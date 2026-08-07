@@ -133,12 +133,15 @@ binary on 2026-08-07.
 Generated from Hook0's public OpenAPI spec (`https://app.hook0.com/api/v1/swagger.json`,
 fetched 2026-08-07, sha256 `368349cf...`) on 2026-08-07. Not production-tuned.
 
-Known rough edge: the spec ships no `tags`, so entity names are derived from URL
-path shape. Most land well, a few do not. `Hook0` is really the
-`/environment_variables/` endpoint, and `UserInvitation`, `OrganizationEditRole`
-and `Revoke` are three entity names sitting on the one
-`/organizations/{organization_id}/invite` path. Adding `tags` to the spec fixes
-this for every generator, not just this one.
+Known rough edge: entity names are derived from the spec's tags and path shapes,
+and a few of them land badly. `Hook0` is really the `/environment_variables/`
+endpoint, because five unrelated read-only endpoints (environment variables,
+errors, health, instance, quotas) all carry the single catch-all tag `Hook0`.
+`UserInvitation`, `OrganizationEditRole` and `Revoke` are three entity names
+sitting on the one `/organizations/{organization_id}/invite` path, one per HTTP
+method. Read those rows in the Entities table as the paths, not the nouns. A
+top-level `tags` block with one tag per resource would fix this for every
+generator, not just this one.
 
 Use it as a starting point or a reference.
 
