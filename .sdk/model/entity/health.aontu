@@ -1,0 +1,85 @@
+# Entity: health
+
+main: kit: entity: health: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "database"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "database_duration_ms"
+      req: true
+      type: "`$INTEGER`"
+    }
+    {
+      name: "object_storage"
+      req: false
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "object_storage_duration_ms"
+      req: false
+      type: "`$INTEGER`"
+    }
+    {
+      name: "pulsar"
+      req: false
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "pulsar_duration_ms"
+      req: false
+      type: "`$INTEGER`"
+    }
+    {
+      name: "total_duration_ms"
+      req: true
+      type: "`$INTEGER`"
+    }
+  ]
+
+  name: "health"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          args: {
+            query: [
+              {
+                kind: "query"
+                name: "key"
+                orig: "key"
+                reqd: false
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/health/"
+          parts: [
+            "api"
+            "v1"
+            "health"
+          ]
+          select: {
+            exist: [
+              "key"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

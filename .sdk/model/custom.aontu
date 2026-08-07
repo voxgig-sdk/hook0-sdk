@@ -1,0 +1,34 @@
+# Per-model naming overrides.
+#
+# apidef canonizes every field name, which depluralizes it. That is the
+# right default for path segments (/applications -> application) but it
+# mangles a handful of Hook0 field names that are genuinely plural, or
+# that merely end in "s" (the "_ms" millisecond suffix). Each entry below
+# maps the wire name to itself, which tells depluralize() to leave it
+# alone, so the generated types and Go JSON tags match what the API
+# actually sends.
+#
+# Verified against https://app.hook0.com/api/v1/swagger.json (2026-08-07)
+# and, for `formbricks`, against a live GET /api/v1/instance/ response.
+
+main: custom: plurals: {
+
+  # genuinely plural field names
+  # (note: `quotas` is deliberately NOT overridden - it is also a path
+  #  segment, and depluralizing it is what names the Quota entity)
+  formbricks: 'formbricks'
+  dedicated_workers: 'dedicated_workers'
+  onboarding_steps: 'onboarding_steps'
+  labels: 'labels'
+  headers: 'headers'
+  users: 'users'
+  limits: 'limits'
+
+  # durations in milliseconds - the trailing "s" is a unit, not a plural
+  database_duration_ms: 'database_duration_ms'
+  object_storage_duration_ms: 'object_storage_duration_ms'
+  pulsar_duration_ms: 'pulsar_duration_ms'
+  total_duration_ms: 'total_duration_ms'
+  elapsed_time_ms: 'elapsed_time_ms'
+
+}

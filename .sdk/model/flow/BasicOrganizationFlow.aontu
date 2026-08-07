@@ -1,0 +1,100 @@
+# BasicOrganizationFlow
+
+main: kit: flow: BasicOrganizationFlow:
+{
+  entity: "organization",
+  kind: "basic",
+  name: "BasicOrganizationFlow",
+  step: [
+    {
+      input: {
+        ref: "organization_ref01"
+      }
+
+      op: "create"
+    }
+
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "organization_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      input: {
+        ref: "organization_ref01",
+        srcdatavar: "organization_ref01_data",
+        suffix: "_up0",
+        textfield: "name"
+      }
+
+      op: "update",
+      spec: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-organization_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      input: {
+        ref: "organization_ref01",
+        srcdatavar: "organization_ref01_data",
+        suffix: "_dt0"
+      }
+
+      match: {
+        id: "organization01"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-organization_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      input: {
+        ref: "organization_ref01",
+        suffix: "_rm0"
+      }
+
+      match: {
+        id: "organization01"
+      }
+
+      op: "remove"
+    }
+
+    {
+      input: {
+        suffix: "_rt0"
+      }
+
+      op: "list",
+      valid: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "organization_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicOrganizationFlow"
+}

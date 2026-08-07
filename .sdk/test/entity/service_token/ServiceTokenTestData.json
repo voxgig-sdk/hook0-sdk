@@ -1,0 +1,41 @@
+{
+  "existing": {
+    "service_token": {
+      "SERVICE_TOKEN00": {
+        "biscuit": "s32",
+        "created_at": "s33",
+        "name": "s34",
+        "organization_id": "ORGANIZATION01",
+        "token_id": "TOKEN01",
+        "id": "SERVICE_TOKEN00"
+      },
+      "SERVICE_TOKEN01": {
+        "biscuit": "s64",
+        "created_at": "s65",
+        "name": "s66",
+        "organization_id": "ORGANIZATION01",
+        "token_id": "TOKEN01",
+        "id": "SERVICE_TOKEN01"
+      },
+      "SERVICE_TOKEN02": {
+        "biscuit": "s96",
+        "created_at": "s97",
+        "name": "s98",
+        "organization_id": "ORGANIZATION01",
+        "token_id": "TOKEN01",
+        "id": "SERVICE_TOKEN02"
+      }
+    }
+  },
+  "new": {
+    "service_token": {
+      "service_token_ref01": {
+        "biscuit": "sc8",
+        "created_at": "sc9",
+        "name": "sca",
+        "organization_id": "ORGANIZATION01",
+        "token_id": "TOKEN01"
+      }
+    }
+  }
+}

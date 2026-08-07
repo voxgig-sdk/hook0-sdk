@@ -1,0 +1,29 @@
+{
+  "existing": {
+    "quotas": {
+      "QUOTAS00": {
+        "enabled": true,
+        "limits": {},
+        "id": "QUOTAS00"
+      },
+      "QUOTAS01": {
+        "enabled": true,
+        "limits": {},
+        "id": "QUOTAS01"
+      },
+      "QUOTAS02": {
+        "enabled": true,
+        "limits": {},
+        "id": "QUOTAS02"
+      }
+    }
+  },
+  "new": {
+    "quotas": {
+      "quotas_ref01": {
+        "enabled": true,
+        "limits": {}
+      }
+    }
+  }
+}

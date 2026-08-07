@@ -1,0 +1,61 @@
+{
+  "existing": {
+    "instance": {
+      "INSTANCE00": {
+        "application_secret_compatibility": true,
+        "auto_db_migration": false,
+        "biscuit_public_key": "s66",
+        "cloudflare_turnstile_site_key": "s67",
+        "formbricks": {},
+        "matomo": {},
+        "password_minimum_length": "s6a",
+        "quota_enforcement": false,
+        "registration_disabled": true,
+        "support_email_address": "s6d",
+        "id": "INSTANCE00"
+      },
+      "INSTANCE01": {
+        "application_secret_compatibility": true,
+        "auto_db_migration": false,
+        "biscuit_public_key": "sca",
+        "cloudflare_turnstile_site_key": "scb",
+        "formbricks": {},
+        "matomo": {},
+        "password_minimum_length": "sce",
+        "quota_enforcement": false,
+        "registration_disabled": true,
+        "support_email_address": "sd1",
+        "id": "INSTANCE01"
+      },
+      "INSTANCE02": {
+        "application_secret_compatibility": true,
+        "auto_db_migration": false,
+        "biscuit_public_key": "s12e",
+        "cloudflare_turnstile_site_key": "s12f",
+        "formbricks": {},
+        "matomo": {},
+        "password_minimum_length": "s132",
+        "quota_enforcement": false,
+        "registration_disabled": true,
+        "support_email_address": "s135",
+        "id": "INSTANCE02"
+      }
+    }
+  },
+  "new": {
+    "instance": {
+      "instance_ref01": {
+        "application_secret_compatibility": true,
+        "auto_db_migration": false,
+        "biscuit_public_key": "s192",
+        "cloudflare_turnstile_site_key": "s193",
+        "formbricks": {},
+        "matomo": {},
+        "password_minimum_length": "s196",
+        "quota_enforcement": false,
+        "registration_disabled": true,
+        "support_email_address": "s199"
+      }
+    }
+  }
+}

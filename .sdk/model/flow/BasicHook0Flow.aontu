@@ -1,0 +1,22 @@
+# BasicHook0Flow
+
+main: kit: flow: BasicHook0Flow:
+{
+  entity: "hook0",
+  kind: "basic",
+  name: "BasicHook0Flow",
+  step: [
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "hook0_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicHook0Flow"
+}

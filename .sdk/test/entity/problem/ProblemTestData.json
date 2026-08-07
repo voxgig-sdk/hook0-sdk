@@ -1,0 +1,33 @@
+{
+  "existing": {
+    "problem": {
+      "PROBLEM00": {
+        "detail": "s28",
+        "id": "PROBLEM00",
+        "status": "s2a",
+        "title": "s2b"
+      },
+      "PROBLEM01": {
+        "detail": "s50",
+        "id": "PROBLEM01",
+        "status": "s52",
+        "title": "s53"
+      },
+      "PROBLEM02": {
+        "detail": "s78",
+        "id": "PROBLEM02",
+        "status": "s7a",
+        "title": "s7b"
+      }
+    }
+  },
+  "new": {
+    "problem": {
+      "problem_ref01": {
+        "detail": "sa0",
+        "status": "sa2",
+        "title": "sa3"
+      }
+    }
+  }
+}

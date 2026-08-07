@@ -1,0 +1,73 @@
+{
+  "existing": {
+    "request_attempt": {
+      "REQUEST_ATTEMPT00": {
+        "created_at": "s82",
+        "delay_until": "s83",
+        "event": {},
+        "event_id": "EVENT01",
+        "failed_at": "s86",
+        "http_response_status": "s87",
+        "picked_at": "s88",
+        "request_attempt_id": "REQUEST_ATTEMPT01",
+        "response_id": "RESPONSE01",
+        "retry_count": "s8b",
+        "status": {},
+        "subscription": {},
+        "succeeded_at": "s8e",
+        "id": "REQUEST_ATTEMPT00"
+      },
+      "REQUEST_ATTEMPT01": {
+        "created_at": "s104",
+        "delay_until": "s105",
+        "event": {},
+        "event_id": "EVENT01",
+        "failed_at": "s108",
+        "http_response_status": "s109",
+        "picked_at": "s10a",
+        "request_attempt_id": "REQUEST_ATTEMPT01",
+        "response_id": "RESPONSE01",
+        "retry_count": "s10d",
+        "status": {},
+        "subscription": {},
+        "succeeded_at": "s110",
+        "id": "REQUEST_ATTEMPT01"
+      },
+      "REQUEST_ATTEMPT02": {
+        "created_at": "s186",
+        "delay_until": "s187",
+        "event": {},
+        "event_id": "EVENT01",
+        "failed_at": "s18a",
+        "http_response_status": "s18b",
+        "picked_at": "s18c",
+        "request_attempt_id": "REQUEST_ATTEMPT01",
+        "response_id": "RESPONSE01",
+        "retry_count": "s18f",
+        "status": {},
+        "subscription": {},
+        "succeeded_at": "s192",
+        "id": "REQUEST_ATTEMPT02"
+      }
+    }
+  },
+  "new": {
+    "request_attempt": {
+      "request_attempt_ref01": {
+        "created_at": "s208",
+        "delay_until": "s209",
+        "event": {},
+        "event_id": "EVENT01",
+        "failed_at": "s20c",
+        "http_response_status": "s20d",
+        "picked_at": "s20e",
+        "request_attempt_id": "REQUEST_ATTEMPT01",
+        "response_id": "RESPONSE01",
+        "retry_count": "s211",
+        "status": {},
+        "subscription": {},
+        "succeeded_at": "s214"
+      }
+    }
+  }
+}

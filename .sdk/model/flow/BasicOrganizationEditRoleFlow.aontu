@@ -1,0 +1,29 @@
+# BasicOrganizationEditRoleFlow
+
+main: kit: flow: BasicOrganizationEditRoleFlow:
+{
+  entity: "organization_edit_role",
+  kind: "basic",
+  name: "BasicOrganizationEditRoleFlow",
+  step: [
+    {
+      input: {
+        ref: "organization_edit_role_ref01",
+        srcdatavar: "organization_edit_role_ref01_data",
+        suffix: "_up0",
+        textfield: "role"
+      }
+
+      op: "update",
+      spec: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-organization_edit_role_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicOrganizationEditRoleFlow"
+}

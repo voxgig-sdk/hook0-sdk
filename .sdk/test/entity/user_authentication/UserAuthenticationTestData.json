@@ -1,0 +1,33 @@
+{
+  "existing": {
+    "user_authentication": {
+      "USER_AUTHENTICATION00": {
+        "email": "s1e",
+        "new_password": "s1f",
+        "token": "s20",
+        "id": "USER_AUTHENTICATION00"
+      },
+      "USER_AUTHENTICATION01": {
+        "email": "s3c",
+        "new_password": "s3d",
+        "token": "s3e",
+        "id": "USER_AUTHENTICATION01"
+      },
+      "USER_AUTHENTICATION02": {
+        "email": "s5a",
+        "new_password": "s5b",
+        "token": "s5c",
+        "id": "USER_AUTHENTICATION02"
+      }
+    }
+  },
+  "new": {
+    "user_authentication": {
+      "user_authentication_ref01": {
+        "email": "s78",
+        "new_password": "s79",
+        "token": "s7a"
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "existing": {
+    "applications_management": {
+      "APPLICATIONS_MANAGEMENT00": {
+        "application_secret_token": "APPLICATION_SECRET_TOKEN01",
+        "id": "APPLICATIONS_MANAGEMENT00"
+      },
+      "APPLICATIONS_MANAGEMENT01": {
+        "application_secret_token": "APPLICATION_SECRET_TOKEN01",
+        "id": "APPLICATIONS_MANAGEMENT01"
+      },
+      "APPLICATIONS_MANAGEMENT02": {
+        "application_secret_token": "APPLICATION_SECRET_TOKEN01",
+        "id": "APPLICATIONS_MANAGEMENT02"
+      }
+    }
+  },
+  "new": {
+    "applications_management": {
+      "applications_management_ref01": {}
+    }
+  }
+}

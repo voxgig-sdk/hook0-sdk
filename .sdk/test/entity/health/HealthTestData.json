@@ -1,0 +1,49 @@
+{
+  "existing": {
+    "health": {
+      "HEALTH00": {
+        "database": true,
+        "database_duration_ms": "s47",
+        "object_storage": true,
+        "object_storage_duration_ms": "s49",
+        "pulsar": true,
+        "pulsar_duration_ms": "s4b",
+        "total_duration_ms": "s4c",
+        "id": "HEALTH00"
+      },
+      "HEALTH01": {
+        "database": true,
+        "database_duration_ms": "s8d",
+        "object_storage": true,
+        "object_storage_duration_ms": "s8f",
+        "pulsar": true,
+        "pulsar_duration_ms": "s91",
+        "total_duration_ms": "s92",
+        "id": "HEALTH01"
+      },
+      "HEALTH02": {
+        "database": true,
+        "database_duration_ms": "sd3",
+        "object_storage": true,
+        "object_storage_duration_ms": "sd5",
+        "pulsar": true,
+        "pulsar_duration_ms": "sd7",
+        "total_duration_ms": "sd8",
+        "id": "HEALTH02"
+      }
+    }
+  },
+  "new": {
+    "health": {
+      "health_ref01": {
+        "database": true,
+        "database_duration_ms": "s119",
+        "object_storage": true,
+        "object_storage_duration_ms": "s11b",
+        "pulsar": true,
+        "pulsar_duration_ms": "s11d",
+        "total_duration_ms": "s11e"
+      }
+    }
+  }
+}

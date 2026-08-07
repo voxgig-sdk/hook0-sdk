@@ -1,0 +1,68 @@
+# Entity: organization_edit_role
+
+main: kit: entity: organization_edit_role: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "role"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "user_id"
+      req: true
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "organization_edit_role"
+  op: {
+    update: {
+      name: "update"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "organization_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "PUT"
+          orig: "/api/v1/organizations/{organization_id}/invite"
+          parts: [
+            "api"
+            "v1"
+            "organizations"
+            "{id}"
+            "invite"
+          ]
+          rename: {
+            param: {
+              organization_id: "id"
+            }
+          }
+          select: {
+            "$action": "invite"
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

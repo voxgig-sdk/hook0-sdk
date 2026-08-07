@@ -1,0 +1,18 @@
+# BasicIngestedEventFlow
+
+main: kit: flow: BasicIngestedEventFlow:
+{
+  entity: "ingested_event",
+  kind: "basic",
+  name: "BasicIngestedEventFlow",
+  step: [
+    {
+      input: {
+        ref: "ingested_event_ref01"
+      }
+
+      op: "create"
+    }
+  ],
+  "key$": "BasicIngestedEventFlow"
+}

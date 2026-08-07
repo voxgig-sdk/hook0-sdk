@@ -1,0 +1,158 @@
+# Entity: event_type
+
+main: kit: entity: event_type: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "application_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "event_type_name"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "resource_type"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "resource_type_name"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "service"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "service_name"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "verb"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "verb_name"
+      req: true
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "event_type"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          method: "POST"
+          orig: "/api/v1/event_types/"
+          parts: [
+            "api"
+            "v1"
+            "event_types"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          args: {
+            query: [
+              {
+                kind: "query"
+                name: "application_id"
+                orig: "application_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/event_types/"
+          parts: [
+            "api"
+            "v1"
+            "event_types"
+          ]
+          select: {
+            exist: [
+              "application_id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "event_type_name"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                kind: "query"
+                name: "application_id"
+                orig: "application_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/event_types/{event_type_name}"
+          parts: [
+            "api"
+            "v1"
+            "event_types"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              event_type_name: "id"
+            }
+          }
+          select: {
+            exist: [
+              "application_id"
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

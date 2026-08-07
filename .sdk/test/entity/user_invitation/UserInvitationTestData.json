@@ -1,0 +1,32 @@
+{
+  "existing": {
+    "user_invitation": {
+      "USER_INVITATION00": {
+        "email": "s14",
+        "role": "s15",
+        "organization_id": "ORGANIZATION01",
+        "id": "USER_INVITATION00"
+      },
+      "USER_INVITATION01": {
+        "email": "s28",
+        "role": "s29",
+        "organization_id": "ORGANIZATION01",
+        "id": "USER_INVITATION01"
+      },
+      "USER_INVITATION02": {
+        "email": "s3c",
+        "role": "s3d",
+        "organization_id": "ORGANIZATION01",
+        "id": "USER_INVITATION02"
+      }
+    }
+  },
+  "new": {
+    "user_invitation": {
+      "user_invitation_ref01": {
+        "email": "s50",
+        "role": "s51"
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "existing": {
+    "registration": {
+      "REGISTRATION00": {
+        "email": "s3c",
+        "first_name": "s3d",
+        "gclid": "s3e",
+        "last_name": "s3f",
+        "password": "s40",
+        "turnstile_token": "s41",
+        "id": "REGISTRATION00"
+      },
+      "REGISTRATION01": {
+        "email": "s78",
+        "first_name": "s79",
+        "gclid": "s7a",
+        "last_name": "s7b",
+        "password": "s7c",
+        "turnstile_token": "s7d",
+        "id": "REGISTRATION01"
+      },
+      "REGISTRATION02": {
+        "email": "sb4",
+        "first_name": "sb5",
+        "gclid": "sb6",
+        "last_name": "sb7",
+        "password": "sb8",
+        "turnstile_token": "sb9",
+        "id": "REGISTRATION02"
+      }
+    }
+  },
+  "new": {
+    "registration": {
+      "registration_ref01": {
+        "email": "sf0",
+        "first_name": "sf1",
+        "gclid": "sf2",
+        "last_name": "sf3",
+        "password": "sf4",
+        "turnstile_token": "sf5"
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+# BasicRequestAttemptFlow
+
+main: kit: flow: BasicRequestAttemptFlow:
+{
+  entity: "request_attempt",
+  kind: "basic",
+  name: "BasicRequestAttemptFlow",
+  step: [
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "request_attempt_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      input: {
+        ref: "request_attempt_ref01",
+        srcdatavar: "request_attempt_ref01_data",
+        suffix: "_dt0"
+      }
+
+      match: {
+        id: "request_attempt01"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-request_attempt_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicRequestAttemptFlow"
+}

@@ -1,0 +1,27 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      description: "Core REST API of Hook0 — Open-Source Webhooks as a service for SaaS"
+      security: {
+        in: "header"
+        name: "Authorization"
+        prefix: ""
+        scheme: "biscuit"
+        type: "apiKey"
+      }
+      servers: [
+        {
+          url: "https://app.hook0.com"
+        }
+      ]
+      summary: "Core REST API of Hook0 — Open-Source Webhooks as a service for SaaS"
+      title: "Hook0 API"
+      version: "1.0.2"
+      website: "https://app.hook0.com"
+    }
+  }
+}
+

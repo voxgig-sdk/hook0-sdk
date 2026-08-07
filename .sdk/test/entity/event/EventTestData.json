@@ -1,0 +1,57 @@
+{
+  "existing": {
+    "event": {
+      "EVENT00": {
+        "event_id": "EVENT01",
+        "event_type_name": "s5b",
+        "ip": "s5c",
+        "labels": {},
+        "metadata": {},
+        "occurred_at": "s5f",
+        "payload": "s60",
+        "payload_content_type": "s61",
+        "received_at": "s62",
+        "id": "EVENT00"
+      },
+      "EVENT01": {
+        "event_id": "EVENT01",
+        "event_type_name": "sb5",
+        "ip": "sb6",
+        "labels": {},
+        "metadata": {},
+        "occurred_at": "sb9",
+        "payload": "sba",
+        "payload_content_type": "sbb",
+        "received_at": "sbc",
+        "id": "EVENT01"
+      },
+      "EVENT02": {
+        "event_id": "EVENT01",
+        "event_type_name": "s10f",
+        "ip": "s110",
+        "labels": {},
+        "metadata": {},
+        "occurred_at": "s113",
+        "payload": "s114",
+        "payload_content_type": "s115",
+        "received_at": "s116",
+        "id": "EVENT02"
+      }
+    }
+  },
+  "new": {
+    "event": {
+      "event_ref01": {
+        "event_id": "EVENT01",
+        "event_type_name": "s169",
+        "ip": "s16a",
+        "labels": {},
+        "metadata": {},
+        "occurred_at": "s16d",
+        "payload": "s16e",
+        "payload_content_type": "s16f",
+        "received_at": "s170"
+      }
+    }
+  }
+}

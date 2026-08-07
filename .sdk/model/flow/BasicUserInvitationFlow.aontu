@@ -1,0 +1,22 @@
+# BasicUserInvitationFlow
+
+main: kit: flow: BasicUserInvitationFlow:
+{
+  entity: "user_invitation",
+  kind: "basic",
+  name: "BasicUserInvitationFlow",
+  step: [
+    {
+      input: {
+        ref: "user_invitation_ref01"
+      }
+
+      match: {
+        organization_id: "organization01"
+      }
+
+      op: "create"
+    }
+  ],
+  "key$": "BasicUserInvitationFlow"
+}

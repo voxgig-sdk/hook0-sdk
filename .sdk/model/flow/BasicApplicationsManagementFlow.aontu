@@ -1,0 +1,9 @@
+# BasicApplicationsManagementFlow
+
+main: kit: flow: BasicApplicationsManagementFlow:
+{
+  entity: "applications_management",
+  kind: "basic",
+  name: "BasicApplicationsManagementFlow",
+  "key$": "BasicApplicationsManagementFlow"
+}

@@ -1,0 +1,69 @@
+# Entity: hook0
+
+main: kit: entity: hook0: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "default"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "description"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "env_var"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "group"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "name"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "required"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "sensitive"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+  ]
+
+  name: "hook0"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          method: "GET"
+          orig: "/api/v1/environment_variables/"
+          parts: [
+            "api"
+            "v1"
+            "environment_variables"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

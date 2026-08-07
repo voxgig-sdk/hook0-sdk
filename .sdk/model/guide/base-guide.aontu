@@ -1,0 +1,225 @@
+# Guide
+
+guide: {
+  metrics: count: entity: 24
+  metrics: count: path: 36
+  metrics: count: method: 54
+
+  entity: application: {
+    path: "/api/v1/applications/": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/api/v1/applications/{application_id}": {
+      rename: param: "application_id": *"id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: application_secret: {
+    path: "/api/v1/application_secrets/": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/api/v1/application_secrets/{application_secret_token}": {
+      rename: param: "application_secret_token": *"id"
+      op: update: method: *PUT
+    }
+  }
+
+  entity: applications_management: {
+    path: "/api/v1/application_secrets/{application_secret_token}": {
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: event: {
+    path: "/api/v1/events/": {
+      op: list: method: *GET
+    }
+    path: "/api/v1/events/{event_id}": {
+      rename: param: "event_id": *"id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: event_type: {
+    path: "/api/v1/event_types/": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/api/v1/event_types/{event_type_name}": {
+      rename: param: "event_type_name": *"id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: events_management: {
+    path: "/api/v1/event_types/{event_type_name}": {
+      op: remove: method: *DELETE
+    }
+    path: "/api/v1/events/{event_id}/replay": {
+      op: create: method: *POST
+    }
+    path: "/api/v1/payload_content_types/": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: events_per_day_entry: {
+    path: "/api/v1/events_per_day/application": {
+      op: list: method: *GET
+    }
+    path: "/api/v1/events_per_day/organization": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: health: {
+    path: "/api/v1/health/": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: hook0: {
+    path: "/api/v1/environment_variables/": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: ingested_event: {
+    path: "/api/v1/event/": {
+      op: create: method: *POST
+    }
+  }
+
+  entity: instance: {
+    path: "/api/v1/instance/": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: login: {
+    path: "/api/v1/auth/login": {
+      op: create: method: *POST
+    }
+    path: "/api/v1/auth/refresh": {
+      op: create: method: *POST
+    }
+  }
+
+  entity: organization: {
+    path: "/api/v1/organizations/": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/api/v1/organizations/{organization_id}/": {
+      rename: param: "organization_id": *"id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: organization_edit_role: {
+    path: "/api/v1/organizations/{organization_id}/invite": {
+      action: "invite": {}
+      rename: param: "organization_id": *"id"
+      op: update: method: *PUT
+    }
+  }
+
+  entity: problem: {
+    path: "/api/v1/errors/": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: quota: {
+    path: "/api/v1/quotas/": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: registration: {
+    path: "/api/v1/register/": {
+      op: create: method: *POST
+    }
+  }
+
+  entity: request_attempt: {
+    path: "/api/v1/request_attempts/": {
+      op: list: method: *GET
+    }
+    path: "/api/v1/request_attempts/{request_attempt_id}": {
+      rename: param: "request_attempt_id": *"id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: response: {
+    path: "/api/v1/responses/{response_id}": {
+      rename: param: "response_id": *"id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: revoke: {
+    path: "/api/v1/organizations/{organization_id}/invite": {
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: service_token: {
+    path: "/api/v1/service_token/": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/api/v1/service_token/{service_token_id}": {
+      rename: param: "service_token_id": *"id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: subscription: {
+    path: "/api/v1/subscriptions/": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/api/v1/subscriptions/{subscription_id}": {
+      rename: param: "subscription_id": *"id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: user_authentication: {
+    path: "/api/v1/auth/begin-reset-password": {
+      op: create: method: *POST
+    }
+    path: "/api/v1/auth/logout": {
+      op: create: method: *POST
+    }
+    path: "/api/v1/auth/password": {
+      op: create: method: *POST
+    }
+    path: "/api/v1/auth/reset-password": {
+      op: create: method: *POST
+    }
+    path: "/api/v1/auth/verify-email": {
+      op: create: method: *POST
+    }
+  }
+
+  entity: user_invitation: {
+    path: "/api/v1/organizations/{organization_id}/invite": {
+      op: create: method: *POST
+    }
+  }
+
+}

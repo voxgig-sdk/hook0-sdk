@@ -1,0 +1,29 @@
+{
+  "existing": {
+    "login": {
+      "LOGIN00": {
+        "email": "s14",
+        "password": "s15",
+        "id": "LOGIN00"
+      },
+      "LOGIN01": {
+        "email": "s28",
+        "password": "s29",
+        "id": "LOGIN01"
+      },
+      "LOGIN02": {
+        "email": "s3c",
+        "password": "s3d",
+        "id": "LOGIN02"
+      }
+    }
+  },
+  "new": {
+    "login": {
+      "login_ref01": {
+        "email": "s50",
+        "password": "s51"
+      }
+    }
+  }
+}

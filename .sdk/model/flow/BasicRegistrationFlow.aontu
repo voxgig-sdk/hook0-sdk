@@ -1,0 +1,18 @@
+# BasicRegistrationFlow
+
+main: kit: flow: BasicRegistrationFlow:
+{
+  entity: "registration",
+  kind: "basic",
+  name: "BasicRegistrationFlow",
+  step: [
+    {
+      input: {
+        ref: "registration_ref01"
+      }
+
+      op: "create"
+    }
+  ],
+  "key$": "BasicRegistrationFlow"
+}

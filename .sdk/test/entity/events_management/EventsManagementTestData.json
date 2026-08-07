@@ -1,0 +1,31 @@
+{
+  "existing": {
+    "events_management": {
+      "EVENTS_MANAGEMENT00": {
+        "application_id": "APPLICATION01",
+        "event_id": "EVENT01",
+        "event_type_name": "EVENT_TYPE_NAME01",
+        "id": "EVENTS_MANAGEMENT00"
+      },
+      "EVENTS_MANAGEMENT01": {
+        "application_id": "APPLICATION01",
+        "event_id": "EVENT01",
+        "event_type_name": "EVENT_TYPE_NAME01",
+        "id": "EVENTS_MANAGEMENT01"
+      },
+      "EVENTS_MANAGEMENT02": {
+        "application_id": "APPLICATION01",
+        "event_id": "EVENT01",
+        "event_type_name": "EVENT_TYPE_NAME01",
+        "id": "EVENTS_MANAGEMENT02"
+      }
+    }
+  },
+  "new": {
+    "events_management": {
+      "events_management_ref01": {
+        "application_id": "APPLICATION01"
+      }
+    }
+  }
+}

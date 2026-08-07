@@ -1,0 +1,59 @@
+# Entity: problem
+
+main: kit: entity: problem: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "detail"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "status"
+      req: true
+      type: "`$INTEGER`"
+    }
+    {
+      name: "title"
+      req: true
+      type: "`$STRING`"
+    }
+  ]
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "problem"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          method: "GET"
+          orig: "/api/v1/errors/"
+          parts: [
+            "api"
+            "v1"
+            "errors"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,44 @@
+# Entity: quota
+
+main: kit: entity: quota: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "enabled"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "limits"
+      req: true
+      type: "`$OBJECT`"
+    }
+  ]
+
+  name: "quota"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          method: "GET"
+          orig: "/api/v1/quotas/"
+          parts: [
+            "api"
+            "v1"
+            "quotas"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

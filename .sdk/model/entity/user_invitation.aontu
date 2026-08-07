@@ -1,0 +1,70 @@
+# Entity: user_invitation
+
+main: kit: entity: user_invitation: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "email"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "role"
+      req: true
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "user_invitation"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "organization_id"
+                orig: "organization_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "POST"
+          orig: "/api/v1/organizations/{organization_id}/invite"
+          parts: [
+            "api"
+            "v1"
+            "organizations"
+            "{organization_id}"
+            "invite"
+          ]
+          select: {
+            exist: [
+              "organization_id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  relations: {
+    ancestors: [
+      [
+        "organization"
+      ]
+    ]
+  }
+
+
+
+}

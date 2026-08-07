@@ -1,0 +1,66 @@
+# Entity: applications_management
+
+main: kit: entity: applications_management: {
+
+  alias: field: {}
+
+  name: "applications_management"
+  op: {
+    remove: {
+      name: "remove"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "application_secret_token"
+                orig: "application_secret_token"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                kind: "query"
+                name: "application_id"
+                orig: "application_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "DELETE"
+          orig: "/api/v1/application_secrets/{application_secret_token}"
+          parts: [
+            "api"
+            "v1"
+            "application_secrets"
+            "{application_secret_token}"
+          ]
+          select: {
+            exist: [
+              "application_id"
+              "application_secret_token"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  relations: {
+    ancestors: [
+      [
+        "application_secret"
+      ]
+    ]
+  }
+
+
+
+}

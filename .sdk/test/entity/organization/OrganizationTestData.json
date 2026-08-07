@@ -1,0 +1,53 @@
+{
+  "existing": {
+    "organization": {
+      "ORGANIZATION00": {
+        "consumption": {},
+        "name": "s51",
+        "onboarding_steps": {},
+        "organization_id": "ORGANIZATION01",
+        "plan": {},
+        "quota": {},
+        "role": "s56",
+        "users": [],
+        "id": "ORGANIZATION00"
+      },
+      "ORGANIZATION01": {
+        "consumption": {},
+        "name": "sa1",
+        "onboarding_steps": {},
+        "organization_id": "ORGANIZATION01",
+        "plan": {},
+        "quota": {},
+        "role": "sa6",
+        "users": [],
+        "id": "ORGANIZATION01"
+      },
+      "ORGANIZATION02": {
+        "consumption": {},
+        "name": "sf1",
+        "onboarding_steps": {},
+        "organization_id": "ORGANIZATION01",
+        "plan": {},
+        "quota": {},
+        "role": "sf6",
+        "users": [],
+        "id": "ORGANIZATION02"
+      }
+    }
+  },
+  "new": {
+    "organization": {
+      "organization_ref01": {
+        "consumption": {},
+        "name": "s141",
+        "onboarding_steps": {},
+        "organization_id": "ORGANIZATION01",
+        "plan": {},
+        "quota": {},
+        "role": "s146",
+        "users": []
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "existing": {
+    "event_type": {
+      "EVENT_TYPE00": {
+        "application_id": "APPLICATION01",
+        "event_type_name": "s51",
+        "resource_type": "s52",
+        "resource_type_name": "s53",
+        "service": "s54",
+        "service_name": "s55",
+        "verb": "s56",
+        "verb_name": "s57",
+        "id": "EVENT_TYPE00"
+      },
+      "EVENT_TYPE01": {
+        "application_id": "APPLICATION01",
+        "event_type_name": "sa1",
+        "resource_type": "sa2",
+        "resource_type_name": "sa3",
+        "service": "sa4",
+        "service_name": "sa5",
+        "verb": "sa6",
+        "verb_name": "sa7",
+        "id": "EVENT_TYPE01"
+      },
+      "EVENT_TYPE02": {
+        "application_id": "APPLICATION01",
+        "event_type_name": "sf1",
+        "resource_type": "sf2",
+        "resource_type_name": "sf3",
+        "service": "sf4",
+        "service_name": "sf5",
+        "verb": "sf6",
+        "verb_name": "sf7",
+        "id": "EVENT_TYPE02"
+      }
+    }
+  },
+  "new": {
+    "event_type": {
+      "event_type_ref01": {
+        "application_id": "APPLICATION01",
+        "event_type_name": "s141",
+        "resource_type": "s142",
+        "resource_type_name": "s143",
+        "service": "s144",
+        "service_name": "s145",
+        "verb": "s146",
+        "verb_name": "s147"
+      }
+    }
+  }
+}

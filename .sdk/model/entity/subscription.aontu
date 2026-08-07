@@ -1,0 +1,318 @@
+# Entity: subscription
+
+main: kit: entity: subscription: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "application_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "created_at"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "dedicated_workers"
+      op: {
+        create: {
+          req: false
+          type: "`$ARRAY`"
+        }
+        update: {
+          req: false
+          type: "`$ARRAY`"
+        }
+      }
+      req: true
+      type: "`$ARRAY`"
+    }
+    {
+      name: "description"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "event_type"
+      req: true
+      type: "`$ARRAY`"
+    }
+    {
+      name: "is_enabled"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "label_key"
+      op: {
+        create: {
+          req: false
+          type: "`$STRING`"
+        }
+        update: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "label_value"
+      op: {
+        create: {
+          req: false
+          type: "`$STRING`"
+        }
+        update: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "labels"
+      op: {
+        create: {
+          req: false
+          type: "`$OBJECT`"
+        }
+        update: {
+          req: false
+          type: "`$OBJECT`"
+        }
+      }
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "metadata"
+      op: {
+        create: {
+          req: false
+          type: "`$OBJECT`"
+        }
+        update: {
+          req: false
+          type: "`$OBJECT`"
+        }
+      }
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "secret"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "subscription_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "target"
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "updated_at"
+      req: true
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "subscription"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          method: "POST"
+          orig: "/api/v1/subscriptions/"
+          parts: [
+            "api"
+            "v1"
+            "subscriptions"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          args: {
+            query: [
+              {
+                kind: "query"
+                name: "application_id"
+                orig: "application_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/subscriptions/"
+          parts: [
+            "api"
+            "v1"
+            "subscriptions"
+          ]
+          select: {
+            exist: [
+              "application_id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "subscription_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/subscriptions/{subscription_id}"
+          parts: [
+            "api"
+            "v1"
+            "subscriptions"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              subscription_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "subscription_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                kind: "query"
+                name: "application_id"
+                orig: "application_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "DELETE"
+          orig: "/api/v1/subscriptions/{subscription_id}"
+          parts: [
+            "api"
+            "v1"
+            "subscriptions"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              subscription_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "application_id"
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "subscription_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "PUT"
+          orig: "/api/v1/subscriptions/{subscription_id}"
+          parts: [
+            "api"
+            "v1"
+            "subscriptions"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              subscription_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

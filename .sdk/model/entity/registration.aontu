@@ -1,0 +1,64 @@
+# Entity: registration
+
+main: kit: entity: registration: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "email"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "first_name"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "gclid"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "last_name"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "password"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "turnstile_token"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "registration"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          method: "POST"
+          orig: "/api/v1/register/"
+          parts: [
+            "api"
+            "v1"
+            "register"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

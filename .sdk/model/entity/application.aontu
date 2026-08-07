@@ -1,0 +1,218 @@
+# Entity: application
+
+main: kit: entity: application: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "application_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "consumption"
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "name"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "onboarding_steps"
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "organization_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "quota"
+      req: true
+      type: "`$OBJECT`"
+    }
+  ]
+
+  name: "application"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          method: "POST"
+          orig: "/api/v1/applications/"
+          parts: [
+            "api"
+            "v1"
+            "applications"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          args: {
+            query: [
+              {
+                kind: "query"
+                name: "organization_id"
+                orig: "organization_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/applications/"
+          parts: [
+            "api"
+            "v1"
+            "applications"
+          ]
+          select: {
+            exist: [
+              "organization_id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "application_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/applications/{application_id}"
+          parts: [
+            "api"
+            "v1"
+            "applications"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              application_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "application_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "DELETE"
+          orig: "/api/v1/applications/{application_id}"
+          parts: [
+            "api"
+            "v1"
+            "applications"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              application_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "application_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "PUT"
+          orig: "/api/v1/applications/{application_id}"
+          parts: [
+            "api"
+            "v1"
+            "applications"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              application_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

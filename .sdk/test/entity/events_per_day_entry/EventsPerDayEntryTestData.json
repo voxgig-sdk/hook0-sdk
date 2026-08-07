@@ -1,0 +1,38 @@
+{
+  "existing": {
+    "events_per_day_entry": {
+      "EVENTS_PER_DAY_ENTRY00": {
+        "amount": "s32",
+        "application_id": "APPLICATION01",
+        "application_name": "s34",
+        "date": "s35",
+        "is_provisional": true
+      },
+      "EVENTS_PER_DAY_ENTRY01": {
+        "amount": "s64",
+        "application_id": "APPLICATION01",
+        "application_name": "s66",
+        "date": "s67",
+        "is_provisional": true
+      },
+      "EVENTS_PER_DAY_ENTRY02": {
+        "amount": "s96",
+        "application_id": "APPLICATION01",
+        "application_name": "s98",
+        "date": "s99",
+        "is_provisional": true
+      }
+    }
+  },
+  "new": {
+    "events_per_day_entry": {
+      "events_per_day_entry_ref01": {
+        "amount": "sc8",
+        "application_id": "APPLICATION01",
+        "application_name": "sca",
+        "date": "scb",
+        "is_provisional": true
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+# Entity: revoke
+
+main: kit: entity: revoke: {
+
+  alias: field: {}
+
+  name: "revoke"
+  op: {
+    remove: {
+      name: "remove"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "organization_id"
+                orig: "organization_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "DELETE"
+          orig: "/api/v1/organizations/{organization_id}/invite"
+          parts: [
+            "api"
+            "v1"
+            "organizations"
+            "{organization_id}"
+            "invite"
+          ]
+          select: {
+            exist: [
+              "organization_id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  relations: {
+    ancestors: [
+      [
+        "organization"
+      ]
+    ]
+  }
+
+
+
+}

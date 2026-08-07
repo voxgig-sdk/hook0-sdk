@@ -1,0 +1,233 @@
+# Entity: service_token
+
+main: kit: entity: service_token: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "biscuit"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "created_at"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "name"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "organization_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "token_id"
+      req: true
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "service_token"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          method: "POST"
+          orig: "/api/v1/service_token/"
+          parts: [
+            "api"
+            "v1"
+            "service_token"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          args: {
+            query: [
+              {
+                kind: "query"
+                name: "organization_id"
+                orig: "organization_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/service_token/"
+          parts: [
+            "api"
+            "v1"
+            "service_token"
+          ]
+          select: {
+            exist: [
+              "organization_id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "service_token_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                kind: "query"
+                name: "organization_id"
+                orig: "organization_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/api/v1/service_token/{service_token_id}"
+          parts: [
+            "api"
+            "v1"
+            "service_token"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              service_token_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+              "organization_id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "service_token_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                kind: "query"
+                name: "organization_id"
+                orig: "organization_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "DELETE"
+          orig: "/api/v1/service_token/{service_token_id}"
+          parts: [
+            "api"
+            "v1"
+            "service_token"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              service_token_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+              "organization_id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "service_token_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "PUT"
+          orig: "/api/v1/service_token/{service_token_id}"
+          parts: [
+            "api"
+            "v1"
+            "service_token"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              service_token_id: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

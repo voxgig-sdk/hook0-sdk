@@ -1,0 +1,29 @@
+{
+  "existing": {
+    "organization_edit_role": {
+      "ORGANIZATION_EDIT_ROLE00": {
+        "role": "s14",
+        "user_id": "USER01",
+        "id": "ORGANIZATION_EDIT_ROLE00"
+      },
+      "ORGANIZATION_EDIT_ROLE01": {
+        "role": "s28",
+        "user_id": "USER01",
+        "id": "ORGANIZATION_EDIT_ROLE01"
+      },
+      "ORGANIZATION_EDIT_ROLE02": {
+        "role": "s3c",
+        "user_id": "USER01",
+        "id": "ORGANIZATION_EDIT_ROLE02"
+      }
+    }
+  },
+  "new": {
+    "organization_edit_role": {
+      "organization_edit_role_ref01": {
+        "role": "s50",
+        "user_id": "USER01"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# BasicEventsPerDayEntryFlow
+
+main: kit: flow: BasicEventsPerDayEntryFlow:
+{
+  entity: "events_per_day_entry",
+  kind: "basic",
+  name: "BasicEventsPerDayEntryFlow",
+  step: [
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "events_per_day_entry_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicEventsPerDayEntryFlow"
+}

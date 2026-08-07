@@ -1,0 +1,23 @@
+{
+  "existing": {
+    "revoke": {
+      "REVOKE00": {
+        "organization_id": "ORGANIZATION01",
+        "id": "REVOKE00"
+      },
+      "REVOKE01": {
+        "organization_id": "ORGANIZATION01",
+        "id": "REVOKE01"
+      },
+      "REVOKE02": {
+        "organization_id": "ORGANIZATION01",
+        "id": "REVOKE02"
+      }
+    }
+  },
+  "new": {
+    "revoke": {
+      "revoke_ref01": {}
+    }
+  }
+}

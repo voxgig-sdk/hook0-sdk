@@ -1,0 +1,74 @@
+# Entity: ingested_event
+
+main: kit: entity: ingested_event: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "application_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "event_id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "event_type"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "labels"
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "metadata"
+      req: false
+      type: "`$OBJECT`"
+    }
+    {
+      name: "occurred_at"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "payload"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "payload_content_type"
+      req: true
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "ingested_event"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          method: "POST"
+          orig: "/api/v1/event/"
+          parts: [
+            "api"
+            "v1"
+            "event"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

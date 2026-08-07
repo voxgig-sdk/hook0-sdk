@@ -1,0 +1,84 @@
+# Entity: instance
+
+main: kit: entity: instance: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "application_secret_compatibility"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "auto_db_migration"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "biscuit_public_key"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "cloudflare_turnstile_site_key"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "formbricks"
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "matomo"
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "password_minimum_length"
+      req: true
+      type: "`$INTEGER`"
+    }
+    {
+      name: "quota_enforcement"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "registration_disabled"
+      req: true
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "support_email_address"
+      req: true
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "instance"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          method: "GET"
+          orig: "/api/v1/instance/"
+          parts: [
+            "api"
+            "v1"
+            "instance"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

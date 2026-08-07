@@ -1,0 +1,32 @@
+# BasicResponseFlow
+
+main: kit: flow: BasicResponseFlow:
+{
+  entity: "response",
+  kind: "basic",
+  name: "BasicResponseFlow",
+  step: [
+    {
+      input: {
+        ref: "response_ref01",
+        srcdatavar: "response_ref01_data",
+        suffix: "_dt0"
+      }
+
+      match: {
+        id: "response01"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-response_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicResponseFlow"
+}

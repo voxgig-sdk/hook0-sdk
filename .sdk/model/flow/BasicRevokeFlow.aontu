@@ -1,0 +1,9 @@
+# BasicRevokeFlow
+
+main: kit: flow: BasicRevokeFlow:
+{
+  entity: "revoke",
+  kind: "basic",
+  name: "BasicRevokeFlow",
+  "key$": "BasicRevokeFlow"
+}

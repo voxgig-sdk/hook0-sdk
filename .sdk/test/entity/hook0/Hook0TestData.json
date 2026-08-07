@@ -1,0 +1,46 @@
+{
+  "existing": {
+    "hook0": {
+      "HOOK000": {
+        "default": "s46",
+        "description": "s47",
+        "env_var": "s48",
+        "group": "s49",
+        "name": "s4a",
+        "required": false,
+        "sensitive": true
+      },
+      "HOOK001": {
+        "default": "s8c",
+        "description": "s8d",
+        "env_var": "s8e",
+        "group": "s8f",
+        "name": "s90",
+        "required": false,
+        "sensitive": true
+      },
+      "HOOK002": {
+        "default": "sd2",
+        "description": "sd3",
+        "env_var": "sd4",
+        "group": "sd5",
+        "name": "sd6",
+        "required": false,
+        "sensitive": true
+      }
+    }
+  },
+  "new": {
+    "hook0": {
+      "hook0_ref01": {
+        "default": "s118",
+        "description": "s119",
+        "env_var": "s11a",
+        "group": "s11b",
+        "name": "s11c",
+        "required": false,
+        "sensitive": true
+      }
+    }
+  }
+}

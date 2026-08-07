@@ -1,0 +1,77 @@
+{
+  "existing": {
+    "subscription": {
+      "SUBSCRIPTION00": {
+        "application_id": "APPLICATION01",
+        "created_at": "s8d",
+        "dedicated_workers": [],
+        "description": "s8f",
+        "event_type": [],
+        "is_enabled": false,
+        "label_key": "s92",
+        "label_value": "s93",
+        "labels": {},
+        "metadata": {},
+        "secret": "s96",
+        "subscription_id": "SUBSCRIPTION01",
+        "target": {},
+        "updated_at": "s99",
+        "id": "SUBSCRIPTION00"
+      },
+      "SUBSCRIPTION01": {
+        "application_id": "APPLICATION01",
+        "created_at": "s119",
+        "dedicated_workers": [],
+        "description": "s11b",
+        "event_type": [],
+        "is_enabled": false,
+        "label_key": "s11e",
+        "label_value": "s11f",
+        "labels": {},
+        "metadata": {},
+        "secret": "s122",
+        "subscription_id": "SUBSCRIPTION01",
+        "target": {},
+        "updated_at": "s125",
+        "id": "SUBSCRIPTION01"
+      },
+      "SUBSCRIPTION02": {
+        "application_id": "APPLICATION01",
+        "created_at": "s1a5",
+        "dedicated_workers": [],
+        "description": "s1a7",
+        "event_type": [],
+        "is_enabled": false,
+        "label_key": "s1aa",
+        "label_value": "s1ab",
+        "labels": {},
+        "metadata": {},
+        "secret": "s1ae",
+        "subscription_id": "SUBSCRIPTION01",
+        "target": {},
+        "updated_at": "s1b1",
+        "id": "SUBSCRIPTION02"
+      }
+    }
+  },
+  "new": {
+    "subscription": {
+      "subscription_ref01": {
+        "application_id": "APPLICATION01",
+        "created_at": "s231",
+        "dedicated_workers": [],
+        "description": "s233",
+        "event_type": [],
+        "is_enabled": false,
+        "label_key": "s236",
+        "label_value": "s237",
+        "labels": {},
+        "metadata": {},
+        "secret": "s23a",
+        "subscription_id": "SUBSCRIPTION01",
+        "target": {},
+        "updated_at": "s23d"
+      }
+    }
+  }
+}

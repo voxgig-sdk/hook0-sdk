@@ -1,0 +1,53 @@
+{
+  "existing": {
+    "ingested_event": {
+      "INGESTED_EVENT00": {
+        "application_id": "APPLICATION01",
+        "event_id": "EVENT01",
+        "event_type": "s52",
+        "labels": {},
+        "metadata": {},
+        "occurred_at": "s55",
+        "payload": "s56",
+        "payload_content_type": "s57",
+        "id": "INGESTED_EVENT00"
+      },
+      "INGESTED_EVENT01": {
+        "application_id": "APPLICATION01",
+        "event_id": "EVENT01",
+        "event_type": "sa2",
+        "labels": {},
+        "metadata": {},
+        "occurred_at": "sa5",
+        "payload": "sa6",
+        "payload_content_type": "sa7",
+        "id": "INGESTED_EVENT01"
+      },
+      "INGESTED_EVENT02": {
+        "application_id": "APPLICATION01",
+        "event_id": "EVENT01",
+        "event_type": "sf2",
+        "labels": {},
+        "metadata": {},
+        "occurred_at": "sf5",
+        "payload": "sf6",
+        "payload_content_type": "sf7",
+        "id": "INGESTED_EVENT02"
+      }
+    }
+  },
+  "new": {
+    "ingested_event": {
+      "ingested_event_ref01": {
+        "application_id": "APPLICATION01",
+        "event_id": "EVENT01",
+        "event_type": "s142",
+        "labels": {},
+        "metadata": {},
+        "occurred_at": "s145",
+        "payload": "s146",
+        "payload_content_type": "s147"
+      }
+    }
+  }
+}

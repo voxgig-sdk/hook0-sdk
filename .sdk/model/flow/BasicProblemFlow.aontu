@@ -1,0 +1,22 @@
+# BasicProblemFlow
+
+main: kit: flow: BasicProblemFlow:
+{
+  entity: "problem",
+  kind: "basic",
+  name: "BasicProblemFlow",
+  step: [
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "problem_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicProblemFlow"
+}
