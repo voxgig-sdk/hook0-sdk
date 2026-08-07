@@ -8,6 +8,6 @@ This project follows [Keep a Changelog](https://keepachangelog.com) and
 
 ## [0.0.1]
 
-- Initial generated release of the Hook0 SDK (TypeScript, JavaScript, Go,
-  Python, PHP, and Lua, plus CLI and MCP surfaces), generated from the upstream
+- Initial generated release of the Hook0 SDK (TypeScript, Python, PHP, Go,
+  Ruby, and Lua, plus CLI and MCP surfaces), generated from the upstream
   OpenAPI specification by @voxgig/sdkgen.

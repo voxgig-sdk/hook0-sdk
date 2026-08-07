@@ -1,6 +1,12 @@
 {
+  "NAME": "HOOK0",
+  "Name": "Hook0",
   "def": "hook0-openapi.json",
   "main": {
+    "api": {
+      "entity": {},
+      "guide": {}
+    },
     "custom": {
       "plurals": {
         "database_duration_ms": "database_duration_ms",
@@ -3280,6 +3286,9 @@
             "go-mcp": {
               "deps": {}
             },
+            "java": {
+              "deps": {}
+            },
             "js": {
               "deps": {}
             },
@@ -3293,6 +3302,9 @@
               "deps": {}
             },
             "ts": {
+              "deps": {}
+            },
+            "zig": {
               "deps": {}
             }
           },
@@ -4554,6 +4566,43 @@
           },
           "title": "Go MCP server"
         },
+        "java": {
+          "active": true,
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "java",
+          "module": {
+            "name": "hook0"
+          },
+          "name": "java",
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "maven-central",
+              "package": "",
+              "state": "pending",
+              "url": "https://central.sonatype.com",
+              "vault": {
+                "alias": "central",
+                "env": "",
+                "recipe": "maven"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            }
+          },
+          "srcfeature": false,
+          "title": "Java"
+        },
         "js": {
           "active": true,
           "comment": {
@@ -4771,10 +4820,50 @@
             }
           },
           "title": "TypeScript"
+        },
+        "zig": {
+          "active": true,
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "zig",
+          "module": {
+            "name": "hook0"
+          },
+          "name": "zig",
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "none",
+              "package": "",
+              "state": "pending",
+              "url": "",
+              "vault": {
+                "alias": "none",
+                "env": "NONE",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            }
+          },
+          "srcfeature": false,
+          "title": "Zig"
         }
       }
     }
   },
   "name": "hook0",
+  "name-": "hook0",
+  "name_": "hook0",
+  "name__orig": "hook0",
   "origin": "voxgig-sdk"
 }

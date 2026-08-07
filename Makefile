@@ -11,11 +11,13 @@
 #   go       tag-only
 #   go-cli   tag-only
 #   go-mcp   tag-only
+#   java     maven-central (publish pending: deploy publishes the git tag only) https://central.sonatype.com
 #   js       npm (publish pending: deploy publishes the git tag only) https://registry.npmjs.org
 #   lua      luarocks (publish pending: deploy publishes the git tag only) https://luarocks.org
 #   php      packagist (publish pending: deploy publishes the git tag only) https://packagist.org
 #   py       pypi (publish pending: deploy publishes the git tag only) https://pypi.org
 #   ts       npm (publish pending: deploy publishes the git tag only) https://registry.npmjs.org
+#   zig      none (publish pending: deploy publishes the git tag only)
 #
 #   make deploy               list per-target deploy commands
 #   make deploy-<target>      deploy ONE target (no deploy-all: each
@@ -32,16 +34,18 @@
 SHELL := /bin/bash
 
 GITHUB_ALIAS ?= github
+MAVEN_CENTRAL_ALIAS ?= central
 NPM_ALIAS ?= npm
 LUAROCKS_ALIAS ?= luarocks
 PACKAGIST_ALIAS ?= packagist
 PYPI_ALIAS ?= pypi
+NONE_ALIAS ?= none
 
 # Lockstep SDK version, read from the canonical ts manifest.
 VERSION := $(shell node -p "require('./ts/package.json').version" 2>/dev/null || echo 0.0.0)
 BORU_DRY_RUN_FILLER := BORU-DRY-RUN-FILLER-NOT-A-REAL-SECRET
 
-TARGETS := go go-cli go-mcp js lua php py ts
+TARGETS := go go-cli go-mcp java js lua php py ts zig
 
 .PHONY: deploy deploy-dry \
   $(addprefix deploy-,$(TARGETS)) $(addprefix deploy-dry-,$(TARGETS)) \
@@ -54,11 +58,13 @@ deploy:
 	@echo "  deploy-go       tag-only"
 	@echo "  deploy-go-cli   tag-only"
 	@echo "  deploy-go-mcp   tag-only"
+	@echo "  deploy-java     maven-central publish pending (deploy = git tag only)"
 	@echo "  deploy-js       npm publish pending (deploy = git tag only)"
 	@echo "  deploy-lua      luarocks publish pending (deploy = git tag only)"
 	@echo "  deploy-php      packagist publish pending (deploy = git tag only)"
 	@echo "  deploy-py       pypi publish pending (deploy = git tag only)"
 	@echo "  deploy-ts       npm publish pending (deploy = git tag only)"
+	@echo "  deploy-zig      none publish pending (deploy = git tag only)"
 	@echo "Rehearse everything safely first: make deploy-dry"
 
 deploy-dry: $(addprefix deploy-dry-,$(TARGETS))
@@ -111,6 +117,27 @@ tag-push-go-mcp:
 	hdr="AUTHORIZATION: basic $$(printf 'x-access-token:%s' "$$token" | base64 | tr -d '\n')"; \
 	git -c http.extraheader="$$hdr" push "$$url" "$$tag"; \
 	echo "pushed $$tag (tag-only port)"
+
+deploy-java:
+	@echo "deploy-java: maven-central publication is pending — publishing the git tag only."
+	boru vault exec --for=github=$(GITHUB_ALIAS) -- $(MAKE) tag-push-java
+
+deploy-dry-java:
+	boru vault exec --dry-run --for=github=$(GITHUB_ALIAS) -- $(MAKE) tag-push-java
+
+tag-push-java:
+	@set -e; tag="java/v$(VERSION)"; \
+	token="$${GITHUB_TOKEN:-$$GH_TOKEN}"; \
+	if [ "$$token" = "$(BORU_DRY_RUN_FILLER)" ]; then \
+	  echo "[dry-run] boru filler token detected: would create (if missing) and push tag $$tag; nothing pushed."; exit 0; fi; \
+	if [ -z "$$token" ]; then echo "tag-push-java: no GITHUB_TOKEN in env — run via make deploy-java (boru vault exec)"; exit 1; fi; \
+	if git rev-parse -q --verify "refs/tags/$$tag" >/dev/null; then \
+	  echo "tag $$tag already exists — pushing existing tag"; \
+	else git tag -a "$$tag" -m "Release $$tag"; fi; \
+	url=$$(git remote get-url origin | sed -E 's#^git@github.com:#https://github.com/#'); \
+	hdr="AUTHORIZATION: basic $$(printf 'x-access-token:%s' "$$token" | base64 | tr -d '\n')"; \
+	git -c http.extraheader="$$hdr" push "$$url" "$$tag"; \
+	echo "pushed $$tag (maven-central publication pending — tag-only deploy)"
 
 deploy-js:
 	@echo "deploy-js: npm publication is pending — publishing the git tag only."
@@ -216,3 +243,24 @@ tag-push-ts:
 	hdr="AUTHORIZATION: basic $$(printf 'x-access-token:%s' "$$token" | base64 | tr -d '\n')"; \
 	git -c http.extraheader="$$hdr" push "$$url" "$$tag"; \
 	echo "pushed $$tag (npm publication pending — tag-only deploy)"
+
+deploy-zig:
+	@echo "deploy-zig: none publication is pending — publishing the git tag only."
+	boru vault exec --for=github=$(GITHUB_ALIAS) -- $(MAKE) tag-push-zig
+
+deploy-dry-zig:
+	boru vault exec --dry-run --for=github=$(GITHUB_ALIAS) -- $(MAKE) tag-push-zig
+
+tag-push-zig:
+	@set -e; tag="zig/v$(VERSION)"; \
+	token="$${GITHUB_TOKEN:-$$GH_TOKEN}"; \
+	if [ "$$token" = "$(BORU_DRY_RUN_FILLER)" ]; then \
+	  echo "[dry-run] boru filler token detected: would create (if missing) and push tag $$tag; nothing pushed."; exit 0; fi; \
+	if [ -z "$$token" ]; then echo "tag-push-zig: no GITHUB_TOKEN in env — run via make deploy-zig (boru vault exec)"; exit 1; fi; \
+	if git rev-parse -q --verify "refs/tags/$$tag" >/dev/null; then \
+	  echo "tag $$tag already exists — pushing existing tag"; \
+	else git tag -a "$$tag" -m "Release $$tag"; fi; \
+	url=$$(git remote get-url origin | sed -E 's#^git@github.com:#https://github.com/#'); \
+	hdr="AUTHORIZATION: basic $$(printf 'x-access-token:%s' "$$token" | base64 | tr -d '\n')"; \
+	git -c http.extraheader="$$hdr" push "$$url" "$$tag"; \
+	echo "pushed $$tag (none publication pending — tag-only deploy)"
