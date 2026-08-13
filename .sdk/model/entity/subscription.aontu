@@ -36,7 +36,7 @@ main: kit: entity: subscription: {
       type: "`$STRING`"
     }
     {
-      name: "event_type"
+      name: "event_types"
       req: true
       type: "`$ARRAY`"
     }

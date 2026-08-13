@@ -14,12 +14,12 @@ from __future__ import annotations
 
 from urllib.parse import quote
 
-from config import make_config
-from features import _make_feature
-from core.control import Hook0Control
-from core.error import Hook0Error
-from core.result import Hook0Result
-from core.spec import Hook0Spec
+from hook0_sdk.config import make_config
+from hook0_sdk.features import _make_feature
+from hook0_sdk.core.control import Hook0Control
+from hook0_sdk.core.error import Hook0Error
+from hook0_sdk.core.result import Hook0Result
+from hook0_sdk.core.spec import Hook0Spec
 
 
 # True when this SDK was generated with the named feature.

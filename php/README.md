@@ -51,7 +51,7 @@ try {
 
 ```php
 try {
-    // load() returns the bare Application record (throws on error).
+    // load() returns the ENTITY — call data_get() for the Application record (throws on error).
     $application = $client->Application()->load(["id" => "example_id"]);
     print_r($application);
 } catch (\Throwable $err) {
@@ -62,11 +62,11 @@ try {
 ### 4. Create, update, and remove
 
 ```php
-// create() returns the bare created Application record.
-$created = $client->Application()->create(["application_id" => "example_application_id", "consumption" => [], "name" => "example_name", "onboarding_steps" => [], "organization_id" => "example_organization_id", "quota" => []]);
+// create() returns the ENTITY — call data_get() for the created Application record.
+$created = $client->Application()->create(["application_id" => "example_application_id", "consumption" => [], "name" => "example_name", "onboarding_steps" => [], "organization_id" => "example_organization_id", "quotas" => []]);
 
 // Update
-$client->Application()->update(["id" => "example_id"]);
+$client->Application()->update(["id" => "example_id", "application_id" => "example_application_id", "consumption" => []]);
 
 // Remove
 $client->Application()->remove(["id" => "example_id"]);
@@ -155,7 +155,8 @@ $client = Hook0SDK::test([
     "entity" => ["application" => ["test01" => ["id" => "test01"]]],
 ]);
 
-// Entity ops return the bare mock record (throws on error).
+// Entity ops return the ENTITY (throws on error);
+// call data_get() for the mock record.
 $application = $client->Application()->list();
 print_r($application);
 ```
@@ -283,7 +284,7 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the bare result data (an `array` for single-entity
+Entity operations return the ENTITY (call data_get() for the record) (an `array` for single-entity
 ops, a `list` for `list`) and throw on error. Wrap calls in
 `try`/`catch` to handle failures.
 
@@ -310,7 +311,7 @@ On error, `ok` is `false` and `$err` contains the error value.
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
-| `quota` |  |
+| `quotas` |  |
 
 Operations: Create, List, Load, Remove, Update.
 
@@ -486,7 +487,7 @@ API path: `/api/v1/auth/login`
 | `onboarding_steps` |  |
 | `organization_id` |  |
 | `plan` |  |
-| `quota` |  |
+| `quotas` |  |
 | `role` |  |
 | `users` |  |
 
@@ -522,8 +523,12 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `enabled` |  |
-| `limits` |  |
+| `global_applications_per_organization_limit` |  |
+| `global_days_of_events_retention_limit` |  |
+| `global_event_types_per_application_limit` |  |
+| `global_events_per_day_limit` |  |
+| `global_members_per_organization_limit` |  |
+| `global_subscriptions_per_application_limit` |  |
 
 Operations: Load.
 
@@ -570,12 +575,6 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
-| `body` |  |
-| `elapsed_time_ms` |  |
-| `headers` |  |
-| `http_code` |  |
-| `response_error_name` |  |
-| `response_id` |  |
 
 Operations: Load.
 
@@ -612,7 +611,7 @@ API path: `/api/v1/service_token/`
 | `created_at` |  |
 | `dedicated_workers` |  |
 | `description` |  |
-| `event_type` |  |
+| `event_types` |  |
 | `is_enabled` |  |
 | `label_key` |  |
 | `label_value` |  |
@@ -678,12 +677,12 @@ Create an instance: `$application = $client->Application();`
 | `name` | `string` |  |
 | `onboarding_steps` | `array` |  |
 | `organization_id` | `string` |  |
-| `quota` | `array` |  |
+| `quotas` | `array` |  |
 
 #### Example: Load
 
 ```php
-// load() returns the bare Application record (throws on error).
+// load() returns the ENTITY — call data_get() for the Application record (throws on error).
 $application = $client->Application()->load(["id" => "application_id"]);
 ```
 
@@ -703,7 +702,7 @@ $application = $client->Application()->create([
     "name" => null, // string
     "onboarding_steps" => null, // array
     "organization_id" => null, // string
-    "quota" => null, // array
+    "quotas" => null, // array
 ]);
 ```
 
@@ -787,7 +786,7 @@ Create an instance: `$event = $client->Event();`
 #### Example: Load
 
 ```php
-// load() returns the bare Event record (throws on error).
+// load() returns the ENTITY — call data_get() for the Event record (throws on error).
 $event = $client->Event()->load(["id" => "event_id"]);
 ```
 
@@ -827,7 +826,7 @@ Create an instance: `$event_type = $client->EventType();`
 #### Example: Load
 
 ```php
-// load() returns the bare EventType record (throws on error).
+// load() returns the ENTITY — call data_get() for the EventType record (throws on error).
 $event_type = $client->EventType()->load(["id" => "event_type_id"]);
 ```
 
@@ -884,6 +883,7 @@ $events_managements = $client->EventsManagement()->list();
 ```php
 $events_management = $client->EventsManagement()->create([
     "event_id" => null, // string
+    "application_id" => null, // string
 ]);
 ```
 
@@ -941,7 +941,7 @@ Create an instance: `$health = $client->Health();`
 #### Example: Load
 
 ```php
-// load() returns the bare Health record (throws on error).
+// load() returns the ENTITY — call data_get() for the Health record (throws on error).
 $health = $client->Health()->load();
 ```
 
@@ -1041,7 +1041,7 @@ Create an instance: `$instance = $client->Instance();`
 #### Example: Load
 
 ```php
-// load() returns the bare Instance record (throws on error).
+// load() returns the ENTITY — call data_get() for the Instance record (throws on error).
 $instance = $client->Instance()->load();
 ```
 
@@ -1096,14 +1096,14 @@ Create an instance: `$organization = $client->Organization();`
 | `onboarding_steps` | `array` |  |
 | `organization_id` | `string` |  |
 | `plan` | `array` |  |
-| `quota` | `array` |  |
+| `quotas` | `array` |  |
 | `role` | `string` |  |
 | `users` | `array` |  |
 
 #### Example: Load
 
 ```php
-// load() returns the bare Organization record (throws on error).
+// load() returns the ENTITY — call data_get() for the Organization record (throws on error).
 $organization = $client->Organization()->load(["id" => "organization_id"]);
 ```
 
@@ -1123,7 +1123,7 @@ $organization = $client->Organization()->create([
     "onboarding_steps" => null, // array
     "organization_id" => null, // string
     "plan" => null, // array
-    "quota" => null, // array
+    "quotas" => null, // array
     "role" => null, // string
     "users" => null, // array
 ]);
@@ -1189,13 +1189,17 @@ Create an instance: `$quota = $client->Quota();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `enabled` | `bool` |  |
-| `limits` | `array` |  |
+| `global_applications_per_organization_limit` | `int` |  |
+| `global_days_of_events_retention_limit` | `int` |  |
+| `global_event_types_per_application_limit` | `int` |  |
+| `global_events_per_day_limit` | `int` |  |
+| `global_members_per_organization_limit` | `int` |  |
+| `global_subscriptions_per_application_limit` | `int` |  |
 
 #### Example: Load
 
 ```php
-// load() returns the bare Quota record (throws on error).
+// load() returns the ENTITY — call data_get() for the Quota record (throws on error).
 $quota = $client->Quota()->load();
 ```
 
@@ -1265,7 +1269,7 @@ Create an instance: `$request_attempt = $client->RequestAttempt();`
 #### Example: Load
 
 ```php
-// load() returns the bare RequestAttempt record (throws on error).
+// load() returns the ENTITY — call data_get() for the RequestAttempt record (throws on error).
 $request_attempt = $client->RequestAttempt()->load(["id" => "request_attempt_id"]);
 ```
 
@@ -1287,21 +1291,10 @@ Create an instance: `$response = $client->Response();`
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
 
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `body` | `string` |  |
-| `elapsed_time_ms` | `int` |  |
-| `headers` | `array` |  |
-| `http_code` | `int` |  |
-| `response_error_name` | `string` |  |
-| `response_id` | `string` |  |
-
 #### Example: Load
 
 ```php
-// load() returns the bare Response record (throws on error).
+// load() returns the ENTITY — call data_get() for the Response record (throws on error).
 $response = $client->Response()->load(["id" => "response_id"]);
 ```
 
@@ -1344,7 +1337,7 @@ Create an instance: `$service_token = $client->ServiceToken();`
 #### Example: Load
 
 ```php
-// load() returns the bare ServiceToken record (throws on error).
+// load() returns the ENTITY — call data_get() for the ServiceToken record (throws on error).
 $service_token = $client->ServiceToken()->load(["id" => "service_token_id"]);
 ```
 
@@ -1390,7 +1383,7 @@ Create an instance: `$subscription = $client->Subscription();`
 | `created_at` | `string` |  |
 | `dedicated_workers` | `array` |  |
 | `description` | `string` |  |
-| `event_type` | `array` |  |
+| `event_types` | `array` |  |
 | `is_enabled` | `bool` |  |
 | `label_key` | `string` |  |
 | `label_value` | `string` |  |
@@ -1404,7 +1397,7 @@ Create an instance: `$subscription = $client->Subscription();`
 #### Example: Load
 
 ```php
-// load() returns the bare Subscription record (throws on error).
+// load() returns the ENTITY — call data_get() for the Subscription record (throws on error).
 $subscription = $client->Subscription()->load(["id" => "subscription_id"]);
 ```
 
@@ -1422,7 +1415,7 @@ $subscription = $client->Subscription()->create([
     "application_id" => null, // string
     "created_at" => null, // string
     "dedicated_workers" => null, // array
-    "event_type" => null, // array
+    "event_types" => null, // array
     "is_enabled" => null, // bool
     "label_key" => null, // string
     "label_value" => null, // string
@@ -1487,6 +1480,8 @@ Create an instance: `$user_invitation = $client->UserInvitation();`
 ```php
 $user_invitation = $client->UserInvitation()->create([
     "organization_id" => null, // string
+    "email" => null, // string
+    "role" => null, // string
 ]);
 ```
 

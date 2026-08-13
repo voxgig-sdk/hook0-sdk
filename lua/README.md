@@ -61,11 +61,11 @@ print(application)
 
 ```lua
 -- Create
-local created, err = client:Application():create({ application_id = "example_application_id", consumption = {}, name = "example_name", onboarding_steps = {}, organization_id = "example_organization_id", quota = {} })
+local created, err = client:Application():create({ application_id = "example_application_id", consumption = {}, name = "example_name", onboarding_steps = {}, organization_id = "example_organization_id", quotas = {} })
 if err then error(err) end
 
 -- Update
-client:Application():update({ id = "example_id" })
+client:Application():update({ id = "example_id", application_id = "example_application_id", consumption = {} })
 
 -- Remove
 client:Application():remove({ id = "example_id" })
@@ -290,7 +290,7 @@ Only `direct()` returns a response envelope — a `table` with `ok`,
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
-| `quota` |  |
+| `quotas` |  |
 
 Operations: Create, List, Load, Remove, Update.
 
@@ -466,7 +466,7 @@ API path: `/api/v1/auth/login`
 | `onboarding_steps` |  |
 | `organization_id` |  |
 | `plan` |  |
-| `quota` |  |
+| `quotas` |  |
 | `role` |  |
 | `users` |  |
 
@@ -502,8 +502,12 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `enabled` |  |
-| `limits` |  |
+| `global_applications_per_organization_limit` |  |
+| `global_days_of_events_retention_limit` |  |
+| `global_event_types_per_application_limit` |  |
+| `global_events_per_day_limit` |  |
+| `global_members_per_organization_limit` |  |
+| `global_subscriptions_per_application_limit` |  |
 
 Operations: Load.
 
@@ -550,12 +554,6 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
-| `body` |  |
-| `elapsed_time_ms` |  |
-| `headers` |  |
-| `http_code` |  |
-| `response_error_name` |  |
-| `response_id` |  |
 
 Operations: Load.
 
@@ -592,7 +590,7 @@ API path: `/api/v1/service_token/`
 | `created_at` |  |
 | `dedicated_workers` |  |
 | `description` |  |
-| `event_type` |  |
+| `event_types` |  |
 | `is_enabled` |  |
 | `label_key` |  |
 | `label_value` |  |
@@ -658,7 +656,7 @@ Create an instance: `local application = client:Application(nil)`
 | `name` | `string` |  |
 | `onboarding_steps` | `table` |  |
 | `organization_id` | `string` |  |
-| `quota` | `table` |  |
+| `quotas` | `table` |  |
 
 #### Example: Load
 
@@ -681,7 +679,7 @@ local application, err = client:Application():create({
   name = "example_name", -- string
   onboarding_steps = {}, -- table
   organization_id = "example_organization_id", -- string
-  quota = {}, -- table
+  quotas = {}, -- table
 })
 ```
 
@@ -856,6 +854,7 @@ local events_managements, err = client:EventsManagement():list()
 ```lua
 local events_management, err = client:EventsManagement():create({
   event_id = "example_event_id", -- string
+  application_id = "example_application_id", -- string
 })
 ```
 
@@ -1064,7 +1063,7 @@ Create an instance: `local organization = client:Organization(nil)`
 | `onboarding_steps` | `table` |  |
 | `organization_id` | `string` |  |
 | `plan` | `table` |  |
-| `quota` | `table` |  |
+| `quotas` | `table` |  |
 | `role` | `string` |  |
 | `users` | `table` |  |
 
@@ -1089,7 +1088,7 @@ local organization, err = client:Organization():create({
   onboarding_steps = {}, -- table
   organization_id = "example_organization_id", -- string
   plan = {}, -- table
-  quota = {}, -- table
+  quotas = {}, -- table
   role = "example_role", -- string
   users = {}, -- table
 })
@@ -1154,8 +1153,12 @@ Create an instance: `local quota = client:Quota(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `enabled` | `boolean` |  |
-| `limits` | `table` |  |
+| `global_applications_per_organization_limit` | `number` |  |
+| `global_days_of_events_retention_limit` | `number` |  |
+| `global_event_types_per_application_limit` | `number` |  |
+| `global_events_per_day_limit` | `number` |  |
+| `global_members_per_organization_limit` | `number` |  |
+| `global_subscriptions_per_application_limit` | `number` |  |
 
 #### Example: Load
 
@@ -1249,17 +1252,6 @@ Create an instance: `local response = client:Response(nil)`
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
 
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `body` | `string` |  |
-| `elapsed_time_ms` | `number` |  |
-| `headers` | `table` |  |
-| `http_code` | `number` |  |
-| `response_error_name` | `string` |  |
-| `response_id` | `string` |  |
-
 #### Example: Load
 
 ```lua
@@ -1349,7 +1341,7 @@ Create an instance: `local subscription = client:Subscription(nil)`
 | `created_at` | `string` |  |
 | `dedicated_workers` | `table` |  |
 | `description` | `string` |  |
-| `event_type` | `table` |  |
+| `event_types` | `table` |  |
 | `is_enabled` | `boolean` |  |
 | `label_key` | `string` |  |
 | `label_value` | `string` |  |
@@ -1379,7 +1371,7 @@ local subscription, err = client:Subscription():create({
   application_id = "example_application_id", -- string
   created_at = "example_created_at", -- string
   dedicated_workers = {}, -- table
-  event_type = {}, -- table
+  event_types = {}, -- table
   is_enabled = true, -- boolean
   label_key = "example_label_key", -- string
   label_value = "example_label_value", -- string
@@ -1444,6 +1436,8 @@ Create an instance: `local user_invitation = client:UserInvitation(nil)`
 ```lua
 local user_invitation, err = client:UserInvitation():create({
   organization_id = "example_organization_id", -- string
+  email = "example_email", -- string
+  role = "example_role", -- string
 })
 ```
 

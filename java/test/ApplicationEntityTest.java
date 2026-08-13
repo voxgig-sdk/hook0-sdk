@@ -47,7 +47,7 @@ public class ApplicationEntityTest {
     // The basic flow consumes synthetic IDs from the fixture. In live mode
     // without an *_ENTID env override, those IDs hit the live API and 4xx.
     Assumptions.assumeFalse(setup.syntheticOnly,
-        "live entity test uses synthetic IDs from fixture — set HOOK__TEST_APPLICATION_ENTID JSON to run live");
+        "live entity test uses synthetic IDs from fixture — set HOOK0_TEST_APPLICATION_ENTID JSON to run live");
     Hook0SDK client = setup.client;
 
     // CREATE
@@ -56,7 +56,7 @@ public class ApplicationEntityTest {
         Struct.getpath(setup.data, "new.application"), "application_ref01"));
 
     Object applicationRef01DataResult = applicationRef01Ent.create(applicationRef01Data, null);
-    applicationRef01Data = Helpers.toMapAny(applicationRef01DataResult);
+    applicationRef01Data = Helpers.toMapAny(applicationRef01DataResult instanceof SdkEntity ? ((SdkEntity) applicationRef01DataResult).data() : applicationRef01DataResult);
     assertNotNull(applicationRef01Data, "expected create result to be a map");
 
     // LIST
@@ -80,7 +80,7 @@ public class ApplicationEntityTest {
     applicationRef01DataUp0Up.put(applicationRef01MarkdefUp0Name, applicationRef01MarkdefUp0Value);
 
     Object applicationRef01ResdataUp0Result = applicationRef01Ent.update(applicationRef01DataUp0Up, null);
-    Map<String, Object> applicationRef01ResdataUp0 = Helpers.toMapAny(applicationRef01ResdataUp0Result);
+    Map<String, Object> applicationRef01ResdataUp0 = Helpers.toMapAny(applicationRef01ResdataUp0Result instanceof SdkEntity ? ((SdkEntity) applicationRef01ResdataUp0Result).data() : applicationRef01ResdataUp0Result);
     assertNotNull(applicationRef01ResdataUp0, "expected update result to be a map");
     assertEquals(applicationRef01MarkdefUp0Value, applicationRef01ResdataUp0.get(applicationRef01MarkdefUp0Name),
         "expected " + applicationRef01MarkdefUp0Name + " to be updated");
@@ -181,26 +181,26 @@ public class ApplicationEntityTest {
     // mode is on without a real override, the basic test runs against
     // synthetic IDs from the fixture and 4xx's. Surface this so the test
     // can skip.
-    String entidEnvRaw = RunnerSupport.getenv("HOOK__TEST_APPLICATION_ENTID");
+    String entidEnvRaw = RunnerSupport.getenv("HOOK0_TEST_APPLICATION_ENTID");
     boolean idmapOverridden = entidEnvRaw != null
         && entidEnvRaw.trim().startsWith("{");
 
     Map<String, Object> envm = new LinkedHashMap<>();
-    envm.put("HOOK__TEST_APPLICATION_ENTID", idmap);
-    envm.put("HOOK__TEST_LIVE", "FALSE");
-    envm.put("HOOK__TEST_EXPLAIN", "FALSE");
-    envm.put("HOOK__APIKEY", "NONE");
+    envm.put("HOOK0_TEST_APPLICATION_ENTID", idmap);
+    envm.put("HOOK0_TEST_LIVE", "FALSE");
+    envm.put("HOOK0_TEST_EXPLAIN", "FALSE");
+    envm.put("HOOK0_APIKEY", "NONE");
     Map<String, Object> env = RunnerSupport.envOverride(envm);
 
-    Map<String, Object> idmapResolved = Helpers.toMapAny(env.get("HOOK__TEST_APPLICATION_ENTID"));
+    Map<String, Object> idmapResolved = Helpers.toMapAny(env.get("HOOK0_TEST_APPLICATION_ENTID"));
     if (idmapResolved == null) {
       idmapResolved = Helpers.toMapAny(idmap);
     }
 
-    boolean live = "TRUE".equals(env.get("HOOK__TEST_LIVE"));
+    boolean live = "TRUE".equals(env.get("HOOK0_TEST_LIVE"));
     if (live) {
       Map<String, Object> liveOpts = new LinkedHashMap<>();
-      liveOpts.put("apikey", env.get("HOOK__APIKEY"));
+      liveOpts.put("apikey", env.get("HOOK0_APIKEY"));
       Object mergedOpts = Struct.merge(Struct.jt(liveOpts, extra));
       client = new Hook0SDK(Helpers.toMapAny(mergedOpts));
     }
@@ -210,7 +210,7 @@ public class ApplicationEntityTest {
     setup.data = entityData;
     setup.idmap = idmapResolved;
     setup.env = env;
-    setup.explain = "TRUE".equals(env.get("HOOK__TEST_EXPLAIN"));
+    setup.explain = "TRUE".equals(env.get("HOOK0_TEST_EXPLAIN"));
     setup.live = live;
     setup.syntheticOnly = live && !idmapOverridden;
     setup.now = System.currentTimeMillis();

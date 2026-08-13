@@ -44,7 +44,7 @@ describe('UserAuthenticationEntity', async () => {
     const user_authentication_ref01_ent = client.UserAuthentication()
     let user_authentication_ref01_data = setup.data.new.user_authentication['user_authentication_ref01']
 
-    user_authentication_ref01_data = await user_authentication_ref01_ent.create(user_authentication_ref01_data)
+    user_authentication_ref01_data = (await user_authentication_ref01_ent.create(user_authentication_ref01_data)).data()
     assert(null != user_authentication_ref01_data)
 
 
@@ -85,18 +85,18 @@ function basicSetup(extra) {
     })
 
   const env = envOverride({
-    'HOOK__TEST_USER_AUTHENTICATION_ENTID': idmap,
-    'HOOK__TEST_LIVE': 'FALSE',
-    'HOOK__TEST_EXPLAIN': 'FALSE',
-    'HOOK__APIKEY': 'NONE',
+    'HOOK0_TEST_USER_AUTHENTICATION_ENTID': idmap,
+    'HOOK0_TEST_LIVE': 'FALSE',
+    'HOOK0_TEST_EXPLAIN': 'FALSE',
+    'HOOK0_APIKEY': 'NONE',
   })
 
-  idmap = env['HOOK__TEST_USER_AUTHENTICATION_ENTID']
+  idmap = env['HOOK0_TEST_USER_AUTHENTICATION_ENTID']
 
-  if ('TRUE' === env.HOOK__TEST_LIVE) {
+  if ('TRUE' === env.HOOK0_TEST_LIVE) {
     client = new Hook0SDK(merge([
       {
-        apikey: env.HOOK__APIKEY,
+        apikey: env.HOOK0_APIKEY,
       },
       extra
     ]))
@@ -109,7 +109,7 @@ function basicSetup(extra) {
     client,
     struct,
     data: entityData,
-    explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+    explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
     now: Date.now(),
   }
 

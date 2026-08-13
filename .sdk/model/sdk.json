@@ -1,36 +1,15 @@
 {
-  "NAME": "HOOK0",
-  "Name": "Hook0",
   "def": "hook0-openapi.json",
   "main": {
-    "api": {
-      "entity": {},
-      "guide": {}
-    },
-    "custom": {
-      "plurals": {
-        "database_duration_ms": "database_duration_ms",
-        "dedicated_workers": "dedicated_workers",
-        "elapsed_time_ms": "elapsed_time_ms",
-        "formbricks": "formbricks",
-        "headers": "headers",
-        "labels": "labels",
-        "limits": "limits",
-        "object_storage_duration_ms": "object_storage_duration_ms",
-        "onboarding_steps": "onboarding_steps",
-        "pulsar_duration_ms": "pulsar_duration_ms",
-        "total_duration_ms": "total_duration_ms",
-        "users": "users"
-      }
-    },
     "def": {
       "desc": ""
     },
     "kit": {
+      "author": {
+        "name": "",
+        "url": ""
+      },
       "config": {
-        "auth": {
-          "prefix": "Bearer"
-        },
         "docs_order": [
           "ts",
           "py",
@@ -43,6 +22,7 @@
           "content-type": "application/json"
         }
       },
+      "contributor": {},
       "entity": {
         "application": {
           "active": true,
@@ -82,7 +62,7 @@
             },
             {
               "active": true,
-              "name": "quota",
+              "name": "quotas",
               "req": true,
               "type": "`$OBJECT`"
             }
@@ -96,6 +76,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/applications/",
                   "parts": [
@@ -129,6 +110,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/applications/",
                   "parts": [
@@ -166,6 +148,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/applications/{application_id}",
                   "parts": [
@@ -209,6 +192,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "DELETE",
                   "orig": "/api/v1/applications/{application_id}",
                   "parts": [
@@ -252,6 +236,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "PUT",
                   "orig": "/api/v1/applications/{application_id}",
                   "parts": [
@@ -328,6 +313,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/application_secrets/",
                   "parts": [
@@ -361,6 +347,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/application_secrets/",
                   "parts": [
@@ -398,6 +385,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "PUT",
                   "orig": "/api/v1/application_secrets/{application_secret_token}",
                   "parts": [
@@ -464,6 +452,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "DELETE",
                   "orig": "/api/v1/application_secrets/{application_secret_token}",
                   "parts": [
@@ -575,6 +564,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/events/",
                   "parts": [
@@ -622,6 +612,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/events/{event_id}",
                   "parts": [
@@ -717,6 +708,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/event_types/",
                   "parts": [
@@ -750,6 +742,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/event_types/",
                   "parts": [
@@ -797,6 +790,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/event_types/{event_type_name}",
                   "parts": [
@@ -861,6 +855,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/events/{event_id}/replay",
                   "parts": [
@@ -889,6 +884,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/payload_content_types/",
                   "parts": [
@@ -932,6 +928,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "DELETE",
                   "orig": "/api/v1/event_types/{event_type_name}",
                   "parts": [
@@ -1038,6 +1035,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/events_per_day/application",
                   "parts": [
@@ -1088,6 +1086,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/events_per_day/organization",
                   "parts": [
@@ -1184,6 +1183,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/health/",
                   "parts": [
@@ -1266,6 +1266,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/environment_variables/",
                   "parts": [
@@ -1350,6 +1351,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/event/",
                   "parts": [
@@ -1446,6 +1448,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/instance/",
                   "parts": [
@@ -1494,6 +1497,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/auth/login",
                   "parts": [
@@ -1511,6 +1515,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/auth/refresh",
                   "parts": [
@@ -1570,7 +1575,7 @@
             },
             {
               "active": true,
-              "name": "quota",
+              "name": "quotas",
               "req": true,
               "type": "`$OBJECT`"
             },
@@ -1596,6 +1601,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/organizations/",
                   "parts": [
@@ -1618,6 +1624,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/organizations/",
                   "parts": [
@@ -1651,6 +1658,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/organizations/{organization_id}/",
                   "parts": [
@@ -1694,6 +1702,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "DELETE",
                   "orig": "/api/v1/organizations/{organization_id}/",
                   "parts": [
@@ -1737,6 +1746,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "PUT",
                   "orig": "/api/v1/organizations/{organization_id}/",
                   "parts": [
@@ -1806,6 +1816,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "PUT",
                   "orig": "/api/v1/organizations/{organization_id}/invite",
                   "parts": [
@@ -1882,6 +1893,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/errors/",
                   "parts": [
@@ -1910,15 +1922,39 @@
           "fields": [
             {
               "active": true,
-              "name": "enabled",
+              "name": "global_applications_per_organization_limit",
               "req": true,
-              "type": "`$BOOLEAN`"
+              "type": "`$INTEGER`"
             },
             {
               "active": true,
-              "name": "limits",
+              "name": "global_days_of_events_retention_limit",
               "req": true,
-              "type": "`$OBJECT`"
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "global_event_types_per_application_limit",
+              "req": true,
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "global_events_per_day_limit",
+              "req": true,
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "global_members_per_organization_limit",
+              "req": true,
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "global_subscriptions_per_application_limit",
+              "req": true,
+              "type": "`$INTEGER`"
             }
           ],
           "name": "quota",
@@ -1930,6 +1966,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/quotas/",
                   "parts": [
@@ -2002,6 +2039,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/register/",
                   "parts": [
@@ -2175,6 +2213,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/request_attempts/",
                   "parts": [
@@ -2228,6 +2267,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/request_attempts/{request_attempt_id}",
                   "parts": [
@@ -2264,44 +2304,7 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "name": "body",
-              "req": false,
-              "type": "`$STRING`"
-            },
-            {
-              "active": true,
-              "name": "elapsed_time_ms",
-              "req": false,
-              "type": "`$INTEGER`"
-            },
-            {
-              "active": true,
-              "name": "headers",
-              "req": false,
-              "type": "`$OBJECT`"
-            },
-            {
-              "active": true,
-              "name": "http_code",
-              "req": false,
-              "type": "`$INTEGER`"
-            },
-            {
-              "active": true,
-              "name": "response_error_name",
-              "req": false,
-              "type": "`$STRING`"
-            },
-            {
-              "active": true,
-              "name": "response_id",
-              "req": true,
-              "type": "`$STRING`"
-            }
-          ],
+          "fields": [],
           "name": "response",
           "op": {
             "load": {
@@ -2332,6 +2335,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/responses/{response_id}",
                   "parts": [
@@ -2389,6 +2393,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "DELETE",
                   "orig": "/api/v1/organizations/{organization_id}/invite",
                   "parts": [
@@ -2465,6 +2470,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/service_token/",
                   "parts": [
@@ -2498,6 +2504,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/service_token/",
                   "parts": [
@@ -2545,6 +2552,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/service_token/{service_token_id}",
                   "parts": [
@@ -2599,6 +2607,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "DELETE",
                   "orig": "/api/v1/service_token/{service_token_id}",
                   "parts": [
@@ -2643,6 +2652,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "PUT",
                   "orig": "/api/v1/service_token/{service_token_id}",
                   "parts": [
@@ -2715,7 +2725,7 @@
             },
             {
               "active": true,
-              "name": "event_type",
+              "name": "event_types",
               "req": true,
               "type": "`$ARRAY`"
             },
@@ -2823,6 +2833,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/subscriptions/",
                   "parts": [
@@ -2856,6 +2867,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/subscriptions/",
                   "parts": [
@@ -2893,6 +2905,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "GET",
                   "orig": "/api/v1/subscriptions/{subscription_id}",
                   "parts": [
@@ -2946,6 +2959,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "DELETE",
                   "orig": "/api/v1/subscriptions/{subscription_id}",
                   "parts": [
@@ -2990,6 +3004,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "PUT",
                   "orig": "/api/v1/subscriptions/{subscription_id}",
                   "parts": [
@@ -3054,6 +3069,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/auth/begin-reset-password",
                   "parts": [
@@ -3071,6 +3087,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/auth/logout",
                   "parts": [
@@ -3088,6 +3105,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/auth/password",
                   "parts": [
@@ -3105,6 +3123,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/auth/reset-password",
                   "parts": [
@@ -3122,6 +3141,7 @@
                 {
                   "active": true,
                   "args": {},
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/auth/verify-email",
                   "parts": [
@@ -3182,6 +3202,7 @@
                       }
                     ]
                   },
+                  "kind": "http",
                   "method": "POST",
                   "orig": "/api/v1/organizations/{organization_id}/invite",
                   "parts": [
@@ -4422,18 +4443,41 @@
         "website": "https://app.hook0.com"
       },
       "option": {},
+      "repo": {
+        "host": "github.com",
+        "path": ""
+      },
       "target": {
         "go": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "//"
           },
           "deps": {},
           "ext": "go",
+          "feature": {
+            "fullset": [
+              "test/feature_test.go"
+            ],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "go",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "publish": {
             "registry": {
               "active": false,
@@ -4455,22 +4499,40 @@
                 "recipe": "github"
               },
               "via": "port"
-            }
+            },
+            "version": "0.0.1"
           },
           "srcfeature": false,
           "title": "Golang"
         },
         "go-cli": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "//"
           },
           "deps": {},
           "ext": "go",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "go-cli",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "phase": {
             "agentguide": {
               "active": false
@@ -4509,21 +4571,39 @@
                 "recipe": "github"
               },
               "via": "root"
-            }
+            },
+            "version": "0.0.1"
           },
           "title": "Go CLI"
         },
         "go-mcp": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "//"
           },
           "deps": {},
           "ext": "go",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "go-mcp",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "phase": {
             "agentguide": {
               "active": false
@@ -4562,21 +4642,41 @@
                 "recipe": "github"
               },
               "via": "root"
-            }
+            },
+            "version": "0.0.1"
           },
           "title": "Go MCP server"
         },
         "java": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "//"
           },
           "deps": {},
           "ext": "java",
+          "feature": {
+            "fullset": [
+              "test/FeatureTest.java"
+            ],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "java",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "publish": {
             "registry": {
               "active": false,
@@ -4598,13 +4698,18 @@
                 "recipe": "github"
               },
               "via": "port"
-            }
+            },
+            "version": "0.0.1"
           },
           "srcfeature": false,
           "title": "Java"
         },
         "js": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "//"
           },
@@ -4616,10 +4721,23 @@
             }
           },
           "ext": "js",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "js",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "publish": {
             "registry": {
               "active": false,
@@ -4641,12 +4759,17 @@
                 "recipe": "github"
               },
               "via": "port"
-            }
+            },
+            "version": "0.0.1"
           },
           "title": "JavaScript"
         },
         "lua": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "--"
           },
@@ -4658,10 +4781,23 @@
             }
           },
           "ext": "lua",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "lua",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "publish": {
             "registry": {
               "active": false,
@@ -4683,22 +4819,40 @@
                 "recipe": "github"
               },
               "via": "port"
-            }
+            },
+            "version": "0.0.1"
           },
           "srcfeature": false,
           "title": "Lua"
         },
         "php": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "//"
           },
           "deps": {},
           "ext": "php",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "php",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "publish": {
             "registry": {
               "active": false,
@@ -4720,13 +4874,18 @@
                 "recipe": "github"
               },
               "via": "port"
-            }
+            },
+            "version": "0.0.1"
           },
           "srcfeature": false,
           "title": "PHP"
         },
         "py": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "#"
           },
@@ -4738,10 +4897,23 @@
             }
           },
           "ext": "py",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "py",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "publish": {
             "registry": {
               "active": false,
@@ -4763,13 +4935,18 @@
                 "recipe": "github"
               },
               "via": "port"
-            }
+            },
+            "version": "0.0.1"
           },
           "srcfeature": false,
           "title": "Python"
         },
         "ts": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "//"
@@ -4792,10 +4969,23 @@
             }
           },
           "ext": "ts",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "ts",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "publish": {
             "registry": {
               "active": false,
@@ -4817,21 +5007,39 @@
                 "recipe": "github"
               },
               "via": "port"
-            }
+            },
+            "version": "0.0.1"
           },
           "title": "TypeScript"
         },
         "zig": {
           "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
           "comment": {
             "line": "//"
           },
           "deps": {},
           "ext": "zig",
+          "feature": {
+            "fullset": [],
+            "trim": false
+          },
           "module": {
-            "name": "hook0"
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
           },
           "name": "zig",
+          "output": {
+            "adopt": false,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
           "publish": {
             "registry": {
               "active": false,
@@ -4853,17 +5061,22 @@
                 "recipe": "github"
               },
               "via": "port"
-            }
+            },
+            "version": "0.0.1"
           },
           "srcfeature": false,
           "title": "Zig"
+        }
+      },
+      "test": {
+        "live": {
+          "app": false,
+          "base": "",
+          "strict": false
         }
       }
     }
   },
   "name": "hook0",
-  "name-": "hook0",
-  "name_": "hook0",
-  "name__orig": "hook0",
   "origin": "voxgig-sdk"
 }

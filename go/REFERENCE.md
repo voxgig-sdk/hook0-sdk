@@ -196,7 +196,7 @@ fmt.Println(application.GetName()) // "application"
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `map[string]any` | Yes |  |
 | `organization_id` | `string` | Yes |  |
-| `quota` | `map[string]any` | Yes |  |
+| `quotas` | `map[string]any` | Yes |  |
 
 ### Operations
 
@@ -235,7 +235,7 @@ result, err := client.Application(nil).Create(map[string]any{
     "name": "example_name",
     "onboarding_steps": map[string]any{},
     "organization_id": "example_organization_id",
-    "quota": map[string]any{},
+    "quotas": map[string]any{},
 }, nil)
 if err != nil {
     panic(err)
@@ -621,6 +621,7 @@ Create a new entity with the given data.
 ```go
 result, err := client.EventsManagement(nil).Create(map[string]any{
     "event_id": "example_event_id",
+    "application_id": "example_application_id",
 }, nil)
 if err != nil {
     panic(err)
@@ -1029,7 +1030,7 @@ fmt.Println(organization.GetName()) // "organization"
 | `onboarding_steps` | `map[string]any` | Yes |  |
 | `organization_id` | `string` | Yes |  |
 | `plan` | `map[string]any` | Yes |  |
-| `quota` | `map[string]any` | Yes |  |
+| `quotas` | `map[string]any` | Yes |  |
 | `role` | `string` | Yes |  |
 | `users` | `[]any` | Yes |  |
 
@@ -1070,7 +1071,7 @@ result, err := client.Organization(nil).Create(map[string]any{
     "onboarding_steps": map[string]any{},
     "organization_id": "example_organization_id",
     "plan": map[string]any{},
-    "quota": map[string]any{},
+    "quotas": map[string]any{},
     "role": "example_role",
     "users": []any{},
 }, nil)
@@ -1251,8 +1252,12 @@ fmt.Println(quota.GetName()) // "quota"
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `enabled` | `bool` | Yes |  |
-| `limits` | `map[string]any` | Yes |  |
+| `global_applications_per_organization_limit` | `int` | Yes |  |
+| `global_days_of_events_retention_limit` | `int` | Yes |  |
+| `global_event_types_per_application_limit` | `int` | Yes |  |
+| `global_events_per_day_limit` | `int` | Yes |  |
+| `global_members_per_organization_limit` | `int` | Yes |  |
+| `global_subscriptions_per_application_limit` | `int` | Yes |  |
 
 ### Operations
 
@@ -1434,17 +1439,6 @@ Return the entity name.
 response := client.Response(nil)
 fmt.Println(response.GetName()) // "response"
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `body` | `string` | No |  |
-| `elapsed_time_ms` | `int` | No |  |
-| `headers` | `map[string]any` | No |  |
-| `http_code` | `int` | No |  |
-| `response_error_name` | `string` | No |  |
-| `response_id` | `string` | Yes |  |
 
 ### Operations
 
@@ -1656,7 +1650,7 @@ fmt.Println(subscription.GetName()) // "subscription"
 | `created_at` | `string` | Yes |  |
 | `dedicated_workers` | `[]any` | Yes |  |
 | `description` | `string` | No |  |
-| `event_type` | `[]any` | Yes |  |
+| `event_types` | `[]any` | Yes |  |
 | `is_enabled` | `bool` | Yes |  |
 | `label_key` | `string` | Yes |  |
 | `label_value` | `string` | Yes |  |
@@ -1675,7 +1669,7 @@ fmt.Println(subscription.GetName()) // "subscription"
 | `created_at` | - | - | - | - | - |
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
-| `event_type` | - | - | - | - | - |
+| `event_types` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |
@@ -1721,7 +1715,7 @@ result, err := client.Subscription(nil).Create(map[string]any{
     "application_id": "example_application_id",
     "created_at": "example_created_at",
     "dedicated_workers": []any{},
-    "event_type": []any{},
+    "event_types": []any{},
     "is_enabled": true,
     "label_key": "example_label_key",
     "label_value": "example_label_value",
@@ -1869,6 +1863,8 @@ Create a new entity with the given data.
 ```go
 result, err := client.UserInvitation(nil).Create(map[string]any{
     "organization_id": "example_organization_id",
+    "email": "example_email",
+    "role": "example_role",
 }, nil)
 if err != nil {
     panic(err)

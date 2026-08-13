@@ -7,7 +7,7 @@
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
         "plan": {},
-        "quota": {},
+        "quotas": {},
         "role": "s56",
         "users": [],
         "id": "ORGANIZATION00"
@@ -18,7 +18,7 @@
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
         "plan": {},
-        "quota": {},
+        "quotas": {},
         "role": "sa6",
         "users": [],
         "id": "ORGANIZATION01"
@@ -29,7 +29,7 @@
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
         "plan": {},
-        "quota": {},
+        "quotas": {},
         "role": "sf6",
         "users": [],
         "id": "ORGANIZATION02"
@@ -44,7 +44,7 @@
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
         "plan": {},
-        "quota": {},
+        "quotas": {},
         "role": "s146",
         "users": []
       }

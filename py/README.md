@@ -55,7 +55,7 @@ except Exception as err:
 
 ### 3. Load an application
 
-`load()` returns the bare record (a `dict`) and raises on error.
+`load()` returns the ENTITY — call data_get() for the record — and raises on error.
 
 ```python
 try:
@@ -68,11 +68,11 @@ except Exception as err:
 ### 4. Create, update, and remove
 
 ```python
-# Create — returns the bare created record (a dict)
-created = client.Application().create({"application_id": "example_application_id", "consumption": {}, "name": "example_name", "onboarding_steps": {}, "organization_id": "example_organization_id", "quota": {}})
+# Create — returns the ENTITY (call data_get() for the record)
+created = client.Application().create({"application_id": "example_application_id", "consumption": {}, "name": "example_name", "onboarding_steps": {}, "organization_id": "example_organization_id", "quotas": {}})
 
 # Update
-client.Application().update({"id": "example_id"})
+client.Application().update({"id": "example_id", "application_id": "example_application_id", "consumption": {}})
 
 # Remove
 client.Application().remove({"id": "example_id"})
@@ -152,7 +152,8 @@ Create a mock client for unit testing — no server required:
 ```python
 client = Hook0SDK.test()
 
-# Entity ops return the bare record and raise on error.
+# Entity ops return the ENTITY and raises on error;
+# call data_get() for the record.
 application = client.Application().list()
 # application contains the mock response record
 ```
@@ -277,7 +278,7 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the bare result data (a `dict` for single-entity
+Entity operations return the ENTITY (call data_get() for the record) (a `dict` for single-entity
 ops, a `list` for `list`) and raise on error. Wrap calls in
 `try`/`except` to handle failures.
 
@@ -304,7 +305,7 @@ On error, `ok` is `False` and `err` contains the error value.
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
-| `quota` |  |
+| `quotas` |  |
 
 Operations: Create, List, Load, Remove, Update.
 
@@ -480,7 +481,7 @@ API path: `/api/v1/auth/login`
 | `onboarding_steps` |  |
 | `organization_id` |  |
 | `plan` |  |
-| `quota` |  |
+| `quotas` |  |
 | `role` |  |
 | `users` |  |
 
@@ -516,8 +517,12 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `enabled` |  |
-| `limits` |  |
+| `global_applications_per_organization_limit` |  |
+| `global_days_of_events_retention_limit` |  |
+| `global_event_types_per_application_limit` |  |
+| `global_events_per_day_limit` |  |
+| `global_members_per_organization_limit` |  |
+| `global_subscriptions_per_application_limit` |  |
 
 Operations: Load.
 
@@ -564,12 +569,6 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
-| `body` |  |
-| `elapsed_time_ms` |  |
-| `headers` |  |
-| `http_code` |  |
-| `response_error_name` |  |
-| `response_id` |  |
 
 Operations: Load.
 
@@ -606,7 +605,7 @@ API path: `/api/v1/service_token/`
 | `created_at` |  |
 | `dedicated_workers` |  |
 | `description` |  |
-| `event_type` |  |
+| `event_types` |  |
 | `is_enabled` |  |
 | `label_key` |  |
 | `label_value` |  |
@@ -672,7 +671,7 @@ Create an instance: `application = client.Application()`
 | `name` | `str` |  |
 | `onboarding_steps` | `dict` |  |
 | `organization_id` | `str` |  |
-| `quota` | `dict` |  |
+| `quotas` | `dict` |  |
 
 #### Example: Load
 
@@ -695,7 +694,7 @@ application = client.Application().create({
     "name": "example_name",  # str
     "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
-    "quota": {},  # dict
+    "quotas": {},  # dict
 })
 ```
 
@@ -870,6 +869,7 @@ events_managements = client.EventsManagement().list()
 ```python
 events_management = client.EventsManagement().create({
     "event_id": "example_event_id",  # str
+    "application_id": "example_application_id",  # str
 })
 ```
 
@@ -1078,7 +1078,7 @@ Create an instance: `organization = client.Organization()`
 | `onboarding_steps` | `dict` |  |
 | `organization_id` | `str` |  |
 | `plan` | `dict` |  |
-| `quota` | `dict` |  |
+| `quotas` | `dict` |  |
 | `role` | `str` |  |
 | `users` | `list` |  |
 
@@ -1103,7 +1103,7 @@ organization = client.Organization().create({
     "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
     "plan": {},  # dict
-    "quota": {},  # dict
+    "quotas": {},  # dict
     "role": "example_role",  # str
     "users": [],  # list
 })
@@ -1168,8 +1168,12 @@ Create an instance: `quota = client.Quota()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `enabled` | `bool` |  |
-| `limits` | `dict` |  |
+| `global_applications_per_organization_limit` | `int` |  |
+| `global_days_of_events_retention_limit` | `int` |  |
+| `global_event_types_per_application_limit` | `int` |  |
+| `global_events_per_day_limit` | `int` |  |
+| `global_members_per_organization_limit` | `int` |  |
+| `global_subscriptions_per_application_limit` | `int` |  |
 
 #### Example: Load
 
@@ -1263,17 +1267,6 @@ Create an instance: `response = client.Response()`
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
 
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `body` | `str` |  |
-| `elapsed_time_ms` | `int` |  |
-| `headers` | `dict` |  |
-| `http_code` | `int` |  |
-| `response_error_name` | `str` |  |
-| `response_id` | `str` |  |
-
 #### Example: Load
 
 ```python
@@ -1363,7 +1356,7 @@ Create an instance: `subscription = client.Subscription()`
 | `created_at` | `str` |  |
 | `dedicated_workers` | `list` |  |
 | `description` | `str` |  |
-| `event_type` | `list` |  |
+| `event_types` | `list` |  |
 | `is_enabled` | `bool` |  |
 | `label_key` | `str` |  |
 | `label_value` | `str` |  |
@@ -1393,7 +1386,7 @@ subscription = client.Subscription().create({
     "application_id": "example_application_id",  # str
     "created_at": "example_created_at",  # str
     "dedicated_workers": [],  # list
-    "event_type": [],  # list
+    "event_types": [],  # list
     "is_enabled": True,  # bool
     "label_key": "example_label_key",  # str
     "label_value": "example_label_value",  # str
@@ -1458,6 +1451,8 @@ Create an instance: `user_invitation = client.UserInvitation()`
 ```python
 user_invitation = client.UserInvitation().create({
     "organization_id": "example_organization_id",  # str
+    "email": "example_email",  # str
+    "role": "example_role",  # str
 })
 ```
 

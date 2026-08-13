@@ -44,14 +44,14 @@ describe('ApplicationEntity', async () => {
     const application_ref01_ent = client.Application()
     let application_ref01_data = setup.data.new.application['application_ref01']
 
-    application_ref01_data = await application_ref01_ent.create(application_ref01_data)
+    application_ref01_data = (await application_ref01_ent.create(application_ref01_data)).data()
     assert(null != application_ref01_data)
 
 
     // LIST
     const application_ref01_match = {}
 
-    const application_ref01_list = await application_ref01_ent.list(application_ref01_match)
+    const application_ref01_list = (await application_ref01_ent.list(application_ref01_match)).map((e) => e.data())
 
 
     // UPDATE
@@ -60,7 +60,7 @@ describe('ApplicationEntity', async () => {
     const application_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-application_ref01_' + setup.now }
     application_ref01_data_up0 [application_ref01_markdef_up0.name] = application_ref01_markdef_up0.value
 
-    const application_ref01_resdata_up0 = await application_ref01_ent.update(application_ref01_data_up0)
+    const application_ref01_resdata_up0 = (await application_ref01_ent.update(application_ref01_data_up0)).data()
     assert(null != application_ref01_resdata_up0)
 
     assert(application_ref01_resdata_up0[application_ref01_markdef_up0.name] === application_ref01_markdef_up0.value)
@@ -68,7 +68,7 @@ describe('ApplicationEntity', async () => {
 
     // LOAD
     const application_ref01_match_dt0 = {}
-    const application_ref01_data_dt0 = await application_ref01_ent.load(application_ref01_match_dt0)
+    const application_ref01_data_dt0 = (await application_ref01_ent.load(application_ref01_match_dt0)).data()
     assert(null != application_ref01_data_dt0)
 
 
@@ -76,7 +76,7 @@ describe('ApplicationEntity', async () => {
     // LIST
     const application_ref01_match_rt0 = {}
 
-    const application_ref01_list_rt0 = await application_ref01_ent.list(application_ref01_match_rt0)
+    const application_ref01_list_rt0 = (await application_ref01_ent.list(application_ref01_match_rt0)).map((e) => e.data())
 
 
   })
@@ -116,18 +116,18 @@ function basicSetup(extra) {
     })
 
   const env = envOverride({
-    'HOOK__TEST_APPLICATION_ENTID': idmap,
-    'HOOK__TEST_LIVE': 'FALSE',
-    'HOOK__TEST_EXPLAIN': 'FALSE',
-    'HOOK__APIKEY': 'NONE',
+    'HOOK0_TEST_APPLICATION_ENTID': idmap,
+    'HOOK0_TEST_LIVE': 'FALSE',
+    'HOOK0_TEST_EXPLAIN': 'FALSE',
+    'HOOK0_APIKEY': 'NONE',
   })
 
-  idmap = env['HOOK__TEST_APPLICATION_ENTID']
+  idmap = env['HOOK0_TEST_APPLICATION_ENTID']
 
-  if ('TRUE' === env.HOOK__TEST_LIVE) {
+  if ('TRUE' === env.HOOK0_TEST_LIVE) {
     client = new Hook0SDK(merge([
       {
-        apikey: env.HOOK__APIKEY,
+        apikey: env.HOOK0_APIKEY,
       },
       extra
     ]))
@@ -140,7 +140,7 @@ function basicSetup(extra) {
     client,
     struct,
     data: entityData,
-    explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+    explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
     now: Date.now(),
   }
 

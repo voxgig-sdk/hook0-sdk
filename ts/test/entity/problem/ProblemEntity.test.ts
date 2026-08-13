@@ -38,7 +38,7 @@ describe('ProblemEntity', async () => {
 
   test('basic', async (t) => {
 
-    const live = 'TRUE' === process.env.HOOK__TEST_LIVE
+    const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
     for (const op of ['list']) {
       if (maybeSkipControl(t, 'entityOp', 'problem.' + op, live)) return
     }
@@ -48,7 +48,7 @@ describe('ProblemEntity', async () => {
     // fixture (entity TestData.json). Those don't exist on the live API.
     // Skip live runs unless the user provided a real ENTID env override.
     if (setup.syntheticOnly) {
-      t.skip('live entity test uses synthetic IDs from fixture — set HOOK__TEST_PROBLEM_ENTID JSON to run live')
+      t.skip('live entity test uses synthetic IDs from fixture — set HOOK0_TEST_PROBLEM_ENTID JSON to run live')
       return
     }
     const client = setup.client
@@ -63,7 +63,7 @@ describe('ProblemEntity', async () => {
     const problem_ref01_ent = client.Problem()
     const problem_ref01_match: any = {}
 
-    const problem_ref01_list = await problem_ref01_ent.list(problem_ref01_match)
+    const problem_ref01_list = (await problem_ref01_ent.list(problem_ref01_match)).map((e: any) => e.data())
 
 
   })
@@ -106,24 +106,24 @@ function basicSetup(extra?: any) {
   // basic flow consumes synthetic IDs from the fixture file; without an
   // override those synthetic IDs reach the live API and 4xx. Surface this
   // to the test so it can skip rather than fail.
-  const idmapEnvVal = process.env['HOOK__TEST_PROBLEM_ENTID']
+  const idmapEnvVal = process.env['HOOK0_TEST_PROBLEM_ENTID']
   const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{')
 
   const env = envOverride({
-    'HOOK__TEST_PROBLEM_ENTID': idmap,
-    'HOOK__TEST_LIVE': 'FALSE',
-    'HOOK__TEST_EXPLAIN': 'FALSE',
-    'HOOK__APIKEY': 'NONE',
+    'HOOK0_TEST_PROBLEM_ENTID': idmap,
+    'HOOK0_TEST_LIVE': 'FALSE',
+    'HOOK0_TEST_EXPLAIN': 'FALSE',
+    'HOOK0_APIKEY': 'NONE',
   })
 
-  idmap = env['HOOK__TEST_PROBLEM_ENTID']
+  idmap = env['HOOK0_TEST_PROBLEM_ENTID']
 
-  const live = 'TRUE' === env.HOOK__TEST_LIVE
+  const live = 'TRUE' === env.HOOK0_TEST_LIVE
 
   if (live) {
     client = new Hook0SDK(merge([
       {
-        apikey: env.HOOK__APIKEY,
+        apikey: env.HOOK0_APIKEY,
       },
       extra
     ]))
@@ -136,7 +136,7 @@ function basicSetup(extra?: any) {
     client,
     struct,
     data: entityData,
-    explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+    explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
     live,
     syntheticOnly: live && !idmapOverridden,
     now: Date.now(),

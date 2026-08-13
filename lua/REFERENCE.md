@@ -188,7 +188,7 @@ local application = client:Application(nil)
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `table` | Yes |  |
 | `organization_id` | `string` | Yes |  |
-| `quota` | `table` | Yes |  |
+| `quotas` | `table` | Yes |  |
 
 ### Operations
 
@@ -203,7 +203,7 @@ local result, err = client:Application():create({
   name = --[[ string ]],
   onboarding_steps = --[[ table ]],
   organization_id = --[[ string ]],
-  quota = --[[ table ]],
+  quotas = --[[ table ]],
 })
 ```
 
@@ -570,6 +570,7 @@ Create a new entity with the given data.
 ```lua
 local result, err = client:EventsManagement():create({
   event_id = --[[ string ]],
+  application_id = --[[ string ]],
 })
 ```
 
@@ -989,7 +990,7 @@ local organization = client:Organization(nil)
 | `onboarding_steps` | `table` | Yes |  |
 | `organization_id` | `string` | Yes |  |
 | `plan` | `table` | Yes |  |
-| `quota` | `table` | Yes |  |
+| `quotas` | `table` | Yes |  |
 | `role` | `string` | Yes |  |
 | `users` | `table` | Yes |  |
 
@@ -1006,7 +1007,7 @@ local result, err = client:Organization():create({
   onboarding_steps = --[[ table ]],
   organization_id = --[[ string ]],
   plan = --[[ table ]],
-  quota = --[[ table ]],
+  quotas = --[[ table ]],
   role = --[[ string ]],
   users = --[[ table ]],
 })
@@ -1198,8 +1199,12 @@ local quota = client:Quota(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `enabled` | `boolean` | Yes |  |
-| `limits` | `table` | Yes |  |
+| `global_applications_per_organization_limit` | `number` | Yes |  |
+| `global_days_of_events_retention_limit` | `number` | Yes |  |
+| `global_event_types_per_application_limit` | `number` | Yes |  |
+| `global_events_per_day_limit` | `number` | Yes |  |
+| `global_members_per_organization_limit` | `number` | Yes |  |
+| `global_subscriptions_per_application_limit` | `number` | Yes |  |
 
 ### Operations
 
@@ -1380,17 +1385,6 @@ Return the entity name.
 ```lua
 local response = client:Response(nil)
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `body` | `string` | No |  |
-| `elapsed_time_ms` | `number` | No |  |
-| `headers` | `table` | No |  |
-| `http_code` | `number` | No |  |
-| `response_error_name` | `string` | No |  |
-| `response_id` | `string` | Yes |  |
 
 ### Operations
 
@@ -1589,7 +1583,7 @@ local subscription = client:Subscription(nil)
 | `created_at` | `string` | Yes |  |
 | `dedicated_workers` | `table` | Yes |  |
 | `description` | `string` | No |  |
-| `event_type` | `table` | Yes |  |
+| `event_types` | `table` | Yes |  |
 | `is_enabled` | `boolean` | Yes |  |
 | `label_key` | `string` | Yes |  |
 | `label_value` | `string` | Yes |  |
@@ -1608,7 +1602,7 @@ local subscription = client:Subscription(nil)
 | `created_at` | - | - | - | - | - |
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
-| `event_type` | - | - | - | - | - |
+| `event_types` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |
@@ -1630,7 +1624,7 @@ local result, err = client:Subscription():create({
   application_id = --[[ string ]],
   created_at = --[[ string ]],
   dedicated_workers = --[[ table ]],
-  event_type = --[[ table ]],
+  event_types = --[[ table ]],
   is_enabled = --[[ boolean ]],
   label_key = --[[ string ]],
   label_value = --[[ string ]],
@@ -1788,6 +1782,8 @@ Create a new entity with the given data.
 ```lua
 local result, err = client:UserInvitation():create({
   organization_id = --[[ string ]],
+  email = --[[ string ]],
+  role = --[[ string ]],
 })
 ```
 

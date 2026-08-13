@@ -16,11 +16,11 @@
 import pytest
 
 from hook0_sdk import Hook0SDK
-from core.error import Hook0Error
-from core.result import Hook0Result
-from core.response import Hook0Response
-from core.spec import Hook0Spec
-from feature.base_feature import Hook0BaseFeature
+from hook0_sdk.core.error import Hook0Error
+from hook0_sdk.core.result import Hook0Result
+from hook0_sdk.core.response import Hook0Response
+from hook0_sdk.core.spec import Hook0Spec
+from hook0_sdk.feature.base_feature import Hook0BaseFeature
 
 
 def _client():

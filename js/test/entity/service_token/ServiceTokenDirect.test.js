@@ -17,6 +17,10 @@ describe('ServiceTokenDirect', async () => {
 
   test('direct-exists', async () => {
     const sdk = new Hook0SDK({
+      // Concrete base: a live construction must satisfy any server
+      // variables a templated base URL declares; overriding base with a
+      // literal (as the direct flow tests do) sidesteps the requirement.
+      base: 'http://localhost:8080',
       system: { fetch: async () => ({}) }
     })
     assert('function' === typeof sdk.direct)
@@ -97,19 +101,19 @@ function directSetup(mockres) {
   const calls = []
 
   const env = envOverride({
-    'HOOK__TEST_SERVICE_TOKEN_ENTID': {},
-    'HOOK__TEST_LIVE': 'FALSE',
-    'HOOK__APIKEY': 'NONE',
+    'HOOK0_TEST_SERVICE_TOKEN_ENTID': {},
+    'HOOK0_TEST_LIVE': 'FALSE',
+    'HOOK0_APIKEY': 'NONE',
   })
 
-  const live = 'TRUE' === env.HOOK__TEST_LIVE
+  const live = 'TRUE' === env.HOOK0_TEST_LIVE
 
   if (live) {
     const client = new Hook0SDK({
-      apikey: env.HOOK__APIKEY,
+      apikey: env.HOOK0_APIKEY,
     })
 
-    let idmap = env['HOOK__TEST_SERVICE_TOKEN_ENTID']
+    let idmap = env['HOOK0_TEST_SERVICE_TOKEN_ENTID']
     if ('string' === typeof idmap && idmap.startsWith('{')) {
       idmap = JSON.parse(idmap)
     }

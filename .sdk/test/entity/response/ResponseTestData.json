@@ -2,44 +2,19 @@
   "existing": {
     "response": {
       "RESPONSE00": {
-        "body": "s3c",
-        "elapsed_time_ms": "s3d",
-        "headers": {},
-        "http_code": "s3f",
-        "response_error_name": "s40",
-        "response_id": "RESPONSE01",
         "id": "RESPONSE00"
       },
       "RESPONSE01": {
-        "body": "s78",
-        "elapsed_time_ms": "s79",
-        "headers": {},
-        "http_code": "s7b",
-        "response_error_name": "s7c",
-        "response_id": "RESPONSE01",
         "id": "RESPONSE01"
       },
       "RESPONSE02": {
-        "body": "sb4",
-        "elapsed_time_ms": "sb5",
-        "headers": {},
-        "http_code": "sb7",
-        "response_error_name": "sb8",
-        "response_id": "RESPONSE01",
         "id": "RESPONSE02"
       }
     }
   },
   "new": {
     "response": {
-      "response_ref01": {
-        "body": "sf0",
-        "elapsed_time_ms": "sf1",
-        "headers": {},
-        "http_code": "sf3",
-        "response_error_name": "sf4",
-        "response_id": "RESPONSE01"
-      }
+      "response_ref01": {}
     }
   }
 }

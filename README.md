@@ -36,9 +36,18 @@ network, and no credentials:
 ### TypeScript
 
 ```ts
-const client = Hook0SDK.test()
+// The offline mock starts EMPTY — seed it with the records the test needs.
+// Shape: { entity: { <entity-name>: { <id>: <record> } } }
+const client = Hook0SDK.test({
+  entity: {
+    application: {
+      test01: { id: 'test01', application_id: 'example_application_id', consumption: {}, name: 'example_name' },
+    },
+  },
+})
 const applications = await client.Application().list()
-// applications is an array of bare Application records populated with mock data
+// applications is an array of Application entities, populated with mock data
+// — call applications[0].data() for the record itself
 console.log(applications)
 ```
 
@@ -89,7 +98,8 @@ System.out.println(applicationList);
 ```js
 const client = Hook0SDK.test()
 const applications = await client.Application().list()
-// applications is an array of bare entities populated with mock data
+// applications is an array of entities, populated with mock data
+// — call applications[0].data() for the record itself
 console.log(applications)
 ```
 
@@ -133,7 +143,7 @@ const client = new Hook0SDK({
   apikey: process.env.HOOK0_APIKEY,
 })
 
-// List all applications (returns Application[])
+// List all applications (returns ApplicationEntity[] — .data() for the record)
 const applications = await client.Application().list()
 for (const application of applications) {
   console.log(application)
@@ -183,7 +193,7 @@ The API exposes 24 entities:
 | **ApplicationsManagement** | The ApplicationsManagement entity (remove). | `/api/v1/application_secrets/{application_secret_token}` |
 | **Event** | The Event entity (list, load). | `/api/v1/events/` |
 | **EventType** | The EventType entity (create, list, load). | `/api/v1/event_types/` |
-| **EventsManagement** | The EventsManagement entity (create, list, remove). | `/api/v1/events/{event_id}/replay` |
+| **EventsManagement** | The EventsManagement entity (create, list, remove). | `/api/v1/payload_content_types/` |
 | **EventsPerDayEntry** | The EventsPerDayEntry entity (list). | `/api/v1/events_per_day/application` |
 | **Health** | The Health entity (load). | `/api/v1/health/` |
 | **Hook0** | The Hook0 entity (list). | `/api/v1/environment_variables/` |
@@ -242,7 +252,7 @@ $client = new Hook0SDK([
 $applications = $client->Application()->list();
 print_r($applications);
 
-// Load a specific application (returns the bare record; throws on error)
+// Load a specific application (returns the ENTITY; call data_get() for the record; throws on error)
 $application = $client->Application()->load(["id" => "example_id"]);
 print_r($application);
 ```

@@ -38,7 +38,7 @@ describe('RegistrationEntity', async () => {
 
   test('basic', async (t) => {
 
-    const live = 'TRUE' === process.env.HOOK__TEST_LIVE
+    const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
     for (const op of ['create']) {
       if (maybeSkipControl(t, 'entityOp', 'registration.' + op, live)) return
     }
@@ -48,7 +48,7 @@ describe('RegistrationEntity', async () => {
     // fixture (entity TestData.json). Those don't exist on the live API.
     // Skip live runs unless the user provided a real ENTID env override.
     if (setup.syntheticOnly) {
-      t.skip('live entity test uses synthetic IDs from fixture — set HOOK__TEST_REGISTRATION_ENTID JSON to run live')
+      t.skip('live entity test uses synthetic IDs from fixture — set HOOK0_TEST_REGISTRATION_ENTID JSON to run live')
       return
     }
     const client = setup.client
@@ -62,7 +62,7 @@ describe('RegistrationEntity', async () => {
     const registration_ref01_ent = client.Registration()
     let registration_ref01_data = setup.data.new.registration['registration_ref01']
 
-    registration_ref01_data = await registration_ref01_ent.create(registration_ref01_data)
+    registration_ref01_data = (await registration_ref01_ent.create(registration_ref01_data)).data()
     assert(null != registration_ref01_data)
 
 
@@ -106,24 +106,24 @@ function basicSetup(extra?: any) {
   // basic flow consumes synthetic IDs from the fixture file; without an
   // override those synthetic IDs reach the live API and 4xx. Surface this
   // to the test so it can skip rather than fail.
-  const idmapEnvVal = process.env['HOOK__TEST_REGISTRATION_ENTID']
+  const idmapEnvVal = process.env['HOOK0_TEST_REGISTRATION_ENTID']
   const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{')
 
   const env = envOverride({
-    'HOOK__TEST_REGISTRATION_ENTID': idmap,
-    'HOOK__TEST_LIVE': 'FALSE',
-    'HOOK__TEST_EXPLAIN': 'FALSE',
-    'HOOK__APIKEY': 'NONE',
+    'HOOK0_TEST_REGISTRATION_ENTID': idmap,
+    'HOOK0_TEST_LIVE': 'FALSE',
+    'HOOK0_TEST_EXPLAIN': 'FALSE',
+    'HOOK0_APIKEY': 'NONE',
   })
 
-  idmap = env['HOOK__TEST_REGISTRATION_ENTID']
+  idmap = env['HOOK0_TEST_REGISTRATION_ENTID']
 
-  const live = 'TRUE' === env.HOOK__TEST_LIVE
+  const live = 'TRUE' === env.HOOK0_TEST_LIVE
 
   if (live) {
     client = new Hook0SDK(merge([
       {
-        apikey: env.HOOK__APIKEY,
+        apikey: env.HOOK0_APIKEY,
       },
       extra
     ]))
@@ -136,7 +136,7 @@ function basicSetup(extra?: any) {
     client,
     struct,
     data: entityData,
-    explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+    explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
     live,
     syntheticOnly: live && !idmapOverridden,
     now: Date.now(),

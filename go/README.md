@@ -70,14 +70,14 @@ func main() {
     fmt.Println(application)
 
     // Create a application.
-    created, err := client.Application(nil).Create(map[string]any{"application_id": "example_application_id", "consumption": map[string]any{}, "name": "example_name", "onboarding_steps": map[string]any{}, "organization_id": "example_organization_id", "quota": map[string]any{}}, nil)
+    created, err := client.Application(nil).Create(map[string]any{"application_id": "example_application_id", "consumption": map[string]any{}, "name": "example_name", "onboarding_steps": map[string]any{}, "organization_id": "example_organization_id", "quotas": map[string]any{}}, nil)
     if err != nil {
         panic(err)
     }
     fmt.Println(created)
 
     // Update a application.
-    updated, err := client.Application(nil).Update(map[string]any{"id": "example_id"}, nil)
+    updated, err := client.Application(nil).Update(map[string]any{"id": "example_id", "application_id": "example_application_id", "consumption": map[string]any{}}, nil)
     if err != nil {
         panic(err)
     }
@@ -326,7 +326,7 @@ Only `Direct()` returns a response envelope — a `map[string]any` with
 | `"name"` |  |
 | `"onboarding_steps"` |  |
 | `"organization_id"` |  |
-| `"quota"` |  |
+| `"quotas"` |  |
 
 Operations: Create, List, Load, Remove, Update.
 
@@ -502,7 +502,7 @@ API path: `/api/v1/auth/login`
 | `"onboarding_steps"` |  |
 | `"organization_id"` |  |
 | `"plan"` |  |
-| `"quota"` |  |
+| `"quotas"` |  |
 | `"role"` |  |
 | `"users"` |  |
 
@@ -538,8 +538,12 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `"enabled"` |  |
-| `"limits"` |  |
+| `"global_applications_per_organization_limit"` |  |
+| `"global_days_of_events_retention_limit"` |  |
+| `"global_event_types_per_application_limit"` |  |
+| `"global_events_per_day_limit"` |  |
+| `"global_members_per_organization_limit"` |  |
+| `"global_subscriptions_per_application_limit"` |  |
 
 Operations: Load.
 
@@ -586,12 +590,6 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
-| `"body"` |  |
-| `"elapsed_time_ms"` |  |
-| `"headers"` |  |
-| `"http_code"` |  |
-| `"response_error_name"` |  |
-| `"response_id"` |  |
 
 Operations: Load.
 
@@ -628,7 +626,7 @@ API path: `/api/v1/service_token/`
 | `"created_at"` |  |
 | `"dedicated_workers"` |  |
 | `"description"` |  |
-| `"event_type"` |  |
+| `"event_types"` |  |
 | `"is_enabled"` |  |
 | `"label_key"` |  |
 | `"label_value"` |  |
@@ -694,7 +692,7 @@ Create an instance: `application := client.Application(nil)`
 | `name` | `string` |  |
 | `onboarding_steps` | `map[string]any` |  |
 | `organization_id` | `string` |  |
-| `quota` | `map[string]any` |  |
+| `quotas` | `map[string]any` |  |
 
 #### Example: Load
 
@@ -725,7 +723,7 @@ result, err := client.Application(nil).Create(map[string]any{
     "name": "example_name",
     "onboarding_steps": map[string]any{},
     "organization_id": "example_organization_id",
-    "quota": map[string]any{},
+    "quotas": map[string]any{},
 }, nil)
 if err != nil {
     panic(err)
@@ -936,6 +934,7 @@ fmt.Println(eventsManagements) // the array of records
 ```go
 result, err := client.EventsManagement(nil).Create(map[string]any{
     "event_id": "example_event_id",
+    "application_id": "example_application_id",
 }, nil)
 if err != nil {
     panic(err)
@@ -1172,7 +1171,7 @@ Create an instance: `organization := client.Organization(nil)`
 | `onboarding_steps` | `map[string]any` |  |
 | `organization_id` | `string` |  |
 | `plan` | `map[string]any` |  |
-| `quota` | `map[string]any` |  |
+| `quotas` | `map[string]any` |  |
 | `role` | `string` |  |
 | `users` | `[]any` |  |
 
@@ -1205,7 +1204,7 @@ result, err := client.Organization(nil).Create(map[string]any{
     "onboarding_steps": map[string]any{},
     "organization_id": "example_organization_id",
     "plan": map[string]any{},
-    "quota": map[string]any{},
+    "quotas": map[string]any{},
     "role": "example_role",
     "users": []any{},
 }, nil)
@@ -1278,8 +1277,12 @@ Create an instance: `quota := client.Quota(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `enabled` | `bool` |  |
-| `limits` | `map[string]any` |  |
+| `global_applications_per_organization_limit` | `int` |  |
+| `global_days_of_events_retention_limit` | `int` |  |
+| `global_event_types_per_application_limit` | `int` |  |
+| `global_events_per_day_limit` | `int` |  |
+| `global_members_per_organization_limit` | `int` |  |
+| `global_subscriptions_per_application_limit` | `int` |  |
 
 #### Example: Load
 
@@ -1389,17 +1392,6 @@ Create an instance: `response := client.Response(nil)`
 | --- | --- |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `body` | `string` |  |
-| `elapsed_time_ms` | `int` |  |
-| `headers` | `map[string]any` |  |
-| `http_code` | `int` |  |
-| `response_error_name` | `string` |  |
-| `response_id` | `string` |  |
-
 #### Example: Load
 
 ```go
@@ -1505,7 +1497,7 @@ Create an instance: `subscription := client.Subscription(nil)`
 | `created_at` | `string` |  |
 | `dedicated_workers` | `[]any` |  |
 | `description` | `string` |  |
-| `event_type` | `[]any` |  |
+| `event_types` | `[]any` |  |
 | `is_enabled` | `bool` |  |
 | `label_key` | `string` |  |
 | `label_value` | `string` |  |
@@ -1543,7 +1535,7 @@ result, err := client.Subscription(nil).Create(map[string]any{
     "application_id": "example_application_id",
     "created_at": "example_created_at",
     "dedicated_workers": []any{},
-    "event_type": []any{},
+    "event_types": []any{},
     "is_enabled": true,
     "label_key": "example_label_key",
     "label_value": "example_label_value",
@@ -1616,6 +1608,8 @@ Create an instance: `userInvitation := client.UserInvitation(nil)`
 ```go
 result, err := client.UserInvitation(nil).Create(map[string]any{
     "organization_id": "example_organization_id",
+    "email": "example_email",
+    "role": "example_role",
 }, nil)
 if err != nil {
     panic(err)

@@ -12,7 +12,7 @@
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
----@field quota table
+---@field quotas table
 
 ---@class ApplicationLoadMatch
 ---@field id string
@@ -23,7 +23,7 @@
 ---@field name? string
 ---@field onboarding_steps? table
 ---@field organization_id? string
----@field quota? table
+---@field quotas? table
 
 ---@class ApplicationCreateData
 ---@field application_id string
@@ -31,10 +31,16 @@
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
----@field quota table
+---@field quotas table
 
 ---@class ApplicationUpdateData
 ---@field id string
+---@field application_id? string
+---@field consumption? table
+---@field name? string
+---@field onboarding_steps? table
+---@field organization_id? string
+---@field quotas? table
 
 ---@class ApplicationRemoveMatch
 ---@field id string
@@ -62,6 +68,11 @@
 
 ---@class ApplicationSecretUpdateData
 ---@field id string
+---@field application_id? string
+---@field created_at? string
+---@field deleted_at? string
+---@field name? string
+---@field token? string
 
 ---@class ApplicationsManagement
 
@@ -134,6 +145,7 @@
 
 ---@class EventsManagementCreateData
 ---@field event_id string
+---@field application_id string
 
 ---@class EventsManagementRemoveMatch
 ---@field event_type_name string
@@ -246,7 +258,7 @@
 ---@field onboarding_steps table
 ---@field organization_id string
 ---@field plan table
----@field quota table
+---@field quotas table
 ---@field role string
 ---@field users table
 
@@ -259,7 +271,7 @@
 ---@field onboarding_steps? table
 ---@field organization_id? string
 ---@field plan? table
----@field quota? table
+---@field quotas? table
 ---@field role? string
 ---@field users? table
 
@@ -269,12 +281,20 @@
 ---@field onboarding_steps table
 ---@field organization_id string
 ---@field plan table
----@field quota table
+---@field quotas table
 ---@field role string
 ---@field users table
 
 ---@class OrganizationUpdateData
 ---@field id string
+---@field consumption? table
+---@field name? string
+---@field onboarding_steps? table
+---@field organization_id? string
+---@field plan? table
+---@field quotas? table
+---@field role? string
+---@field users? table
 
 ---@class OrganizationRemoveMatch
 ---@field id string
@@ -285,6 +305,8 @@
 
 ---@class OrganizationEditRoleUpdateData
 ---@field id string
+---@field role? string
+---@field user_id? string
 
 ---@class Problem
 ---@field detail string
@@ -299,12 +321,20 @@
 ---@field title? string
 
 ---@class Quota
----@field enabled boolean
----@field limits table
+---@field global_applications_per_organization_limit number
+---@field global_days_of_events_retention_limit number
+---@field global_event_types_per_application_limit number
+---@field global_events_per_day_limit number
+---@field global_members_per_organization_limit number
+---@field global_subscriptions_per_application_limit number
 
 ---@class QuotaLoadMatch
----@field enabled? boolean
----@field limits? table
+---@field global_applications_per_organization_limit? number
+---@field global_days_of_events_retention_limit? number
+---@field global_event_types_per_application_limit? number
+---@field global_events_per_day_limit? number
+---@field global_members_per_organization_limit? number
+---@field global_subscriptions_per_application_limit? number
 
 ---@class Registration
 ---@field email string
@@ -356,12 +386,6 @@
 ---@field succeeded_at? string
 
 ---@class Response
----@field body? string
----@field elapsed_time_ms? number
----@field headers? table
----@field http_code? number
----@field response_error_name? string
----@field response_id string
 
 ---@class ResponseLoadMatch
 ---@field id string
@@ -397,6 +421,11 @@
 
 ---@class ServiceTokenUpdateData
 ---@field id string
+---@field biscuit? string
+---@field created_at? string
+---@field name? string
+---@field organization_id? string
+---@field token_id? string
 
 ---@class ServiceTokenRemoveMatch
 ---@field id string
@@ -406,7 +435,7 @@
 ---@field created_at string
 ---@field dedicated_workers table
 ---@field description? string
----@field event_type table
+---@field event_types table
 ---@field is_enabled boolean
 ---@field label_key string
 ---@field label_value string
@@ -425,7 +454,7 @@
 ---@field created_at? string
 ---@field dedicated_workers? table
 ---@field description? string
----@field event_type? table
+---@field event_types? table
 ---@field is_enabled? boolean
 ---@field label_key? string
 ---@field label_value? string
@@ -441,7 +470,7 @@
 ---@field created_at string
 ---@field dedicated_workers table
 ---@field description? string
----@field event_type table
+---@field event_types table
 ---@field is_enabled boolean
 ---@field label_key string
 ---@field label_value string
@@ -454,6 +483,20 @@
 
 ---@class SubscriptionUpdateData
 ---@field id string
+---@field application_id? string
+---@field created_at? string
+---@field dedicated_workers? table
+---@field description? string
+---@field event_types? table
+---@field is_enabled? boolean
+---@field label_key? string
+---@field label_value? string
+---@field labels? table
+---@field metadata? table
+---@field secret? string
+---@field subscription_id? string
+---@field target? table
+---@field updated_at? string
 
 ---@class SubscriptionRemoveMatch
 ---@field id string
@@ -474,6 +517,8 @@
 
 ---@class UserInvitationCreateData
 ---@field organization_id string
+---@field email string
+---@field role string
 
 local M = {}
 

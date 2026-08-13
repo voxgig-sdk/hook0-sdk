@@ -44,14 +44,14 @@ describe('OrganizationEntity', async () => {
     const organization_ref01_ent = client.Organization()
     let organization_ref01_data = setup.data.new.organization['organization_ref01']
 
-    organization_ref01_data = await organization_ref01_ent.create(organization_ref01_data)
+    organization_ref01_data = (await organization_ref01_ent.create(organization_ref01_data)).data()
     assert(null != organization_ref01_data)
 
 
     // LIST
     const organization_ref01_match = {}
 
-    const organization_ref01_list = await organization_ref01_ent.list(organization_ref01_match)
+    const organization_ref01_list = (await organization_ref01_ent.list(organization_ref01_match)).map((e) => e.data())
 
 
     // UPDATE
@@ -60,7 +60,7 @@ describe('OrganizationEntity', async () => {
     const organization_ref01_markdef_up0 = { name: 'name', value: 'Mark01-organization_ref01_' + setup.now }
     organization_ref01_data_up0 [organization_ref01_markdef_up0.name] = organization_ref01_markdef_up0.value
 
-    const organization_ref01_resdata_up0 = await organization_ref01_ent.update(organization_ref01_data_up0)
+    const organization_ref01_resdata_up0 = (await organization_ref01_ent.update(organization_ref01_data_up0)).data()
     assert(null != organization_ref01_resdata_up0)
 
     assert(organization_ref01_resdata_up0[organization_ref01_markdef_up0.name] === organization_ref01_markdef_up0.value)
@@ -68,7 +68,7 @@ describe('OrganizationEntity', async () => {
 
     // LOAD
     const organization_ref01_match_dt0 = {}
-    const organization_ref01_data_dt0 = await organization_ref01_ent.load(organization_ref01_match_dt0)
+    const organization_ref01_data_dt0 = (await organization_ref01_ent.load(organization_ref01_match_dt0)).data()
     assert(null != organization_ref01_data_dt0)
 
 
@@ -76,7 +76,7 @@ describe('OrganizationEntity', async () => {
     // LIST
     const organization_ref01_match_rt0 = {}
 
-    const organization_ref01_list_rt0 = await organization_ref01_ent.list(organization_ref01_match_rt0)
+    const organization_ref01_list_rt0 = (await organization_ref01_ent.list(organization_ref01_match_rt0)).map((e) => e.data())
 
 
   })
@@ -116,18 +116,18 @@ function basicSetup(extra) {
     })
 
   const env = envOverride({
-    'HOOK__TEST_ORGANIZATION_ENTID': idmap,
-    'HOOK__TEST_LIVE': 'FALSE',
-    'HOOK__TEST_EXPLAIN': 'FALSE',
-    'HOOK__APIKEY': 'NONE',
+    'HOOK0_TEST_ORGANIZATION_ENTID': idmap,
+    'HOOK0_TEST_LIVE': 'FALSE',
+    'HOOK0_TEST_EXPLAIN': 'FALSE',
+    'HOOK0_APIKEY': 'NONE',
   })
 
-  idmap = env['HOOK__TEST_ORGANIZATION_ENTID']
+  idmap = env['HOOK0_TEST_ORGANIZATION_ENTID']
 
-  if ('TRUE' === env.HOOK__TEST_LIVE) {
+  if ('TRUE' === env.HOOK0_TEST_LIVE) {
     client = new Hook0SDK(merge([
       {
-        apikey: env.HOOK__APIKEY,
+        apikey: env.HOOK0_APIKEY,
       },
       extra
     ]))
@@ -140,7 +140,7 @@ function basicSetup(extra) {
     client,
     struct,
     data: entityData,
-    explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+    explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
     now: Date.now(),
   }
 

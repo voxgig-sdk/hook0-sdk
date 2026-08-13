@@ -6,9 +6,9 @@ import time
 
 import pytest
 
-from utility.voxgig_struct import voxgig_struct as vs
+from hook0_sdk.utility.voxgig_struct import voxgig_struct as vs
 from hook0_sdk import Hook0SDK
-from core import helpers
+from hook0_sdk.core import helpers
 
 _TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 from test import runner
@@ -42,7 +42,7 @@ class TestEventTypeEntity:
         assert len(seen) == 3
 
         # Inbound: streaming active -> yields each item from the feature.
-        from config import make_config
+        from hook0_sdk.config import make_config
         cfg = make_config()
         if isinstance(cfg.get("feature"), dict) and "streaming" in cfg["feature"]:
             sdk = Hook0SDK.test(
@@ -70,7 +70,7 @@ class TestEventTypeEntity:
         # without an *_ENTID env override, those IDs hit the live API and 4xx.
         if setup.get("synthetic_only"):
             pytest.skip("live entity test uses synthetic IDs from fixture — "
-                        "set HOOK__TEST_EVENT_TYPE_ENTID JSON to run live")
+                        "set HOOK0_TEST_EVENT_TYPE_ENTID JSON to run live")
         client = setup["client"]
 
         # CREATE
@@ -78,7 +78,7 @@ class TestEventTypeEntity:
         event_type_ref01_data = helpers.to_map(vs.getprop(
             vs.getpath(setup["data"], "new.event_type"), "event_type_ref01"))
 
-        event_type_ref01_data = helpers.to_map(event_type_ref01_ent.create(event_type_ref01_data, None))
+        event_type_ref01_data = helpers.to_map(runner.entity_data(event_type_ref01_ent.create(event_type_ref01_data, None)))
         assert event_type_ref01_data is not None
 
         # LIST
@@ -123,37 +123,37 @@ def _event_type_basic_setup(extra):
     # mode is on without a real override, the basic test runs against synthetic
     # IDs from the fixture and 4xx's. We surface this so the test can skip.
     _entid_env_raw = os.environ.get(
-        "HOOK__TEST_EVENT_TYPE_ENTID")
+        "HOOK0_TEST_EVENT_TYPE_ENTID")
     _idmap_overridden = _entid_env_raw is not None and _entid_env_raw.strip().startswith("{")
 
     env = runner.env_override({
-        "HOOK__TEST_EVENT_TYPE_ENTID": idmap,
-        "HOOK__TEST_LIVE": "FALSE",
-        "HOOK__TEST_EXPLAIN": "FALSE",
-        "HOOK__APIKEY": "NONE",
+        "HOOK0_TEST_EVENT_TYPE_ENTID": idmap,
+        "HOOK0_TEST_LIVE": "FALSE",
+        "HOOK0_TEST_EXPLAIN": "FALSE",
+        "HOOK0_APIKEY": "NONE",
     })
 
     idmap_resolved = helpers.to_map(
-        env.get("HOOK__TEST_EVENT_TYPE_ENTID"))
+        env.get("HOOK0_TEST_EVENT_TYPE_ENTID"))
     if idmap_resolved is None:
         idmap_resolved = helpers.to_map(idmap)
 
-    if env.get("HOOK__TEST_LIVE") == "TRUE":
+    if env.get("HOOK0_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([
             {
-                "apikey": env.get("HOOK__APIKEY"),
+                "apikey": env.get("HOOK0_APIKEY"),
             },
             extra or {},
         ])
         client = Hook0SDK(helpers.to_map(merged_opts))
 
-    _live = env.get("HOOK__TEST_LIVE") == "TRUE"
+    _live = env.get("HOOK0_TEST_LIVE") == "TRUE"
     return {
         "client": client,
         "data": entity_data,
         "idmap": idmap_resolved,
         "env": env,
-        "explain": env.get("HOOK__TEST_EXPLAIN") == "TRUE",
+        "explain": env.get("HOOK0_TEST_EXPLAIN") == "TRUE",
         "live": _live,
         "synthetic_only": _live and not _idmap_overridden,
         "now": int(time.time() * 1000),

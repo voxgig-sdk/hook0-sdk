@@ -190,7 +190,7 @@ $application = $client->Application();
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `array` | Yes |  |
 | `organization_id` | `string` | Yes |  |
-| `quota` | `array` | Yes |  |
+| `quotas` | `array` | Yes |  |
 
 ### Operations
 
@@ -205,7 +205,7 @@ $result = $client->Application()->create([
   "name" => null, // string
   "onboarding_steps" => null, // array
   "organization_id" => null, // string
-  "quota" => null, // array
+  "quotas" => null, // array
 ]);
 ```
 
@@ -572,6 +572,7 @@ Create a new entity with the given data. Throws on error.
 ```php
 $result = $client->EventsManagement()->create([
   "event_id" => null, // string
+  "application_id" => null, // string
 ]);
 ```
 
@@ -991,7 +992,7 @@ $organization = $client->Organization();
 | `onboarding_steps` | `array` | Yes |  |
 | `organization_id` | `string` | Yes |  |
 | `plan` | `array` | Yes |  |
-| `quota` | `array` | Yes |  |
+| `quotas` | `array` | Yes |  |
 | `role` | `string` | Yes |  |
 | `users` | `array` | Yes |  |
 
@@ -1008,7 +1009,7 @@ $result = $client->Organization()->create([
   "onboarding_steps" => null, // array
   "organization_id" => null, // string
   "plan" => null, // array
-  "quota" => null, // array
+  "quotas" => null, // array
   "role" => null, // string
   "users" => null, // array
 ]);
@@ -1200,8 +1201,12 @@ $quota = $client->Quota();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `enabled` | `bool` | Yes |  |
-| `limits` | `array` | Yes |  |
+| `global_applications_per_organization_limit` | `int` | Yes |  |
+| `global_days_of_events_retention_limit` | `int` | Yes |  |
+| `global_event_types_per_application_limit` | `int` | Yes |  |
+| `global_events_per_day_limit` | `int` | Yes |  |
+| `global_members_per_organization_limit` | `int` | Yes |  |
+| `global_subscriptions_per_application_limit` | `int` | Yes |  |
 
 ### Operations
 
@@ -1382,17 +1387,6 @@ Return the entity name.
 ```php
 $response = $client->Response();
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `body` | `string` | No |  |
-| `elapsed_time_ms` | `int` | No |  |
-| `headers` | `array` | No |  |
-| `http_code` | `int` | No |  |
-| `response_error_name` | `string` | No |  |
-| `response_id` | `string` | Yes |  |
 
 ### Operations
 
@@ -1591,7 +1585,7 @@ $subscription = $client->Subscription();
 | `created_at` | `string` | Yes |  |
 | `dedicated_workers` | `array` | Yes |  |
 | `description` | `string` | No |  |
-| `event_type` | `array` | Yes |  |
+| `event_types` | `array` | Yes |  |
 | `is_enabled` | `bool` | Yes |  |
 | `label_key` | `string` | Yes |  |
 | `label_value` | `string` | Yes |  |
@@ -1610,7 +1604,7 @@ $subscription = $client->Subscription();
 | `created_at` | - | - | - | - | - |
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
-| `event_type` | - | - | - | - | - |
+| `event_types` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |
@@ -1632,7 +1626,7 @@ $result = $client->Subscription()->create([
   "application_id" => null, // string
   "created_at" => null, // string
   "dedicated_workers" => null, // array
-  "event_type" => null, // array
+  "event_types" => null, // array
   "is_enabled" => null, // bool
   "label_key" => null, // string
   "label_value" => null, // string
@@ -1790,6 +1784,8 @@ Create a new entity with the given data. Throws on error.
 ```php
 $result = $client->UserInvitation()->create([
   "organization_id" => null, // string
+  "email" => null, // string
+  "role" => null, // string
 ]);
 ```
 

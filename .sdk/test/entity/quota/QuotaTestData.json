@@ -2,18 +2,30 @@
   "existing": {
     "quota": {
       "QUOTA00": {
-        "enabled": true,
-        "limits": {},
+        "global_applications_per_organization_limit": "s3c",
+        "global_days_of_events_retention_limit": "s3d",
+        "global_event_types_per_application_limit": "s3e",
+        "global_events_per_day_limit": "s3f",
+        "global_members_per_organization_limit": "s40",
+        "global_subscriptions_per_application_limit": "s41",
         "id": "QUOTA00"
       },
       "QUOTA01": {
-        "enabled": true,
-        "limits": {},
+        "global_applications_per_organization_limit": "s78",
+        "global_days_of_events_retention_limit": "s79",
+        "global_event_types_per_application_limit": "s7a",
+        "global_events_per_day_limit": "s7b",
+        "global_members_per_organization_limit": "s7c",
+        "global_subscriptions_per_application_limit": "s7d",
         "id": "QUOTA01"
       },
       "QUOTA02": {
-        "enabled": true,
-        "limits": {},
+        "global_applications_per_organization_limit": "sb4",
+        "global_days_of_events_retention_limit": "sb5",
+        "global_event_types_per_application_limit": "sb6",
+        "global_events_per_day_limit": "sb7",
+        "global_members_per_organization_limit": "sb8",
+        "global_subscriptions_per_application_limit": "sb9",
         "id": "QUOTA02"
       }
     }
@@ -21,8 +33,12 @@
   "new": {
     "quota": {
       "quota_ref01": {
-        "enabled": true,
-        "limits": {}
+        "global_applications_per_organization_limit": "sf0",
+        "global_days_of_events_retention_limit": "sf1",
+        "global_event_types_per_application_limit": "sf2",
+        "global_events_per_day_limit": "sf3",
+        "global_members_per_organization_limit": "sf4",
+        "global_subscriptions_per_application_limit": "sf5"
       }
     }
   }

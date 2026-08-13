@@ -20,7 +20,7 @@ class Application
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
-    public array $quota;
+    public array $quotas;
 }
 
 /** Request payload for Application#load. */
@@ -37,7 +37,7 @@ class ApplicationListMatch
     public ?string $name = null;
     public ?array $onboarding_steps = null;
     public ?string $organization_id = null;
-    public ?array $quota = null;
+    public ?array $quotas = null;
 }
 
 /** Request payload for Application#create. */
@@ -48,13 +48,19 @@ class ApplicationCreateData
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
-    public array $quota;
+    public array $quotas;
 }
 
 /** Request payload for Application#update. */
 class ApplicationUpdateData
 {
     public string $id;
+    public ?string $application_id = null;
+    public ?array $consumption = null;
+    public ?string $name = null;
+    public ?array $onboarding_steps = null;
+    public ?string $organization_id = null;
+    public ?array $quotas = null;
 }
 
 /** Request payload for Application#remove. */
@@ -97,6 +103,11 @@ class ApplicationSecretCreateData
 class ApplicationSecretUpdateData
 {
     public string $id;
+    public ?string $application_id = null;
+    public ?string $created_at = null;
+    public ?string $deleted_at = null;
+    public ?string $name = null;
+    public ?string $token = null;
 }
 
 /** ApplicationsManagement entity data model. */
@@ -205,6 +216,7 @@ class EventsManagementListMatch
 class EventsManagementCreateData
 {
     public string $event_id;
+    public string $application_id;
 }
 
 /** Request payload for EventsManagement#remove. */
@@ -359,7 +371,7 @@ class Organization
     public array $onboarding_steps;
     public string $organization_id;
     public array $plan;
-    public array $quota;
+    public array $quotas;
     public string $role;
     public array $users;
 }
@@ -378,7 +390,7 @@ class OrganizationListMatch
     public ?array $onboarding_steps = null;
     public ?string $organization_id = null;
     public ?array $plan = null;
-    public ?array $quota = null;
+    public ?array $quotas = null;
     public ?string $role = null;
     public ?array $users = null;
 }
@@ -391,7 +403,7 @@ class OrganizationCreateData
     public array $onboarding_steps;
     public string $organization_id;
     public array $plan;
-    public array $quota;
+    public array $quotas;
     public string $role;
     public array $users;
 }
@@ -400,6 +412,14 @@ class OrganizationCreateData
 class OrganizationUpdateData
 {
     public string $id;
+    public ?array $consumption = null;
+    public ?string $name = null;
+    public ?array $onboarding_steps = null;
+    public ?string $organization_id = null;
+    public ?array $plan = null;
+    public ?array $quotas = null;
+    public ?string $role = null;
+    public ?array $users = null;
 }
 
 /** Request payload for Organization#remove. */
@@ -419,6 +439,8 @@ class OrganizationEditRole
 class OrganizationEditRoleUpdateData
 {
     public string $id;
+    public ?string $role = null;
+    public ?string $user_id = null;
 }
 
 /** Problem entity data model. */
@@ -442,15 +464,23 @@ class ProblemListMatch
 /** Quota entity data model. */
 class Quota
 {
-    public bool $enabled;
-    public array $limits;
+    public int $global_applications_per_organization_limit;
+    public int $global_days_of_events_retention_limit;
+    public int $global_event_types_per_application_limit;
+    public int $global_events_per_day_limit;
+    public int $global_members_per_organization_limit;
+    public int $global_subscriptions_per_application_limit;
 }
 
 /** Request payload for Quota#load. */
 class QuotaLoadMatch
 {
-    public ?bool $enabled = null;
-    public ?array $limits = null;
+    public ?int $global_applications_per_organization_limit = null;
+    public ?int $global_days_of_events_retention_limit = null;
+    public ?int $global_event_types_per_application_limit = null;
+    public ?int $global_events_per_day_limit = null;
+    public ?int $global_members_per_organization_limit = null;
+    public ?int $global_subscriptions_per_application_limit = null;
 }
 
 /** Registration entity data model. */
@@ -520,12 +550,6 @@ class RequestAttemptListMatch
 /** Response entity data model. */
 class Response
 {
-    public ?string $body = null;
-    public ?int $elapsed_time_ms = null;
-    public ?array $headers = null;
-    public ?int $http_code = null;
-    public ?string $response_error_name = null;
-    public string $response_id;
 }
 
 /** Request payload for Response#load. */
@@ -585,6 +609,11 @@ class ServiceTokenCreateData
 class ServiceTokenUpdateData
 {
     public string $id;
+    public ?string $biscuit = null;
+    public ?string $created_at = null;
+    public ?string $name = null;
+    public ?string $organization_id = null;
+    public ?string $token_id = null;
 }
 
 /** Request payload for ServiceToken#remove. */
@@ -600,7 +629,7 @@ class Subscription
     public string $created_at;
     public array $dedicated_workers;
     public ?string $description = null;
-    public array $event_type;
+    public array $event_types;
     public bool $is_enabled;
     public string $label_key;
     public string $label_value;
@@ -625,7 +654,7 @@ class SubscriptionListMatch
     public ?string $created_at = null;
     public ?array $dedicated_workers = null;
     public ?string $description = null;
-    public ?array $event_type = null;
+    public ?array $event_types = null;
     public ?bool $is_enabled = null;
     public ?string $label_key = null;
     public ?string $label_value = null;
@@ -644,7 +673,7 @@ class SubscriptionCreateData
     public string $created_at;
     public array $dedicated_workers;
     public ?string $description = null;
-    public array $event_type;
+    public array $event_types;
     public bool $is_enabled;
     public string $label_key;
     public string $label_value;
@@ -660,6 +689,20 @@ class SubscriptionCreateData
 class SubscriptionUpdateData
 {
     public string $id;
+    public ?string $application_id = null;
+    public ?string $created_at = null;
+    public ?array $dedicated_workers = null;
+    public ?string $description = null;
+    public ?array $event_types = null;
+    public ?bool $is_enabled = null;
+    public ?string $label_key = null;
+    public ?string $label_value = null;
+    public ?array $labels = null;
+    public ?array $metadata = null;
+    public ?string $secret = null;
+    public ?string $subscription_id = null;
+    public ?array $target = null;
+    public ?string $updated_at = null;
 }
 
 /** Request payload for Subscription#remove. */
@@ -695,5 +738,7 @@ class UserInvitation
 class UserInvitationCreateData
 {
     public string $organization_id;
+    public string $email;
+    public string $role;
 }
 

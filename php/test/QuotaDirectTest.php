@@ -65,16 +65,16 @@ function quota_direct_setup($mockres)
     $calls = new \ArrayObject();
 
     $env = Runner::env_override([
-        "HOOK__TEST_QUOTA_ENTID" => [],
-        "HOOK__TEST_LIVE" => "FALSE",
-        "HOOK__APIKEY" => "NONE",
+        "HOOK0_TEST_QUOTA_ENTID" => [],
+        "HOOK0_TEST_LIVE" => "FALSE",
+        "HOOK0_APIKEY" => "NONE",
     ]);
 
-    $live = $env["HOOK__TEST_LIVE"] === "TRUE";
+    $live = $env["HOOK0_TEST_LIVE"] === "TRUE";
 
     if ($live) {
         $merged_opts = [
-            "apikey" => $env["HOOK__APIKEY"],
+            "apikey" => $env["HOOK0_APIKEY"],
         ];
         $client = new Hook0SDK($merged_opts);
         return [

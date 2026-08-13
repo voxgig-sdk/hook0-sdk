@@ -13,7 +13,7 @@
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
- * @property {Object} quota
+ * @property {Object} quotas
  */
 
 /**
@@ -28,7 +28,7 @@
  * @property {string} [name]
  * @property {Object} [onboarding_steps]
  * @property {string} [organization_id]
- * @property {Object} [quota]
+ * @property {Object} [quotas]
  */
 
 /**
@@ -38,12 +38,18 @@
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
- * @property {Object} quota
+ * @property {Object} quotas
  */
 
 /**
  * @typedef {Object} ApplicationUpdateData
  * @property {string} id
+ * @property {string} [application_id]
+ * @property {Object} [consumption]
+ * @property {string} [name]
+ * @property {Object} [onboarding_steps]
+ * @property {string} [organization_id]
+ * @property {Object} [quotas]
  */
 
 /**
@@ -81,6 +87,11 @@
 /**
  * @typedef {Object} ApplicationSecretUpdateData
  * @property {string} id
+ * @property {string} [application_id]
+ * @property {string} [created_at]
+ * @property {string} [deleted_at]
+ * @property {string} [name]
+ * @property {string} [token]
  */
 
 /**
@@ -177,6 +188,7 @@
 /**
  * @typedef {Object} EventsManagementCreateData
  * @property {string} event_id
+ * @property {string} application_id
  */
 
 /**
@@ -317,7 +329,7 @@
  * @property {Object} onboarding_steps
  * @property {string} organization_id
  * @property {Object} plan
- * @property {Object} quota
+ * @property {Object} quotas
  * @property {string} role
  * @property {Array} users
  */
@@ -334,7 +346,7 @@
  * @property {Object} [onboarding_steps]
  * @property {string} [organization_id]
  * @property {Object} [plan]
- * @property {Object} [quota]
+ * @property {Object} [quotas]
  * @property {string} [role]
  * @property {Array} [users]
  */
@@ -346,7 +358,7 @@
  * @property {Object} onboarding_steps
  * @property {string} organization_id
  * @property {Object} plan
- * @property {Object} quota
+ * @property {Object} quotas
  * @property {string} role
  * @property {Array} users
  */
@@ -354,6 +366,14 @@
 /**
  * @typedef {Object} OrganizationUpdateData
  * @property {string} id
+ * @property {Object} [consumption]
+ * @property {string} [name]
+ * @property {Object} [onboarding_steps]
+ * @property {string} [organization_id]
+ * @property {Object} [plan]
+ * @property {Object} [quotas]
+ * @property {string} [role]
+ * @property {Array} [users]
  */
 
 /**
@@ -370,6 +390,8 @@
 /**
  * @typedef {Object} OrganizationEditRoleUpdateData
  * @property {string} id
+ * @property {string} [role]
+ * @property {string} [user_id]
  */
 
 /**
@@ -390,14 +412,22 @@
 
 /**
  * @typedef {Object} Quota
- * @property {boolean} enabled
- * @property {Object} limits
+ * @property {number} global_applications_per_organization_limit
+ * @property {number} global_days_of_events_retention_limit
+ * @property {number} global_event_types_per_application_limit
+ * @property {number} global_events_per_day_limit
+ * @property {number} global_members_per_organization_limit
+ * @property {number} global_subscriptions_per_application_limit
  */
 
 /**
  * @typedef {Object} QuotaLoadMatch
- * @property {boolean} [enabled]
- * @property {Object} [limits]
+ * @property {number} [global_applications_per_organization_limit]
+ * @property {number} [global_days_of_events_retention_limit]
+ * @property {number} [global_event_types_per_application_limit]
+ * @property {number} [global_events_per_day_limit]
+ * @property {number} [global_members_per_organization_limit]
+ * @property {number} [global_subscriptions_per_application_limit]
  */
 
 /**
@@ -461,12 +491,6 @@
 
 /**
  * @typedef {Object} Response
- * @property {string} [body]
- * @property {number} [elapsed_time_ms]
- * @property {Object} [headers]
- * @property {number} [http_code]
- * @property {string} [response_error_name]
- * @property {string} response_id
  */
 
 /**
@@ -518,6 +542,11 @@
 /**
  * @typedef {Object} ServiceTokenUpdateData
  * @property {string} id
+ * @property {string} [biscuit]
+ * @property {string} [created_at]
+ * @property {string} [name]
+ * @property {string} [organization_id]
+ * @property {string} [token_id]
  */
 
 /**
@@ -531,7 +560,7 @@
  * @property {string} created_at
  * @property {Array} dedicated_workers
  * @property {string} [description]
- * @property {Array} event_type
+ * @property {Array} event_types
  * @property {boolean} is_enabled
  * @property {string} label_key
  * @property {string} label_value
@@ -554,7 +583,7 @@
  * @property {string} [created_at]
  * @property {Array} [dedicated_workers]
  * @property {string} [description]
- * @property {Array} [event_type]
+ * @property {Array} [event_types]
  * @property {boolean} [is_enabled]
  * @property {string} [label_key]
  * @property {string} [label_value]
@@ -572,7 +601,7 @@
  * @property {string} created_at
  * @property {Array} dedicated_workers
  * @property {string} [description]
- * @property {Array} event_type
+ * @property {Array} event_types
  * @property {boolean} is_enabled
  * @property {string} label_key
  * @property {string} label_value
@@ -587,6 +616,20 @@
 /**
  * @typedef {Object} SubscriptionUpdateData
  * @property {string} id
+ * @property {string} [application_id]
+ * @property {string} [created_at]
+ * @property {Array} [dedicated_workers]
+ * @property {string} [description]
+ * @property {Array} [event_types]
+ * @property {boolean} [is_enabled]
+ * @property {string} [label_key]
+ * @property {string} [label_value]
+ * @property {Object} [labels]
+ * @property {Object} [metadata]
+ * @property {string} [secret]
+ * @property {string} [subscription_id]
+ * @property {Object} [target]
+ * @property {string} [updated_at]
  */
 
 /**
@@ -617,5 +660,7 @@
 /**
  * @typedef {Object} UserInvitationCreateData
  * @property {string} organization_id
+ * @property {string} email
+ * @property {string} role
  */
 

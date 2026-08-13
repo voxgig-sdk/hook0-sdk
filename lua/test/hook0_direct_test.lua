@@ -61,16 +61,16 @@ function hook0_direct_setup(mockres)
   local calls = {}
 
   local env = runner.env_override({
-    ["HOOK__TEST_HOOK__ENTID"] = {},
-    ["HOOK__TEST_LIVE"] = "FALSE",
-    ["HOOK__APIKEY"] = "NONE",
+    ["HOOK0_TEST_HOOK0_ENTID"] = {},
+    ["HOOK0_TEST_LIVE"] = "FALSE",
+    ["HOOK0_APIKEY"] = "NONE",
   })
 
-  local live = env["HOOK__TEST_LIVE"] == "TRUE"
+  local live = env["HOOK0_TEST_LIVE"] == "TRUE"
 
   if live then
     local merged_opts = {
-      apikey = env["HOOK__APIKEY"],
+      apikey = env["HOOK0_APIKEY"],
     }
     local client = sdk.new(merged_opts)
     return {

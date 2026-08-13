@@ -15,7 +15,7 @@ local function make_config()
     options = {
       base = "https://app.hook0.com",
       auth = {
-        prefix = "Bearer",
+        prefix = "",
       },
       headers = {
         ["content-type"] = "application/json",
@@ -87,7 +87,7 @@ local function make_config()
           },
           {
             ["active"] = true,
-            ["name"] = "quota",
+            ["name"] = "quotas",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
             ["index$"] = 5,
@@ -102,6 +102,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/applications/",
                 ["parts"] = {
@@ -137,6 +138,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/applications/",
                 ["parts"] = {
@@ -177,6 +179,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/applications/{application_id}",
                 ["parts"] = {
@@ -223,6 +226,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/applications/{application_id}",
                 ["parts"] = {
@@ -269,6 +273,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/applications/{application_id}",
                 ["parts"] = {
@@ -348,6 +353,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/application_secrets/",
                 ["parts"] = {
@@ -383,6 +389,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/application_secrets/",
                 ["parts"] = {
@@ -423,6 +430,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/application_secrets/{application_secret_token}",
                 ["parts"] = {
@@ -488,6 +496,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/application_secrets/{application_secret_token}",
                 ["parts"] = {
@@ -606,6 +615,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/events/",
                 ["parts"] = {
@@ -656,6 +666,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/events/{event_id}",
                 ["parts"] = {
@@ -757,6 +768,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/event_types/",
                 ["parts"] = {
@@ -792,6 +804,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/event_types/",
                 ["parts"] = {
@@ -842,6 +855,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/event_types/{event_type_name}",
                 ["parts"] = {
@@ -906,6 +920,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/events/{event_id}/replay",
                 ["parts"] = {
@@ -936,6 +951,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/payload_content_types/",
                 ["parts"] = {
@@ -982,6 +998,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/event_types/{event_type_name}",
                 ["parts"] = {
@@ -1091,6 +1108,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/events_per_day/application",
                 ["parts"] = {
@@ -1142,6 +1160,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/events_per_day/organization",
                 ["parts"] = {
@@ -1243,6 +1262,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/health/",
                 ["parts"] = {
@@ -1330,6 +1350,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/environment_variables/",
                 ["parts"] = {
@@ -1420,6 +1441,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/event/",
                 ["parts"] = {
@@ -1524,6 +1546,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/instance/",
                 ["parts"] = {
@@ -1572,6 +1595,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/login",
                 ["parts"] = {
@@ -1590,6 +1614,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/refresh",
                 ["parts"] = {
@@ -1652,7 +1677,7 @@ local function make_config()
           },
           {
             ["active"] = true,
-            ["name"] = "quota",
+            ["name"] = "quotas",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
             ["index$"] = 5,
@@ -1681,6 +1706,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/organizations/",
                 ["parts"] = {
@@ -1705,6 +1731,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/organizations/",
                 ["parts"] = {
@@ -1741,6 +1768,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/organizations/{organization_id}/",
                 ["parts"] = {
@@ -1787,6 +1815,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/organizations/{organization_id}/",
                 ["parts"] = {
@@ -1833,6 +1862,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/organizations/{organization_id}/",
                 ["parts"] = {
@@ -1903,6 +1933,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/organizations/{organization_id}/invite",
                 ["parts"] = {
@@ -1977,6 +2008,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/errors/",
                 ["parts"] = {
@@ -2003,17 +2035,45 @@ local function make_config()
         ["fields"] = {
           {
             ["active"] = true,
-            ["name"] = "enabled",
+            ["name"] = "global_applications_per_organization_limit",
             ["req"] = true,
-            ["type"] = "`$BOOLEAN`",
+            ["type"] = "`$INTEGER`",
             ["index$"] = 0,
           },
           {
             ["active"] = true,
-            ["name"] = "limits",
+            ["name"] = "global_days_of_events_retention_limit",
             ["req"] = true,
-            ["type"] = "`$OBJECT`",
+            ["type"] = "`$INTEGER`",
             ["index$"] = 1,
+          },
+          {
+            ["active"] = true,
+            ["name"] = "global_event_types_per_application_limit",
+            ["req"] = true,
+            ["type"] = "`$INTEGER`",
+            ["index$"] = 2,
+          },
+          {
+            ["active"] = true,
+            ["name"] = "global_events_per_day_limit",
+            ["req"] = true,
+            ["type"] = "`$INTEGER`",
+            ["index$"] = 3,
+          },
+          {
+            ["active"] = true,
+            ["name"] = "global_members_per_organization_limit",
+            ["req"] = true,
+            ["type"] = "`$INTEGER`",
+            ["index$"] = 4,
+          },
+          {
+            ["active"] = true,
+            ["name"] = "global_subscriptions_per_application_limit",
+            ["req"] = true,
+            ["type"] = "`$INTEGER`",
+            ["index$"] = 5,
           },
         },
         ["name"] = "quota",
@@ -2025,6 +2085,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/quotas/",
                 ["parts"] = {
@@ -2101,6 +2162,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/register/",
                 ["parts"] = {
@@ -2285,6 +2347,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/request_attempts/",
                 ["parts"] = {
@@ -2341,6 +2404,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/request_attempts/{request_attempt_id}",
                 ["parts"] = {
@@ -2375,50 +2439,7 @@ local function make_config()
         },
       },
       ["response"] = {
-        ["fields"] = {
-          {
-            ["active"] = true,
-            ["name"] = "body",
-            ["req"] = false,
-            ["type"] = "`$STRING`",
-            ["index$"] = 0,
-          },
-          {
-            ["active"] = true,
-            ["name"] = "elapsed_time_ms",
-            ["req"] = false,
-            ["type"] = "`$INTEGER`",
-            ["index$"] = 1,
-          },
-          {
-            ["active"] = true,
-            ["name"] = "headers",
-            ["req"] = false,
-            ["type"] = "`$OBJECT`",
-            ["index$"] = 2,
-          },
-          {
-            ["active"] = true,
-            ["name"] = "http_code",
-            ["req"] = false,
-            ["type"] = "`$INTEGER`",
-            ["index$"] = 3,
-          },
-          {
-            ["active"] = true,
-            ["name"] = "response_error_name",
-            ["req"] = false,
-            ["type"] = "`$STRING`",
-            ["index$"] = 4,
-          },
-          {
-            ["active"] = true,
-            ["name"] = "response_id",
-            ["req"] = true,
-            ["type"] = "`$STRING`",
-            ["index$"] = 5,
-          },
-        },
+        ["fields"] = {},
         ["name"] = "response",
         ["op"] = {
           ["load"] = {
@@ -2450,6 +2471,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/responses/{response_id}",
                 ["parts"] = {
@@ -2506,6 +2528,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/organizations/{organization_id}/invite",
                 ["parts"] = {
@@ -2585,6 +2608,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/service_token/",
                 ["parts"] = {
@@ -2620,6 +2644,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/service_token/",
                 ["parts"] = {
@@ -2670,6 +2695,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/service_token/{service_token_id}",
                 ["parts"] = {
@@ -2727,6 +2753,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/service_token/{service_token_id}",
                 ["parts"] = {
@@ -2774,6 +2801,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/service_token/{service_token_id}",
                 ["parts"] = {
@@ -2848,7 +2876,7 @@ local function make_config()
           },
           {
             ["active"] = true,
-            ["name"] = "event_type",
+            ["name"] = "event_types",
             ["req"] = true,
             ["type"] = "`$ARRAY`",
             ["index$"] = 4,
@@ -2966,6 +2994,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/subscriptions/",
                 ["parts"] = {
@@ -3001,6 +3030,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/subscriptions/",
                 ["parts"] = {
@@ -3041,6 +3071,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/subscriptions/{subscription_id}",
                 ["parts"] = {
@@ -3097,6 +3128,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/subscriptions/{subscription_id}",
                 ["parts"] = {
@@ -3144,6 +3176,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/subscriptions/{subscription_id}",
                 ["parts"] = {
@@ -3209,6 +3242,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/begin-reset-password",
                 ["parts"] = {
@@ -3227,6 +3261,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/logout",
                 ["parts"] = {
@@ -3245,6 +3280,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/password",
                 ["parts"] = {
@@ -3263,6 +3299,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/reset-password",
                 ["parts"] = {
@@ -3281,6 +3318,7 @@ local function make_config()
               {
                 ["active"] = true,
                 ["args"] = {},
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/verify-email",
                 ["parts"] = {
@@ -3342,6 +3380,7 @@ local function make_config()
                     },
                   },
                 },
+                ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/organizations/{organization_id}/invite",
                 ["parts"] = {

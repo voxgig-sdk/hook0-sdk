@@ -3,9 +3,9 @@
 import json
 import pytest
 
-from utility.voxgig_struct import voxgig_struct as vs
+from hook0_sdk.utility.voxgig_struct import voxgig_struct as vs
 from hook0_sdk import Hook0SDK
-from core import helpers
+from hook0_sdk.core import helpers
 from test import runner
 
 
@@ -66,16 +66,16 @@ def _response_direct_setup(mockres):
     calls = []
 
     env = runner.env_override({
-        "HOOK__TEST_RESPONSE_ENTID": {},
-        "HOOK__TEST_LIVE": "FALSE",
-        "HOOK__APIKEY": "NONE",
+        "HOOK0_TEST_RESPONSE_ENTID": {},
+        "HOOK0_TEST_LIVE": "FALSE",
+        "HOOK0_APIKEY": "NONE",
     })
 
-    live = env.get("HOOK__TEST_LIVE") == "TRUE"
+    live = env.get("HOOK0_TEST_LIVE") == "TRUE"
 
     if live:
         merged_opts = {
-            "apikey": env.get("HOOK__APIKEY"),
+            "apikey": env.get("HOOK0_APIKEY"),
         }
         client = Hook0SDK(merged_opts)
         return {

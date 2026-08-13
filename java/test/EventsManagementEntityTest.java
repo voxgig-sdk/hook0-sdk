@@ -47,7 +47,7 @@ public class EventsManagementEntityTest {
     // The basic flow consumes synthetic IDs from the fixture. In live mode
     // without an *_ENTID env override, those IDs hit the live API and 4xx.
     Assumptions.assumeFalse(setup.syntheticOnly,
-        "live entity test uses synthetic IDs from fixture — set HOOK__TEST_EVENTS_MANAGEMENT_ENTID JSON to run live");
+        "live entity test uses synthetic IDs from fixture — set HOOK0_TEST_EVENTS_MANAGEMENT_ENTID JSON to run live");
     Hook0SDK client = setup.client;
 
     // CREATE
@@ -57,7 +57,7 @@ public class EventsManagementEntityTest {
     eventsManagementRef01Data.put("event_id", setup.idmap.get("event01"));
 
     Object eventsManagementRef01DataResult = eventsManagementRef01Ent.create(eventsManagementRef01Data, null);
-    eventsManagementRef01Data = Helpers.toMapAny(eventsManagementRef01DataResult);
+    eventsManagementRef01Data = Helpers.toMapAny(eventsManagementRef01DataResult instanceof SdkEntity ? ((SdkEntity) eventsManagementRef01DataResult).data() : eventsManagementRef01DataResult);
     assertNotNull(eventsManagementRef01Data, "expected create result to be a map");
 
     // LIST
@@ -170,26 +170,26 @@ public class EventsManagementEntityTest {
     // mode is on without a real override, the basic test runs against
     // synthetic IDs from the fixture and 4xx's. Surface this so the test
     // can skip.
-    String entidEnvRaw = RunnerSupport.getenv("HOOK__TEST_EVENTS_MANAGEMENT_ENTID");
+    String entidEnvRaw = RunnerSupport.getenv("HOOK0_TEST_EVENTS_MANAGEMENT_ENTID");
     boolean idmapOverridden = entidEnvRaw != null
         && entidEnvRaw.trim().startsWith("{");
 
     Map<String, Object> envm = new LinkedHashMap<>();
-    envm.put("HOOK__TEST_EVENTS_MANAGEMENT_ENTID", idmap);
-    envm.put("HOOK__TEST_LIVE", "FALSE");
-    envm.put("HOOK__TEST_EXPLAIN", "FALSE");
-    envm.put("HOOK__APIKEY", "NONE");
+    envm.put("HOOK0_TEST_EVENTS_MANAGEMENT_ENTID", idmap);
+    envm.put("HOOK0_TEST_LIVE", "FALSE");
+    envm.put("HOOK0_TEST_EXPLAIN", "FALSE");
+    envm.put("HOOK0_APIKEY", "NONE");
     Map<String, Object> env = RunnerSupport.envOverride(envm);
 
-    Map<String, Object> idmapResolved = Helpers.toMapAny(env.get("HOOK__TEST_EVENTS_MANAGEMENT_ENTID"));
+    Map<String, Object> idmapResolved = Helpers.toMapAny(env.get("HOOK0_TEST_EVENTS_MANAGEMENT_ENTID"));
     if (idmapResolved == null) {
       idmapResolved = Helpers.toMapAny(idmap);
     }
 
-    boolean live = "TRUE".equals(env.get("HOOK__TEST_LIVE"));
+    boolean live = "TRUE".equals(env.get("HOOK0_TEST_LIVE"));
     if (live) {
       Map<String, Object> liveOpts = new LinkedHashMap<>();
-      liveOpts.put("apikey", env.get("HOOK__APIKEY"));
+      liveOpts.put("apikey", env.get("HOOK0_APIKEY"));
       Object mergedOpts = Struct.merge(Struct.jt(liveOpts, extra));
       client = new Hook0SDK(Helpers.toMapAny(mergedOpts));
     }
@@ -199,7 +199,7 @@ public class EventsManagementEntityTest {
     setup.data = entityData;
     setup.idmap = idmapResolved;
     setup.env = env;
-    setup.explain = "TRUE".equals(env.get("HOOK__TEST_EXPLAIN"));
+    setup.explain = "TRUE".equals(env.get("HOOK0_TEST_EXPLAIN"));
     setup.live = live;
     setup.syntheticOnly = live && !idmapOverridden;
     setup.now = System.currentTimeMillis();

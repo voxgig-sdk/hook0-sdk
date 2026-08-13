@@ -38,7 +38,7 @@ describe('ApplicationEntity', async () => {
 
   test('basic', async (t) => {
 
-    const live = 'TRUE' === process.env.HOOK__TEST_LIVE
+    const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
     for (const op of ['create', 'list', 'update', 'load', 'remove']) {
       if (maybeSkipControl(t, 'entityOp', 'application.' + op, live)) return
     }
@@ -48,7 +48,7 @@ describe('ApplicationEntity', async () => {
     // fixture (entity TestData.json). Those don't exist on the live API.
     // Skip live runs unless the user provided a real ENTID env override.
     if (setup.syntheticOnly) {
-      t.skip('live entity test uses synthetic IDs from fixture — set HOOK__TEST_APPLICATION_ENTID JSON to run live')
+      t.skip('live entity test uses synthetic IDs from fixture — set HOOK0_TEST_APPLICATION_ENTID JSON to run live')
       return
     }
     const client = setup.client
@@ -62,14 +62,14 @@ describe('ApplicationEntity', async () => {
     const application_ref01_ent = client.Application()
     let application_ref01_data = setup.data.new.application['application_ref01']
 
-    application_ref01_data = await application_ref01_ent.create(application_ref01_data)
+    application_ref01_data = (await application_ref01_ent.create(application_ref01_data)).data()
     assert(null != application_ref01_data)
 
 
     // LIST
     const application_ref01_match: any = {}
 
-    const application_ref01_list = await application_ref01_ent.list(application_ref01_match)
+    const application_ref01_list = (await application_ref01_ent.list(application_ref01_match)).map((e: any) => e.data())
 
 
     // UPDATE
@@ -78,7 +78,7 @@ describe('ApplicationEntity', async () => {
     const application_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-application_ref01_' + setup.now }
     ;(application_ref01_data_up0 as any)[application_ref01_markdef_up0.name] = application_ref01_markdef_up0.value
 
-    const application_ref01_resdata_up0 = await application_ref01_ent.update(application_ref01_data_up0)
+    const application_ref01_resdata_up0 = (await application_ref01_ent.update(application_ref01_data_up0)).data()
     assert(null != application_ref01_resdata_up0)
 
     assert((application_ref01_resdata_up0 as any)[application_ref01_markdef_up0.name] === application_ref01_markdef_up0.value)
@@ -89,7 +89,7 @@ describe('ApplicationEntity', async () => {
     // LIST
     const application_ref01_match_rt0: any = {}
 
-    const application_ref01_list_rt0 = await application_ref01_ent.list(application_ref01_match_rt0)
+    const application_ref01_list_rt0 = (await application_ref01_ent.list(application_ref01_match_rt0)).map((e: any) => e.data())
 
 
   })
@@ -132,24 +132,24 @@ function basicSetup(extra?: any) {
   // basic flow consumes synthetic IDs from the fixture file; without an
   // override those synthetic IDs reach the live API and 4xx. Surface this
   // to the test so it can skip rather than fail.
-  const idmapEnvVal = process.env['HOOK__TEST_APPLICATION_ENTID']
+  const idmapEnvVal = process.env['HOOK0_TEST_APPLICATION_ENTID']
   const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{')
 
   const env = envOverride({
-    'HOOK__TEST_APPLICATION_ENTID': idmap,
-    'HOOK__TEST_LIVE': 'FALSE',
-    'HOOK__TEST_EXPLAIN': 'FALSE',
-    'HOOK__APIKEY': 'NONE',
+    'HOOK0_TEST_APPLICATION_ENTID': idmap,
+    'HOOK0_TEST_LIVE': 'FALSE',
+    'HOOK0_TEST_EXPLAIN': 'FALSE',
+    'HOOK0_APIKEY': 'NONE',
   })
 
-  idmap = env['HOOK__TEST_APPLICATION_ENTID']
+  idmap = env['HOOK0_TEST_APPLICATION_ENTID']
 
-  const live = 'TRUE' === env.HOOK__TEST_LIVE
+  const live = 'TRUE' === env.HOOK0_TEST_LIVE
 
   if (live) {
     client = new Hook0SDK(merge([
       {
-        apikey: env.HOOK__APIKEY,
+        apikey: env.HOOK0_APIKEY,
       },
       extra
     ]))
@@ -162,7 +162,7 @@ function basicSetup(extra?: any) {
     client,
     struct,
     data: entityData,
-    explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+    explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
     live,
     syntheticOnly: live && !idmapOverridden,
     now: Date.now(),

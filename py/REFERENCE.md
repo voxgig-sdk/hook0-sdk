@@ -185,7 +185,7 @@ application = client.Application()
 | `name` | `str` | Yes |  |
 | `onboarding_steps` | `dict` | Yes |  |
 | `organization_id` | `str` | Yes |  |
-| `quota` | `dict` | Yes |  |
+| `quotas` | `dict` | Yes |  |
 
 ### Operations
 
@@ -200,7 +200,7 @@ result = client.Application().create({
     "name": "example_name",  # str
     "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
-    "quota": {},  # dict
+    "quotas": {},  # dict
 })
 ```
 
@@ -570,6 +570,7 @@ Create a new entity with the given data. Returns the created entity data and rai
 ```python
 result = client.EventsManagement().create({
     "event_id": "example_event_id",  # str
+    "application_id": "example_application_id",  # str
 })
 ```
 
@@ -988,7 +989,7 @@ organization = client.Organization()
 | `onboarding_steps` | `dict` | Yes |  |
 | `organization_id` | `str` | Yes |  |
 | `plan` | `dict` | Yes |  |
-| `quota` | `dict` | Yes |  |
+| `quotas` | `dict` | Yes |  |
 | `role` | `str` | Yes |  |
 | `users` | `list` | Yes |  |
 
@@ -1005,7 +1006,7 @@ result = client.Organization().create({
     "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
     "plan": {},  # dict
-    "quota": {},  # dict
+    "quotas": {},  # dict
     "role": "example_role",  # str
     "users": [],  # list
 })
@@ -1198,8 +1199,12 @@ quota = client.Quota()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `enabled` | `bool` | Yes |  |
-| `limits` | `dict` | Yes |  |
+| `global_applications_per_organization_limit` | `int` | Yes |  |
+| `global_days_of_events_retention_limit` | `int` | Yes |  |
+| `global_event_types_per_application_limit` | `int` | Yes |  |
+| `global_events_per_day_limit` | `int` | Yes |  |
+| `global_members_per_organization_limit` | `int` | Yes |  |
+| `global_subscriptions_per_application_limit` | `int` | Yes |  |
 
 ### Operations
 
@@ -1379,17 +1384,6 @@ Return the entity name.
 ```python
 response = client.Response()
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `body` | `str` | No |  |
-| `elapsed_time_ms` | `int` | No |  |
-| `headers` | `dict` | No |  |
-| `http_code` | `int` | No |  |
-| `response_error_name` | `str` | No |  |
-| `response_id` | `str` | Yes |  |
 
 ### Operations
 
@@ -1587,7 +1581,7 @@ subscription = client.Subscription()
 | `created_at` | `str` | Yes |  |
 | `dedicated_workers` | `list` | Yes |  |
 | `description` | `str` | No |  |
-| `event_type` | `list` | Yes |  |
+| `event_types` | `list` | Yes |  |
 | `is_enabled` | `bool` | Yes |  |
 | `label_key` | `str` | Yes |  |
 | `label_value` | `str` | Yes |  |
@@ -1606,7 +1600,7 @@ subscription = client.Subscription()
 | `created_at` | - | - | - | - | - |
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
-| `event_type` | - | - | - | - | - |
+| `event_types` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |
@@ -1628,7 +1622,7 @@ result = client.Subscription().create({
     "application_id": "example_application_id",  # str
     "created_at": "example_created_at",  # str
     "dedicated_workers": [],  # list
-    "event_type": [],  # list
+    "event_types": [],  # list
     "is_enabled": True,  # bool
     "label_key": "example_label_key",  # str
     "label_value": "example_label_value",  # str
@@ -1786,6 +1780,8 @@ Create a new entity with the given data. Returns the created entity data and rai
 ```python
 result = client.UserInvitation().create({
     "organization_id": "example_organization_id",  # str
+    "email": "example_email",  # str
+    "role": "example_role",  # str
 })
 ```
 

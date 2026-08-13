@@ -6,7 +6,11 @@
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 package entity
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/voxgig-sdk/hook0-sdk/go/core"
+)
 
 // Application is the typed data model for the application entity.
 type Application struct {
@@ -15,7 +19,7 @@ type Application struct {
 	Name string `json:"name"`
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
-	Quota map[string]any `json:"quota"`
+	Quotas map[string]any `json:"quotas"`
 }
 
 // ApplicationLoadMatch is the typed request payload for Application.LoadTyped.
@@ -30,7 +34,7 @@ type ApplicationListMatch struct {
 	Name *string `json:"name,omitempty"`
 	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
-	Quota *map[string]any `json:"quota,omitempty"`
+	Quotas *map[string]any `json:"quotas,omitempty"`
 }
 
 // ApplicationCreateData is the typed request payload for Application.CreateTyped.
@@ -40,12 +44,18 @@ type ApplicationCreateData struct {
 	Name string `json:"name"`
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
-	Quota map[string]any `json:"quota"`
+	Quotas map[string]any `json:"quotas"`
 }
 
 // ApplicationUpdateData is the typed request payload for Application.UpdateTyped.
 type ApplicationUpdateData struct {
 	Id string `json:"id"`
+	ApplicationId *string `json:"application_id,omitempty"`
+	Consumption *map[string]any `json:"consumption,omitempty"`
+	Name *string `json:"name,omitempty"`
+	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
+	OrganizationId *string `json:"organization_id,omitempty"`
+	Quotas *map[string]any `json:"quotas,omitempty"`
 }
 
 // ApplicationRemoveMatch is the typed request payload for Application.RemoveTyped.
@@ -83,6 +93,11 @@ type ApplicationSecretCreateData struct {
 // ApplicationSecretUpdateData is the typed request payload for ApplicationSecret.UpdateTyped.
 type ApplicationSecretUpdateData struct {
 	Id string `json:"id"`
+	ApplicationId *string `json:"application_id,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
+	DeletedAt *string `json:"deleted_at,omitempty"`
+	Name *string `json:"name,omitempty"`
+	Token *string `json:"token,omitempty"`
 }
 
 // ApplicationsManagement is the typed data model for the applications_management entity.
@@ -179,6 +194,7 @@ type EventsManagementListMatch struct {
 // EventsManagementCreateData is the typed request payload for EventsManagement.CreateTyped.
 type EventsManagementCreateData struct {
 	EventId string `json:"event_id"`
+	ApplicationId string `json:"application_id"`
 }
 
 // EventsManagementRemoveMatch is the typed request payload for EventsManagement.RemoveTyped.
@@ -319,7 +335,7 @@ type Organization struct {
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
 	Plan map[string]any `json:"plan"`
-	Quota map[string]any `json:"quota"`
+	Quotas map[string]any `json:"quotas"`
 	Role string `json:"role"`
 	Users []any `json:"users"`
 }
@@ -336,7 +352,7 @@ type OrganizationListMatch struct {
 	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
 	Plan *map[string]any `json:"plan,omitempty"`
-	Quota *map[string]any `json:"quota,omitempty"`
+	Quotas *map[string]any `json:"quotas,omitempty"`
 	Role *string `json:"role,omitempty"`
 	Users *[]any `json:"users,omitempty"`
 }
@@ -348,7 +364,7 @@ type OrganizationCreateData struct {
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
 	Plan map[string]any `json:"plan"`
-	Quota map[string]any `json:"quota"`
+	Quotas map[string]any `json:"quotas"`
 	Role string `json:"role"`
 	Users []any `json:"users"`
 }
@@ -356,6 +372,14 @@ type OrganizationCreateData struct {
 // OrganizationUpdateData is the typed request payload for Organization.UpdateTyped.
 type OrganizationUpdateData struct {
 	Id string `json:"id"`
+	Consumption *map[string]any `json:"consumption,omitempty"`
+	Name *string `json:"name,omitempty"`
+	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
+	OrganizationId *string `json:"organization_id,omitempty"`
+	Plan *map[string]any `json:"plan,omitempty"`
+	Quotas *map[string]any `json:"quotas,omitempty"`
+	Role *string `json:"role,omitempty"`
+	Users *[]any `json:"users,omitempty"`
 }
 
 // OrganizationRemoveMatch is the typed request payload for Organization.RemoveTyped.
@@ -372,6 +396,8 @@ type OrganizationEditRole struct {
 // OrganizationEditRoleUpdateData is the typed request payload for OrganizationEditRole.UpdateTyped.
 type OrganizationEditRoleUpdateData struct {
 	Id string `json:"id"`
+	Role *string `json:"role,omitempty"`
+	UserId *string `json:"user_id,omitempty"`
 }
 
 // Problem is the typed data model for the problem entity.
@@ -392,14 +418,22 @@ type ProblemListMatch struct {
 
 // Quota is the typed data model for the quota entity.
 type Quota struct {
-	Enabled bool `json:"enabled"`
-	Limits map[string]any `json:"limits"`
+	GlobalApplicationsPerOrganizationLimit int `json:"global_applications_per_organization_limit"`
+	GlobalDaysOfEventsRetentionLimit int `json:"global_days_of_events_retention_limit"`
+	GlobalEventTypesPerApplicationLimit int `json:"global_event_types_per_application_limit"`
+	GlobalEventsPerDayLimit int `json:"global_events_per_day_limit"`
+	GlobalMembersPerOrganizationLimit int `json:"global_members_per_organization_limit"`
+	GlobalSubscriptionsPerApplicationLimit int `json:"global_subscriptions_per_application_limit"`
 }
 
 // QuotaLoadMatch is the typed request payload for Quota.LoadTyped.
 type QuotaLoadMatch struct {
-	Enabled *bool `json:"enabled,omitempty"`
-	Limits *map[string]any `json:"limits,omitempty"`
+	GlobalApplicationsPerOrganizationLimit *int `json:"global_applications_per_organization_limit,omitempty"`
+	GlobalDaysOfEventsRetentionLimit *int `json:"global_days_of_events_retention_limit,omitempty"`
+	GlobalEventTypesPerApplicationLimit *int `json:"global_event_types_per_application_limit,omitempty"`
+	GlobalEventsPerDayLimit *int `json:"global_events_per_day_limit,omitempty"`
+	GlobalMembersPerOrganizationLimit *int `json:"global_members_per_organization_limit,omitempty"`
+	GlobalSubscriptionsPerApplicationLimit *int `json:"global_subscriptions_per_application_limit,omitempty"`
 }
 
 // Registration is the typed data model for the registration entity.
@@ -463,12 +497,6 @@ type RequestAttemptListMatch struct {
 
 // Response is the typed data model for the response entity.
 type Response struct {
-	Body *string `json:"body,omitempty"`
-	ElapsedTimeMs *int `json:"elapsed_time_ms,omitempty"`
-	Headers *map[string]any `json:"headers,omitempty"`
-	HttpCode *int `json:"http_code,omitempty"`
-	ResponseErrorName *string `json:"response_error_name,omitempty"`
-	ResponseId string `json:"response_id"`
 }
 
 // ResponseLoadMatch is the typed request payload for Response.LoadTyped.
@@ -520,6 +548,11 @@ type ServiceTokenCreateData struct {
 // ServiceTokenUpdateData is the typed request payload for ServiceToken.UpdateTyped.
 type ServiceTokenUpdateData struct {
 	Id string `json:"id"`
+	Biscuit *string `json:"biscuit,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
+	Name *string `json:"name,omitempty"`
+	OrganizationId *string `json:"organization_id,omitempty"`
+	TokenId *string `json:"token_id,omitempty"`
 }
 
 // ServiceTokenRemoveMatch is the typed request payload for ServiceToken.RemoveTyped.
@@ -533,7 +566,7 @@ type Subscription struct {
 	CreatedAt string `json:"created_at"`
 	DedicatedWorkers []any `json:"dedicated_workers"`
 	Description *string `json:"description,omitempty"`
-	EventType []any `json:"event_type"`
+	EventTypes []any `json:"event_types"`
 	IsEnabled bool `json:"is_enabled"`
 	LabelKey string `json:"label_key"`
 	LabelValue string `json:"label_value"`
@@ -556,7 +589,7 @@ type SubscriptionListMatch struct {
 	CreatedAt *string `json:"created_at,omitempty"`
 	DedicatedWorkers *[]any `json:"dedicated_workers,omitempty"`
 	Description *string `json:"description,omitempty"`
-	EventType *[]any `json:"event_type,omitempty"`
+	EventTypes *[]any `json:"event_types,omitempty"`
 	IsEnabled *bool `json:"is_enabled,omitempty"`
 	LabelKey *string `json:"label_key,omitempty"`
 	LabelValue *string `json:"label_value,omitempty"`
@@ -574,7 +607,7 @@ type SubscriptionCreateData struct {
 	CreatedAt string `json:"created_at"`
 	DedicatedWorkers []any `json:"dedicated_workers"`
 	Description *string `json:"description,omitempty"`
-	EventType []any `json:"event_type"`
+	EventTypes []any `json:"event_types"`
 	IsEnabled bool `json:"is_enabled"`
 	LabelKey string `json:"label_key"`
 	LabelValue string `json:"label_value"`
@@ -589,6 +622,20 @@ type SubscriptionCreateData struct {
 // SubscriptionUpdateData is the typed request payload for Subscription.UpdateTyped.
 type SubscriptionUpdateData struct {
 	Id string `json:"id"`
+	ApplicationId *string `json:"application_id,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
+	DedicatedWorkers *[]any `json:"dedicated_workers,omitempty"`
+	Description *string `json:"description,omitempty"`
+	EventTypes *[]any `json:"event_types,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty"`
+	LabelKey *string `json:"label_key,omitempty"`
+	LabelValue *string `json:"label_value,omitempty"`
+	Labels *map[string]any `json:"labels,omitempty"`
+	Metadata *map[string]any `json:"metadata,omitempty"`
+	Secret *string `json:"secret,omitempty"`
+	SubscriptionId *string `json:"subscription_id,omitempty"`
+	Target *map[string]any `json:"target,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 }
 
 // SubscriptionRemoveMatch is the typed request payload for Subscription.RemoveTyped.
@@ -619,6 +666,8 @@ type UserInvitation struct {
 // UserInvitationCreateData is the typed request payload for UserInvitation.CreateTyped.
 type UserInvitationCreateData struct {
 	OrganizationId string `json:"organization_id"`
+	Email string `json:"email"`
+	Role string `json:"role"`
 }
 
 // asMap turns a typed request/data struct into the map[string]any the
@@ -633,12 +682,26 @@ func asMap(v any) map[string]any {
 	return out
 }
 
-// typedFrom decodes a runtime value (a map[string]any produced by the op
-// pipeline) into a typed model T via a JSON round-trip. On any error it
-// returns the zero value of T; the op's own (value, error) tuple carries the
-// real error.
+// entityData unwraps an entity to its data map.
+//
+// Operations resolve to the ENTITY, not the raw data (see AGENTS.md), and an
+// entity's fields are UNEXPORTED — marshalling one directly yields `{}`, so
+// every typed accessor would silently hand back a zero-valued struct. The
+// typed boundary therefore takes the data hop first.
+func entityData(v any) any {
+	if ent, ok := v.(core.Entity); ok {
+		return ent.Data()
+	}
+	return v
+}
+
+// typedFrom decodes a runtime value (an entity, or the map[string]any the op
+// pipeline produced) into a typed model T via a JSON round-trip. On any error
+// it returns the zero value of T; the op's own (value, error) tuple carries
+// the real error.
 func typedFrom[T any](v any) T {
 	var out T
+	v = entityData(v)
 	if v == nil {
 		return out
 	}
@@ -650,12 +713,20 @@ func typedFrom[T any](v any) T {
 	return out
 }
 
-// typedSliceFrom decodes a runtime list value ([]any of maps) into a typed
-// slice []T via a JSON round-trip, for list ops.
+// typedSliceFrom decodes a runtime list value into a typed slice []T via a
+// JSON round-trip, for list ops. `list` resolves to a slice of ENTITY
+// instances, so each element takes the data hop.
 func typedSliceFrom[T any](v any) []T {
 	var out []T
 	if v == nil {
 		return out
+	}
+	if list, ok := v.([]any); ok {
+		unwrapped := make([]any, 0, len(list))
+		for _, item := range list {
+			unwrapped = append(unwrapped, entityData(item))
+		}
+		v = unwrapped
 	}
 	b, err := json.Marshal(v)
 	if err != nil {

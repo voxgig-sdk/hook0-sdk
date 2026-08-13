@@ -17,6 +17,23 @@ const OpResult = types.OpResult;
 const OutVal = types.OutVal;
 const Entity = types.Entity;
 
+// Every operation resolves to the ENTITY, not the raw data — `list` to a
+// slice of them, one per record; the record is reached through `data()`.
+// See AGENTS.md "Entity operations return ENTITIES".
+//
+// `Value` cannot carry an entity (it is a closed data union) and the shared
+// `OpResult` cannot name a per-entity type, so each entity declares its own
+// result unions and the CONTRACT lives in those signatures.
+pub const EntResult = union(enum) {
+    ok: *RevokeEntity,
+    err: *errmod.Hook0Error,
+};
+
+pub const EntListResult = union(enum) {
+    ok: []*RevokeEntity,
+    err: *errmod.Hook0Error,
+};
+
 pub const RevokeEntity = struct {
     name: []const u8 = "revoke",
     client: *sdk.Hook0SDK,
@@ -25,6 +42,8 @@ pub const RevokeEntity = struct {
     data: Value,
     mtch: Value,
     entctx: ?*Context = null,
+    // Set once a successful `remove` resolves on this instance.
+    deleted: bool = false,
 
     pub fn new(client: *sdk.Hook0SDK, entopts_in: Value) *RevokeEntity {
         const entopts: Value = switch (entopts_in) {
@@ -71,6 +90,26 @@ pub const RevokeEntity = struct {
     fn doneResult(self: *RevokeEntity, ctx: *Context) OpResult {
         const v = self.utility.done(ctx) catch return .{ .err = ctx.pending_err.? };
         return .{ .ok = v };
+    }
+
+    // Runs the pipeline and hands back THIS entity: run_op has just absorbed
+    // the result into it. See AGENTS.md "Entity operations return ENTITIES".
+    fn run_op_ent(self: *RevokeEntity, ctx: *Context, post_done: *const fn (*RevokeEntity, *Context) void) EntResult {
+        return switch (self.run_op(ctx, post_done)) {
+            .err => |e| EntResult{ .err = e },
+            .ok => EntResult{ .ok = self },
+        };
+    }
+
+    // `remove` resolves to the entity, marked. The instance KEEPS the data it
+    // held — a caller can still read what was deleted — but it is no longer a
+    // live record.
+    pub fn mark_deleted(self: *RevokeEntity) void {
+        self.deleted = true;
+    }
+
+    pub fn is_deleted(self: *RevokeEntity) bool {
+        return self.deleted;
     }
 
     fn run_op(self: *RevokeEntity, ctx: *Context, post_done: *const fn (*RevokeEntity, *Context) void) OpResult {
@@ -260,32 +299,32 @@ pub const RevokeEntity = struct {
 
     // ---- CRUD operations ----
 
-    pub fn load(self: *RevokeEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn load(self: *RevokeEntity, _reqmatch: Value, _ctrl: Value) EntResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("load", self.name) };
     }
 
-    pub fn list(self: *RevokeEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn list(self: *RevokeEntity, _reqmatch: Value, _ctrl: Value) EntListResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("list", self.name) };
     }
 
-    pub fn create(self: *RevokeEntity, _reqdata: Value, _ctrl: Value) OpResult {
+    pub fn create(self: *RevokeEntity, _reqdata: Value, _ctrl: Value) EntResult {
         _ = _reqdata;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("create", self.name) };
     }
 
-    pub fn update(self: *RevokeEntity, _reqdata: Value, _ctrl: Value) OpResult {
+    pub fn update(self: *RevokeEntity, _reqdata: Value, _ctrl: Value) EntResult {
         _ = _reqdata;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("update", self.name) };
     }
 
 
-    pub fn remove(self: *RevokeEntity, reqmatch: Value, ctrl: Value) OpResult {
+    pub fn remove(self: *RevokeEntity, reqmatch: Value, ctrl: Value) EntResult {
         const ctx = self.utility.make_context(CtxSpec{
             .opname = "remove",
             .ctrl = ctrl,
@@ -293,7 +332,10 @@ pub const RevokeEntity = struct {
             .data = self.data,
             .reqmatch = reqmatch,
         }, self.ent_ctx());
-        return self.run_op(ctx, remove_post_done);
+        const res = self.run_op_ent(ctx, remove_post_done);
+        // A removed entity keeps its data but is no longer a live record.
+        if (res == .ok) self.mark_deleted();
+        return res;
     }
     
     fn remove_post_done(self: *RevokeEntity, ctx: *Context) void {

@@ -4,39 +4,6 @@ main: kit: entity: response: {
 
   alias: field: {}
 
-  fields: [
-    {
-      name: "body"
-      req: false
-      type: "`$STRING`"
-    }
-    {
-      name: "elapsed_time_ms"
-      req: false
-      type: "`$INTEGER`"
-    }
-    {
-      name: "headers"
-      req: false
-      type: "`$OBJECT`"
-    }
-    {
-      name: "http_code"
-      req: false
-      type: "`$INTEGER`"
-    }
-    {
-      name: "response_error_name"
-      req: false
-      type: "`$STRING`"
-    }
-    {
-      name: "response_id"
-      req: true
-      type: "`$STRING`"
-    }
-  ]
-
   name: "response"
   op: {
     load: {

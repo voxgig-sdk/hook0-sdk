@@ -17,6 +17,23 @@ const OpResult = types.OpResult;
 const OutVal = types.OutVal;
 const Entity = types.Entity;
 
+// Every operation resolves to the ENTITY, not the raw data — `list` to a
+// slice of them, one per record; the record is reached through `data()`.
+// See AGENTS.md "Entity operations return ENTITIES".
+//
+// `Value` cannot carry an entity (it is a closed data union) and the shared
+// `OpResult` cannot name a per-entity type, so each entity declares its own
+// result unions and the CONTRACT lives in those signatures.
+pub const EntResult = union(enum) {
+    ok: *ProblemEntity,
+    err: *errmod.Hook0Error,
+};
+
+pub const EntListResult = union(enum) {
+    ok: []*ProblemEntity,
+    err: *errmod.Hook0Error,
+};
+
 pub const ProblemEntity = struct {
     name: []const u8 = "problem",
     client: *sdk.Hook0SDK,
@@ -25,6 +42,8 @@ pub const ProblemEntity = struct {
     data: Value,
     mtch: Value,
     entctx: ?*Context = null,
+    // Set once a successful `remove` resolves on this instance.
+    deleted: bool = false,
 
     pub fn new(client: *sdk.Hook0SDK, entopts_in: Value) *ProblemEntity {
         const entopts: Value = switch (entopts_in) {
@@ -71,6 +90,26 @@ pub const ProblemEntity = struct {
     fn doneResult(self: *ProblemEntity, ctx: *Context) OpResult {
         const v = self.utility.done(ctx) catch return .{ .err = ctx.pending_err.? };
         return .{ .ok = v };
+    }
+
+    // Runs the pipeline and hands back THIS entity: run_op has just absorbed
+    // the result into it. See AGENTS.md "Entity operations return ENTITIES".
+    fn run_op_ent(self: *ProblemEntity, ctx: *Context, post_done: *const fn (*ProblemEntity, *Context) void) EntResult {
+        return switch (self.run_op(ctx, post_done)) {
+            .err => |e| EntResult{ .err = e },
+            .ok => EntResult{ .ok = self },
+        };
+    }
+
+    // `remove` resolves to the entity, marked. The instance KEEPS the data it
+    // held — a caller can still read what was deleted — but it is no longer a
+    // live record.
+    pub fn mark_deleted(self: *ProblemEntity) void {
+        self.deleted = true;
+    }
+
+    pub fn is_deleted(self: *ProblemEntity) bool {
+        return self.deleted;
     }
 
     fn run_op(self: *ProblemEntity, ctx: *Context, post_done: *const fn (*ProblemEntity, *Context) void) OpResult {
@@ -260,14 +299,14 @@ pub const ProblemEntity = struct {
 
     // ---- CRUD operations ----
 
-    pub fn load(self: *ProblemEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn load(self: *ProblemEntity, _reqmatch: Value, _ctrl: Value) EntResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("load", self.name) };
     }
 
 
-    pub fn list(self: *ProblemEntity, reqmatch: Value, ctrl: Value) OpResult {
+    pub fn list(self: *ProblemEntity, reqmatch: Value, ctrl: Value) EntListResult {
         const ctx = self.utility.make_context(CtxSpec{
             .opname = "list",
             .ctrl = ctrl,
@@ -275,7 +314,26 @@ pub const ProblemEntity = struct {
             .data = self.data,
             .reqmatch = reqmatch,
         }, self.ent_ctx());
-        return self.run_op(ctx, list_post_done);
+        const out = switch (self.run_op(ctx, list_post_done)) {
+            .err => |e| return EntListResult{ .err = e },
+            .ok => |v| v,
+        };
+    
+        // `list` resolves to one ENTITY per record. make_result cannot build them
+        // here — it works in Value, which has no slot for an entity — so the op
+        // does, mirroring what the dynamic targets get from make_result.
+        var items = std.ArrayList(*ProblemEntity).init(h.A());
+        if (out == .array) {
+            for (out.array.data.items) |entry| {
+                const ent = ProblemEntity.new(self.client, h.clone(self.entopts));
+                if (entry == .object) {
+                    _ = ent.data_impl(entry);
+                }
+                items.append(ent) catch {};
+            }
+        }
+    
+        return EntListResult{ .ok = items.toOwnedSlice() catch &[_]*ProblemEntity{} };
     }
     
     fn list_post_done(self: *ProblemEntity, ctx: *Context) void {
@@ -286,19 +344,19 @@ pub const ProblemEntity = struct {
     }
     
 
-    pub fn create(self: *ProblemEntity, _reqdata: Value, _ctrl: Value) OpResult {
+    pub fn create(self: *ProblemEntity, _reqdata: Value, _ctrl: Value) EntResult {
         _ = _reqdata;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("create", self.name) };
     }
 
-    pub fn update(self: *ProblemEntity, _reqdata: Value, _ctrl: Value) OpResult {
+    pub fn update(self: *ProblemEntity, _reqdata: Value, _ctrl: Value) EntResult {
         _ = _reqdata;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("update", self.name) };
     }
 
-    pub fn remove(self: *ProblemEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn remove(self: *ProblemEntity, _reqmatch: Value, _ctrl: Value) EntResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("remove", self.name) };

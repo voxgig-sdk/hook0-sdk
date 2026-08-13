@@ -33,7 +33,7 @@ class LoginEntityTest extends TestCase
         // The basic flow consumes synthetic IDs from the fixture. In live mode
         // without an *_ENTID env override, those IDs hit the live API and 4xx.
         if (!empty($setup["synthetic_only"])) {
-            $this->markTestSkipped("live entity test uses synthetic IDs from fixture — set HOOK__TEST_LOGIN_ENTID JSON to run live");
+            $this->markTestSkipped("live entity test uses synthetic IDs from fixture — set HOOK0_TEST_LOGIN_ENTID JSON to run live");
             return;
         }
         $client = $setup["client"];
@@ -44,7 +44,7 @@ class LoginEntityTest extends TestCase
             Vs::getpath($setup["data"], "new.login"), "login_ref01"));
 
         $login_ref01_data_result = $login_ref01_ent->create($login_ref01_data, null);
-        $login_ref01_data = Helpers::to_map($login_ref01_data_result);
+        $login_ref01_data = Helpers::to_map(is_object($login_ref01_data_result) && method_exists($login_ref01_data_result, 'data_get') ? $login_ref01_data_result->data_get() : $login_ref01_data_result);
         $this->assertNotNull($login_ref01_data);
 
     }
@@ -72,39 +72,39 @@ function login_basic_setup($extra)
     // Detect ENTID env override before envOverride consumes it. When live
     // mode is on without a real override, the basic test runs against synthetic
     // IDs from the fixture and 4xx's. Surface this so the test can skip.
-    $entid_env_raw = getenv("HOOK__TEST_LOGIN_ENTID");
+    $entid_env_raw = getenv("HOOK0_TEST_LOGIN_ENTID");
     $idmap_overridden = $entid_env_raw !== false && str_starts_with(trim($entid_env_raw), "{");
 
     $env = Runner::env_override([
-        "HOOK__TEST_LOGIN_ENTID" => $idmap,
-        "HOOK__TEST_LIVE" => "FALSE",
-        "HOOK__TEST_EXPLAIN" => "FALSE",
-        "HOOK__APIKEY" => "NONE",
+        "HOOK0_TEST_LOGIN_ENTID" => $idmap,
+        "HOOK0_TEST_LIVE" => "FALSE",
+        "HOOK0_TEST_EXPLAIN" => "FALSE",
+        "HOOK0_APIKEY" => "NONE",
     ]);
 
     $idmap_resolved = Helpers::to_map(
-        $env["HOOK__TEST_LOGIN_ENTID"]);
+        $env["HOOK0_TEST_LOGIN_ENTID"]);
     if ($idmap_resolved === null) {
         $idmap_resolved = Helpers::to_map($idmap);
     }
 
-    if ($env["HOOK__TEST_LIVE"] === "TRUE") {
+    if ($env["HOOK0_TEST_LIVE"] === "TRUE") {
         $merged_opts = Vs::merge([
             [
-                "apikey" => $env["HOOK__APIKEY"],
+                "apikey" => $env["HOOK0_APIKEY"],
             ],
             $extra ?? [],
         ]);
         $client = new Hook0SDK(Helpers::to_map($merged_opts));
     }
 
-    $live = $env["HOOK__TEST_LIVE"] === "TRUE";
+    $live = $env["HOOK0_TEST_LIVE"] === "TRUE";
     return [
         "client" => $client,
         "data" => $entity_data,
         "idmap" => $idmap_resolved,
         "env" => $env,
-        "explain" => $env["HOOK__TEST_EXPLAIN"] === "TRUE",
+        "explain" => $env["HOOK0_TEST_EXPLAIN"] === "TRUE",
         "live" => $live,
         "synthetic_only" => $live && !$idmap_overridden,
         "now" => (int)(microtime(true) * 1000),

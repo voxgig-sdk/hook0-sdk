@@ -213,7 +213,7 @@ const application = client.application(h.vnull());
 | `name` | `[]const u8` | Yes |  |
 | `onboarding_steps` | `Value (object)` | Yes |  |
 | `organization_id` | `[]const u8` | Yes |  |
-| `quota` | `Value (object)` | Yes |  |
+| `quotas` | `Value (object)` | Yes |  |
 
 ### Operations
 
@@ -228,7 +228,7 @@ switch (client.application(h.vnull()).create(h.jo(&.{
     .{ "name", h.vstr("example_name") }, // []const u8
     .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
-    .{ "quota", h.omap() }, // Value (object)
+    .{ "quotas", h.omap() }, // Value (object)
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -592,6 +592,7 @@ Create a new entity with the given data. `.ok` carries the created entity data.
 ```zig
 switch (client.events_management(h.vnull()).create(h.jo(&.{
     .{ "event_id", h.vstr("example_event_id") }, // []const u8
+    .{ "application_id", h.vstr("example_application_id") }, // []const u8
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -975,7 +976,7 @@ const organization = client.organization(h.vnull());
 | `onboarding_steps` | `Value (object)` | Yes |  |
 | `organization_id` | `[]const u8` | Yes |  |
 | `plan` | `Value (object)` | Yes |  |
-| `quota` | `Value (object)` | Yes |  |
+| `quotas` | `Value (object)` | Yes |  |
 | `role` | `[]const u8` | Yes |  |
 | `users` | `Value (array)` | Yes |  |
 
@@ -992,7 +993,7 @@ switch (client.organization(h.vnull()).create(h.jo(&.{
     .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
     .{ "plan", h.omap() }, // Value (object)
-    .{ "quota", h.omap() }, // Value (object)
+    .{ "quotas", h.omap() }, // Value (object)
     .{ "role", h.vstr("example_role") }, // []const u8
     .{ "users", h.olist() }, // Value (array)
 }), h.vnull())) {
@@ -1178,8 +1179,12 @@ const quota = client.quota(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `enabled` | `bool` | Yes |  |
-| `limits` | `Value (object)` | Yes |  |
+| `global_applications_per_organization_limit` | `i64` | Yes |  |
+| `global_days_of_events_retention_limit` | `i64` | Yes |  |
+| `global_event_types_per_application_limit` | `i64` | Yes |  |
+| `global_events_per_day_limit` | `i64` | Yes |  |
+| `global_members_per_organization_limit` | `i64` | Yes |  |
+| `global_subscriptions_per_application_limit` | `i64` | Yes |  |
 
 ### Operations
 
@@ -1345,17 +1350,6 @@ Return the entity name.
 ```zig
 const response = client.response(h.vnull());
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `body` | `[]const u8` | No |  |
-| `elapsed_time_ms` | `i64` | No |  |
-| `headers` | `Value (object)` | No |  |
-| `http_code` | `i64` | No |  |
-| `response_error_name` | `[]const u8` | No |  |
-| `response_id` | `[]const u8` | Yes |  |
 
 ### Operations
 
@@ -1548,7 +1542,7 @@ const subscription = client.subscription(h.vnull());
 | `created_at` | `[]const u8` | Yes |  |
 | `dedicated_workers` | `Value (array)` | Yes |  |
 | `description` | `[]const u8` | No |  |
-| `event_type` | `Value (array)` | Yes |  |
+| `event_types` | `Value (array)` | Yes |  |
 | `is_enabled` | `bool` | Yes |  |
 | `label_key` | `[]const u8` | Yes |  |
 | `label_value` | `[]const u8` | Yes |  |
@@ -1567,7 +1561,7 @@ const subscription = client.subscription(h.vnull());
 | `created_at` | - | - | - | - | - |
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
-| `event_type` | - | - | - | - | - |
+| `event_types` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |
@@ -1589,7 +1583,7 @@ switch (client.subscription(h.vnull()).create(h.jo(&.{
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
     .{ "created_at", h.vstr("example_created_at") }, // []const u8
     .{ "dedicated_workers", h.olist() }, // Value (array)
-    .{ "event_type", h.olist() }, // Value (array)
+    .{ "event_types", h.olist() }, // Value (array)
     .{ "is_enabled", h.vbool(true) }, // bool
     .{ "label_key", h.vstr("example_label_key") }, // []const u8
     .{ "label_value", h.vstr("example_label_value") }, // []const u8
@@ -1747,6 +1741,8 @@ Create a new entity with the given data. `.ok` carries the created entity data.
 ```zig
 switch (client.user_invitation(h.vnull()).create(h.jo(&.{
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
+    .{ "email", h.vstr("example_email") }, // []const u8
+    .{ "role", h.vstr("example_role") }, // []const u8
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),

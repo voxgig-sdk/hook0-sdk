@@ -31,7 +31,7 @@ main: kit: entity: organization: {
       type: "`$OBJECT`"
     }
     {
-      name: "quota"
+      name: "quotas"
       req: true
       type: "`$OBJECT`"
     }

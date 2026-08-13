@@ -37,7 +37,7 @@ class Hook0Entity extends Hook0EntityBase<Hook0> {
 
 
 
-  async list(this: any, reqmatch?: Hook0ListMatch, ctrl?: Control): Promise<Hook0[]> {
+  async list(this: any, reqmatch?: Hook0ListMatch, ctrl?: Control): Promise<Hook0Entity[]> {
 
     const utility = this._utility
 

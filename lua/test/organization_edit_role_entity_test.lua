@@ -29,7 +29,7 @@ describe("OrganizationEditRoleEntity", function()
     -- The basic flow consumes synthetic IDs from the fixture. In live mode
     -- without an *_ENTID env override, those IDs hit the live API and 4xx.
     if setup.synthetic_only then
-      pending("live entity test uses synthetic IDs from fixture — set HOOK__TEST_ORGANIZATION_EDIT_ROLE_ENTID JSON to run live")
+      pending("live entity test uses synthetic IDs from fixture — set HOOK0_TEST_ORGANIZATION_EDIT_ROLE_ENTID JSON to run live")
       return
     end
     local client = setup.client
@@ -53,7 +53,7 @@ describe("OrganizationEditRoleEntity", function()
 
     local organization_edit_role_ref01_resdata_up0_result, err = organization_edit_role_ref01_ent:update(organization_edit_role_ref01_data_up0_up, nil)
     assert.is_nil(err)
-    local organization_edit_role_ref01_resdata_up0 = helpers.to_map(organization_edit_role_ref01_resdata_up0_result)
+    local organization_edit_role_ref01_resdata_up0 = helpers.to_map(type(organization_edit_role_ref01_resdata_up0_result) == 'table' and organization_edit_role_ref01_resdata_up0_result.data_get and organization_edit_role_ref01_resdata_up0_result:data_get() or organization_edit_role_ref01_resdata_up0_result)
     assert.is_not_nil(organization_edit_role_ref01_resdata_up0)
     assert.are.equal(organization_edit_role_ref01_resdata_up0[organization_edit_role_ref01_markdef_up0_name], organization_edit_role_ref01_markdef_up0_value)
 
@@ -92,39 +92,39 @@ function organization_edit_role_basic_setup(extra)
   -- Detect ENTID env override before envOverride consumes it. When live
   -- mode is on without a real override, the basic test runs against synthetic
   -- IDs from the fixture and 4xx's. Surface this so the test can skip.
-  local entid_env_raw = os.getenv("HOOK__TEST_ORGANIZATION_EDIT_ROLE_ENTID")
+  local entid_env_raw = os.getenv("HOOK0_TEST_ORGANIZATION_EDIT_ROLE_ENTID")
   local idmap_overridden = entid_env_raw ~= nil and entid_env_raw:match("^%s*{") ~= nil
 
   local env = runner.env_override({
-    ["HOOK__TEST_ORGANIZATION_EDIT_ROLE_ENTID"] = idmap,
-    ["HOOK__TEST_LIVE"] = "FALSE",
-    ["HOOK__TEST_EXPLAIN"] = "FALSE",
-    ["HOOK__APIKEY"] = "NONE",
+    ["HOOK0_TEST_ORGANIZATION_EDIT_ROLE_ENTID"] = idmap,
+    ["HOOK0_TEST_LIVE"] = "FALSE",
+    ["HOOK0_TEST_EXPLAIN"] = "FALSE",
+    ["HOOK0_APIKEY"] = "NONE",
   })
 
   local idmap_resolved = helpers.to_map(
-    env["HOOK__TEST_ORGANIZATION_EDIT_ROLE_ENTID"])
+    env["HOOK0_TEST_ORGANIZATION_EDIT_ROLE_ENTID"])
   if idmap_resolved == nil then
     idmap_resolved = helpers.to_map(idmap)
   end
 
-  if env["HOOK__TEST_LIVE"] == "TRUE" then
+  if env["HOOK0_TEST_LIVE"] == "TRUE" then
     local merged_opts = vs.merge({
       {
-        apikey = env["HOOK__APIKEY"],
+        apikey = env["HOOK0_APIKEY"],
       },
       extra or {},
     })
     client = sdk.new(helpers.to_map(merged_opts))
   end
 
-  local live = env["HOOK__TEST_LIVE"] == "TRUE"
+  local live = env["HOOK0_TEST_LIVE"] == "TRUE"
   return {
     client = client,
     data = entity_data,
     idmap = idmap_resolved,
     env = env,
-    explain = env["HOOK__TEST_EXPLAIN"] == "TRUE",
+    explain = env["HOOK0_TEST_EXPLAIN"] == "TRUE",
     live = live,
     synthetic_only = live and not idmap_overridden,
     now = os.time() * 1000,

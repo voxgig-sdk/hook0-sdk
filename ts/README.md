@@ -37,7 +37,9 @@ const client = new Hook0SDK({
 
 ### 2. List application records
 
-`list()` resolves to an array of Application objects — iterate it directly:
+`list()` resolves to an array of Application ENTITIES — every operation
+resolves to entities, not raw records. Iterate them directly, and call
+`.data()` on one for the record it holds:
 
 ```ts
 const applications = await client.Application().list()
@@ -63,19 +65,21 @@ try {
 ### 4. Create, update, and remove
 
 ```ts
-// Create — returns the created Application
+// Create — returns the created Application ENTITY (.data() for the record)
 const created = await client.Application().create({
   application_id: 'example_application_id',
   consumption: {},
   name: 'example_name',
   onboarding_steps: {},
   organization_id: 'example_organization_id',
-  quota: {},
+  quotas: {},
 })
 
 // Update
 const updated = await client.Application().update({
   id: 'example_id',
+  application_id: 'example_application_id',
+  consumption: {},
 })
 
 // Remove
@@ -159,7 +163,8 @@ Create a mock client for unit testing — no server required:
 const client = Hook0SDK.test()
 
 const application = await client.Application().list()
-// application is a bare entity populated with mock response data
+// application is the entity, populated with mock response data
+// — call application.data() for the record itself
 console.log(application)
 ```
 
@@ -361,7 +366,7 @@ The `prepare()` method returns:
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
-| `quota` |  |
+| `quotas` |  |
 
 Operations: create, list, load, remove, update.
 
@@ -537,7 +542,7 @@ API path: `/api/v1/auth/login`
 | `onboarding_steps` |  |
 | `organization_id` |  |
 | `plan` |  |
-| `quota` |  |
+| `quotas` |  |
 | `role` |  |
 | `users` |  |
 
@@ -573,8 +578,12 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `enabled` |  |
-| `limits` |  |
+| `global_applications_per_organization_limit` |  |
+| `global_days_of_events_retention_limit` |  |
+| `global_event_types_per_application_limit` |  |
+| `global_events_per_day_limit` |  |
+| `global_members_per_organization_limit` |  |
+| `global_subscriptions_per_application_limit` |  |
 
 Operations: load.
 
@@ -621,12 +630,6 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
-| `body` |  |
-| `elapsed_time_ms` |  |
-| `headers` |  |
-| `http_code` |  |
-| `response_error_name` |  |
-| `response_id` |  |
 
 Operations: load.
 
@@ -663,7 +666,7 @@ API path: `/api/v1/service_token/`
 | `created_at` |  |
 | `dedicated_workers` |  |
 | `description` |  |
-| `event_type` |  |
+| `event_types` |  |
 | `is_enabled` |  |
 | `label_key` |  |
 | `label_value` |  |
@@ -729,7 +732,7 @@ Create an instance: `const application = client.Application()`
 | `name` | `string` |  |
 | `onboarding_steps` | `Record<string, any>` |  |
 | `organization_id` | `string` |  |
-| `quota` | `Record<string, any>` |  |
+| `quotas` | `Record<string, any>` |  |
 
 #### Example: Load
 
@@ -752,7 +755,7 @@ const application = await client.Application().create({
   name: 'example_name',
   onboarding_steps: {},
   organization_id: 'example_organization_id',
-  quota: {},
+  quotas: {},
 })
 ```
 
@@ -927,6 +930,7 @@ const events_managements = await client.EventsManagement().list()
 ```ts
 const events_management = await client.EventsManagement().create({
   event_id: 'example_event_id',
+  application_id: 'example_application_id',
 })
 ```
 
@@ -1135,7 +1139,7 @@ Create an instance: `const organization = client.Organization()`
 | `onboarding_steps` | `Record<string, any>` |  |
 | `organization_id` | `string` |  |
 | `plan` | `Record<string, any>` |  |
-| `quota` | `Record<string, any>` |  |
+| `quotas` | `Record<string, any>` |  |
 | `role` | `string` |  |
 | `users` | `any[]` |  |
 
@@ -1160,7 +1164,7 @@ const organization = await client.Organization().create({
   onboarding_steps: {},
   organization_id: 'example_organization_id',
   plan: {},
-  quota: {},
+  quotas: {},
   role: 'example_role',
   users: [],
 })
@@ -1225,8 +1229,12 @@ Create an instance: `const quota = client.Quota()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `enabled` | `boolean` |  |
-| `limits` | `Record<string, any>` |  |
+| `global_applications_per_organization_limit` | `number` |  |
+| `global_days_of_events_retention_limit` | `number` |  |
+| `global_event_types_per_application_limit` | `number` |  |
+| `global_events_per_day_limit` | `number` |  |
+| `global_members_per_organization_limit` | `number` |  |
+| `global_subscriptions_per_application_limit` | `number` |  |
 
 #### Example: Load
 
@@ -1320,17 +1328,6 @@ Create an instance: `const response = client.Response()`
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
 
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `body` | `string` |  |
-| `elapsed_time_ms` | `number` |  |
-| `headers` | `Record<string, any>` |  |
-| `http_code` | `number` |  |
-| `response_error_name` | `string` |  |
-| `response_id` | `string` |  |
-
 #### Example: Load
 
 ```ts
@@ -1420,7 +1417,7 @@ Create an instance: `const subscription = client.Subscription()`
 | `created_at` | `string` |  |
 | `dedicated_workers` | `any[]` |  |
 | `description` | `string` |  |
-| `event_type` | `any[]` |  |
+| `event_types` | `any[]` |  |
 | `is_enabled` | `boolean` |  |
 | `label_key` | `string` |  |
 | `label_value` | `string` |  |
@@ -1450,7 +1447,7 @@ const subscription = await client.Subscription().create({
   application_id: 'example_application_id',
   created_at: 'example_created_at',
   dedicated_workers: [],
-  event_type: [],
+  event_types: [],
   is_enabled: true,
   label_key: 'example_label_key',
   label_value: 'example_label_value',
@@ -1515,6 +1512,8 @@ Create an instance: `const user_invitation = client.UserInvitation()`
 ```ts
 const user_invitation = await client.UserInvitation().create({
   organization_id: 'example_organization_id',
+  email: 'example_email',
+  role: 'example_role',
 })
 ```
 

@@ -17,6 +17,23 @@ const OpResult = types.OpResult;
 const OutVal = types.OutVal;
 const Entity = types.Entity;
 
+// Every operation resolves to the ENTITY, not the raw data — `list` to a
+// slice of them, one per record; the record is reached through `data()`.
+// See AGENTS.md "Entity operations return ENTITIES".
+//
+// `Value` cannot carry an entity (it is a closed data union) and the shared
+// `OpResult` cannot name a per-entity type, so each entity declares its own
+// result unions and the CONTRACT lives in those signatures.
+pub const EntResult = union(enum) {
+    ok: *OrganizationEditRoleEntity,
+    err: *errmod.Hook0Error,
+};
+
+pub const EntListResult = union(enum) {
+    ok: []*OrganizationEditRoleEntity,
+    err: *errmod.Hook0Error,
+};
+
 pub const OrganizationEditRoleEntity = struct {
     name: []const u8 = "organization_edit_role",
     client: *sdk.Hook0SDK,
@@ -25,6 +42,8 @@ pub const OrganizationEditRoleEntity = struct {
     data: Value,
     mtch: Value,
     entctx: ?*Context = null,
+    // Set once a successful `remove` resolves on this instance.
+    deleted: bool = false,
 
     pub fn new(client: *sdk.Hook0SDK, entopts_in: Value) *OrganizationEditRoleEntity {
         const entopts: Value = switch (entopts_in) {
@@ -71,6 +90,26 @@ pub const OrganizationEditRoleEntity = struct {
     fn doneResult(self: *OrganizationEditRoleEntity, ctx: *Context) OpResult {
         const v = self.utility.done(ctx) catch return .{ .err = ctx.pending_err.? };
         return .{ .ok = v };
+    }
+
+    // Runs the pipeline and hands back THIS entity: run_op has just absorbed
+    // the result into it. See AGENTS.md "Entity operations return ENTITIES".
+    fn run_op_ent(self: *OrganizationEditRoleEntity, ctx: *Context, post_done: *const fn (*OrganizationEditRoleEntity, *Context) void) EntResult {
+        return switch (self.run_op(ctx, post_done)) {
+            .err => |e| EntResult{ .err = e },
+            .ok => EntResult{ .ok = self },
+        };
+    }
+
+    // `remove` resolves to the entity, marked. The instance KEEPS the data it
+    // held — a caller can still read what was deleted — but it is no longer a
+    // live record.
+    pub fn mark_deleted(self: *OrganizationEditRoleEntity) void {
+        self.deleted = true;
+    }
+
+    pub fn is_deleted(self: *OrganizationEditRoleEntity) bool {
+        return self.deleted;
     }
 
     fn run_op(self: *OrganizationEditRoleEntity, ctx: *Context, post_done: *const fn (*OrganizationEditRoleEntity, *Context) void) OpResult {
@@ -260,26 +299,26 @@ pub const OrganizationEditRoleEntity = struct {
 
     // ---- CRUD operations ----
 
-    pub fn load(self: *OrganizationEditRoleEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn load(self: *OrganizationEditRoleEntity, _reqmatch: Value, _ctrl: Value) EntResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("load", self.name) };
     }
 
-    pub fn list(self: *OrganizationEditRoleEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn list(self: *OrganizationEditRoleEntity, _reqmatch: Value, _ctrl: Value) EntListResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("list", self.name) };
     }
 
-    pub fn create(self: *OrganizationEditRoleEntity, _reqdata: Value, _ctrl: Value) OpResult {
+    pub fn create(self: *OrganizationEditRoleEntity, _reqdata: Value, _ctrl: Value) EntResult {
         _ = _reqdata;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("create", self.name) };
     }
 
 
-    pub fn update(self: *OrganizationEditRoleEntity, reqdata: Value, ctrl: Value) OpResult {
+    pub fn update(self: *OrganizationEditRoleEntity, reqdata: Value, ctrl: Value) EntResult {
         const ctx = self.utility.make_context(CtxSpec{
             .opname = "update",
             .ctrl = ctrl,
@@ -287,7 +326,7 @@ pub const OrganizationEditRoleEntity = struct {
             .data = self.data,
             .reqdata = reqdata,
         }, self.ent_ctx());
-        return self.run_op(ctx, update_post_done);
+        return self.run_op_ent(ctx, update_post_done);
     }
     
     fn update_post_done(self: *OrganizationEditRoleEntity, ctx: *Context) void {
@@ -303,7 +342,7 @@ pub const OrganizationEditRoleEntity = struct {
     }
     
 
-    pub fn remove(self: *OrganizationEditRoleEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn remove(self: *OrganizationEditRoleEntity, _reqmatch: Value, _ctrl: Value) EntResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("remove", self.name) };

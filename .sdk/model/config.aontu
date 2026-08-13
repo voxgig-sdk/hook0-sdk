@@ -6,14 +6,7 @@ main: kit: config: {
   # security scheme (see api/api-info.aontu: main.kit.info.security,
   # set by apidef) and defaults to 'Bearer' when the spec gives no
   # signal. Uncomment to override per-SDK:
-  #
-  # Hook0 override: the spec declares all three Biscuit schemes as
-  # `type: apiKey, in: header, name: Authorization`, which carries no
-  # prefix signal, but the scheme descriptions say "use the format
-  # Bearer TOKEN". `type: http, scheme: bearer` would express this
-  # natively. Until the spec says so, set the prefix here so callers
-  # pass a bare token and the SDK sends `Authorization: Bearer <token>`.
-  auth: prefix: 'Bearer'
+  # auth: prefix: 'Bearer'
 
 
   headers: {

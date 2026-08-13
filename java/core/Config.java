@@ -39,7 +39,7 @@ public final class Config {
     b.append(" \"options\": {");
     b.append("  \"base\": \"https://app.hook0.com\",");
     b.append("  \"auth\": {");
-    b.append("   \"prefix\": \"Bearer\"");
+    b.append("   \"prefix\": \"\"");
     b.append("  },");
     b.append("  \"headers\": {");
     b.append("   \"content-type\": \"application/json\"");
@@ -111,7 +111,7 @@ public final class Config {
     b.append("    },");
     b.append("    {");
     b.append("     \"active\": true,");
-    b.append("     \"name\": \"quota\",");
+    b.append("     \"name\": \"quotas\",");
     b.append("     \"req\": true,");
     b.append("     \"type\": \"`$OBJECT`\",");
     b.append("     \"index$\": 5");
@@ -126,6 +126,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/applications/\",");
     b.append("       \"parts\": [");
@@ -161,6 +162,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/applications/\",");
     b.append("       \"parts\": [");
@@ -201,6 +203,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/applications/{application_id}\",");
     b.append("       \"parts\": [");
@@ -247,6 +250,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"DELETE\",");
     b.append("       \"orig\": \"/api/v1/applications/{application_id}\",");
     b.append("       \"parts\": [");
@@ -293,6 +297,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"PUT\",");
     b.append("       \"orig\": \"/api/v1/applications/{application_id}\",");
     b.append("       \"parts\": [");
@@ -372,6 +377,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/application_secrets/\",");
     b.append("       \"parts\": [");
@@ -407,6 +413,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/application_secrets/\",");
     b.append("       \"parts\": [");
@@ -447,6 +454,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"PUT\",");
     b.append("       \"orig\": \"/api/v1/application_secrets/{application_secret_token}\",");
     b.append("       \"parts\": [");
@@ -512,6 +520,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"DELETE\",");
     b.append("       \"orig\": \"/api/v1/application_secrets/{application_secret_token}\",");
     b.append("       \"parts\": [");
@@ -630,6 +639,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/events/\",");
     b.append("       \"parts\": [");
@@ -680,6 +690,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/events/{event_id}\",");
     b.append("       \"parts\": [");
@@ -781,6 +792,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/event_types/\",");
     b.append("       \"parts\": [");
@@ -816,6 +828,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/event_types/\",");
     b.append("       \"parts\": [");
@@ -866,6 +879,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/event_types/{event_type_name}\",");
     b.append("       \"parts\": [");
@@ -930,6 +944,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/events/{event_id}/replay\",");
     b.append("       \"parts\": [");
@@ -960,6 +975,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/payload_content_types/\",");
     b.append("       \"parts\": [");
@@ -1006,6 +1022,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"DELETE\",");
     b.append("       \"orig\": \"/api/v1/event_types/{event_type_name}\",");
     b.append("       \"parts\": [");
@@ -1115,6 +1132,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/events_per_day/application\",");
     b.append("       \"parts\": [");
@@ -1166,6 +1184,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/events_per_day/organization\",");
     b.append("       \"parts\": [");
@@ -1267,6 +1286,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/health/\",");
     b.append("       \"parts\": [");
@@ -1354,6 +1374,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/environment_variables/\",");
     b.append("       \"parts\": [");
@@ -1444,6 +1465,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/event/\",");
     b.append("       \"parts\": [");
@@ -1548,6 +1570,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/instance/\",");
     b.append("       \"parts\": [");
@@ -1596,6 +1619,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/auth/login\",");
     b.append("       \"parts\": [");
@@ -1614,6 +1638,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/auth/refresh\",");
     b.append("       \"parts\": [");
@@ -1676,7 +1701,7 @@ public final class Config {
     b.append("    },");
     b.append("    {");
     b.append("     \"active\": true,");
-    b.append("     \"name\": \"quota\",");
+    b.append("     \"name\": \"quotas\",");
     b.append("     \"req\": true,");
     b.append("     \"type\": \"`$OBJECT`\",");
     b.append("     \"index$\": 5");
@@ -1705,6 +1730,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/organizations/\",");
     b.append("       \"parts\": [");
@@ -1729,6 +1755,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/organizations/\",");
     b.append("       \"parts\": [");
@@ -1765,6 +1792,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/organizations/{organization_id}/\",");
     b.append("       \"parts\": [");
@@ -1811,6 +1839,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"DELETE\",");
     b.append("       \"orig\": \"/api/v1/organizations/{organization_id}/\",");
     b.append("       \"parts\": [");
@@ -1857,6 +1886,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"PUT\",");
     b.append("       \"orig\": \"/api/v1/organizations/{organization_id}/\",");
     b.append("       \"parts\": [");
@@ -1927,6 +1957,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"PUT\",");
     b.append("       \"orig\": \"/api/v1/organizations/{organization_id}/invite\",");
     b.append("       \"parts\": [");
@@ -2001,6 +2032,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/errors/\",");
     b.append("       \"parts\": [");
@@ -2027,17 +2059,45 @@ public final class Config {
     b.append("   \"fields\": [");
     b.append("    {");
     b.append("     \"active\": true,");
-    b.append("     \"name\": \"enabled\",");
+    b.append("     \"name\": \"global_applications_per_organization_limit\",");
     b.append("     \"req\": true,");
-    b.append("     \"type\": \"`$BOOLEAN`\",");
+    b.append("     \"type\": \"`$INTEGER`\",");
     b.append("     \"index$\": 0");
     b.append("    },");
     b.append("    {");
     b.append("     \"active\": true,");
-    b.append("     \"name\": \"limits\",");
+    b.append("     \"name\": \"global_days_of_events_retention_limit\",");
     b.append("     \"req\": true,");
-    b.append("     \"type\": \"`$OBJECT`\",");
+    b.append("     \"type\": \"`$INTEGER`\",");
     b.append("     \"index$\": 1");
+    b.append("    },");
+    b.append("    {");
+    b.append("     \"active\": true,");
+    b.append("     \"name\": \"global_event_types_per_application_limit\",");
+    b.append("     \"req\": true,");
+    b.append("     \"type\": \"`$INTEGER`\",");
+    b.append("     \"index$\": 2");
+    b.append("    },");
+    b.append("    {");
+    b.append("     \"active\": true,");
+    b.append("     \"name\": \"global_events_per_day_limit\",");
+    b.append("     \"req\": true,");
+    b.append("     \"type\": \"`$INTEGER`\",");
+    b.append("     \"index$\": 3");
+    b.append("    },");
+    b.append("    {");
+    b.append("     \"active\": true,");
+    b.append("     \"name\": \"global_members_per_organization_limit\",");
+    b.append("     \"req\": true,");
+    b.append("     \"type\": \"`$INTEGER`\",");
+    b.append("     \"index$\": 4");
+    b.append("    },");
+    b.append("    {");
+    b.append("     \"active\": true,");
+    b.append("     \"name\": \"global_subscriptions_per_application_limit\",");
+    b.append("     \"req\": true,");
+    b.append("     \"type\": \"`$INTEGER`\",");
+    b.append("     \"index$\": 5");
     b.append("    }");
     b.append("   ],");
     b.append("   \"name\": \"quota\",");
@@ -2049,6 +2109,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/quotas/\",");
     b.append("       \"parts\": [");
@@ -2125,6 +2186,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/register/\",");
     b.append("       \"parts\": [");
@@ -2309,6 +2371,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/request_attempts/\",");
     b.append("       \"parts\": [");
@@ -2365,6 +2428,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/request_attempts/{request_attempt_id}\",");
     b.append("       \"parts\": [");
@@ -2399,50 +2463,7 @@ public final class Config {
     b.append("   }");
     b.append("  },");
     b.append("  \"response\": {");
-    b.append("   \"fields\": [");
-    b.append("    {");
-    b.append("     \"active\": true,");
-    b.append("     \"name\": \"body\",");
-    b.append("     \"req\": false,");
-    b.append("     \"type\": \"`$STRING`\",");
-    b.append("     \"index$\": 0");
-    b.append("    },");
-    b.append("    {");
-    b.append("     \"active\": true,");
-    b.append("     \"name\": \"elapsed_time_ms\",");
-    b.append("     \"req\": false,");
-    b.append("     \"type\": \"`$INTEGER`\",");
-    b.append("     \"index$\": 1");
-    b.append("    },");
-    b.append("    {");
-    b.append("     \"active\": true,");
-    b.append("     \"name\": \"headers\",");
-    b.append("     \"req\": false,");
-    b.append("     \"type\": \"`$OBJECT`\",");
-    b.append("     \"index$\": 2");
-    b.append("    },");
-    b.append("    {");
-    b.append("     \"active\": true,");
-    b.append("     \"name\": \"http_code\",");
-    b.append("     \"req\": false,");
-    b.append("     \"type\": \"`$INTEGER`\",");
-    b.append("     \"index$\": 3");
-    b.append("    },");
-    b.append("    {");
-    b.append("     \"active\": true,");
-    b.append("     \"name\": \"response_error_name\",");
-    b.append("     \"req\": false,");
-    b.append("     \"type\": \"`$STRING`\",");
-    b.append("     \"index$\": 4");
-    b.append("    },");
-    b.append("    {");
-    b.append("     \"active\": true,");
-    b.append("     \"name\": \"response_id\",");
-    b.append("     \"req\": true,");
-    b.append("     \"type\": \"`$STRING`\",");
-    b.append("     \"index$\": 5");
-    b.append("    }");
-    b.append("   ],");
+    b.append("   \"fields\": [],");
     b.append("   \"name\": \"response\",");
     b.append("   \"op\": {");
     b.append("    \"load\": {");
@@ -2474,6 +2495,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/responses/{response_id}\",");
     b.append("       \"parts\": [");
@@ -2530,6 +2552,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"DELETE\",");
     b.append("       \"orig\": \"/api/v1/organizations/{organization_id}/invite\",");
     b.append("       \"parts\": [");
@@ -2609,6 +2632,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/service_token/\",");
     b.append("       \"parts\": [");
@@ -2644,6 +2668,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/service_token/\",");
     b.append("       \"parts\": [");
@@ -2694,6 +2719,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/service_token/{service_token_id}\",");
     b.append("       \"parts\": [");
@@ -2751,6 +2777,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"DELETE\",");
     b.append("       \"orig\": \"/api/v1/service_token/{service_token_id}\",");
     b.append("       \"parts\": [");
@@ -2798,6 +2825,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"PUT\",");
     b.append("       \"orig\": \"/api/v1/service_token/{service_token_id}\",");
     b.append("       \"parts\": [");
@@ -2872,7 +2900,7 @@ public final class Config {
     b.append("    },");
     b.append("    {");
     b.append("     \"active\": true,");
-    b.append("     \"name\": \"event_type\",");
+    b.append("     \"name\": \"event_types\",");
     b.append("     \"req\": true,");
     b.append("     \"type\": \"`$ARRAY`\",");
     b.append("     \"index$\": 4");
@@ -2990,6 +3018,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/subscriptions/\",");
     b.append("       \"parts\": [");
@@ -3025,6 +3054,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/subscriptions/\",");
     b.append("       \"parts\": [");
@@ -3065,6 +3095,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"GET\",");
     b.append("       \"orig\": \"/api/v1/subscriptions/{subscription_id}\",");
     b.append("       \"parts\": [");
@@ -3121,6 +3152,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"DELETE\",");
     b.append("       \"orig\": \"/api/v1/subscriptions/{subscription_id}\",");
     b.append("       \"parts\": [");
@@ -3168,6 +3200,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"PUT\",");
     b.append("       \"orig\": \"/api/v1/subscriptions/{subscription_id}\",");
     b.append("       \"parts\": [");
@@ -3233,6 +3266,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/auth/begin-reset-password\",");
     b.append("       \"parts\": [");
@@ -3251,6 +3285,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/auth/logout\",");
     b.append("       \"parts\": [");
@@ -3269,6 +3304,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/auth/password\",");
     b.append("       \"parts\": [");
@@ -3287,6 +3323,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/auth/reset-password\",");
     b.append("       \"parts\": [");
@@ -3305,6 +3342,7 @@ public final class Config {
     b.append("      {");
     b.append("       \"active\": true,");
     b.append("       \"args\": {},");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/auth/verify-email\",");
     b.append("       \"parts\": [");
@@ -3366,6 +3404,7 @@ public final class Config {
     b.append("         }");
     b.append("        ]");
     b.append("       },");
+    b.append("       \"kind\": \"http\",");
     b.append("       \"method\": \"POST\",");
     b.append("       \"orig\": \"/api/v1/organizations/{organization_id}/invite\",");
     b.append("       \"parts\": [");

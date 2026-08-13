@@ -398,7 +398,7 @@ const application = client.Application()
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `Object` | Yes |  |
 | `organization_id` | `string` | Yes |  |
-| `quota` | `Object` | Yes |  |
+| `quotas` | `Object` | Yes |  |
 
 ### Operations
 
@@ -413,7 +413,7 @@ const result = await client.Application().create({
   name: 'example_name',
   onboarding_steps: {},
   organization_id: 'example_organization_id',
-  quota: {},
+  quotas: {},
 })
 ```
 
@@ -770,6 +770,7 @@ Create a new entity with the given data.
 ```ts
 const result = await client.EventsManagement().create({
   event_id: 'example_event_id',
+  application_id: 'example_application_id',
 })
 ```
 
@@ -1175,7 +1176,7 @@ const organization = client.Organization()
 | `onboarding_steps` | `Object` | Yes |  |
 | `organization_id` | `string` | Yes |  |
 | `plan` | `Object` | Yes |  |
-| `quota` | `Object` | Yes |  |
+| `quotas` | `Object` | Yes |  |
 | `role` | `string` | Yes |  |
 | `users` | `Array` | Yes |  |
 
@@ -1192,7 +1193,7 @@ const result = await client.Organization().create({
   onboarding_steps: {},
   organization_id: 'example_organization_id',
   plan: {},
-  quota: {},
+  quotas: {},
   role: 'example_role',
   users: [],
 })
@@ -1378,8 +1379,12 @@ const quota = client.Quota()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `enabled` | `boolean` | Yes |  |
-| `limits` | `Object` | Yes |  |
+| `global_applications_per_organization_limit` | `number` | Yes |  |
+| `global_days_of_events_retention_limit` | `number` | Yes |  |
+| `global_event_types_per_application_limit` | `number` | Yes |  |
+| `global_events_per_day_limit` | `number` | Yes |  |
+| `global_members_per_organization_limit` | `number` | Yes |  |
+| `global_subscriptions_per_application_limit` | `number` | Yes |  |
 
 ### Operations
 
@@ -1554,17 +1559,6 @@ Return a copy of the entity options.
 ```ts
 const response = client.Response()
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `body` | `string` | No |  |
-| `elapsed_time_ms` | `number` | No |  |
-| `headers` | `Object` | No |  |
-| `http_code` | `number` | No |  |
-| `response_error_name` | `string` | No |  |
-| `response_id` | `string` | Yes |  |
 
 ### Operations
 
@@ -1757,7 +1751,7 @@ const subscription = client.Subscription()
 | `created_at` | `string` | Yes |  |
 | `dedicated_workers` | `Array` | Yes |  |
 | `description` | `string` | No |  |
-| `event_type` | `Array` | Yes |  |
+| `event_types` | `Array` | Yes |  |
 | `is_enabled` | `boolean` | Yes |  |
 | `label_key` | `string` | Yes |  |
 | `label_value` | `string` | Yes |  |
@@ -1776,7 +1770,7 @@ const subscription = client.Subscription()
 | `created_at` | - | - | - | - | - |
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
-| `event_type` | - | - | - | - | - |
+| `event_types` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |
@@ -1798,7 +1792,7 @@ const result = await client.Subscription().create({
   application_id: 'example_application_id',
   created_at: 'example_created_at',
   dedicated_workers: [],
-  event_type: [],
+  event_types: [],
   is_enabled: true,
   label_key: 'example_label_key',
   label_value: 'example_label_value',
@@ -1952,6 +1946,8 @@ Create a new entity with the given data.
 ```ts
 const result = await client.UserInvitation().create({
   organization_id: 'example_organization_id',
+  email: 'example_email',
+  role: 'example_role',
 })
 ```
 

@@ -1,4 +1,4 @@
-# ProjectName SDK exists test
+# Hook0 SDK exists test
 
 import pytest
 from hook0_sdk import Hook0SDK

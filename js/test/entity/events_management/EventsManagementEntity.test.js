@@ -45,21 +45,21 @@ describe('EventsManagementEntity', async () => {
     let events_management_ref01_data = setup.data.new.events_management['events_management_ref01']
     events_management_ref01_data['event_id'] = setup.idmap['event01']
 
-    events_management_ref01_data = await events_management_ref01_ent.create(events_management_ref01_data)
+    events_management_ref01_data = (await events_management_ref01_ent.create(events_management_ref01_data)).data()
     assert(null != events_management_ref01_data)
 
 
     // LIST
     const events_management_ref01_match = {}
 
-    const events_management_ref01_list = await events_management_ref01_ent.list(events_management_ref01_match)
+    const events_management_ref01_list = (await events_management_ref01_ent.list(events_management_ref01_match)).map((e) => e.data())
 
 
 
     // LIST
     const events_management_ref01_match_rt0 = {}
 
-    const events_management_ref01_list_rt0 = await events_management_ref01_ent.list(events_management_ref01_match_rt0)
+    const events_management_ref01_list_rt0 = (await events_management_ref01_ent.list(events_management_ref01_match_rt0)).map((e) => e.data())
 
 
   })
@@ -99,18 +99,18 @@ function basicSetup(extra) {
     })
 
   const env = envOverride({
-    'HOOK__TEST_EVENTS_MANAGEMENT_ENTID': idmap,
-    'HOOK__TEST_LIVE': 'FALSE',
-    'HOOK__TEST_EXPLAIN': 'FALSE',
-    'HOOK__APIKEY': 'NONE',
+    'HOOK0_TEST_EVENTS_MANAGEMENT_ENTID': idmap,
+    'HOOK0_TEST_LIVE': 'FALSE',
+    'HOOK0_TEST_EXPLAIN': 'FALSE',
+    'HOOK0_APIKEY': 'NONE',
   })
 
-  idmap = env['HOOK__TEST_EVENTS_MANAGEMENT_ENTID']
+  idmap = env['HOOK0_TEST_EVENTS_MANAGEMENT_ENTID']
 
-  if ('TRUE' === env.HOOK__TEST_LIVE) {
+  if ('TRUE' === env.HOOK0_TEST_LIVE) {
     client = new Hook0SDK(merge([
       {
-        apikey: env.HOOK__APIKEY,
+        apikey: env.HOOK0_APIKEY,
       },
       extra
     ]))
@@ -123,7 +123,7 @@ function basicSetup(extra) {
     client,
     struct,
     data: entityData,
-    explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+    explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
     now: Date.now(),
   }
 

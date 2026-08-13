@@ -84,24 +84,24 @@ public class ApplicationSecretDirectTest {
     final List<Map<String, Object>> calls = new ArrayList<>();
 
     Map<String, Object> envm = new LinkedHashMap<>();
-    envm.put("HOOK__TEST_APPLICATION_SECRET_ENTID", new LinkedHashMap<>());
-    envm.put("HOOK__TEST_LIVE", "FALSE");
-    envm.put("HOOK__APIKEY", "NONE");
+    envm.put("HOOK0_TEST_APPLICATION_SECRET_ENTID", new LinkedHashMap<>());
+    envm.put("HOOK0_TEST_LIVE", "FALSE");
+    envm.put("HOOK0_APIKEY", "NONE");
     Map<String, Object> env = RunnerSupport.envOverride(envm);
 
-    boolean live = "TRUE".equals(env.get("HOOK__TEST_LIVE"));
+    boolean live = "TRUE".equals(env.get("HOOK0_TEST_LIVE"));
 
     DirectSetup setup = new DirectSetup();
     setup.calls = calls;
 
     if (live) {
       Map<String, Object> mergedOpts = new LinkedHashMap<>();
-      mergedOpts.put("apikey", env.get("HOOK__APIKEY"));
+      mergedOpts.put("apikey", env.get("HOOK0_APIKEY"));
       setup.client = new Hook0SDK(mergedOpts);
       setup.live = true;
 
       Map<String, Object> idmap = new LinkedHashMap<>();
-      Object entidRaw = env.get("HOOK__TEST_APPLICATION_SECRET_ENTID");
+      Object entidRaw = env.get("HOOK0_TEST_APPLICATION_SECRET_ENTID");
       if (entidRaw instanceof String && ((String) entidRaw).startsWith("{")) {
         Map<String, Object> parsed = Helpers.toMapAny(Json.parseOrNull((String) entidRaw));
         if (parsed != null) {

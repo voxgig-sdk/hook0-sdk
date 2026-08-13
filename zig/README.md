@@ -79,13 +79,13 @@ switch (client.application(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("example_id")
 
 ```zig
 // Create — .ok carries the created record
-switch (client.application(h.vnull()).create(h.jo(&.{.{ "application_id", h.vstr("example_application_id") }, .{ "consumption", h.omap() }, .{ "name", h.vstr("example_name") }, .{ "onboarding_steps", h.omap() }, .{ "organization_id", h.vstr("example_organization_id") }, .{ "quota", h.omap() }}), h.vnull())) {
+switch (client.application(h.vnull()).create(h.jo(&.{.{ "application_id", h.vstr("example_application_id") }, .{ "consumption", h.omap() }, .{ "name", h.vstr("example_name") }, .{ "onboarding_steps", h.omap() }, .{ "organization_id", h.vstr("example_organization_id") }, .{ "quotas", h.omap() }}), h.vnull())) {
     .ok => |created| std.debug.print("{s}\n", .{h.stringify(created)}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 
 // Update
-switch (client.application(h.vnull()).update(h.jo(&.{.{ "id", h.vstr("example_id") }}), h.vnull())) {
+switch (client.application(h.vnull()).update(h.jo(&.{.{ "id", h.vstr("example_id") }, .{ "application_id", h.vstr("example_application_id") }, .{ "consumption", h.omap() }}), h.vnull())) {
     .ok => |updated| std.debug.print("{s}\n", .{h.stringify(updated)}),
     .err => |e| std.debug.print("update failed: {s}\n", .{e.msg}),
 }
@@ -316,7 +316,7 @@ On error, `ok` is `false` and `err` carries the error message.
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
-| `quota` |  |
+| `quotas` |  |
 
 Operations: Create, List, Load, Remove, Update.
 
@@ -492,7 +492,7 @@ API path: `/api/v1/auth/login`
 | `onboarding_steps` |  |
 | `organization_id` |  |
 | `plan` |  |
-| `quota` |  |
+| `quotas` |  |
 | `role` |  |
 | `users` |  |
 
@@ -528,8 +528,12 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `enabled` |  |
-| `limits` |  |
+| `global_applications_per_organization_limit` |  |
+| `global_days_of_events_retention_limit` |  |
+| `global_event_types_per_application_limit` |  |
+| `global_events_per_day_limit` |  |
+| `global_members_per_organization_limit` |  |
+| `global_subscriptions_per_application_limit` |  |
 
 Operations: Load.
 
@@ -576,12 +580,6 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
-| `body` |  |
-| `elapsed_time_ms` |  |
-| `headers` |  |
-| `http_code` |  |
-| `response_error_name` |  |
-| `response_id` |  |
 
 Operations: Load.
 
@@ -618,7 +616,7 @@ API path: `/api/v1/service_token/`
 | `created_at` |  |
 | `dedicated_workers` |  |
 | `description` |  |
-| `event_type` |  |
+| `event_types` |  |
 | `is_enabled` |  |
 | `label_key` |  |
 | `label_value` |  |
@@ -687,7 +685,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | `name` | `[]const u8` |  |
 | `onboarding_steps` | `Value (object)` |  |
 | `organization_id` | `[]const u8` |  |
-| `quota` | `Value (object)` |  |
+| `quotas` | `Value (object)` |  |
 
 #### Example: Load
 
@@ -716,7 +714,7 @@ switch (client.application(h.vnull()).create(h.jo(&.{
     .{ "name", h.vstr("example_name") }, // []const u8
     .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
-    .{ "quota", h.omap() }, // Value (object)
+    .{ "quotas", h.omap() }, // Value (object)
 }), h.vnull())) {
     .ok => |application| std.debug.print("{s}\n", .{h.stringify(application)}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -933,6 +931,7 @@ switch (client.events_management(h.vnull()).list(h.vnull(), h.vnull())) {
 ```zig
 switch (client.events_management(h.vnull()).create(h.jo(&.{
     .{ "event_id", h.vstr("example_event_id") }, // []const u8
+    .{ "application_id", h.vstr("example_application_id") }, // []const u8
 }), h.vnull())) {
     .ok => |events_management| std.debug.print("{s}\n", .{h.stringify(events_management)}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1183,7 +1182,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | `onboarding_steps` | `Value (object)` |  |
 | `organization_id` | `[]const u8` |  |
 | `plan` | `Value (object)` |  |
-| `quota` | `Value (object)` |  |
+| `quotas` | `Value (object)` |  |
 | `role` | `[]const u8` |  |
 | `users` | `Value (array)` |  |
 
@@ -1214,7 +1213,7 @@ switch (client.organization(h.vnull()).create(h.jo(&.{
     .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
     .{ "plan", h.omap() }, // Value (object)
-    .{ "quota", h.omap() }, // Value (object)
+    .{ "quotas", h.omap() }, // Value (object)
     .{ "role", h.vstr("example_role") }, // []const u8
     .{ "users", h.olist() }, // Value (array)
 }), h.vnull())) {
@@ -1294,8 +1293,12 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `enabled` | `bool` |  |
-| `limits` | `Value (object)` |  |
+| `global_applications_per_organization_limit` | `i64` |  |
+| `global_days_of_events_retention_limit` | `i64` |  |
+| `global_event_types_per_application_limit` | `i64` |  |
+| `global_events_per_day_limit` | `i64` |  |
+| `global_members_per_organization_limit` | `i64` |  |
+| `global_subscriptions_per_application_limit` | `i64` |  |
 
 #### Example: Load
 
@@ -1410,17 +1413,6 @@ Create an instance: `const response = client.response(h.vnull());`
 Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
 carries the result `Value`, `.err => |e|` carries the branded error.
 
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `body` | `[]const u8` |  |
-| `elapsed_time_ms` | `i64` |  |
-| `headers` | `Value (object)` |  |
-| `http_code` | `i64` |  |
-| `response_error_name` | `[]const u8` |  |
-| `response_id` | `[]const u8` |  |
-
 #### Example: Load
 
 ```zig
@@ -1531,7 +1523,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | `created_at` | `[]const u8` |  |
 | `dedicated_workers` | `Value (array)` |  |
 | `description` | `[]const u8` |  |
-| `event_type` | `Value (array)` |  |
+| `event_types` | `Value (array)` |  |
 | `is_enabled` | `bool` |  |
 | `label_key` | `[]const u8` |  |
 | `label_value` | `[]const u8` |  |
@@ -1567,7 +1559,7 @@ switch (client.subscription(h.vnull()).create(h.jo(&.{
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
     .{ "created_at", h.vstr("example_created_at") }, // []const u8
     .{ "dedicated_workers", h.olist() }, // Value (array)
-    .{ "event_type", h.olist() }, // Value (array)
+    .{ "event_types", h.olist() }, // Value (array)
     .{ "is_enabled", h.vbool(true) }, // bool
     .{ "label_key", h.vstr("example_label_key") }, // []const u8
     .{ "label_value", h.vstr("example_label_value") }, // []const u8
@@ -1644,6 +1636,8 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 ```zig
 switch (client.user_invitation(h.vnull()).create(h.jo(&.{
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
+    .{ "email", h.vstr("example_email") }, // []const u8
+    .{ "role", h.vstr("example_role") }, // []const u8
 }), h.vnull())) {
     .ok => |user_invitation| std.debug.print("{s}\n", .{h.stringify(user_invitation)}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),

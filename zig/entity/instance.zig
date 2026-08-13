@@ -17,6 +17,23 @@ const OpResult = types.OpResult;
 const OutVal = types.OutVal;
 const Entity = types.Entity;
 
+// Every operation resolves to the ENTITY, not the raw data — `list` to a
+// slice of them, one per record; the record is reached through `data()`.
+// See AGENTS.md "Entity operations return ENTITIES".
+//
+// `Value` cannot carry an entity (it is a closed data union) and the shared
+// `OpResult` cannot name a per-entity type, so each entity declares its own
+// result unions and the CONTRACT lives in those signatures.
+pub const EntResult = union(enum) {
+    ok: *InstanceEntity,
+    err: *errmod.Hook0Error,
+};
+
+pub const EntListResult = union(enum) {
+    ok: []*InstanceEntity,
+    err: *errmod.Hook0Error,
+};
+
 pub const InstanceEntity = struct {
     name: []const u8 = "instance",
     client: *sdk.Hook0SDK,
@@ -25,6 +42,8 @@ pub const InstanceEntity = struct {
     data: Value,
     mtch: Value,
     entctx: ?*Context = null,
+    // Set once a successful `remove` resolves on this instance.
+    deleted: bool = false,
 
     pub fn new(client: *sdk.Hook0SDK, entopts_in: Value) *InstanceEntity {
         const entopts: Value = switch (entopts_in) {
@@ -71,6 +90,26 @@ pub const InstanceEntity = struct {
     fn doneResult(self: *InstanceEntity, ctx: *Context) OpResult {
         const v = self.utility.done(ctx) catch return .{ .err = ctx.pending_err.? };
         return .{ .ok = v };
+    }
+
+    // Runs the pipeline and hands back THIS entity: run_op has just absorbed
+    // the result into it. See AGENTS.md "Entity operations return ENTITIES".
+    fn run_op_ent(self: *InstanceEntity, ctx: *Context, post_done: *const fn (*InstanceEntity, *Context) void) EntResult {
+        return switch (self.run_op(ctx, post_done)) {
+            .err => |e| EntResult{ .err = e },
+            .ok => EntResult{ .ok = self },
+        };
+    }
+
+    // `remove` resolves to the entity, marked. The instance KEEPS the data it
+    // held — a caller can still read what was deleted — but it is no longer a
+    // live record.
+    pub fn mark_deleted(self: *InstanceEntity) void {
+        self.deleted = true;
+    }
+
+    pub fn is_deleted(self: *InstanceEntity) bool {
+        return self.deleted;
     }
 
     fn run_op(self: *InstanceEntity, ctx: *Context, post_done: *const fn (*InstanceEntity, *Context) void) OpResult {
@@ -261,7 +300,7 @@ pub const InstanceEntity = struct {
     // ---- CRUD operations ----
 
 
-    pub fn load(self: *InstanceEntity, reqmatch: Value, ctrl: Value) OpResult {
+    pub fn load(self: *InstanceEntity, reqmatch: Value, ctrl: Value) EntResult {
         const ctx = self.utility.make_context(CtxSpec{
             .opname = "load",
             .ctrl = ctrl,
@@ -269,7 +308,7 @@ pub const InstanceEntity = struct {
             .data = self.data,
             .reqmatch = reqmatch,
         }, self.ent_ctx());
-        return self.run_op(ctx, load_post_done);
+        return self.run_op_ent(ctx, load_post_done);
     }
     
     fn load_post_done(self: *InstanceEntity, ctx: *Context) void {
@@ -285,25 +324,25 @@ pub const InstanceEntity = struct {
     }
     
 
-    pub fn list(self: *InstanceEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn list(self: *InstanceEntity, _reqmatch: Value, _ctrl: Value) EntListResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("list", self.name) };
     }
 
-    pub fn create(self: *InstanceEntity, _reqdata: Value, _ctrl: Value) OpResult {
+    pub fn create(self: *InstanceEntity, _reqdata: Value, _ctrl: Value) EntResult {
         _ = _reqdata;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("create", self.name) };
     }
 
-    pub fn update(self: *InstanceEntity, _reqdata: Value, _ctrl: Value) OpResult {
+    pub fn update(self: *InstanceEntity, _reqdata: Value, _ctrl: Value) EntResult {
         _ = _reqdata;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("update", self.name) };
     }
 
-    pub fn remove(self: *InstanceEntity, _reqmatch: Value, _ctrl: Value) OpResult {
+    pub fn remove(self: *InstanceEntity, _reqmatch: Value, _ctrl: Value) EntResult {
         _ = _reqmatch;
         _ = _ctrl;
         return .{ .err = h.unsupported_op("remove", self.name) };

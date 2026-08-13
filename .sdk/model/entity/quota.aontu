@@ -6,14 +6,34 @@ main: kit: entity: quota: {
 
   fields: [
     {
-      name: "enabled"
+      name: "global_applications_per_organization_limit"
       req: true
-      type: "`$BOOLEAN`"
+      type: "`$INTEGER`"
     }
     {
-      name: "limits"
+      name: "global_days_of_events_retention_limit"
       req: true
-      type: "`$OBJECT`"
+      type: "`$INTEGER`"
+    }
+    {
+      name: "global_event_types_per_application_limit"
+      req: true
+      type: "`$INTEGER`"
+    }
+    {
+      name: "global_events_per_day_limit"
+      req: true
+      type: "`$INTEGER`"
+    }
+    {
+      name: "global_members_per_organization_limit"
+      req: true
+      type: "`$INTEGER`"
+    }
+    {
+      name: "global_subscriptions_per_application_limit"
+      req: true
+      type: "`$INTEGER`"
     }
   ]
 

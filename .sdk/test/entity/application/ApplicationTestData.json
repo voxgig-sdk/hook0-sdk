@@ -7,7 +7,7 @@
         "name": "s3e",
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
-        "quota": {},
+        "quotas": {},
         "id": "APPLICATION00"
       },
       "APPLICATION01": {
@@ -16,7 +16,7 @@
         "name": "s7a",
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
-        "quota": {},
+        "quotas": {},
         "id": "APPLICATION01"
       },
       "APPLICATION02": {
@@ -25,7 +25,7 @@
         "name": "sb6",
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
-        "quota": {},
+        "quotas": {},
         "id": "APPLICATION02"
       }
     }
@@ -38,7 +38,7 @@
         "name": "sf2",
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
-        "quota": {}
+        "quotas": {}
       }
     }
   }

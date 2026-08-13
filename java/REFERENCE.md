@@ -210,7 +210,7 @@ SdkEntity application = client.application(null);
 | `name` | `String` | Yes |  |
 | `onboarding_steps` | `Map<String, Object>` | Yes |  |
 | `organization_id` | `String` | Yes |  |
-| `quota` | `Map<String, Object>` | Yes |  |
+| `quotas` | `Map<String, Object>` | Yes |  |
 
 ### Operations
 
@@ -225,7 +225,7 @@ Object result = client.application(null).create(Map.of(
     "name", "example_name",  // String
     "onboarding_steps", Map.of(),  // Map<String, Object>
     "organization_id", "example_organization_id",  // String
-    "quota", Map.of()  // Map<String, Object>
+    "quotas", Map.of()  // Map<String, Object>
 ), null);
 ```
 
@@ -548,7 +548,8 @@ Create a new entity with the given data. Returns the created entity data and rai
 
 ```java
 Object result = client.eventsManagement(null).create(Map.of(
-    "event_id", "example_event_id"  // String
+    "event_id", "example_event_id",  // String
+    "application_id", "example_application_id"  // String
 ), null);
 ```
 
@@ -908,7 +909,7 @@ SdkEntity organization = client.organization(null);
 | `onboarding_steps` | `Map<String, Object>` | Yes |  |
 | `organization_id` | `String` | Yes |  |
 | `plan` | `Map<String, Object>` | Yes |  |
-| `quota` | `Map<String, Object>` | Yes |  |
+| `quotas` | `Map<String, Object>` | Yes |  |
 | `role` | `String` | Yes |  |
 | `users` | `List<Object>` | Yes |  |
 
@@ -925,7 +926,7 @@ Object result = client.organization(null).create(Map.of(
     "onboarding_steps", Map.of(),  // Map<String, Object>
     "organization_id", "example_organization_id",  // String
     "plan", Map.of(),  // Map<String, Object>
-    "quota", Map.of(),  // Map<String, Object>
+    "quotas", Map.of(),  // Map<String, Object>
     "role", "example_role",  // String
     "users", List.of()  // List<Object>
 ), null);
@@ -1090,8 +1091,12 @@ SdkEntity quota = client.quota(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `enabled` | `Boolean` | Yes |  |
-| `limits` | `Map<String, Object>` | Yes |  |
+| `global_applications_per_organization_limit` | `Long` | Yes |  |
+| `global_days_of_events_retention_limit` | `Long` | Yes |  |
+| `global_event_types_per_application_limit` | `Long` | Yes |  |
+| `global_events_per_day_limit` | `Long` | Yes |  |
+| `global_members_per_organization_limit` | `Long` | Yes |  |
+| `global_subscriptions_per_application_limit` | `Long` | Yes |  |
 
 ### Operations
 
@@ -1246,17 +1251,6 @@ Return the entity name.
 ```java
 SdkEntity response = client.response(null);
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `body` | `String` | No |  |
-| `elapsed_time_ms` | `Long` | No |  |
-| `headers` | `Map<String, Object>` | No |  |
-| `http_code` | `Long` | No |  |
-| `response_error_name` | `String` | No |  |
-| `response_id` | `String` | Yes |  |
 
 ### Operations
 
@@ -1428,7 +1422,7 @@ SdkEntity subscription = client.subscription(null);
 | `created_at` | `String` | Yes |  |
 | `dedicated_workers` | `List<Object>` | Yes |  |
 | `description` | `String` | No |  |
-| `event_type` | `List<Object>` | Yes |  |
+| `event_types` | `List<Object>` | Yes |  |
 | `is_enabled` | `Boolean` | Yes |  |
 | `label_key` | `String` | Yes |  |
 | `label_value` | `String` | Yes |  |
@@ -1447,7 +1441,7 @@ SdkEntity subscription = client.subscription(null);
 | `created_at` | - | - | - | - | - |
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
-| `event_type` | - | - | - | - | - |
+| `event_types` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |
@@ -1469,7 +1463,7 @@ Object result = client.subscription(null).create(Map.of(
     "application_id", "example_application_id",  // String
     "created_at", "example_created_at",  // String
     "dedicated_workers", List.of(),  // List<Object>
-    "event_type", List.of(),  // List<Object>
+    "event_types", List.of(),  // List<Object>
     "is_enabled", true,  // Boolean
     "label_key", "example_label_key",  // String
     "label_value", "example_label_value",  // String
@@ -1608,7 +1602,9 @@ Create a new entity with the given data. Returns the created entity data and rai
 
 ```java
 Object result = client.userInvitation(null).create(Map.of(
-    "organization_id", "example_organization_id"  // String
+    "organization_id", "example_organization_id",  // String
+    "email", "example_email",  // String
+    "role", "example_role"  // String
 ), null);
 ```
 

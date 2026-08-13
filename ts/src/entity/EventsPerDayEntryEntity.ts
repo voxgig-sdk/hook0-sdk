@@ -37,7 +37,7 @@ class EventsPerDayEntryEntity extends Hook0EntityBase<EventsPerDayEntry> {
 
 
 
-  async list(this: any, reqmatch?: EventsPerDayEntryListMatch, ctrl?: Control): Promise<EventsPerDayEntry[]> {
+  async list(this: any, reqmatch?: EventsPerDayEntryListMatch, ctrl?: Control): Promise<EventsPerDayEntryEntity[]> {
 
     const utility = this._utility
 
