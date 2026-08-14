@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from urllib.parse import quote
 
-from hook0_sdk.config import make_config
+from hook0_sdk.config import shared_config
 from hook0_sdk.features import _make_feature
 from hook0_sdk.core.control import Hook0Control
 from hook0_sdk.core.error import Hook0Error
@@ -24,7 +24,7 @@ from hook0_sdk.core.spec import Hook0Spec
 
 # True when this SDK was generated with the named feature.
 def has_feature(name):
-    feature = make_config().get("feature")
+    feature = shared_config().get("feature")
     return isinstance(feature, dict) and feature.get(name) is not None
 
 

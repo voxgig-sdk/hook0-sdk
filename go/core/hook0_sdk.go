@@ -23,7 +23,7 @@ func NewHook0SDK(options map[string]any) *Hook0SDK {
 
 	sdk.utility = NewUtility()
 
-	config := MakeConfig()
+	config := SharedConfig()
 
 	sdk.rootctx = sdk.utility.MakeContext(map[string]any{
 		"client":  sdk,

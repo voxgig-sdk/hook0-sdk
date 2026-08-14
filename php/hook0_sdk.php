@@ -40,7 +40,7 @@ class Hook0SDK
         $utility = new Hook0Utility();
         $this->_utility = $utility;
 
-        $config = Hook0Config::make_config();
+        $config = Hook0Config::shared_config();
 
         $this->_rootctx = ($utility->make_context)([
             "client" => $this,

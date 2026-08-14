@@ -1,5 +1,8 @@
 -- Hook0 SDK configuration
 
+-- Build a fresh, fully materialised config table. Every call rebuilds the
+-- whole structure, so prefer require("config_shared") unless you need a
+-- private copy you intend to mutate.
 local function make_config()
   return {
     main = {
@@ -51,46 +54,34 @@ local function make_config()
       ["application"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "consumption",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "onboarding_steps",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "organization_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "quotas",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 5,
           },
         },
         ["name"] = "application",
@@ -100,7 +91,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -115,21 +105,17 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "organization_id",
                       ["orig"] = "organization_id",
@@ -155,27 +141,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["load"] = {
             ["input"] = "data",
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "application_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -202,27 +183,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
           ["remove"] = {
             ["input"] = "data",
             ["name"] = "remove",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "application_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -249,27 +225,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "remove",
           },
           ["update"] = {
             ["input"] = "data",
             ["name"] = "update",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "application_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -296,10 +267,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "update",
           },
         },
         ["relations"] = {
@@ -309,39 +278,27 @@ local function make_config()
       ["application_secret"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "created_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "deleted_at",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "name",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "token",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 4,
           },
         },
         ["name"] = "application_secret",
@@ -351,7 +308,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -366,21 +322,17 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -406,27 +358,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["update"] = {
             ["input"] = "data",
             ["name"] = "update",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "application_secret_token",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -453,10 +400,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "update",
           },
         },
         ["relations"] = {
@@ -472,22 +417,18 @@ local function make_config()
             ["name"] = "remove",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "application_secret_token",
                       ["orig"] = "application_secret_token",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -515,10 +456,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "remove",
           },
         },
         ["relations"] = {
@@ -532,67 +471,48 @@ local function make_config()
       ["event"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "event_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "event_type_name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "ip",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "labels",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "metadata",
-            ["req"] = false,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "occurred_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "payload",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 6,
           },
           {
-            ["active"] = true,
             ["name"] = "payload_content_type",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 7,
           },
           {
-            ["active"] = true,
             ["name"] = "received_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 8,
           },
         },
         ["name"] = "event",
@@ -602,11 +522,9 @@ local function make_config()
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -632,32 +550,26 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["load"] = {
             ["input"] = "data",
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "event_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -690,10 +602,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -703,60 +613,44 @@ local function make_config()
       ["event_type"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "event_type_name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "resource_type",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "resource_type_name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "service",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "service_name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "verb",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 6,
           },
           {
-            ["active"] = true,
             ["name"] = "verb_name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 7,
           },
         },
         ["name"] = "event_type",
@@ -766,7 +660,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -781,21 +674,17 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -821,32 +710,26 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["load"] = {
             ["input"] = "data",
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "event_type_name",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -879,10 +762,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -892,11 +773,9 @@ local function make_config()
       ["events_management"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
         },
         ["name"] = "events_management",
@@ -906,17 +785,14 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "event_id",
                       ["orig"] = "event_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -939,17 +815,14 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "GET",
@@ -964,32 +837,26 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["remove"] = {
             ["input"] = "data",
             ["name"] = "remove",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "event_type_name",
                       ["orig"] = "event_type_name",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -1017,10 +884,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "remove",
           },
         },
         ["relations"] = {
@@ -1037,39 +902,29 @@ local function make_config()
       ["events_per_day_entry"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "amount",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "application_name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "date",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "is_provisional",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 4,
           },
         },
         ["name"] = "events_per_day_entry",
@@ -1079,11 +934,9 @@ local function make_config()
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -1091,19 +944,15 @@ local function make_config()
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "from",
                       ["orig"] = "from",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "to",
                       ["orig"] = "to",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                   },
@@ -1128,22 +977,17 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "from",
                       ["orig"] = "from",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "organization_id",
                       ["orig"] = "organization_id",
@@ -1151,11 +995,9 @@ local function make_config()
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "to",
                       ["orig"] = "to",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                   },
@@ -1180,10 +1022,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 1,
               },
             },
-            ["key$"] = "list",
           },
         },
         ["relations"] = {
@@ -1193,53 +1033,35 @@ local function make_config()
       ["health"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "database",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "database_duration_ms",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "object_storage",
-            ["req"] = false,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "object_storage_duration_ms",
-            ["req"] = false,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "pulsar",
-            ["req"] = false,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "pulsar_duration_ms",
-            ["req"] = false,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "total_duration_ms",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 6,
           },
         },
         ["name"] = "health",
@@ -1249,15 +1071,12 @@ local function make_config()
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "key",
                       ["orig"] = "key",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                   },
@@ -1279,10 +1098,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -1292,53 +1109,36 @@ local function make_config()
       ["hook0"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "default",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "description",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "env_var",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "group",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "required",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "sensitive",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 6,
           },
         },
         ["name"] = "hook0",
@@ -1348,7 +1148,6 @@ local function make_config()
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "GET",
@@ -1363,10 +1162,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
         },
         ["relations"] = {
@@ -1376,60 +1173,42 @@ local function make_config()
       ["ingested_event"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "event_id",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "event_type",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "labels",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "metadata",
-            ["req"] = false,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "occurred_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "payload",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 6,
           },
           {
-            ["active"] = true,
             ["name"] = "payload_content_type",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 7,
           },
         },
         ["name"] = "ingested_event",
@@ -1439,7 +1218,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -1454,10 +1232,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
         },
         ["relations"] = {
@@ -1467,74 +1243,53 @@ local function make_config()
       ["instance"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "application_secret_compatibility",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "auto_db_migration",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "biscuit_public_key",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "cloudflare_turnstile_site_key",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "formbricks",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "matomo",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "password_minimum_length",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 6,
           },
           {
-            ["active"] = true,
             ["name"] = "quota_enforcement",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 7,
           },
           {
-            ["active"] = true,
             ["name"] = "registration_disabled",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 8,
           },
           {
-            ["active"] = true,
             ["name"] = "support_email_address",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 9,
           },
         },
         ["name"] = "instance",
@@ -1544,7 +1299,6 @@ local function make_config()
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "GET",
@@ -1559,10 +1313,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -1572,18 +1324,14 @@ local function make_config()
       ["login"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "email",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "password",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
         },
         ["name"] = "login",
@@ -1593,7 +1341,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -1609,10 +1356,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -1628,10 +1373,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 1,
               },
             },
-            ["key$"] = "create",
           },
         },
         ["relations"] = {
@@ -1641,60 +1384,44 @@ local function make_config()
       ["organization"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "consumption",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "onboarding_steps",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "organization_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "plan",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "quotas",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "role",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 6,
           },
           {
-            ["active"] = true,
             ["name"] = "users",
             ["req"] = true,
             ["type"] = "`$ARRAY`",
-            ["index$"] = 7,
           },
         },
         ["name"] = "organization",
@@ -1704,7 +1431,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -1719,17 +1445,14 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "GET",
@@ -1744,27 +1467,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["load"] = {
             ["input"] = "data",
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "organization_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -1791,27 +1509,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
           ["remove"] = {
             ["input"] = "data",
             ["name"] = "remove",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "organization_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -1838,27 +1551,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "remove",
           },
           ["update"] = {
             ["input"] = "data",
             ["name"] = "update",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "organization_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -1885,10 +1593,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "update",
           },
         },
         ["relations"] = {
@@ -1898,18 +1604,14 @@ local function make_config()
       ["organization_edit_role"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "role",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "user_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
         },
         ["name"] = "organization_edit_role",
@@ -1919,17 +1621,14 @@ local function make_config()
             ["name"] = "update",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "organization_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -1958,10 +1657,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "update",
           },
         },
         ["relations"] = {
@@ -1971,32 +1668,24 @@ local function make_config()
       ["problem"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "detail",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "status",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "title",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
         },
         ["name"] = "problem",
@@ -2006,7 +1695,6 @@ local function make_config()
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "GET",
@@ -2021,10 +1709,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
         },
         ["relations"] = {
@@ -2034,46 +1720,34 @@ local function make_config()
       ["quota"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "global_applications_per_organization_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "global_days_of_events_retention_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "global_event_types_per_application_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "global_events_per_day_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "global_members_per_organization_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "global_subscriptions_per_application_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 5,
           },
         },
         ["name"] = "quota",
@@ -2083,7 +1757,6 @@ local function make_config()
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "GET",
@@ -2098,10 +1771,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -2111,46 +1782,32 @@ local function make_config()
       ["registration"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "email",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "first_name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "gclid",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "last_name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "password",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "turnstile_token",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 5,
           },
         },
         ["name"] = "registration",
@@ -2160,7 +1817,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -2175,10 +1831,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
         },
         ["relations"] = {
@@ -2188,95 +1842,63 @@ local function make_config()
       ["request_attempt"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "created_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "delay_until",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "event",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "event_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "failed_at",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "http_response_status",
-            ["req"] = false,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "picked_at",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 6,
           },
           {
-            ["active"] = true,
             ["name"] = "request_attempt_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 7,
           },
           {
-            ["active"] = true,
             ["name"] = "response_id",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 8,
           },
           {
-            ["active"] = true,
             ["name"] = "retry_count",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 9,
           },
           {
-            ["active"] = true,
             ["name"] = "status",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 10,
           },
           {
-            ["active"] = true,
             ["name"] = "subscription",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 11,
           },
           {
-            ["active"] = true,
             ["name"] = "succeeded_at",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 12,
           },
         },
         ["name"] = "request_attempt",
@@ -2286,11 +1908,9 @@ local function make_config()
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -2298,51 +1918,39 @@ local function make_config()
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "event_event_type_name",
                       ["orig"] = "event_event_type_name",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "event_id",
                       ["orig"] = "event_id",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "max_created_at",
                       ["orig"] = "max_created_at",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "min_created_at",
                       ["orig"] = "min_created_at",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "pagination_cursor",
                       ["orig"] = "pagination_cursor",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "subscription_id",
                       ["orig"] = "subscription_id",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                   },
@@ -2370,32 +1978,26 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["load"] = {
             ["input"] = "data",
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "request_attempt_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -2428,10 +2030,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -2447,22 +2047,18 @@ local function make_config()
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "response_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -2495,10 +2091,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -2514,17 +2108,14 @@ local function make_config()
             ["name"] = "remove",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "organization_id",
                       ["orig"] = "organization_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -2547,10 +2138,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "remove",
           },
         },
         ["relations"] = {
@@ -2564,39 +2153,29 @@ local function make_config()
       ["service_token"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "biscuit",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "created_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "name",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "organization_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "token_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 4,
           },
         },
         ["name"] = "service_token",
@@ -2606,7 +2185,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -2621,21 +2199,17 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "organization_id",
                       ["orig"] = "organization_id",
@@ -2661,32 +2235,26 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["load"] = {
             ["input"] = "data",
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "service_token_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "organization_id",
                       ["orig"] = "organization_id",
@@ -2719,32 +2287,26 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
           ["remove"] = {
             ["input"] = "data",
             ["name"] = "remove",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "service_token_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "organization_id",
                       ["orig"] = "organization_id",
@@ -2777,27 +2339,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "remove",
           },
           ["update"] = {
             ["input"] = "data",
             ["name"] = "update",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "service_token_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -2824,10 +2381,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "update",
           },
         },
         ["relations"] = {
@@ -2837,152 +2392,113 @@ local function make_config()
       ["subscription"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "created_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "dedicated_workers",
             ["op"] = {
               ["create"] = {
-                ["req"] = false,
                 ["type"] = "`$ARRAY`",
               },
               ["update"] = {
-                ["req"] = false,
                 ["type"] = "`$ARRAY`",
               },
             },
             ["req"] = true,
             ["type"] = "`$ARRAY`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "description",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "event_types",
             ["req"] = true,
             ["type"] = "`$ARRAY`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "is_enabled",
             ["req"] = true,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "label_key",
             ["op"] = {
               ["create"] = {
-                ["req"] = false,
                 ["type"] = "`$STRING`",
               },
               ["update"] = {
-                ["req"] = false,
                 ["type"] = "`$STRING`",
               },
             },
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 6,
           },
           {
-            ["active"] = true,
             ["name"] = "label_value",
             ["op"] = {
               ["create"] = {
-                ["req"] = false,
                 ["type"] = "`$STRING`",
               },
               ["update"] = {
-                ["req"] = false,
                 ["type"] = "`$STRING`",
               },
             },
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 7,
           },
           {
-            ["active"] = true,
             ["name"] = "labels",
             ["op"] = {
               ["create"] = {
-                ["req"] = false,
                 ["type"] = "`$OBJECT`",
               },
               ["update"] = {
-                ["req"] = false,
                 ["type"] = "`$OBJECT`",
               },
             },
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 8,
           },
           {
-            ["active"] = true,
             ["name"] = "metadata",
             ["op"] = {
               ["create"] = {
-                ["req"] = false,
                 ["type"] = "`$OBJECT`",
               },
               ["update"] = {
-                ["req"] = false,
                 ["type"] = "`$OBJECT`",
               },
             },
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 9,
           },
           {
-            ["active"] = true,
             ["name"] = "secret",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 10,
           },
           {
-            ["active"] = true,
             ["name"] = "subscription_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 11,
           },
           {
-            ["active"] = true,
             ["name"] = "target",
             ["req"] = true,
             ["type"] = "`$OBJECT`",
-            ["index$"] = 12,
           },
           {
-            ["active"] = true,
             ["name"] = "updated_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 13,
           },
         },
         ["name"] = "subscription",
@@ -2992,7 +2508,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -3007,21 +2522,17 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -3047,27 +2558,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
           ["load"] = {
             ["input"] = "data",
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "subscription_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -3094,32 +2600,26 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
           ["remove"] = {
             ["input"] = "data",
             ["name"] = "remove",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "subscription_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "query",
                       ["name"] = "application_id",
                       ["orig"] = "application_id",
@@ -3152,27 +2652,22 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "remove",
           },
           ["update"] = {
             ["input"] = "data",
             ["name"] = "update",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "subscription_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -3199,10 +2694,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "update",
           },
         },
         ["relations"] = {
@@ -3212,25 +2705,19 @@ local function make_config()
       ["user_authentication"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "email",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "new_password",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "token",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
         },
         ["name"] = "user_authentication",
@@ -3240,7 +2727,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -3256,10 +2742,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -3275,10 +2759,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 1,
               },
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -3294,10 +2776,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 2,
               },
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -3313,10 +2793,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 3,
               },
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -3332,10 +2810,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 4,
               },
             },
-            ["key$"] = "create",
           },
         },
         ["relations"] = {
@@ -3345,18 +2821,14 @@ local function make_config()
       ["user_invitation"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "email",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "role",
             ["req"] = true,
             ["type"] = "`$STRING`",
-            ["index$"] = 1,
           },
         },
         ["name"] = "user_invitation",
@@ -3366,17 +2838,14 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["kind"] = "param",
                       ["name"] = "organization_id",
                       ["orig"] = "organization_id",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -3399,10 +2868,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
         },
         ["relations"] = {
