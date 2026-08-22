@@ -8,7 +8,7 @@ local function make_config()
     main = {
       name = "Hook0",
       slug = "hook0",
-      version = "0.0.1",
+      version = "0.1.1",
       target = "lua",
     },
     feature = {
@@ -1786,7 +1786,7 @@ local function make_config()
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
-                  ["res"] = "`body`",
+                  ["res"] = "`body.limits`",
                 },
               },
             },
@@ -2108,7 +2108,7 @@ local function make_config()
                 },
                 ["transform"] = {
                   ["req"] = "`reqdata`",
-                  ["res"] = "`body`",
+                  ["res"] = "`body.headers`",
                 },
               },
             },

@@ -34,7 +34,7 @@ class Hook0Config
             "main" => [
                 "name" => "Hook0",
                 "slug" => "hook0",
-                "version" => "0.0.1",
+                "version" => "0.1.1",
                 "target" => "php",
             ],
             "feature" => [
@@ -1812,7 +1812,7 @@ class Hook0Config
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
-                    'res' => '`body`',
+                    'res' => '`body.limits`',
                   ],
                 ],
               ],
@@ -2134,7 +2134,7 @@ class Hook0Config
                   ],
                   'transform' => [
                     'req' => '`reqdata`',
-                    'res' => '`body`',
+                    'res' => '`body.headers`',
                   ],
                 ],
               ],

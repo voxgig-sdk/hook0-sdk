@@ -52,7 +52,7 @@ main: kit: entity: quota: {
           ]
           transform: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.limits`"
           }
         }
       ]

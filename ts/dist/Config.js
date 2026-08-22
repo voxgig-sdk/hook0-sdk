@@ -21,7 +21,7 @@ class Config {
     main = {
         name: 'Hook0',
         slug: "hook0",
-        version: "0.0.1",
+        version: "0.1.1",
         target: "ts",
     };
     feature = {
@@ -1799,7 +1799,7 @@ class Config {
                             "select": {},
                             "transform": {
                                 "req": "`reqdata`",
-                                "res": "`body`"
+                                "res": "`body.limits`"
                             }
                         }
                     ]
@@ -2121,7 +2121,7 @@ class Config {
                             },
                             "transform": {
                                 "req": "`reqdata`",
-                                "res": "`body`"
+                                "res": "`body.headers`"
                             }
                         }
                     ]

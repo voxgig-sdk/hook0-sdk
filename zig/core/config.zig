@@ -1786,7 +1786,7 @@ pub fn make_config() Value {
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
-                                    .{ "res", h.vstr("`body`") },
+                                    .{ "res", h.vstr("`body.limits`") },
                                 }) },
                             }),
                         }) },
@@ -2108,7 +2108,7 @@ pub fn make_config() Value {
                                 }) },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
-                                    .{ "res", h.vstr("`body`") },
+                                    .{ "res", h.vstr("`body.headers`") },
                                 }) },
                             }),
                         }) },

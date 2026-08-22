@@ -51,7 +51,7 @@ main: kit: entity: response: {
           }
           transform: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.headers`"
           }
         }
       ]
