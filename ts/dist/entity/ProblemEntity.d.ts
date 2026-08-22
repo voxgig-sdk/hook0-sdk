@@ -5,6 +5,6 @@ import type { Problem, ProblemListMatch } from '../Hook0Types';
 declare class ProblemEntity extends Hook0EntityBase<Problem> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: ProblemEntity): ProblemEntity;
-    list(this: any, reqmatch?: ProblemListMatch, ctrl?: Control): Promise<Problem[]>;
+    list(this: any, reqmatch?: ProblemListMatch, ctrl?: Control): Promise<ProblemEntity[]>;
 }
 export { ProblemEntity };

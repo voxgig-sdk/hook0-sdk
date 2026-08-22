@@ -208,12 +208,12 @@ const application = client.application(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `[]const u8` | Yes |  |
-| `consumption` | `Value (object)` | Yes |  |
-| `name` | `[]const u8` | Yes |  |
-| `onboarding_steps` | `Value (object)` | Yes |  |
-| `organization_id` | `[]const u8` | Yes |  |
-| `quotas` | `Value (object)` | Yes |  |
+| `application_id` | `[]const u8` | Yes | Unique identifier of the application. |
+| `consumption` | `Value (object)` | Yes | Current consumption metrics for this application. |
+| `name` | `[]const u8` | Yes | Name of the application. |
+| `onboarding_steps` | `Value (object)` | Yes | Onboarding completion status for this application. |
+| `organization_id` | `[]const u8` | Yes | UUID of the organization this application belongs to. |
+| `quotas` | `Value (object)` | Yes | Quota limits for this application. |
 
 ### Operations
 
@@ -806,14 +806,14 @@ const ingested_event = client.ingested_event(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `[]const u8` | Yes |  |
-| `event_id` | `[]const u8` | No |  |
-| `event_type` | `[]const u8` | Yes |  |
-| `labels` | `Value (object)` | Yes |  |
-| `metadata` | `Value (object)` | No |  |
-| `occurred_at` | `[]const u8` | Yes |  |
-| `payload` | `[]const u8` | Yes |  |
-| `payload_content_type` | `[]const u8` | Yes |  |
+| `application_id` | `[]const u8` | Yes | UUID of the application this event belongs to. |
+| `event_id` | `[]const u8` | No | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `[]const u8` | Yes | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `Value (object)` | Yes | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `Value (object)` | No | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `[]const u8` | Yes | Timestamp when the event occurred. |
+| `payload` | `[]const u8` | Yes | The event payload. |
+| `payload_content_type` | `[]const u8` | Yes | Content type of the payload. |
 
 ### Operations
 
@@ -1232,7 +1232,7 @@ const registration = client.registration(h.vnull());
 | --- | --- | --- | --- |
 | `email` | `[]const u8` | Yes |  |
 | `first_name` | `[]const u8` | Yes |  |
-| `gclid` | `[]const u8` | No |  |
+| `gclid` | `[]const u8` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `[]const u8` | Yes |  |
 | `password` | `[]const u8` | Yes |  |
 | `turnstile_token` | `[]const u8` | No |  |
@@ -1296,7 +1296,7 @@ const request_attempt = client.request_attempt(h.vnull());
 | `request_attempt_id` | `[]const u8` | Yes |  |
 | `response_id` | `[]const u8` | No |  |
 | `retry_count` | `i64` | Yes |  |
-| `status` | `Value (object)` | Yes |  |
+| `status` | `Value (object)` | Yes | Status of a request attempt. |
 | `subscription` | `Value (object)` | Yes |  |
 | `succeeded_at` | `[]const u8` | No |  |
 
@@ -1544,8 +1544,8 @@ const subscription = client.subscription(h.vnull());
 | `description` | `[]const u8` | No |  |
 | `event_types` | `Value (array)` | Yes |  |
 | `is_enabled` | `bool` | Yes |  |
-| `label_key` | `[]const u8` | Yes |  |
-| `label_value` | `[]const u8` | Yes |  |
+| `label_key` | `[]const u8` | Yes | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `[]const u8` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `Value (object)` | Yes |  |
 | `metadata` | `Value (object)` | Yes |  |
 | `secret` | `[]const u8` | Yes |  |

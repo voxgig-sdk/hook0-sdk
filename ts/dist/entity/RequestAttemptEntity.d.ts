@@ -5,7 +5,7 @@ import type { RequestAttempt, RequestAttemptLoadMatch, RequestAttemptListMatch }
 declare class RequestAttemptEntity extends Hook0EntityBase<RequestAttempt> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: RequestAttemptEntity): RequestAttemptEntity;
-    load(this: any, reqmatch?: RequestAttemptLoadMatch, ctrl?: Control): Promise<RequestAttempt>;
-    list(this: any, reqmatch?: RequestAttemptListMatch, ctrl?: Control): Promise<RequestAttempt[]>;
+    load(this: any, reqmatch?: RequestAttemptLoadMatch, ctrl?: Control): Promise<RequestAttemptEntity>;
+    list(this: any, reqmatch?: RequestAttemptListMatch, ctrl?: Control): Promise<RequestAttemptEntity[]>;
 }
 export { RequestAttemptEntity };

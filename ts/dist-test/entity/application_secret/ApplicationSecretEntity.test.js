@@ -54,7 +54,7 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)(null != ent);
     });
     (0, node_test_1.test)('basic', async (t) => {
-        const live = 'TRUE' === process.env.HOOK__TEST_LIVE;
+        const live = 'TRUE' === process.env.HOOK0_TEST_LIVE;
         for (const op of ['create', 'list', 'update']) {
             if ((0, utility_1.maybeSkipControl)(t, 'entityOp', 'application_secret.' + op, live))
                 return;
@@ -64,7 +64,7 @@ const utility_1 = require("../../utility");
         // fixture (entity TestData.json). Those don't exist on the live API.
         // Skip live runs unless the user provided a real ENTID env override.
         if (setup.syntheticOnly) {
-            t.skip('live entity test uses synthetic IDs from fixture — set HOOK__TEST_APPLICATION_SECRET_ENTID JSON to run live');
+            t.skip('live entity test uses synthetic IDs from fixture — set HOOK0_TEST_APPLICATION_SECRET_ENTID JSON to run live');
             return;
         }
         const client = setup.client;
@@ -74,16 +74,16 @@ const utility_1 = require("../../utility");
         // CREATE
         const application_secret_ref01_ent = client.ApplicationSecret();
         let application_secret_ref01_data = setup.data.new.application_secret['application_secret_ref01'];
-        application_secret_ref01_data = await application_secret_ref01_ent.create(application_secret_ref01_data);
+        application_secret_ref01_data = (await application_secret_ref01_ent.create(application_secret_ref01_data)).data();
         (0, node_assert_1.default)(null != application_secret_ref01_data);
         // LIST
         const application_secret_ref01_match = {};
-        const application_secret_ref01_list = await application_secret_ref01_ent.list(application_secret_ref01_match);
+        const application_secret_ref01_list = (await application_secret_ref01_ent.list(application_secret_ref01_match)).map((e) => e.data());
         // UPDATE
         const application_secret_ref01_data_up0 = {};
         const application_secret_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-application_secret_ref01_' + setup.now };
         application_secret_ref01_data_up0[application_secret_ref01_markdef_up0.name] = application_secret_ref01_markdef_up0.value;
-        const application_secret_ref01_resdata_up0 = await application_secret_ref01_ent.update(application_secret_ref01_data_up0);
+        const application_secret_ref01_resdata_up0 = (await application_secret_ref01_ent.update(application_secret_ref01_data_up0)).data();
         (0, node_assert_1.default)(null != application_secret_ref01_resdata_up0);
         (0, node_assert_1.default)(application_secret_ref01_resdata_up0[application_secret_ref01_markdef_up0.name] === application_secret_ref01_markdef_up0.value);
     });
@@ -112,20 +112,20 @@ function basicSetup(extra) {
     // basic flow consumes synthetic IDs from the fixture file; without an
     // override those synthetic IDs reach the live API and 4xx. Surface this
     // to the test so it can skip rather than fail.
-    const idmapEnvVal = process.env['HOOK__TEST_APPLICATION_SECRET_ENTID'];
+    const idmapEnvVal = process.env['HOOK0_TEST_APPLICATION_SECRET_ENTID'];
     const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{');
     const env = (0, utility_1.envOverride)({
-        'HOOK__TEST_APPLICATION_SECRET_ENTID': idmap,
-        'HOOK__TEST_LIVE': 'FALSE',
-        'HOOK__TEST_EXPLAIN': 'FALSE',
-        'HOOK__APIKEY': 'NONE',
+        'HOOK0_TEST_APPLICATION_SECRET_ENTID': idmap,
+        'HOOK0_TEST_LIVE': 'FALSE',
+        'HOOK0_TEST_EXPLAIN': 'FALSE',
+        'HOOK0_APIKEY': 'NONE',
     });
-    idmap = env['HOOK__TEST_APPLICATION_SECRET_ENTID'];
-    const live = 'TRUE' === env.HOOK__TEST_LIVE;
+    idmap = env['HOOK0_TEST_APPLICATION_SECRET_ENTID'];
+    const live = 'TRUE' === env.HOOK0_TEST_LIVE;
     if (live) {
         client = new __1.Hook0SDK(merge([
             {
-                apikey: env.HOOK__APIKEY,
+                apikey: env.HOOK0_APIKEY,
             },
             extra
         ]));
@@ -137,7 +137,7 @@ function basicSetup(extra) {
         client,
         struct,
         data: entityData,
-        explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+        explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
         live,
         syntheticOnly: live && !idmapOverridden,
         now: Date.now(),

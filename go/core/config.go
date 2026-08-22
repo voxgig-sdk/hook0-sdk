@@ -11,6 +11,9 @@ func MakeConfig() map[string]any {
 	return map[string]any{
 		"main": map[string]any{
 			"name": "Hook0",
+			"slug": "hook0",
+			"version": "0.0.1",
+			"target": "go",
 		},
 		"feature": map[string]any{
 			"test": map[string]any{
@@ -60,31 +63,37 @@ func MakeConfig() map[string]any {
 					map[string]any{
 						"name": "application_id",
 						"req": true,
+						"short": "Unique identifier of the application.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "consumption",
 						"req": true,
+						"short": "Current consumption metrics for this application.",
 						"type": "`$OBJECT`",
 					},
 					map[string]any{
 						"name": "name",
 						"req": true,
+						"short": "Name of the application.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "onboarding_steps",
 						"req": true,
+						"short": "Onboarding completion status for this application.",
 						"type": "`$OBJECT`",
 					},
 					map[string]any{
 						"name": "organization_id",
 						"req": true,
+						"short": "UUID of the organization this application belongs to.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "quotas",
 						"req": true,
+						"short": "Quota limits for this application.",
 						"type": "`$OBJECT`",
 					},
 				},
@@ -1179,39 +1188,47 @@ func MakeConfig() map[string]any {
 					map[string]any{
 						"name": "application_id",
 						"req": true,
+						"short": "UUID of the application this event belongs to.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "event_id",
+						"short": "Optional unique identifier for this event (client-generated UUID).",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "event_type",
 						"req": true,
+						"short": "The type of event (e.g., 'user.created', 'order.completed').",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "labels",
 						"req": true,
+						"short": "Labels for event filtering and routing to subscriptions.",
 						"type": "`$OBJECT`",
 					},
 					map[string]any{
 						"name": "metadata",
+						"short": "Optional metadata key-value pairs associated with the event.",
 						"type": "`$OBJECT`",
 					},
 					map[string]any{
 						"name": "occurred_at",
 						"req": true,
+						"short": "Timestamp when the event occurred.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "payload",
 						"req": true,
+						"short": "The event payload.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "payload_content_type",
 						"req": true,
+						"short": "Content type of the payload.",
 						"type": "`$STRING`",
 					},
 				},
@@ -1797,6 +1814,7 @@ func MakeConfig() map[string]any {
 					},
 					map[string]any{
 						"name": "gclid",
+						"short": "Optional Google Ads click identifier captured during the user's journey from a Google Ad.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
@@ -1893,6 +1911,7 @@ func MakeConfig() map[string]any {
 					map[string]any{
 						"name": "status",
 						"req": true,
+						"short": "Status of a request attempt.",
 						"type": "`$OBJECT`",
 					},
 					map[string]any{
@@ -2443,6 +2462,7 @@ func MakeConfig() map[string]any {
 							},
 						},
 						"req": true,
+						"short": "_Kept for backward compatibility, you should use `labels`_",
 						"type": "`$STRING`",
 					},
 					map[string]any{
@@ -2456,6 +2476,7 @@ func MakeConfig() map[string]any {
 							},
 						},
 						"req": true,
+						"short": "_Kept for backward compatibility, you should use `labels`_",
 						"type": "`$STRING`",
 					},
 					map[string]any{

@@ -20,9 +20,11 @@
         ],
         "headers": {
           "content-type": "application/json"
-        }
+        },
+        "repr": "auto"
       },
       "contributor": {},
+      "docs": {},
       "entity": {
         "application": {
           "active": true,
@@ -34,36 +36,42 @@
               "active": true,
               "name": "application_id",
               "req": true,
+              "short": "Unique identifier of the application.",
               "type": "`$STRING`"
             },
             {
               "active": true,
               "name": "consumption",
               "req": true,
+              "short": "Current consumption metrics for this application.",
               "type": "`$OBJECT`"
             },
             {
               "active": true,
               "name": "name",
               "req": true,
+              "short": "Name of the application.",
               "type": "`$STRING`"
             },
             {
               "active": true,
               "name": "onboarding_steps",
               "req": true,
+              "short": "Onboarding completion status for this application.",
               "type": "`$OBJECT`"
             },
             {
               "active": true,
               "name": "organization_id",
               "req": true,
+              "short": "UUID of the organization this application belongs to.",
               "type": "`$STRING`"
             },
             {
               "active": true,
               "name": "quotas",
               "req": true,
+              "short": "Quota limits for this application.",
               "type": "`$OBJECT`"
             }
           ],
@@ -1297,48 +1305,56 @@
               "active": true,
               "name": "application_id",
               "req": true,
+              "short": "UUID of the application this event belongs to.",
               "type": "`$STRING`"
             },
             {
               "active": true,
               "name": "event_id",
               "req": false,
+              "short": "Optional unique identifier for this event (client-generated UUID).",
               "type": "`$STRING`"
             },
             {
               "active": true,
               "name": "event_type",
               "req": true,
+              "short": "The type of event (e.g., 'user.created', 'order.completed').",
               "type": "`$STRING`"
             },
             {
               "active": true,
               "name": "labels",
               "req": true,
+              "short": "Labels for event filtering and routing to subscriptions.",
               "type": "`$OBJECT`"
             },
             {
               "active": true,
               "name": "metadata",
               "req": false,
+              "short": "Optional metadata key-value pairs associated with the event.",
               "type": "`$OBJECT`"
             },
             {
               "active": true,
               "name": "occurred_at",
               "req": true,
+              "short": "Timestamp when the event occurred.",
               "type": "`$STRING`"
             },
             {
               "active": true,
               "name": "payload",
               "req": true,
+              "short": "The event payload.",
               "type": "`$STRING`"
             },
             {
               "active": true,
               "name": "payload_content_type",
               "req": true,
+              "short": "Content type of the payload.",
               "type": "`$STRING`"
             }
           ],
@@ -2009,6 +2025,7 @@
               "active": true,
               "name": "gclid",
               "req": false,
+              "short": "Optional Google Ads click identifier captured during the user's journey from a Google Ad.",
               "type": "`$STRING`"
             },
             {
@@ -2130,6 +2147,7 @@
               "active": true,
               "name": "status",
               "req": true,
+              "short": "Status of a request attempt.",
               "type": "`$OBJECT`"
             },
             {
@@ -2749,6 +2767,7 @@
                 }
               },
               "req": true,
+              "short": "_Kept for backward compatibility, you should use `labels`_",
               "type": "`$STRING`"
             },
             {
@@ -2765,6 +2784,7 @@
                 }
               },
               "req": true,
+              "short": "_Kept for backward compatibility, you should use `labels`_",
               "type": "`$STRING`"
             },
             {
@@ -3237,6 +3257,7 @@
       "feature": {
         "test": {
           "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "config": {
             "options": {
               "active": false
@@ -3297,6 +3318,8 @@
             }
           },
           "name": "test",
+          "origname": "",
+          "package": "@voxgig/sdkgen",
           "target": {
             "go": {
               "deps": {}
@@ -4454,6 +4477,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "//"
           },
@@ -4472,12 +4496,14 @@
             "path": ""
           },
           "name": "go",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "publish": {
             "registry": {
               "active": false,
@@ -4511,6 +4537,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "//"
           },
@@ -4527,12 +4554,14 @@
             "path": ""
           },
           "name": "go-cli",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "phase": {
             "agentguide": {
               "active": false
@@ -4582,6 +4611,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "//"
           },
@@ -4598,12 +4628,14 @@
             "path": ""
           },
           "name": "go-mcp",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "phase": {
             "agentguide": {
               "active": false
@@ -4653,6 +4685,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "//"
           },
@@ -4671,12 +4704,14 @@
             "path": ""
           },
           "name": "java",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "publish": {
             "registry": {
               "active": false,
@@ -4710,6 +4745,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "//"
           },
@@ -4732,12 +4768,14 @@
             "path": ""
           },
           "name": "js",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "publish": {
             "registry": {
               "active": false,
@@ -4770,6 +4808,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "--"
           },
@@ -4792,12 +4831,14 @@
             "path": ""
           },
           "name": "lua",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "publish": {
             "registry": {
               "active": false,
@@ -4831,6 +4872,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "//"
           },
@@ -4847,12 +4889,14 @@
             "path": ""
           },
           "name": "php",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "publish": {
             "registry": {
               "active": false,
@@ -4886,6 +4930,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "#"
           },
@@ -4908,12 +4953,14 @@
             "path": ""
           },
           "name": "py",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "publish": {
             "registry": {
               "active": false,
@@ -4980,12 +5027,14 @@
             "path": ""
           },
           "name": "ts",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "publish": {
             "registry": {
               "active": false,
@@ -5018,6 +5067,7 @@
             "name": "",
             "url": ""
           },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
           "comment": {
             "line": "//"
           },
@@ -5034,12 +5084,14 @@
             "path": ""
           },
           "name": "zig",
+          "origname": "",
           "output": {
             "adopt": false,
             "path": "",
             "repo": "",
             "sdkrel": ""
           },
+          "package": "@voxgig/sdkgen",
           "publish": {
             "registry": {
               "active": false,

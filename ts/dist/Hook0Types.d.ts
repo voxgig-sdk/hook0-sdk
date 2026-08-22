@@ -4,7 +4,7 @@ export interface Application {
     name: string;
     onboarding_steps: Record<string, any>;
     organization_id: string;
-    quota: Record<string, any>;
+    quotas: Record<string, any>;
 }
 export interface ApplicationLoadMatch {
     id: string;
@@ -15,7 +15,7 @@ export interface ApplicationListMatch {
     name?: string;
     onboarding_steps?: Record<string, any>;
     organization_id?: string;
-    quota?: Record<string, any>;
+    quotas?: Record<string, any>;
 }
 export interface ApplicationCreateData {
     application_id: string;
@@ -23,10 +23,16 @@ export interface ApplicationCreateData {
     name: string;
     onboarding_steps: Record<string, any>;
     organization_id: string;
-    quota: Record<string, any>;
+    quotas: Record<string, any>;
 }
 export interface ApplicationUpdateData {
     id: string;
+    application_id?: string;
+    consumption?: Record<string, any>;
+    name?: string;
+    onboarding_steps?: Record<string, any>;
+    organization_id?: string;
+    quotas?: Record<string, any>;
 }
 export interface ApplicationRemoveMatch {
     id: string;
@@ -54,6 +60,11 @@ export interface ApplicationSecretCreateData {
 }
 export interface ApplicationSecretUpdateData {
     id: string;
+    application_id?: string;
+    created_at?: string;
+    deleted_at?: string;
+    name?: string;
+    token?: string;
 }
 export interface ApplicationsManagement {
 }
@@ -126,6 +137,7 @@ export interface EventsManagementListMatch {
 }
 export interface EventsManagementCreateData {
     event_id: string;
+    application_id: string;
 }
 export interface EventsManagementRemoveMatch {
     event_type_name: string;
@@ -238,7 +250,7 @@ export interface Organization {
     onboarding_steps: Record<string, any>;
     organization_id: string;
     plan: Record<string, any>;
-    quota: Record<string, any>;
+    quotas: Record<string, any>;
     role: string;
     users: any[];
 }
@@ -251,7 +263,7 @@ export interface OrganizationListMatch {
     onboarding_steps?: Record<string, any>;
     organization_id?: string;
     plan?: Record<string, any>;
-    quota?: Record<string, any>;
+    quotas?: Record<string, any>;
     role?: string;
     users?: any[];
 }
@@ -261,12 +273,20 @@ export interface OrganizationCreateData {
     onboarding_steps: Record<string, any>;
     organization_id: string;
     plan: Record<string, any>;
-    quota: Record<string, any>;
+    quotas: Record<string, any>;
     role: string;
     users: any[];
 }
 export interface OrganizationUpdateData {
     id: string;
+    consumption?: Record<string, any>;
+    name?: string;
+    onboarding_steps?: Record<string, any>;
+    organization_id?: string;
+    plan?: Record<string, any>;
+    quotas?: Record<string, any>;
+    role?: string;
+    users?: any[];
 }
 export interface OrganizationRemoveMatch {
     id: string;
@@ -277,6 +297,10 @@ export interface OrganizationEditRole {
 }
 export interface OrganizationEditRoleUpdateData {
     id: string;
+    role?: string;
+    user_id?: string;
+    $action?: string;
+    [action: string]: any;
 }
 export interface Problem {
     detail: string;
@@ -291,12 +315,20 @@ export interface ProblemListMatch {
     title?: string;
 }
 export interface Quota {
-    enabled: boolean;
-    limits: Record<string, any>;
+    global_applications_per_organization_limit: number;
+    global_days_of_events_retention_limit: number;
+    global_event_types_per_application_limit: number;
+    global_events_per_day_limit: number;
+    global_members_per_organization_limit: number;
+    global_subscriptions_per_application_limit: number;
 }
 export interface QuotaLoadMatch {
-    enabled?: boolean;
-    limits?: Record<string, any>;
+    global_applications_per_organization_limit?: number;
+    global_days_of_events_retention_limit?: number;
+    global_event_types_per_application_limit?: number;
+    global_events_per_day_limit?: number;
+    global_members_per_organization_limit?: number;
+    global_subscriptions_per_application_limit?: number;
 }
 export interface Registration {
     email: string;
@@ -348,12 +380,6 @@ export interface RequestAttemptListMatch {
     succeeded_at?: string;
 }
 export interface Response {
-    body?: string;
-    elapsed_time_ms?: number;
-    headers?: Record<string, any>;
-    http_code?: number;
-    response_error_name?: string;
-    response_id: string;
 }
 export interface ResponseLoadMatch {
     id: string;
@@ -389,6 +415,11 @@ export interface ServiceTokenCreateData {
 }
 export interface ServiceTokenUpdateData {
     id: string;
+    biscuit?: string;
+    created_at?: string;
+    name?: string;
+    organization_id?: string;
+    token_id?: string;
 }
 export interface ServiceTokenRemoveMatch {
     id: string;
@@ -398,7 +429,7 @@ export interface Subscription {
     created_at: string;
     dedicated_workers: any[];
     description?: string;
-    event_type: any[];
+    event_types: any[];
     is_enabled: boolean;
     label_key: string;
     label_value: string;
@@ -417,7 +448,7 @@ export interface SubscriptionListMatch {
     created_at?: string;
     dedicated_workers?: any[];
     description?: string;
-    event_type?: any[];
+    event_types?: any[];
     is_enabled?: boolean;
     label_key?: string;
     label_value?: string;
@@ -433,7 +464,7 @@ export interface SubscriptionCreateData {
     created_at: string;
     dedicated_workers: any[];
     description?: string;
-    event_type: any[];
+    event_types: any[];
     is_enabled: boolean;
     label_key: string;
     label_value: string;
@@ -446,6 +477,20 @@ export interface SubscriptionCreateData {
 }
 export interface SubscriptionUpdateData {
     id: string;
+    application_id?: string;
+    created_at?: string;
+    dedicated_workers?: any[];
+    description?: string;
+    event_types?: any[];
+    is_enabled?: boolean;
+    label_key?: string;
+    label_value?: string;
+    labels?: Record<string, any>;
+    metadata?: Record<string, any>;
+    secret?: string;
+    subscription_id?: string;
+    target?: Record<string, any>;
+    updated_at?: string;
 }
 export interface SubscriptionRemoveMatch {
     id: string;
@@ -466,4 +511,6 @@ export interface UserInvitation {
 }
 export interface UserInvitationCreateData {
     organization_id: string;
+    email: string;
+    role: string;
 }

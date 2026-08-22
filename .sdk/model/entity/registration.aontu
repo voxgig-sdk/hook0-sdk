@@ -18,6 +18,7 @@ main: kit: entity: registration: {
     {
       name: "gclid"
       req: false
+      short: "Optional Google Ads click identifier captured during the user's journey from a Google Ad."
       type: "`$STRING`"
     }
     {

@@ -28,6 +28,9 @@ def make_config():
     return {
         "main": {
             "name": "Hook0",
+            "slug": "hook0",
+            "version": "0.0.1",
+            "target": "py",
         },
         "feature": {
             "test": {
@@ -77,31 +80,37 @@ def make_config():
           {
             "name": "application_id",
             "req": True,
+            "short": "Unique identifier of the application.",
             "type": "`$STRING`",
           },
           {
             "name": "consumption",
             "req": True,
+            "short": "Current consumption metrics for this application.",
             "type": "`$OBJECT`",
           },
           {
             "name": "name",
             "req": True,
+            "short": "Name of the application.",
             "type": "`$STRING`",
           },
           {
             "name": "onboarding_steps",
             "req": True,
+            "short": "Onboarding completion status for this application.",
             "type": "`$OBJECT`",
           },
           {
             "name": "organization_id",
             "req": True,
+            "short": "UUID of the organization this application belongs to.",
             "type": "`$STRING`",
           },
           {
             "name": "quotas",
             "req": True,
+            "short": "Quota limits for this application.",
             "type": "`$OBJECT`",
           },
         ],
@@ -1196,39 +1205,47 @@ def make_config():
           {
             "name": "application_id",
             "req": True,
+            "short": "UUID of the application this event belongs to.",
             "type": "`$STRING`",
           },
           {
             "name": "event_id",
+            "short": "Optional unique identifier for this event (client-generated UUID).",
             "type": "`$STRING`",
           },
           {
             "name": "event_type",
             "req": True,
+            "short": "The type of event (e.g., 'user.created', 'order.completed').",
             "type": "`$STRING`",
           },
           {
             "name": "labels",
             "req": True,
+            "short": "Labels for event filtering and routing to subscriptions.",
             "type": "`$OBJECT`",
           },
           {
             "name": "metadata",
+            "short": "Optional metadata key-value pairs associated with the event.",
             "type": "`$OBJECT`",
           },
           {
             "name": "occurred_at",
             "req": True,
+            "short": "Timestamp when the event occurred.",
             "type": "`$STRING`",
           },
           {
             "name": "payload",
             "req": True,
+            "short": "The event payload.",
             "type": "`$STRING`",
           },
           {
             "name": "payload_content_type",
             "req": True,
+            "short": "Content type of the payload.",
             "type": "`$STRING`",
           },
         ],
@@ -1814,6 +1831,7 @@ def make_config():
           },
           {
             "name": "gclid",
+            "short": "Optional Google Ads click identifier captured during the user's journey from a Google Ad.",
             "type": "`$STRING`",
           },
           {
@@ -1910,6 +1928,7 @@ def make_config():
           {
             "name": "status",
             "req": True,
+            "short": "Status of a request attempt.",
             "type": "`$OBJECT`",
           },
           {
@@ -2460,6 +2479,7 @@ def make_config():
               },
             },
             "req": True,
+            "short": "_Kept for backward compatibility, you should use `labels`_",
             "type": "`$STRING`",
           },
           {
@@ -2473,6 +2493,7 @@ def make_config():
               },
             },
             "req": True,
+            "short": "_Kept for backward compatibility, you should use `labels`_",
             "type": "`$STRING`",
           },
           {

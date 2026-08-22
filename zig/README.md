@@ -311,12 +311,12 @@ On error, `ok` is `false` and `err` carries the error message.
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
-| `consumption` |  |
-| `name` |  |
-| `onboarding_steps` |  |
-| `organization_id` |  |
-| `quotas` |  |
+| `application_id` | Unique identifier of the application. |
+| `consumption` | Current consumption metrics for this application. |
+| `name` | Name of the application. |
+| `onboarding_steps` | Onboarding completion status for this application. |
+| `organization_id` | UUID of the organization this application belongs to. |
+| `quotas` | Quota limits for this application. |
 
 Operations: Create, List, Load, Remove, Update.
 
@@ -440,14 +440,14 @@ API path: `/api/v1/environment_variables/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
-| `event_id` |  |
-| `event_type` |  |
-| `labels` |  |
-| `metadata` |  |
-| `occurred_at` |  |
-| `payload` |  |
-| `payload_content_type` |  |
+| `application_id` | UUID of the application this event belongs to. |
+| `event_id` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | Timestamp when the event occurred. |
+| `payload` | The event payload. |
+| `payload_content_type` | Content type of the payload. |
 
 Operations: Create.
 
@@ -545,7 +545,7 @@ API path: `/api/v1/quotas/`
 | --- | --- |
 | `email` |  |
 | `first_name` |  |
-| `gclid` |  |
+| `gclid` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` |  |
 | `password` |  |
 | `turnstile_token` |  |
@@ -568,7 +568,7 @@ API path: `/api/v1/register/`
 | `request_attempt_id` |  |
 | `response_id` |  |
 | `retry_count` |  |
-| `status` |  |
+| `status` | Status of a request attempt. |
 | `subscription` |  |
 | `succeeded_at` |  |
 
@@ -618,8 +618,8 @@ API path: `/api/v1/service_token/`
 | `description` |  |
 | `event_types` |  |
 | `is_enabled` |  |
-| `label_key` |  |
-| `label_value` |  |
+| `label_key` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` |  |
 | `metadata` |  |
 | `secret` |  |
@@ -680,12 +680,12 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `[]const u8` |  |
-| `consumption` | `Value (object)` |  |
-| `name` | `[]const u8` |  |
-| `onboarding_steps` | `Value (object)` |  |
-| `organization_id` | `[]const u8` |  |
-| `quotas` | `Value (object)` |  |
+| `application_id` | `[]const u8` | Unique identifier of the application. |
+| `consumption` | `Value (object)` | Current consumption metrics for this application. |
+| `name` | `[]const u8` | Name of the application. |
+| `onboarding_steps` | `Value (object)` | Onboarding completion status for this application. |
+| `organization_id` | `[]const u8` | UUID of the organization this application belongs to. |
+| `quotas` | `Value (object)` | Quota limits for this application. |
 
 #### Example: Load
 
@@ -1059,14 +1059,14 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `[]const u8` |  |
-| `event_id` | `[]const u8` |  |
-| `event_type` | `[]const u8` |  |
-| `labels` | `Value (object)` |  |
-| `metadata` | `Value (object)` |  |
-| `occurred_at` | `[]const u8` |  |
-| `payload` | `[]const u8` |  |
-| `payload_content_type` | `[]const u8` |  |
+| `application_id` | `[]const u8` | UUID of the application this event belongs to. |
+| `event_id` | `[]const u8` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `[]const u8` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `Value (object)` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `Value (object)` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `[]const u8` | Timestamp when the event occurred. |
+| `payload` | `[]const u8` | The event payload. |
+| `payload_content_type` | `[]const u8` | Content type of the payload. |
 
 #### Example: Create
 
@@ -1329,7 +1329,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | --- | --- | --- |
 | `email` | `[]const u8` |  |
 | `first_name` | `[]const u8` |  |
-| `gclid` | `[]const u8` |  |
+| `gclid` | `[]const u8` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `[]const u8` |  |
 | `password` | `[]const u8` |  |
 | `turnstile_token` | `[]const u8` |  |
@@ -1377,7 +1377,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | `request_attempt_id` | `[]const u8` |  |
 | `response_id` | `[]const u8` |  |
 | `retry_count` | `i64` |  |
-| `status` | `Value (object)` |  |
+| `status` | `Value (object)` | Status of a request attempt. |
 | `subscription` | `Value (object)` |  |
 | `succeeded_at` | `[]const u8` |  |
 
@@ -1525,8 +1525,8 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | `description` | `[]const u8` |  |
 | `event_types` | `Value (array)` |  |
 | `is_enabled` | `bool` |  |
-| `label_key` | `[]const u8` |  |
-| `label_value` | `[]const u8` |  |
+| `label_key` | `[]const u8` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `[]const u8` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `Value (object)` |  |
 | `metadata` | `Value (object)` |  |
 | `secret` | `[]const u8` |  |

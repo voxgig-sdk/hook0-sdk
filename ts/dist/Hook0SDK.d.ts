@@ -53,6 +53,20 @@ declare class Hook0SDK {
         headers?: undefined;
         data?: undefined;
     }>;
+    _rawRequest(fetchargs?: any): Promise<Error | {
+        ok: boolean;
+        status: number;
+        headers: any;
+        data: any;
+        err?: undefined;
+    } | {
+        ok: boolean;
+        err: any;
+        status?: undefined;
+        headers?: undefined;
+        data?: undefined;
+    }>;
+    graphql(query: string, variables?: any, ctrl?: any): Promise<any>;
     Application(entopts?: Record<string, any>): ApplicationEntity;
     ApplicationSecret(entopts?: Record<string, any>): ApplicationSecretEntity;
     ApplicationsManagement(entopts?: Record<string, any>): ApplicationsManagementEntity;

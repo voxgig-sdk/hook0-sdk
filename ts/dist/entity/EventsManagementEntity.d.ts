@@ -5,8 +5,8 @@ import type { EventsManagement, EventsManagementListMatch, EventsManagementCreat
 declare class EventsManagementEntity extends Hook0EntityBase<EventsManagement> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: EventsManagementEntity): EventsManagementEntity;
-    list(this: any, reqmatch?: EventsManagementListMatch, ctrl?: Control): Promise<EventsManagement[]>;
-    create(this: any, reqdata?: EventsManagementCreateData, ctrl?: Control): Promise<EventsManagement>;
-    remove(this: any, reqmatch?: EventsManagementRemoveMatch, ctrl?: Control): Promise<EventsManagement>;
+    list(this: any, reqmatch?: EventsManagementListMatch, ctrl?: Control): Promise<EventsManagementEntity[]>;
+    create(this: any, reqdata?: EventsManagementCreateData, ctrl?: Control): Promise<EventsManagementEntity>;
+    remove(this: any, reqmatch?: EventsManagementRemoveMatch, ctrl?: Control): Promise<EventsManagementEntity>;
 }
 export { EventsManagementEntity };

@@ -20,6 +20,9 @@ pub fn make_config() Value {
         }) },
         .{ "options", h.jo(&.{
             .{ "base", h.vstr("https://app.hook0.com") },
+            .{ "auth", h.jo(&.{
+                .{ "prefix", h.vstr("") },
+            }) },
             .{ "headers", h.jo(&.{
                 .{ "content-type", h.vstr("application/json") },
             }) },
@@ -49,9 +52,6 @@ pub fn make_config() Value {
                 .{ "user_authentication", h.omap() },
                 .{ "user_invitation", h.omap() },
             }) },
-            .{ "auth", h.jo(&.{
-                .{ "prefix", h.vstr("") },
-            }) },
         }) },
         .{ "entity", h.jo(&.{
             .{ "application", h.jo(&.{
@@ -59,31 +59,37 @@ pub fn make_config() Value {
                     h.jo(&.{
                         .{ "name", h.vstr("application_id") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Unique identifier of the application.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("consumption") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Current consumption metrics for this application.") },
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("name") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Name of the application.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("onboarding_steps") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Onboarding completion status for this application.") },
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("organization_id") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("UUID of the organization this application belongs to.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("quotas") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Quota limits for this application.") },
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                 }) },
@@ -1178,39 +1184,47 @@ pub fn make_config() Value {
                     h.jo(&.{
                         .{ "name", h.vstr("application_id") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("UUID of the application this event belongs to.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("event_id") },
+                        .{ "short", h.vstr("Optional unique identifier for this event (client-generated UUID).") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("event_type") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("The type of event (e.g., 'user.created', 'order.completed').") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("labels") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Labels for event filtering and routing to subscriptions.") },
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("metadata") },
+                        .{ "short", h.vstr("Optional metadata key-value pairs associated with the event.") },
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("occurred_at") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Timestamp when the event occurred.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("payload") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("The event payload.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("payload_content_type") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Content type of the payload.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                 }) },
@@ -1796,6 +1810,7 @@ pub fn make_config() Value {
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("gclid") },
+                        .{ "short", h.vstr("Optional Google Ads click identifier captured during the user's journey from a Google Ad.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
@@ -1892,6 +1907,7 @@ pub fn make_config() Value {
                     h.jo(&.{
                         .{ "name", h.vstr("status") },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Status of a request attempt.") },
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
@@ -2442,6 +2458,7 @@ pub fn make_config() Value {
                             }) },
                         }) },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("_Kept for backward compatibility, you should use `labels`_") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
@@ -2455,6 +2472,7 @@ pub fn make_config() Value {
                             }) },
                         }) },
                         .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("_Kept for backward compatibility, you should use `labels`_") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
@@ -2885,6 +2903,28 @@ pub fn make_config() Value {
             }) },
         }) },
     });
+}
+
+// SHARED CONFIG (sdkgen rung L2).
+//
+// The SDK reads the config on every request and never writes to it, so one
+// instance is shared by every client rather than rebuilt per client. Above the
+// size threshold make_config re-parses the whole embedded JSON, so this is the
+// difference between parsing the model once and once per client.
+//
+// Value nodes are arena-allocated and reference-stable, so the shared value is
+// genuinely one structure, not a copy.
+var shared_config_val: ?Value = null;
+
+/// The process-wide config, built once on first use.
+///
+/// The returned Value SHARES its nodes: treat it as read-only. Callers that
+/// need to mutate should use make_config, which always returns a fresh copy.
+pub fn shared_config() Value {
+    if (shared_config_val) |c| return c;
+    const c = make_config();
+    shared_config_val = c;
+    return c;
 }
 
 pub fn make_feature(name: []const u8) Feature {

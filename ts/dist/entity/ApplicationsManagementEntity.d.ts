@@ -5,6 +5,6 @@ import type { ApplicationsManagement, ApplicationsManagementRemoveMatch } from '
 declare class ApplicationsManagementEntity extends Hook0EntityBase<ApplicationsManagement> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: ApplicationsManagementEntity): ApplicationsManagementEntity;
-    remove(this: any, reqmatch?: ApplicationsManagementRemoveMatch, ctrl?: Control): Promise<ApplicationsManagement>;
+    remove(this: any, reqmatch?: ApplicationsManagementRemoveMatch, ctrl?: Control): Promise<ApplicationsManagementEntity>;
 }
 export { ApplicationsManagementEntity };

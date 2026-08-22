@@ -301,12 +301,12 @@ On error, `ok` is `false` and `err` contains the error value.
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
-| `consumption` |  |
-| `name` |  |
-| `onboarding_steps` |  |
-| `organization_id` |  |
-| `quotas` |  |
+| `application_id` | Unique identifier of the application. |
+| `consumption` | Current consumption metrics for this application. |
+| `name` | Name of the application. |
+| `onboarding_steps` | Onboarding completion status for this application. |
+| `organization_id` | UUID of the organization this application belongs to. |
+| `quotas` | Quota limits for this application. |
 
 Operations: create, list, load, remove, update.
 
@@ -430,14 +430,14 @@ API path: `/api/v1/environment_variables/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
-| `event_id` |  |
-| `event_type` |  |
-| `labels` |  |
-| `metadata` |  |
-| `occurred_at` |  |
-| `payload` |  |
-| `payload_content_type` |  |
+| `application_id` | UUID of the application this event belongs to. |
+| `event_id` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | Timestamp when the event occurred. |
+| `payload` | The event payload. |
+| `payload_content_type` | Content type of the payload. |
 
 Operations: create.
 
@@ -535,7 +535,7 @@ API path: `/api/v1/quotas/`
 | --- | --- |
 | `email` |  |
 | `first_name` |  |
-| `gclid` |  |
+| `gclid` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` |  |
 | `password` |  |
 | `turnstile_token` |  |
@@ -558,7 +558,7 @@ API path: `/api/v1/register/`
 | `request_attempt_id` |  |
 | `response_id` |  |
 | `retry_count` |  |
-| `status` |  |
+| `status` | Status of a request attempt. |
 | `subscription` |  |
 | `succeeded_at` |  |
 
@@ -608,8 +608,8 @@ API path: `/api/v1/service_token/`
 | `description` |  |
 | `event_types` |  |
 | `is_enabled` |  |
-| `label_key` |  |
-| `label_value` |  |
+| `label_key` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` |  |
 | `metadata` |  |
 | `secret` |  |
@@ -667,12 +667,12 @@ Create an instance: `SdkEntity application = client.application(null);`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `String` |  |
-| `consumption` | `Map<String, Object>` |  |
-| `name` | `String` |  |
-| `onboarding_steps` | `Map<String, Object>` |  |
-| `organization_id` | `String` |  |
-| `quotas` | `Map<String, Object>` |  |
+| `application_id` | `String` | Unique identifier of the application. |
+| `consumption` | `Map<String, Object>` | Current consumption metrics for this application. |
+| `name` | `String` | Name of the application. |
+| `onboarding_steps` | `Map<String, Object>` | Onboarding completion status for this application. |
+| `organization_id` | `String` | UUID of the organization this application belongs to. |
+| `quotas` | `Map<String, Object>` | Quota limits for this application. |
 
 #### Example: Load
 
@@ -974,14 +974,14 @@ Create an instance: `SdkEntity ingestedEvent = client.ingestedEvent(null);`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `String` |  |
-| `event_id` | `String` |  |
-| `event_type` | `String` |  |
-| `labels` | `Map<String, Object>` |  |
-| `metadata` | `Map<String, Object>` |  |
-| `occurred_at` | `String` |  |
-| `payload` | `String` |  |
-| `payload_content_type` | `String` |  |
+| `application_id` | `String` | UUID of the application this event belongs to. |
+| `event_id` | `String` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `String` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `Map<String, Object>` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `Map<String, Object>` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `String` | Timestamp when the event occurred. |
+| `payload` | `String` | The event payload. |
+| `payload_content_type` | `String` | Content type of the payload. |
 
 #### Example: Create
 
@@ -1199,7 +1199,7 @@ Create an instance: `SdkEntity registration = client.registration(null);`
 | --- | --- | --- |
 | `email` | `String` |  |
 | `first_name` | `String` |  |
-| `gclid` | `String` |  |
+| `gclid` | `String` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `String` |  |
 | `password` | `String` |  |
 | `turnstile_token` | `String` |  |
@@ -1241,7 +1241,7 @@ Create an instance: `SdkEntity requestAttempt = client.requestAttempt(null);`
 | `request_attempt_id` | `String` |  |
 | `response_id` | `String` |  |
 | `retry_count` | `Long` |  |
-| `status` | `Map<String, Object>` |  |
+| `status` | `Map<String, Object>` | Status of a request attempt. |
 | `subscription` | `Map<String, Object>` |  |
 | `succeeded_at` | `String` |  |
 
@@ -1359,8 +1359,8 @@ Create an instance: `SdkEntity subscription = client.subscription(null);`
 | `description` | `String` |  |
 | `event_types` | `List<Object>` |  |
 | `is_enabled` | `Boolean` |  |
-| `label_key` | `String` |  |
-| `label_value` | `String` |  |
+| `label_key` | `String` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `String` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `Map<String, Object>` |  |
 | `metadata` | `Map<String, Object>` |  |
 | `secret` | `String` |  |

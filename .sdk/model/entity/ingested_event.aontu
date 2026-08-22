@@ -8,41 +8,49 @@ main: kit: entity: ingested_event: {
     {
       name: "application_id"
       req: true
+      short: "UUID of the application this event belongs to."
       type: "`$STRING`"
     }
     {
       name: "event_id"
       req: false
+      short: "Optional unique identifier for this event (client-generated UUID)."
       type: "`$STRING`"
     }
     {
       name: "event_type"
       req: true
+      short: "The type of event (e.g., 'user.created', 'order.completed')."
       type: "`$STRING`"
     }
     {
       name: "labels"
       req: true
+      short: "Labels for event filtering and routing to subscriptions."
       type: "`$OBJECT`"
     }
     {
       name: "metadata"
       req: false
+      short: "Optional metadata key-value pairs associated with the event."
       type: "`$OBJECT`"
     }
     {
       name: "occurred_at"
       req: true
+      short: "Timestamp when the event occurred."
       type: "`$STRING`"
     }
     {
       name: "payload"
       req: true
+      short: "The event payload."
       type: "`$STRING`"
     }
     {
       name: "payload_content_type"
       req: true
+      short: "Content type of the payload."
       type: "`$STRING`"
     }
   ]

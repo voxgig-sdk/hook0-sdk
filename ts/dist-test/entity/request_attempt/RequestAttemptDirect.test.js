@@ -15,6 +15,10 @@ const utility_1 = require("../../utility");
     (0, node_test_1.afterEach)((0, utility_1.liveDelay)('HOOK0_TEST_LIVE'));
     (0, node_test_1.test)('direct-exists', async () => {
         const sdk = new __1.Hook0SDK({
+            // Concrete base: a live construction must satisfy any server
+            // variables a templated base URL declares; overriding base with a
+            // literal (as the direct flow tests do) sidesteps the requirement.
+            base: 'http://localhost:8080',
             system: { fetch: async () => ({}) }
         });
         (0, node_assert_1.default)('function' === typeof sdk.direct);
@@ -113,16 +117,16 @@ const utility_1 = require("../../utility");
 function directSetup(mockres) {
     const calls = [];
     const env = (0, utility_1.envOverride)({
-        'HOOK__TEST_REQUEST_ATTEMPT_ENTID': {},
-        'HOOK__TEST_LIVE': 'FALSE',
-        'HOOK__APIKEY': 'NONE',
+        'HOOK0_TEST_REQUEST_ATTEMPT_ENTID': {},
+        'HOOK0_TEST_LIVE': 'FALSE',
+        'HOOK0_APIKEY': 'NONE',
     });
-    const live = 'TRUE' === env.HOOK__TEST_LIVE;
+    const live = 'TRUE' === env.HOOK0_TEST_LIVE;
     if (live) {
         const client = new __1.Hook0SDK({
-            apikey: env.HOOK__APIKEY,
+            apikey: env.HOOK0_APIKEY,
         });
-        let idmap = env['HOOK__TEST_REQUEST_ATTEMPT_ENTID'];
+        let idmap = env['HOOK0_TEST_REQUEST_ATTEMPT_ENTID'];
         if ('string' === typeof idmap && idmap.startsWith('{')) {
             idmap = JSON.parse(idmap);
         }

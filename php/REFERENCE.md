@@ -185,12 +185,12 @@ $application = $client->Application();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-| `consumption` | `array` | Yes |  |
-| `name` | `string` | Yes |  |
-| `onboarding_steps` | `array` | Yes |  |
-| `organization_id` | `string` | Yes |  |
-| `quotas` | `array` | Yes |  |
+| `application_id` | `string` | Yes | Unique identifier of the application. |
+| `consumption` | `array` | Yes | Current consumption metrics for this application. |
+| `name` | `string` | Yes | Name of the application. |
+| `onboarding_steps` | `array` | Yes | Onboarding completion status for this application. |
+| `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
+| `quotas` | `array` | Yes | Quota limits for this application. |
 
 ### Operations
 
@@ -804,14 +804,14 @@ $ingested_event = $client->IngestedEvent();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-| `event_id` | `string` | No |  |
-| `event_type` | `string` | Yes |  |
-| `labels` | `array` | Yes |  |
-| `metadata` | `array` | No |  |
-| `occurred_at` | `string` | Yes |  |
-| `payload` | `string` | Yes |  |
-| `payload_content_type` | `string` | Yes |  |
+| `application_id` | `string` | Yes | UUID of the application this event belongs to. |
+| `event_id` | `string` | No | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `string` | Yes | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `array` | Yes | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `array` | No | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `string` | Yes | Timestamp when the event occurred. |
+| `payload` | `string` | Yes | The event payload. |
+| `payload_content_type` | `string` | Yes | Content type of the payload. |
 
 ### Operations
 
@@ -1260,7 +1260,7 @@ $registration = $client->Registration();
 | --- | --- | --- | --- |
 | `email` | `string` | Yes |  |
 | `first_name` | `string` | Yes |  |
-| `gclid` | `string` | No |  |
+| `gclid` | `string` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
 | `turnstile_token` | `string` | No |  |
@@ -1330,7 +1330,7 @@ $request_attempt = $client->RequestAttempt();
 | `request_attempt_id` | `string` | Yes |  |
 | `response_id` | `string` | No |  |
 | `retry_count` | `int` | Yes |  |
-| `status` | `array` | Yes |  |
+| `status` | `array` | Yes | Status of a request attempt. |
 | `subscription` | `array` | Yes |  |
 | `succeeded_at` | `string` | No |  |
 
@@ -1587,8 +1587,8 @@ $subscription = $client->Subscription();
 | `description` | `string` | No |  |
 | `event_types` | `array` | Yes |  |
 | `is_enabled` | `bool` | Yes |  |
-| `label_key` | `string` | Yes |  |
-| `label_value` | `string` | Yes |  |
+| `label_key` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `array` | Yes |  |
 | `metadata` | `array` | Yes |  |
 | `secret` | `string` | Yes |  |

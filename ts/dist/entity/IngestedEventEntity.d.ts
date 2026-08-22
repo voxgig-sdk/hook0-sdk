@@ -5,6 +5,6 @@ import type { IngestedEvent, IngestedEventCreateData } from '../Hook0Types';
 declare class IngestedEventEntity extends Hook0EntityBase<IngestedEvent> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: IngestedEventEntity): IngestedEventEntity;
-    create(this: any, reqdata?: IngestedEventCreateData, ctrl?: Control): Promise<IngestedEvent>;
+    create(this: any, reqdata?: IngestedEventCreateData, ctrl?: Control): Promise<IngestedEventEntity>;
 }
 export { IngestedEventEntity };

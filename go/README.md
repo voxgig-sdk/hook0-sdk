@@ -6,7 +6,7 @@ The Golang SDK for the Hook0 API — an entity-oriented client using standard Go
 
 It exposes the API as capitalised, semantic **Entities** — e.g. `client.Application(nil)` — each with the same small set of operations (`List`, `Load`, `Create`, `Update`, `Remove`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
-> Other languages, the CLI, and MCP server live alongside this one — see
+> Also generated from this model: `go-cli`, `go-mcp`, `java`, `js`, `lua`, `php`, `py`, `ts`, `zig` — see
 > the [top-level README](../README.md).
 
 
@@ -321,12 +321,12 @@ Only `Direct()` returns a response envelope — a `map[string]any` with
 
 | Field | Description |
 | --- | --- |
-| `"application_id"` |  |
-| `"consumption"` |  |
-| `"name"` |  |
-| `"onboarding_steps"` |  |
-| `"organization_id"` |  |
-| `"quotas"` |  |
+| `"application_id"` | Unique identifier of the application. |
+| `"consumption"` | Current consumption metrics for this application. |
+| `"name"` | Name of the application. |
+| `"onboarding_steps"` | Onboarding completion status for this application. |
+| `"organization_id"` | UUID of the organization this application belongs to. |
+| `"quotas"` | Quota limits for this application. |
 
 Operations: Create, List, Load, Remove, Update.
 
@@ -450,14 +450,14 @@ API path: `/api/v1/environment_variables/`
 
 | Field | Description |
 | --- | --- |
-| `"application_id"` |  |
-| `"event_id"` |  |
-| `"event_type"` |  |
-| `"labels"` |  |
-| `"metadata"` |  |
-| `"occurred_at"` |  |
-| `"payload"` |  |
-| `"payload_content_type"` |  |
+| `"application_id"` | UUID of the application this event belongs to. |
+| `"event_id"` | Optional unique identifier for this event (client-generated UUID). |
+| `"event_type"` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `"labels"` | Labels for event filtering and routing to subscriptions. |
+| `"metadata"` | Optional metadata key-value pairs associated with the event. |
+| `"occurred_at"` | Timestamp when the event occurred. |
+| `"payload"` | The event payload. |
+| `"payload_content_type"` | Content type of the payload. |
 
 Operations: Create.
 
@@ -555,7 +555,7 @@ API path: `/api/v1/quotas/`
 | --- | --- |
 | `"email"` |  |
 | `"first_name"` |  |
-| `"gclid"` |  |
+| `"gclid"` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `"last_name"` |  |
 | `"password"` |  |
 | `"turnstile_token"` |  |
@@ -578,7 +578,7 @@ API path: `/api/v1/register/`
 | `"request_attempt_id"` |  |
 | `"response_id"` |  |
 | `"retry_count"` |  |
-| `"status"` |  |
+| `"status"` | Status of a request attempt. |
 | `"subscription"` |  |
 | `"succeeded_at"` |  |
 
@@ -628,8 +628,8 @@ API path: `/api/v1/service_token/`
 | `"description"` |  |
 | `"event_types"` |  |
 | `"is_enabled"` |  |
-| `"label_key"` |  |
-| `"label_value"` |  |
+| `"label_key"` | _Kept for backward compatibility, you should use `labels`_ |
+| `"label_value"` | _Kept for backward compatibility, you should use `labels`_ |
 | `"labels"` |  |
 | `"metadata"` |  |
 | `"secret"` |  |
@@ -687,12 +687,12 @@ Create an instance: `application := client.Application(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `string` |  |
-| `consumption` | `map[string]any` |  |
-| `name` | `string` |  |
-| `onboarding_steps` | `map[string]any` |  |
-| `organization_id` | `string` |  |
-| `quotas` | `map[string]any` |  |
+| `application_id` | `string` | Unique identifier of the application. |
+| `consumption` | `map[string]any` | Current consumption metrics for this application. |
+| `name` | `string` | Name of the application. |
+| `onboarding_steps` | `map[string]any` | Onboarding completion status for this application. |
+| `organization_id` | `string` | UUID of the organization this application belongs to. |
+| `quotas` | `map[string]any` | Quota limits for this application. |
 
 #### Example: Load
 
@@ -1054,14 +1054,14 @@ Create an instance: `ingestedEvent := client.IngestedEvent(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `string` |  |
-| `event_id` | `string` |  |
-| `event_type` | `string` |  |
-| `labels` | `map[string]any` |  |
-| `metadata` | `map[string]any` |  |
-| `occurred_at` | `string` |  |
-| `payload` | `string` |  |
-| `payload_content_type` | `string` |  |
+| `application_id` | `string` | UUID of the application this event belongs to. |
+| `event_id` | `string` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `string` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `map[string]any` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `map[string]any` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `string` | Timestamp when the event occurred. |
+| `payload` | `string` | The event payload. |
+| `payload_content_type` | `string` | Content type of the payload. |
 
 #### Example: Create
 
@@ -1311,7 +1311,7 @@ Create an instance: `registration := client.Registration(nil)`
 | --- | --- | --- |
 | `email` | `string` |  |
 | `first_name` | `string` |  |
-| `gclid` | `string` |  |
+| `gclid` | `string` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` |  |
 | `password` | `string` |  |
 | `turnstile_token` | `string` |  |
@@ -1357,7 +1357,7 @@ Create an instance: `requestAttempt := client.RequestAttempt(nil)`
 | `request_attempt_id` | `string` |  |
 | `response_id` | `string` |  |
 | `retry_count` | `int` |  |
-| `status` | `map[string]any` |  |
+| `status` | `map[string]any` | Status of a request attempt. |
 | `subscription` | `map[string]any` |  |
 | `succeeded_at` | `string` |  |
 
@@ -1499,8 +1499,8 @@ Create an instance: `subscription := client.Subscription(nil)`
 | `description` | `string` |  |
 | `event_types` | `[]any` |  |
 | `is_enabled` | `bool` |  |
-| `label_key` | `string` |  |
-| `label_value` | `string` |  |
+| `label_key` | `string` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `string` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `map[string]any` |  |
 | `metadata` | `map[string]any` |  |
 | `secret` | `string` |  |

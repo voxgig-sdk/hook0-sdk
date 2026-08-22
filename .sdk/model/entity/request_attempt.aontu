@@ -58,6 +58,7 @@ main: kit: entity: request_attempt: {
     {
       name: "status"
       req: true
+      short: "Status of a request attempt."
       type: "`$OBJECT`"
     }
     {

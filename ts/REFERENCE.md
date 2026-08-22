@@ -393,12 +393,12 @@ const application = client.Application()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-| `consumption` | `Record<string, any>` | Yes |  |
-| `name` | `string` | Yes |  |
-| `onboarding_steps` | `Record<string, any>` | Yes |  |
-| `organization_id` | `string` | Yes |  |
-| `quotas` | `Record<string, any>` | Yes |  |
+| `application_id` | `string` | Yes | Unique identifier of the application. |
+| `consumption` | `Record<string, any>` | Yes | Current consumption metrics for this application. |
+| `name` | `string` | Yes | Name of the application. |
+| `onboarding_steps` | `Record<string, any>` | Yes | Onboarding completion status for this application. |
+| `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
+| `quotas` | `Record<string, any>` | Yes | Quota limits for this application. |
 
 ### Operations
 
@@ -994,14 +994,14 @@ const ingested_event = client.IngestedEvent()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-| `event_id` | `string` | No |  |
-| `event_type` | `string` | Yes |  |
-| `labels` | `Record<string, any>` | Yes |  |
-| `metadata` | `Record<string, any>` | No |  |
-| `occurred_at` | `string` | Yes |  |
-| `payload` | `string` | Yes |  |
-| `payload_content_type` | `string` | Yes |  |
+| `application_id` | `string` | Yes | UUID of the application this event belongs to. |
+| `event_id` | `string` | No | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `string` | Yes | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `Record<string, any>` | Yes | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `Record<string, any>` | No | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `string` | Yes | Timestamp when the event occurred. |
+| `payload` | `string` | Yes | The event payload. |
+| `payload_content_type` | `string` | Yes | Content type of the payload. |
 
 ### Operations
 
@@ -1456,7 +1456,7 @@ const registration = client.Registration()
 | --- | --- | --- | --- |
 | `email` | `string` | Yes |  |
 | `first_name` | `string` | Yes |  |
-| `gclid` | `string` | No |  |
+| `gclid` | `string` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
 | `turnstile_token` | `string` | No |  |
@@ -1524,7 +1524,7 @@ const request_attempt = client.RequestAttempt()
 | `request_attempt_id` | `string` | Yes |  |
 | `response_id` | `string` | No |  |
 | `retry_count` | `number` | Yes |  |
-| `status` | `Record<string, any>` | Yes |  |
+| `status` | `Record<string, any>` | Yes | Status of a request attempt. |
 | `subscription` | `Record<string, any>` | Yes |  |
 | `succeeded_at` | `string` | No |  |
 
@@ -1773,8 +1773,8 @@ const subscription = client.Subscription()
 | `description` | `string` | No |  |
 | `event_types` | `any[]` | Yes |  |
 | `is_enabled` | `boolean` | Yes |  |
-| `label_key` | `string` | Yes |  |
-| `label_value` | `string` | Yes |  |
+| `label_key` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `Record<string, any>` | Yes |  |
 | `metadata` | `Record<string, any>` | Yes |  |
 | `secret` | `string` | Yes |  |

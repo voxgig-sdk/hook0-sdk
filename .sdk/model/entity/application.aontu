@@ -8,31 +8,37 @@ main: kit: entity: application: {
     {
       name: "application_id"
       req: true
+      short: "Unique identifier of the application."
       type: "`$STRING`"
     }
     {
       name: "consumption"
       req: true
+      short: "Current consumption metrics for this application."
       type: "`$OBJECT`"
     }
     {
       name: "name"
       req: true
+      short: "Name of the application."
       type: "`$STRING`"
     }
     {
       name: "onboarding_steps"
       req: true
+      short: "Onboarding completion status for this application."
       type: "`$OBJECT`"
     }
     {
       name: "organization_id"
       req: true
+      short: "UUID of the organization this application belongs to."
       type: "`$STRING`"
     }
     {
       name: "quotas"
       req: true
+      short: "Quota limits for this application."
       type: "`$OBJECT`"
     }
   ]

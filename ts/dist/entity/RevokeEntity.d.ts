@@ -5,6 +5,6 @@ import type { Revoke, RevokeRemoveMatch } from '../Hook0Types';
 declare class RevokeEntity extends Hook0EntityBase<Revoke> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: RevokeEntity): RevokeEntity;
-    remove(this: any, reqmatch?: RevokeRemoveMatch, ctrl?: Control): Promise<Revoke>;
+    remove(this: any, reqmatch?: RevokeRemoveMatch, ctrl?: Control): Promise<RevokeEntity>;
 }
 export { RevokeEntity };

@@ -5,6 +5,6 @@ import type { Login, LoginCreateData } from '../Hook0Types';
 declare class LoginEntity extends Hook0EntityBase<Login> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: LoginEntity): LoginEntity;
-    create(this: any, reqdata?: LoginCreateData, ctrl?: Control): Promise<Login>;
+    create(this: any, reqdata?: LoginCreateData, ctrl?: Control): Promise<LoginEntity>;
 }
 export { LoginEntity };

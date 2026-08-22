@@ -5,7 +5,7 @@ import type { Event, EventLoadMatch, EventListMatch } from '../Hook0Types';
 declare class EventEntity extends Hook0EntityBase<Event> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: EventEntity): EventEntity;
-    load(this: any, reqmatch?: EventLoadMatch, ctrl?: Control): Promise<Event>;
-    list(this: any, reqmatch?: EventListMatch, ctrl?: Control): Promise<Event[]>;
+    load(this: any, reqmatch?: EventLoadMatch, ctrl?: Control): Promise<EventEntity>;
+    list(this: any, reqmatch?: EventListMatch, ctrl?: Control): Promise<EventEntity[]>;
 }
 export { EventEntity };

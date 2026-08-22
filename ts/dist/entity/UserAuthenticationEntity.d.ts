@@ -5,6 +5,6 @@ import type { UserAuthentication, UserAuthenticationCreateData } from '../Hook0T
 declare class UserAuthenticationEntity extends Hook0EntityBase<UserAuthentication> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: UserAuthenticationEntity): UserAuthenticationEntity;
-    create(this: any, reqdata?: UserAuthenticationCreateData, ctrl?: Control): Promise<UserAuthentication>;
+    create(this: any, reqdata?: UserAuthenticationCreateData, ctrl?: Control): Promise<UserAuthenticationEntity>;
 }
 export { UserAuthenticationEntity };

@@ -5,6 +5,8 @@ main: kit: target: zig: {
   ext: zig
   comment: line: "//"
   module: name: 'hook0'
+  base: 'node_modules/@voxgig/sdkgen/project/.sdk'
+  package: '@voxgig/sdkgen'
   srcfeature: false
 
   # The vendored voxgig struct port is in-tree (utility/voxgigstruct) — Zig

@@ -5,10 +5,10 @@ import type { ServiceToken, ServiceTokenLoadMatch, ServiceTokenListMatch, Servic
 declare class ServiceTokenEntity extends Hook0EntityBase<ServiceToken> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: ServiceTokenEntity): ServiceTokenEntity;
-    load(this: any, reqmatch?: ServiceTokenLoadMatch, ctrl?: Control): Promise<ServiceToken>;
-    list(this: any, reqmatch?: ServiceTokenListMatch, ctrl?: Control): Promise<ServiceToken[]>;
-    create(this: any, reqdata?: ServiceTokenCreateData, ctrl?: Control): Promise<ServiceToken>;
-    update(this: any, reqdata?: ServiceTokenUpdateData, ctrl?: Control): Promise<ServiceToken>;
-    remove(this: any, reqmatch?: ServiceTokenRemoveMatch, ctrl?: Control): Promise<ServiceToken>;
+    load(this: any, reqmatch?: ServiceTokenLoadMatch, ctrl?: Control): Promise<ServiceTokenEntity>;
+    list(this: any, reqmatch?: ServiceTokenListMatch, ctrl?: Control): Promise<ServiceTokenEntity[]>;
+    create(this: any, reqdata?: ServiceTokenCreateData, ctrl?: Control): Promise<ServiceTokenEntity>;
+    update(this: any, reqdata?: ServiceTokenUpdateData, ctrl?: Control): Promise<ServiceTokenEntity>;
+    remove(this: any, reqmatch?: ServiceTokenRemoveMatch, ctrl?: Control): Promise<ServiceTokenEntity>;
 }
 export { ServiceTokenEntity };

@@ -362,12 +362,12 @@ The `prepare()` method returns:
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
-| `consumption` |  |
-| `name` |  |
-| `onboarding_steps` |  |
-| `organization_id` |  |
-| `quotas` |  |
+| `application_id` | Unique identifier of the application. |
+| `consumption` | Current consumption metrics for this application. |
+| `name` | Name of the application. |
+| `onboarding_steps` | Onboarding completion status for this application. |
+| `organization_id` | UUID of the organization this application belongs to. |
+| `quotas` | Quota limits for this application. |
 
 Operations: create, list, load, remove, update.
 
@@ -491,14 +491,14 @@ API path: `/api/v1/environment_variables/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
-| `event_id` |  |
-| `event_type` |  |
-| `labels` |  |
-| `metadata` |  |
-| `occurred_at` |  |
-| `payload` |  |
-| `payload_content_type` |  |
+| `application_id` | UUID of the application this event belongs to. |
+| `event_id` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | Timestamp when the event occurred. |
+| `payload` | The event payload. |
+| `payload_content_type` | Content type of the payload. |
 
 Operations: create.
 
@@ -596,7 +596,7 @@ API path: `/api/v1/quotas/`
 | --- | --- |
 | `email` |  |
 | `first_name` |  |
-| `gclid` |  |
+| `gclid` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` |  |
 | `password` |  |
 | `turnstile_token` |  |
@@ -619,7 +619,7 @@ API path: `/api/v1/register/`
 | `request_attempt_id` |  |
 | `response_id` |  |
 | `retry_count` |  |
-| `status` |  |
+| `status` | Status of a request attempt. |
 | `subscription` |  |
 | `succeeded_at` |  |
 
@@ -669,8 +669,8 @@ API path: `/api/v1/service_token/`
 | `description` |  |
 | `event_types` |  |
 | `is_enabled` |  |
-| `label_key` |  |
-| `label_value` |  |
+| `label_key` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` |  |
 | `metadata` |  |
 | `secret` |  |
@@ -728,12 +728,12 @@ Create an instance: `const application = client.Application()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `string` |  |
-| `consumption` | `Object` |  |
-| `name` | `string` |  |
-| `onboarding_steps` | `Object` |  |
-| `organization_id` | `string` |  |
-| `quotas` | `Object` |  |
+| `application_id` | `string` | Unique identifier of the application. |
+| `consumption` | `Object` | Current consumption metrics for this application. |
+| `name` | `string` | Name of the application. |
+| `onboarding_steps` | `Object` | Onboarding completion status for this application. |
+| `organization_id` | `string` | UUID of the organization this application belongs to. |
+| `quotas` | `Object` | Quota limits for this application. |
 
 #### Example: Load
 
@@ -1035,14 +1035,14 @@ Create an instance: `const ingested_event = client.IngestedEvent()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `string` |  |
-| `event_id` | `string` |  |
-| `event_type` | `string` |  |
-| `labels` | `Object` |  |
-| `metadata` | `Object` |  |
-| `occurred_at` | `string` |  |
-| `payload` | `string` |  |
-| `payload_content_type` | `string` |  |
+| `application_id` | `string` | UUID of the application this event belongs to. |
+| `event_id` | `string` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `string` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `Object` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `Object` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `string` | Timestamp when the event occurred. |
+| `payload` | `string` | The event payload. |
+| `payload_content_type` | `string` | Content type of the payload. |
 
 #### Example: Create
 
@@ -1260,7 +1260,7 @@ Create an instance: `const registration = client.Registration()`
 | --- | --- | --- |
 | `email` | `string` |  |
 | `first_name` | `string` |  |
-| `gclid` | `string` |  |
+| `gclid` | `string` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` |  |
 | `password` | `string` |  |
 | `turnstile_token` | `string` |  |
@@ -1302,7 +1302,7 @@ Create an instance: `const request_attempt = client.RequestAttempt()`
 | `request_attempt_id` | `string` |  |
 | `response_id` | `string` |  |
 | `retry_count` | `number` |  |
-| `status` | `Object` |  |
+| `status` | `Object` | Status of a request attempt. |
 | `subscription` | `Object` |  |
 | `succeeded_at` | `string` |  |
 
@@ -1420,8 +1420,8 @@ Create an instance: `const subscription = client.Subscription()`
 | `description` | `string` |  |
 | `event_types` | `Array` |  |
 | `is_enabled` | `boolean` |  |
-| `label_key` | `string` |  |
-| `label_value` | `string` |  |
+| `label_key` | `string` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `string` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `Object` |  |
 | `metadata` | `Object` |  |
 | `secret` | `string` |  |

@@ -205,12 +205,12 @@ SdkEntity application = client.application(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `String` | Yes |  |
-| `consumption` | `Map<String, Object>` | Yes |  |
-| `name` | `String` | Yes |  |
-| `onboarding_steps` | `Map<String, Object>` | Yes |  |
-| `organization_id` | `String` | Yes |  |
-| `quotas` | `Map<String, Object>` | Yes |  |
+| `application_id` | `String` | Yes | Unique identifier of the application. |
+| `consumption` | `Map<String, Object>` | Yes | Current consumption metrics for this application. |
+| `name` | `String` | Yes | Name of the application. |
+| `onboarding_steps` | `Map<String, Object>` | Yes | Onboarding completion status for this application. |
+| `organization_id` | `String` | Yes | UUID of the organization this application belongs to. |
+| `quotas` | `Map<String, Object>` | Yes | Quota limits for this application. |
 
 ### Operations
 
@@ -748,14 +748,14 @@ SdkEntity ingestedEvent = client.ingestedEvent(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `String` | Yes |  |
-| `event_id` | `String` | No |  |
-| `event_type` | `String` | Yes |  |
-| `labels` | `Map<String, Object>` | Yes |  |
-| `metadata` | `Map<String, Object>` | No |  |
-| `occurred_at` | `String` | Yes |  |
-| `payload` | `String` | Yes |  |
-| `payload_content_type` | `String` | Yes |  |
+| `application_id` | `String` | Yes | UUID of the application this event belongs to. |
+| `event_id` | `String` | No | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `String` | Yes | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `Map<String, Object>` | Yes | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `Map<String, Object>` | No | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `String` | Yes | Timestamp when the event occurred. |
+| `payload` | `String` | Yes | The event payload. |
+| `payload_content_type` | `String` | Yes | Content type of the payload. |
 
 ### Operations
 
@@ -1141,7 +1141,7 @@ SdkEntity registration = client.registration(null);
 | --- | --- | --- | --- |
 | `email` | `String` | Yes |  |
 | `first_name` | `String` | Yes |  |
-| `gclid` | `String` | No |  |
+| `gclid` | `String` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `String` | Yes |  |
 | `password` | `String` | Yes |  |
 | `turnstile_token` | `String` | No |  |
@@ -1202,7 +1202,7 @@ SdkEntity requestAttempt = client.requestAttempt(null);
 | `request_attempt_id` | `String` | Yes |  |
 | `response_id` | `String` | No |  |
 | `retry_count` | `Long` | Yes |  |
-| `status` | `Map<String, Object>` | Yes |  |
+| `status` | `Map<String, Object>` | Yes | Status of a request attempt. |
 | `subscription` | `Map<String, Object>` | Yes |  |
 | `succeeded_at` | `String` | No |  |
 
@@ -1424,8 +1424,8 @@ SdkEntity subscription = client.subscription(null);
 | `description` | `String` | No |  |
 | `event_types` | `List<Object>` | Yes |  |
 | `is_enabled` | `Boolean` | Yes |  |
-| `label_key` | `String` | Yes |  |
-| `label_value` | `String` | Yes |  |
+| `label_key` | `String` | Yes | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `String` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `Map<String, Object>` | Yes |  |
 | `metadata` | `Map<String, Object>` | Yes |  |
 | `secret` | `String` | Yes |  |

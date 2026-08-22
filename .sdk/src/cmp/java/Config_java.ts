@@ -3,6 +3,7 @@ import {
   Content,
   File,
   cmp,
+  configDefinition,
   each,
   isAuthActive,
   resolveAuthPrefix,
@@ -75,8 +76,14 @@ const Config = cmp(async function Config(props: any) {
       relations: n.relations,
     }, true), a), {})
 
+  // Identity comes from configDefinition's def, not re-derived here, so
+  // this target cannot disagree with the shared emitter on main.slug /
+  // main.version / main.target (the three station descriptor fields,
+  // station design §4) — passing target.name is what opts this target in.
+  const { def: configDef } = configDefinition(model, target.name)
+
   const config = {
-    main: { name: model.const.Name },
+    main: configDef.main,
     feature: featureConfig,
     options,
     entity: entityConfig,
@@ -99,6 +106,27 @@ public final class Config {
 
   public static Map<String, Object> makeConfig() {
     return (Map<String, Object>) Json.parse(configJson());
+  }
+
+  // SHARED CONFIG (sdkgen rung L2).
+  //
+  // The SDK reads the config on every request and never writes to it, so one
+  // instance is shared by every client rather than rebuilt per client - the
+  // difference between parsing the embedded JSON once and once per client.
+  //
+  // Initialization-on-demand holder: the JLS guarantees the class initializer
+  // runs once, lazily, and safely under concurrency, with no locking on the
+  // read path.
+  private static final class SharedHolder {
+    static final Map<String, Object> VALUE = makeConfig();
+  }
+
+  // The process-wide config, built once on first use.
+  //
+  // The returned map is SHARED: treat it as read-only. Callers that need to
+  // mutate should use makeConfig, which always parses a fresh copy.
+  public static Map<String, Object> sharedConfig() {
+    return SharedHolder.VALUE;
   }
 
   public static Feature makeFeature(String name) {

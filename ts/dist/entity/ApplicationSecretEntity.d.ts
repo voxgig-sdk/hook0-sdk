@@ -5,8 +5,8 @@ import type { ApplicationSecret, ApplicationSecretListMatch, ApplicationSecretCr
 declare class ApplicationSecretEntity extends Hook0EntityBase<ApplicationSecret> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: ApplicationSecretEntity): ApplicationSecretEntity;
-    list(this: any, reqmatch?: ApplicationSecretListMatch, ctrl?: Control): Promise<ApplicationSecret[]>;
-    create(this: any, reqdata?: ApplicationSecretCreateData, ctrl?: Control): Promise<ApplicationSecret>;
-    update(this: any, reqdata?: ApplicationSecretUpdateData, ctrl?: Control): Promise<ApplicationSecret>;
+    list(this: any, reqmatch?: ApplicationSecretListMatch, ctrl?: Control): Promise<ApplicationSecretEntity[]>;
+    create(this: any, reqdata?: ApplicationSecretCreateData, ctrl?: Control): Promise<ApplicationSecretEntity>;
+    update(this: any, reqdata?: ApplicationSecretUpdateData, ctrl?: Control): Promise<ApplicationSecretEntity>;
 }
 export { ApplicationSecretEntity };

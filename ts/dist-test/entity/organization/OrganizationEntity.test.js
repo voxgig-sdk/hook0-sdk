@@ -54,7 +54,7 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)(null != ent);
     });
     (0, node_test_1.test)('basic', async (t) => {
-        const live = 'TRUE' === process.env.HOOK__TEST_LIVE;
+        const live = 'TRUE' === process.env.HOOK0_TEST_LIVE;
         for (const op of ['create', 'list', 'update', 'load', 'remove']) {
             if ((0, utility_1.maybeSkipControl)(t, 'entityOp', 'organization.' + op, live))
                 return;
@@ -64,7 +64,7 @@ const utility_1 = require("../../utility");
         // fixture (entity TestData.json). Those don't exist on the live API.
         // Skip live runs unless the user provided a real ENTID env override.
         if (setup.syntheticOnly) {
-            t.skip('live entity test uses synthetic IDs from fixture — set HOOK__TEST_ORGANIZATION_ENTID JSON to run live');
+            t.skip('live entity test uses synthetic IDs from fixture — set HOOK0_TEST_ORGANIZATION_ENTID JSON to run live');
             return;
         }
         const client = setup.client;
@@ -74,21 +74,21 @@ const utility_1 = require("../../utility");
         // CREATE
         const organization_ref01_ent = client.Organization();
         let organization_ref01_data = setup.data.new.organization['organization_ref01'];
-        organization_ref01_data = await organization_ref01_ent.create(organization_ref01_data);
+        organization_ref01_data = (await organization_ref01_ent.create(organization_ref01_data)).data();
         (0, node_assert_1.default)(null != organization_ref01_data);
         // LIST
         const organization_ref01_match = {};
-        const organization_ref01_list = await organization_ref01_ent.list(organization_ref01_match);
+        const organization_ref01_list = (await organization_ref01_ent.list(organization_ref01_match)).map((e) => e.data());
         // UPDATE
         const organization_ref01_data_up0 = {};
         const organization_ref01_markdef_up0 = { name: 'name', value: 'Mark01-organization_ref01_' + setup.now };
         organization_ref01_data_up0[organization_ref01_markdef_up0.name] = organization_ref01_markdef_up0.value;
-        const organization_ref01_resdata_up0 = await organization_ref01_ent.update(organization_ref01_data_up0);
+        const organization_ref01_resdata_up0 = (await organization_ref01_ent.update(organization_ref01_data_up0)).data();
         (0, node_assert_1.default)(null != organization_ref01_resdata_up0);
         (0, node_assert_1.default)(organization_ref01_resdata_up0[organization_ref01_markdef_up0.name] === organization_ref01_markdef_up0.value);
         // LIST
         const organization_ref01_match_rt0 = {};
-        const organization_ref01_list_rt0 = await organization_ref01_ent.list(organization_ref01_match_rt0);
+        const organization_ref01_list_rt0 = (await organization_ref01_ent.list(organization_ref01_match_rt0)).map((e) => e.data());
     });
 });
 function basicSetup(extra) {
@@ -115,20 +115,20 @@ function basicSetup(extra) {
     // basic flow consumes synthetic IDs from the fixture file; without an
     // override those synthetic IDs reach the live API and 4xx. Surface this
     // to the test so it can skip rather than fail.
-    const idmapEnvVal = process.env['HOOK__TEST_ORGANIZATION_ENTID'];
+    const idmapEnvVal = process.env['HOOK0_TEST_ORGANIZATION_ENTID'];
     const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{');
     const env = (0, utility_1.envOverride)({
-        'HOOK__TEST_ORGANIZATION_ENTID': idmap,
-        'HOOK__TEST_LIVE': 'FALSE',
-        'HOOK__TEST_EXPLAIN': 'FALSE',
-        'HOOK__APIKEY': 'NONE',
+        'HOOK0_TEST_ORGANIZATION_ENTID': idmap,
+        'HOOK0_TEST_LIVE': 'FALSE',
+        'HOOK0_TEST_EXPLAIN': 'FALSE',
+        'HOOK0_APIKEY': 'NONE',
     });
-    idmap = env['HOOK__TEST_ORGANIZATION_ENTID'];
-    const live = 'TRUE' === env.HOOK__TEST_LIVE;
+    idmap = env['HOOK0_TEST_ORGANIZATION_ENTID'];
+    const live = 'TRUE' === env.HOOK0_TEST_LIVE;
     if (live) {
         client = new __1.Hook0SDK(merge([
             {
-                apikey: env.HOOK__APIKEY,
+                apikey: env.HOOK0_APIKEY,
             },
             extra
         ]));
@@ -140,7 +140,7 @@ function basicSetup(extra) {
         client,
         struct,
         data: entityData,
-        explain: 'TRUE' === env.HOOK__TEST_EXPLAIN,
+        explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
         live,
         syntheticOnly: live && !idmapOverridden,
         now: Date.now(),

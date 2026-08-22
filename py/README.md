@@ -300,12 +300,12 @@ On error, `ok` is `False` and `err` contains the error value.
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
-| `consumption` |  |
-| `name` |  |
-| `onboarding_steps` |  |
-| `organization_id` |  |
-| `quotas` |  |
+| `application_id` | Unique identifier of the application. |
+| `consumption` | Current consumption metrics for this application. |
+| `name` | Name of the application. |
+| `onboarding_steps` | Onboarding completion status for this application. |
+| `organization_id` | UUID of the organization this application belongs to. |
+| `quotas` | Quota limits for this application. |
 
 Operations: Create, List, Load, Remove, Update.
 
@@ -429,14 +429,14 @@ API path: `/api/v1/environment_variables/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
-| `event_id` |  |
-| `event_type` |  |
-| `labels` |  |
-| `metadata` |  |
-| `occurred_at` |  |
-| `payload` |  |
-| `payload_content_type` |  |
+| `application_id` | UUID of the application this event belongs to. |
+| `event_id` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | Timestamp when the event occurred. |
+| `payload` | The event payload. |
+| `payload_content_type` | Content type of the payload. |
 
 Operations: Create.
 
@@ -534,7 +534,7 @@ API path: `/api/v1/quotas/`
 | --- | --- |
 | `email` |  |
 | `first_name` |  |
-| `gclid` |  |
+| `gclid` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` |  |
 | `password` |  |
 | `turnstile_token` |  |
@@ -557,7 +557,7 @@ API path: `/api/v1/register/`
 | `request_attempt_id` |  |
 | `response_id` |  |
 | `retry_count` |  |
-| `status` |  |
+| `status` | Status of a request attempt. |
 | `subscription` |  |
 | `succeeded_at` |  |
 
@@ -607,8 +607,8 @@ API path: `/api/v1/service_token/`
 | `description` |  |
 | `event_types` |  |
 | `is_enabled` |  |
-| `label_key` |  |
-| `label_value` |  |
+| `label_key` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` |  |
 | `metadata` |  |
 | `secret` |  |
@@ -666,12 +666,12 @@ Create an instance: `application = client.Application()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `str` |  |
-| `consumption` | `dict` |  |
-| `name` | `str` |  |
-| `onboarding_steps` | `dict` |  |
-| `organization_id` | `str` |  |
-| `quotas` | `dict` |  |
+| `application_id` | `str` | Unique identifier of the application. |
+| `consumption` | `dict` | Current consumption metrics for this application. |
+| `name` | `str` | Name of the application. |
+| `onboarding_steps` | `dict` | Onboarding completion status for this application. |
+| `organization_id` | `str` | UUID of the organization this application belongs to. |
+| `quotas` | `dict` | Quota limits for this application. |
 
 #### Example: Load
 
@@ -973,14 +973,14 @@ Create an instance: `ingested_event = client.IngestedEvent()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `str` |  |
-| `event_id` | `str` |  |
-| `event_type` | `str` |  |
-| `labels` | `dict` |  |
-| `metadata` | `dict` |  |
-| `occurred_at` | `str` |  |
-| `payload` | `str` |  |
-| `payload_content_type` | `str` |  |
+| `application_id` | `str` | UUID of the application this event belongs to. |
+| `event_id` | `str` | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `str` | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `dict` | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `dict` | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `str` | Timestamp when the event occurred. |
+| `payload` | `str` | The event payload. |
+| `payload_content_type` | `str` | Content type of the payload. |
 
 #### Example: Create
 
@@ -1198,7 +1198,7 @@ Create an instance: `registration = client.Registration()`
 | --- | --- | --- |
 | `email` | `str` |  |
 | `first_name` | `str` |  |
-| `gclid` | `str` |  |
+| `gclid` | `str` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `str` |  |
 | `password` | `str` |  |
 | `turnstile_token` | `str` |  |
@@ -1240,7 +1240,7 @@ Create an instance: `request_attempt = client.RequestAttempt()`
 | `request_attempt_id` | `str` |  |
 | `response_id` | `str` |  |
 | `retry_count` | `int` |  |
-| `status` | `dict` |  |
+| `status` | `dict` | Status of a request attempt. |
 | `subscription` | `dict` |  |
 | `succeeded_at` | `str` |  |
 
@@ -1358,8 +1358,8 @@ Create an instance: `subscription = client.Subscription()`
 | `description` | `str` |  |
 | `event_types` | `list` |  |
 | `is_enabled` | `bool` |  |
-| `label_key` | `str` |  |
-| `label_value` | `str` |  |
+| `label_key` | `str` | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `str` | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `dict` |  |
 | `metadata` | `dict` |  |
 | `secret` | `str` |  |

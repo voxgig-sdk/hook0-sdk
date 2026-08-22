@@ -12,8 +12,17 @@ class Config {
         // TODO: errors etc
         return fi;
     }
+    // False for a feature added at runtime via options.extend (station's
+    // adopt path) - the constructor uses this to skip makeFeature for names
+    // no generated class backs.
+    hasFeature(fn) {
+        return null != FEATURE_CLASS[fn];
+    }
     main = {
-        name: 'ProjectName',
+        name: 'Hook0',
+        slug: "hook0",
+        version: "0.0.1",
+        target: "ts",
     };
     feature = {
         test: {
@@ -23,9 +32,9 @@ class Config {
         },
     };
     options = {
-        base: 'https://app.hook0.com',
+        base: "https://app.hook0.com",
         auth: {
-            prefix: 'Bearer',
+            prefix: '',
         },
         headers: {
             "content-type": "application/json"
@@ -61,46 +70,40 @@ class Config {
         "application": {
             "fields": [
                 {
-                    "active": true,
                     "name": "application_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "short": "Unique identifier of the application.",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "consumption",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 1
+                    "short": "Current consumption metrics for this application.",
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "short": "Name of the application.",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "onboarding_steps",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 3
+                    "short": "Onboarding completion status for this application.",
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "organization_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 4
+                    "short": "UUID of the organization this application belongs to.",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
-                    "name": "quota",
+                    "name": "quotas",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 5
+                    "short": "Quota limits for this application.",
+                    "type": "`$OBJECT`"
                 }
             ],
             "name": "application",
@@ -110,8 +113,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/applications/",
                             "parts": [
@@ -123,22 +126,18 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 },
                 "list": {
                     "input": "data",
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "organization_id",
                                         "orig": "organization_id",
@@ -147,6 +146,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/applications/",
                             "parts": [
@@ -162,31 +162,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "load": {
                     "input": "data",
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "application_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/applications/{application_id}",
                             "parts": [
@@ -208,31 +204,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 },
                 "remove": {
                     "input": "data",
                     "name": "remove",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "application_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "DELETE",
                             "orig": "/api/v1/applications/{application_id}",
                             "parts": [
@@ -254,31 +246,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "remove"
+                    ]
                 },
                 "update": {
                     "input": "data",
                     "name": "update",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "application_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "PUT",
                             "orig": "/api/v1/applications/{application_id}",
                             "parts": [
@@ -300,11 +288,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "update"
+                    ]
                 }
             },
             "relations": {
@@ -314,39 +300,27 @@ class Config {
         "application_secret": {
             "fields": [
                 {
-                    "active": true,
                     "name": "application_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "created_at",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "deleted_at",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "name",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "token",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 4
+                    "type": "`$STRING`"
                 }
             ],
             "name": "application_secret",
@@ -356,8 +330,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/application_secrets/",
                             "parts": [
@@ -369,22 +343,18 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 },
                 "list": {
                     "input": "data",
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -393,6 +363,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/application_secrets/",
                             "parts": [
@@ -408,31 +379,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "update": {
                     "input": "data",
                     "name": "update",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "application_secret_token",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "PUT",
                             "orig": "/api/v1/application_secrets/{application_secret_token}",
                             "parts": [
@@ -454,11 +421,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "update"
+                    ]
                 }
             },
             "relations": {
@@ -474,22 +439,18 @@ class Config {
                     "name": "remove",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "application_secret_token",
                                         "orig": "application_secret_token",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -498,6 +459,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "DELETE",
                             "orig": "/api/v1/application_secrets/{application_secret_token}",
                             "parts": [
@@ -515,11 +477,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "remove"
+                    ]
                 }
             },
             "relations": {
@@ -533,67 +493,48 @@ class Config {
         "event": {
             "fields": [
                 {
-                    "active": true,
                     "name": "event_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "event_type_name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "ip",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "labels",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 3
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "metadata",
-                    "req": false,
-                    "type": "`$OBJECT`",
-                    "index$": 4
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "occurred_at",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 5
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "payload",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 6
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "payload_content_type",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 7
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "received_at",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 8
+                    "type": "`$STRING`"
                 }
             ],
             "name": "event",
@@ -603,11 +544,9 @@ class Config {
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -616,6 +555,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/events/",
                             "parts": [
@@ -631,33 +571,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "load": {
                     "input": "data",
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "event_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -666,6 +600,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/events/{event_id}",
                             "parts": [
@@ -688,11 +623,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 }
             },
             "relations": {
@@ -702,60 +635,44 @@ class Config {
         "event_type": {
             "fields": [
                 {
-                    "active": true,
                     "name": "application_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "event_type_name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "resource_type",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "resource_type_name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "service",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 4
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "service_name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 5
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "verb",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 6
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "verb_name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 7
+                    "type": "`$STRING`"
                 }
             ],
             "name": "event_type",
@@ -765,8 +682,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/event_types/",
                             "parts": [
@@ -778,22 +695,18 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 },
                 "list": {
                     "input": "data",
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -802,6 +715,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/event_types/",
                             "parts": [
@@ -817,33 +731,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "load": {
                     "input": "data",
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "event_type_name",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -852,6 +760,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/event_types/{event_type_name}",
                             "parts": [
@@ -874,11 +783,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 }
             },
             "relations": {
@@ -888,11 +795,9 @@ class Config {
         "events_management": {
             "fields": [
                 {
-                    "active": true,
                     "name": "application_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 }
             ],
             "name": "events_management",
@@ -902,20 +807,18 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "event_id",
                                         "orig": "event_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/events/{event_id}/replay",
                             "parts": [
@@ -933,19 +836,17 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 },
                 "list": {
                     "input": "data",
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/payload_content_types/",
                             "parts": [
@@ -957,33 +858,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "remove": {
                     "input": "data",
                     "name": "remove",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "event_type_name",
                                         "orig": "event_type_name",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -992,6 +887,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "DELETE",
                             "orig": "/api/v1/event_types/{event_type_name}",
                             "parts": [
@@ -1009,11 +905,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "remove"
+                    ]
                 }
             },
             "relations": {
@@ -1030,39 +924,29 @@ class Config {
         "events_per_day_entry": {
             "fields": [
                 {
-                    "active": true,
                     "name": "amount",
                     "req": true,
-                    "type": "`$INTEGER`",
-                    "index$": 0
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
                     "name": "application_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "application_name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "date",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "is_provisional",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 4
+                    "type": "`$BOOLEAN`"
                 }
             ],
             "name": "events_per_day_entry",
@@ -1072,11 +956,9 @@ class Config {
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -1084,23 +966,20 @@ class Config {
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "from",
                                         "orig": "from",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "to",
                                         "orig": "to",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/events_per_day/application",
                             "parts": [
@@ -1119,23 +998,18 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         },
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "from",
                                         "orig": "from",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "organization_id",
                                         "orig": "organization_id",
@@ -1143,15 +1017,14 @@ class Config {
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "to",
                                         "orig": "to",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/events_per_day/organization",
                             "parts": [
@@ -1170,11 +1043,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 1
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 }
             },
             "relations": {
@@ -1184,53 +1055,35 @@ class Config {
         "health": {
             "fields": [
                 {
-                    "active": true,
                     "name": "database",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 0
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "database_duration_ms",
                     "req": true,
-                    "type": "`$INTEGER`",
-                    "index$": 1
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
                     "name": "object_storage",
-                    "req": false,
-                    "type": "`$BOOLEAN`",
-                    "index$": 2
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "object_storage_duration_ms",
-                    "req": false,
-                    "type": "`$INTEGER`",
-                    "index$": 3
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
                     "name": "pulsar",
-                    "req": false,
-                    "type": "`$BOOLEAN`",
-                    "index$": 4
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "pulsar_duration_ms",
-                    "req": false,
-                    "type": "`$INTEGER`",
-                    "index$": 5
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
                     "name": "total_duration_ms",
                     "req": true,
-                    "type": "`$INTEGER`",
-                    "index$": 6
+                    "type": "`$INTEGER`"
                 }
             ],
             "name": "health",
@@ -1240,19 +1093,17 @@ class Config {
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "key",
                                         "orig": "key",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/health/",
                             "parts": [
@@ -1268,11 +1119,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 }
             },
             "relations": {
@@ -1282,53 +1131,36 @@ class Config {
         "hook0": {
             "fields": [
                 {
-                    "active": true,
                     "name": "default",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "description",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "env_var",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "group",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 4
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "required",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 5
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "sensitive",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 6
+                    "type": "`$BOOLEAN`"
                 }
             ],
             "name": "hook0",
@@ -1338,8 +1170,8 @@ class Config {
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/environment_variables/",
                             "parts": [
@@ -1351,11 +1183,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 }
             },
             "relations": {
@@ -1365,60 +1195,50 @@ class Config {
         "ingested_event": {
             "fields": [
                 {
-                    "active": true,
                     "name": "application_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "short": "UUID of the application this event belongs to.",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "event_id",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "short": "Optional unique identifier for this event (client-generated UUID).",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "event_type",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "short": "The type of event (e.g., 'user.created', 'order.completed').",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "labels",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 3
+                    "short": "Labels for event filtering and routing to subscriptions.",
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "metadata",
-                    "req": false,
-                    "type": "`$OBJECT`",
-                    "index$": 4
+                    "short": "Optional metadata key-value pairs associated with the event.",
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "occurred_at",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 5
+                    "short": "Timestamp when the event occurred.",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "payload",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 6
+                    "short": "The event payload.",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "payload_content_type",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 7
+                    "short": "Content type of the payload.",
+                    "type": "`$STRING`"
                 }
             ],
             "name": "ingested_event",
@@ -1428,8 +1248,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/event/",
                             "parts": [
@@ -1441,11 +1261,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 }
             },
             "relations": {
@@ -1455,74 +1273,53 @@ class Config {
         "instance": {
             "fields": [
                 {
-                    "active": true,
                     "name": "application_secret_compatibility",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 0
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "auto_db_migration",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 1
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "biscuit_public_key",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "cloudflare_turnstile_site_key",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "formbricks",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 4
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "matomo",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 5
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "password_minimum_length",
                     "req": true,
-                    "type": "`$INTEGER`",
-                    "index$": 6
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
                     "name": "quota_enforcement",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 7
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "registration_disabled",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 8
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "support_email_address",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 9
+                    "type": "`$STRING`"
                 }
             ],
             "name": "instance",
@@ -1532,8 +1329,8 @@ class Config {
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/instance/",
                             "parts": [
@@ -1545,11 +1342,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 }
             },
             "relations": {
@@ -1559,18 +1354,14 @@ class Config {
         "login": {
             "fields": [
                 {
-                    "active": true,
                     "name": "email",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "password",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 }
             ],
             "name": "login",
@@ -1580,8 +1371,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/auth/login",
                             "parts": [
@@ -1594,12 +1385,11 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         },
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/auth/refresh",
                             "parts": [
@@ -1612,11 +1402,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 1
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 }
             },
             "relations": {
@@ -1626,60 +1414,44 @@ class Config {
         "organization": {
             "fields": [
                 {
-                    "active": true,
                     "name": "consumption",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 0
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "onboarding_steps",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 2
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "organization_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "plan",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 4
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
-                    "name": "quota",
+                    "name": "quotas",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 5
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "role",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 6
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "users",
                     "req": true,
-                    "type": "`$ARRAY`",
-                    "index$": 7
+                    "type": "`$ARRAY`"
                 }
             ],
             "name": "organization",
@@ -1689,8 +1461,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/organizations/",
                             "parts": [
@@ -1702,19 +1474,17 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 },
                 "list": {
                     "input": "data",
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/organizations/",
                             "parts": [
@@ -1726,31 +1496,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "load": {
                     "input": "data",
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "organization_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/organizations/{organization_id}/",
                             "parts": [
@@ -1772,31 +1538,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 },
                 "remove": {
                     "input": "data",
                     "name": "remove",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "organization_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "DELETE",
                             "orig": "/api/v1/organizations/{organization_id}/",
                             "parts": [
@@ -1818,31 +1580,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "remove"
+                    ]
                 },
                 "update": {
                     "input": "data",
                     "name": "update",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "organization_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "PUT",
                             "orig": "/api/v1/organizations/{organization_id}/",
                             "parts": [
@@ -1864,11 +1622,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "update"
+                    ]
                 }
             },
             "relations": {
@@ -1878,18 +1634,14 @@ class Config {
         "organization_edit_role": {
             "fields": [
                 {
-                    "active": true,
                     "name": "role",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "user_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 }
             ],
             "name": "organization_edit_role",
@@ -1899,20 +1651,18 @@ class Config {
                     "name": "update",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "organization_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "PUT",
                             "orig": "/api/v1/organizations/{organization_id}/invite",
                             "parts": [
@@ -1936,11 +1686,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "update"
+                    ]
                 }
             },
             "relations": {
@@ -1950,32 +1698,24 @@ class Config {
         "problem": {
             "fields": [
                 {
-                    "active": true,
                     "name": "detail",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "status",
                     "req": true,
-                    "type": "`$INTEGER`",
-                    "index$": 2
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
                     "name": "title",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 }
             ],
             "name": "problem",
@@ -1985,8 +1725,8 @@ class Config {
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/errors/",
                             "parts": [
@@ -1998,11 +1738,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 }
             },
             "relations": {
@@ -2012,18 +1750,34 @@ class Config {
         "quota": {
             "fields": [
                 {
-                    "active": true,
-                    "name": "enabled",
+                    "name": "global_applications_per_organization_limit",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 0
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
-                    "name": "limits",
+                    "name": "global_days_of_events_retention_limit",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 1
+                    "type": "`$INTEGER`"
+                },
+                {
+                    "name": "global_event_types_per_application_limit",
+                    "req": true,
+                    "type": "`$INTEGER`"
+                },
+                {
+                    "name": "global_events_per_day_limit",
+                    "req": true,
+                    "type": "`$INTEGER`"
+                },
+                {
+                    "name": "global_members_per_organization_limit",
+                    "req": true,
+                    "type": "`$INTEGER`"
+                },
+                {
+                    "name": "global_subscriptions_per_application_limit",
+                    "req": true,
+                    "type": "`$INTEGER`"
                 }
             ],
             "name": "quota",
@@ -2033,8 +1787,8 @@ class Config {
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/quotas/",
                             "parts": [
@@ -2046,11 +1800,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 }
             },
             "relations": {
@@ -2060,46 +1812,33 @@ class Config {
         "registration": {
             "fields": [
                 {
-                    "active": true,
                     "name": "email",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "first_name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "gclid",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "short": "Optional Google Ads click identifier captured during the user's journey from a Google Ad.",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "last_name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "password",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 4
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "turnstile_token",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 5
+                    "type": "`$STRING`"
                 }
             ],
             "name": "registration",
@@ -2109,8 +1848,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/register/",
                             "parts": [
@@ -2122,11 +1861,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 }
             },
             "relations": {
@@ -2136,95 +1873,64 @@ class Config {
         "request_attempt": {
             "fields": [
                 {
-                    "active": true,
                     "name": "created_at",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "delay_until",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "event",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 2
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "event_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "failed_at",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 4
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "http_response_status",
-                    "req": false,
-                    "type": "`$INTEGER`",
-                    "index$": 5
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
                     "name": "picked_at",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 6
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "request_attempt_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 7
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "response_id",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 8
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "retry_count",
                     "req": true,
-                    "type": "`$INTEGER`",
-                    "index$": 9
+                    "type": "`$INTEGER`"
                 },
                 {
-                    "active": true,
                     "name": "status",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 10
+                    "short": "Status of a request attempt.",
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "subscription",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 11
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "succeeded_at",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 12
+                    "type": "`$STRING`"
                 }
             ],
             "name": "request_attempt",
@@ -2234,11 +1940,9 @@ class Config {
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -2246,55 +1950,44 @@ class Config {
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "event_event_type_name",
                                         "orig": "event_event_type_name",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "event_id",
                                         "orig": "event_id",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "max_created_at",
                                         "orig": "max_created_at",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "min_created_at",
                                         "orig": "min_created_at",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "pagination_cursor",
                                         "orig": "pagination_cursor",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     },
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "subscription_id",
                                         "orig": "subscription_id",
-                                        "reqd": false,
                                         "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/request_attempts/",
                             "parts": [
@@ -2316,33 +2009,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "load": {
                     "input": "data",
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "request_attempt_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -2351,6 +2038,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/request_attempts/{request_attempt_id}",
                             "parts": [
@@ -2373,11 +2061,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 }
             },
             "relations": {
@@ -2385,50 +2071,7 @@ class Config {
             }
         },
         "response": {
-            "fields": [
-                {
-                    "active": true,
-                    "name": "body",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 0
-                },
-                {
-                    "active": true,
-                    "name": "elapsed_time_ms",
-                    "req": false,
-                    "type": "`$INTEGER`",
-                    "index$": 1
-                },
-                {
-                    "active": true,
-                    "name": "headers",
-                    "req": false,
-                    "type": "`$OBJECT`",
-                    "index$": 2
-                },
-                {
-                    "active": true,
-                    "name": "http_code",
-                    "req": false,
-                    "type": "`$INTEGER`",
-                    "index$": 3
-                },
-                {
-                    "active": true,
-                    "name": "response_error_name",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 4
-                },
-                {
-                    "active": true,
-                    "name": "response_id",
-                    "req": true,
-                    "type": "`$STRING`",
-                    "index$": 5
-                }
-            ],
+            "fields": [],
             "name": "response",
             "op": {
                 "load": {
@@ -2436,22 +2079,18 @@ class Config {
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "response_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -2460,6 +2099,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/responses/{response_id}",
                             "parts": [
@@ -2482,11 +2122,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 }
             },
             "relations": {
@@ -2502,20 +2140,18 @@ class Config {
                     "name": "remove",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "organization_id",
                                         "orig": "organization_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "DELETE",
                             "orig": "/api/v1/organizations/{organization_id}/invite",
                             "parts": [
@@ -2533,11 +2169,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "remove"
+                    ]
                 }
             },
             "relations": {
@@ -2551,39 +2185,29 @@ class Config {
         "service_token": {
             "fields": [
                 {
-                    "active": true,
                     "name": "biscuit",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "created_at",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "name",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "organization_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "token_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 4
+                    "type": "`$STRING`"
                 }
             ],
             "name": "service_token",
@@ -2593,8 +2217,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/service_token/",
                             "parts": [
@@ -2606,22 +2230,18 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 },
                 "list": {
                     "input": "data",
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "organization_id",
                                         "orig": "organization_id",
@@ -2630,6 +2250,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/service_token/",
                             "parts": [
@@ -2645,33 +2266,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "load": {
                     "input": "data",
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "service_token_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "organization_id",
                                         "orig": "organization_id",
@@ -2680,6 +2295,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/service_token/{service_token_id}",
                             "parts": [
@@ -2702,33 +2318,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 },
                 "remove": {
                     "input": "data",
                     "name": "remove",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "service_token_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "organization_id",
                                         "orig": "organization_id",
@@ -2737,6 +2347,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "DELETE",
                             "orig": "/api/v1/service_token/{service_token_id}",
                             "parts": [
@@ -2759,31 +2370,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "remove"
+                    ]
                 },
                 "update": {
                     "input": "data",
                     "name": "update",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "service_token_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "PUT",
                             "orig": "/api/v1/service_token/{service_token_id}",
                             "parts": [
@@ -2805,11 +2412,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "update"
+                    ]
                 }
             },
             "relations": {
@@ -2819,152 +2424,115 @@ class Config {
         "subscription": {
             "fields": [
                 {
-                    "active": true,
                     "name": "application_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "created_at",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "dedicated_workers",
                     "op": {
                         "create": {
-                            "req": false,
                             "type": "`$ARRAY`"
                         },
                         "update": {
-                            "req": false,
                             "type": "`$ARRAY`"
                         }
                     },
                     "req": true,
-                    "type": "`$ARRAY`",
-                    "index$": 2
+                    "type": "`$ARRAY`"
                 },
                 {
-                    "active": true,
                     "name": "description",
-                    "req": false,
-                    "type": "`$STRING`",
-                    "index$": 3
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
-                    "name": "event_type",
+                    "name": "event_types",
                     "req": true,
-                    "type": "`$ARRAY`",
-                    "index$": 4
+                    "type": "`$ARRAY`"
                 },
                 {
-                    "active": true,
                     "name": "is_enabled",
                     "req": true,
-                    "type": "`$BOOLEAN`",
-                    "index$": 5
+                    "type": "`$BOOLEAN`"
                 },
                 {
-                    "active": true,
                     "name": "label_key",
                     "op": {
                         "create": {
-                            "req": false,
                             "type": "`$STRING`"
                         },
                         "update": {
-                            "req": false,
                             "type": "`$STRING`"
                         }
                     },
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 6
+                    "short": "_Kept for backward compatibility, you should use `labels`_",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "label_value",
                     "op": {
                         "create": {
-                            "req": false,
                             "type": "`$STRING`"
                         },
                         "update": {
-                            "req": false,
                             "type": "`$STRING`"
                         }
                     },
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 7
+                    "short": "_Kept for backward compatibility, you should use `labels`_",
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "labels",
                     "op": {
                         "create": {
-                            "req": false,
                             "type": "`$OBJECT`"
                         },
                         "update": {
-                            "req": false,
                             "type": "`$OBJECT`"
                         }
                     },
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 8
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "metadata",
                     "op": {
                         "create": {
-                            "req": false,
                             "type": "`$OBJECT`"
                         },
                         "update": {
-                            "req": false,
                             "type": "`$OBJECT`"
                         }
                     },
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 9
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "secret",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 10
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "subscription_id",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 11
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "target",
                     "req": true,
-                    "type": "`$OBJECT`",
-                    "index$": 12
+                    "type": "`$OBJECT`"
                 },
                 {
-                    "active": true,
                     "name": "updated_at",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 13
+                    "type": "`$STRING`"
                 }
             ],
             "name": "subscription",
@@ -2974,8 +2542,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/subscriptions/",
                             "parts": [
@@ -2987,22 +2555,18 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 },
                 "list": {
                     "input": "data",
                     "name": "list",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -3011,6 +2575,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/subscriptions/",
                             "parts": [
@@ -3026,31 +2591,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "list"
+                    ]
                 },
                 "load": {
                     "input": "data",
                     "name": "load",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "subscription_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "GET",
                             "orig": "/api/v1/subscriptions/{subscription_id}",
                             "parts": [
@@ -3072,33 +2633,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "load"
+                    ]
                 },
                 "remove": {
                     "input": "data",
                     "name": "remove",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "subscription_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ],
                                 "query": [
                                     {
-                                        "active": true,
                                         "kind": "query",
                                         "name": "application_id",
                                         "orig": "application_id",
@@ -3107,6 +2662,7 @@ class Config {
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "DELETE",
                             "orig": "/api/v1/subscriptions/{subscription_id}",
                             "parts": [
@@ -3129,31 +2685,27 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "remove"
+                    ]
                 },
                 "update": {
                     "input": "data",
                     "name": "update",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "id",
                                         "orig": "subscription_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "PUT",
                             "orig": "/api/v1/subscriptions/{subscription_id}",
                             "parts": [
@@ -3175,11 +2727,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "update"
+                    ]
                 }
             },
             "relations": {
@@ -3189,25 +2739,19 @@ class Config {
         "user_authentication": {
             "fields": [
                 {
-                    "active": true,
                     "name": "email",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "new_password",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "token",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                 }
             ],
             "name": "user_authentication",
@@ -3217,8 +2761,8 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/auth/begin-reset-password",
                             "parts": [
@@ -3231,12 +2775,11 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         },
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/auth/logout",
                             "parts": [
@@ -3249,12 +2792,11 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 1
+                            }
                         },
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/auth/password",
                             "parts": [
@@ -3267,12 +2809,11 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 2
+                            }
                         },
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/auth/reset-password",
                             "parts": [
@@ -3285,12 +2826,11 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 3
+                            }
                         },
                         {
-                            "active": true,
                             "args": {},
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/auth/verify-email",
                             "parts": [
@@ -3303,11 +2843,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 4
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 }
             },
             "relations": {
@@ -3317,18 +2855,14 @@ class Config {
         "user_invitation": {
             "fields": [
                 {
-                    "active": true,
                     "name": "email",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                 },
                 {
-                    "active": true,
                     "name": "role",
                     "req": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                 }
             ],
             "name": "user_invitation",
@@ -3338,20 +2872,18 @@ class Config {
                     "name": "create",
                     "points": [
                         {
-                            "active": true,
                             "args": {
                                 "params": [
                                     {
-                                        "active": true,
                                         "kind": "param",
                                         "name": "organization_id",
                                         "orig": "organization_id",
                                         "reqd": true,
-                                        "type": "`$STRING`",
-                                        "index$": 0
+                                        "type": "`$STRING`"
                                     }
                                 ]
                             },
+                            "kind": "http",
                             "method": "POST",
                             "orig": "/api/v1/organizations/{organization_id}/invite",
                             "parts": [
@@ -3369,11 +2901,9 @@ class Config {
                             "transform": {
                                 "req": "`reqdata`",
                                 "res": "`body`"
-                            },
-                            "index$": 0
+                            }
                         }
-                    ],
-                    "key$": "create"
+                    ]
                 }
             },
             "relations": {

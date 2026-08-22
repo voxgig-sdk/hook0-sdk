@@ -35,6 +35,14 @@ fn fmt(comptime f: []const u8, args: anytype) []const u8 {
     return std.fmt.allocPrint(h.A(), f, args) catch "";
 }
 
+// Boolean-or-absent: an option that is unset, null or a non-boolean is false.
+fn is_true(v: Value) bool {
+    return switch (v) {
+        .bool => |b| b,
+        else => false,
+    };
+}
+
 // ============================================================================
 // Utility bundle
 // ============================================================================
@@ -368,15 +376,91 @@ pub fn make_options_util(ctx: *Context) Value {
             .{ "entity", h.jo(&.{.{ "`$OPEN`", h.vbool(true) }}) },
         }) },
         .{ "clean", h.jo(&.{.{ "keys", h.vstr("key,token,id") }}) },
+        // Server-variable values for a templated base URL (OpenAPI server
+        // variables): {name} placeholders in "base" are substituted from this
+        // map at construction. Spec defaults arrive via the generated config;
+        // user values override them. Mirrors go's make_options optspec.
+        .{ "server", h.jo(&.{.{ "`$CHILD`", h.vstr("") }}) },
     });
 
     // Preserve system.fetch before merge/validate (validation strips it).
     const sys_fetch = h.getpath(&.{ "system", "fetch" }, opts);
 
-    const merged = vs.merge(h.A(), h.ja(&.{ h.omap(), cfgopts, opts }), vs.MAXDEPTH) catch opts;
+    // CLONE the config side: `config` is a process-wide singleton
+    // (config.shared_config) and merge uses its nested maps as merge TARGETS,
+    // so without this one client's options (headers, server, ...) are written
+    // into the shared config and inherited by every client built after it.
+    const merged = vs.merge(h.A(), h.ja(&.{ h.omap(), h.clone(cfgopts), opts }), vs.MAXDEPTH) catch opts;
     const vres = vs.validate(h.A(), merged, optspec) catch null;
     if (vres) |vr| {
         if (vr.err == null and vr.out == .object) opts = vr.out;
+    }
+
+    // Resolve a templated base URL (e.g. https://{tenant_id}.hanko.io).
+    // Every placeholder must resolve to a non-empty value: from options.server
+    // (user), else the Config default. A placeholder that resolves to "" is a
+    // construction ERROR in live mode - the URL cannot work - but in test mode
+    // substitutes the deterministic value "test-<name>" so offline tests need
+    // no configuration. The SDK constructor has no error return, so a missing
+    // required variable PANICS: construction-time misconfiguration.
+    //
+    // Scanned by hand: a placeholder is `{` followed by [A-Za-z0-9_]+ and `}`;
+    // anything else is literal text, so a stray brace in a URL is left alone.
+    switch (h.getp(opts, "base")) {
+        .string => |base| {
+            if (null != std.mem.indexOfScalar(u8, base, '{')) {
+                const testmode =
+                    is_true(h.getpath(&.{ "test", "active" }, opts)) or
+                    is_true(h.getpath(&.{ "feature", "test", "active" }, opts));
+                const server = h.getp(opts, "server");
+                const sdkname: []const u8 = switch (h.getpath(&.{ "main", "name" }, config)) {
+                    .string => |s| if (0 < s.len) s else "SDK",
+                    else => "SDK",
+                };
+
+                var out = std.ArrayList(u8).init(h.A());
+                var i: usize = 0;
+                while (i < base.len) {
+                    if ('{' != base[i]) {
+                        out.append(base[i]) catch {};
+                        i += 1;
+                        continue;
+                    }
+                    var j = i + 1;
+                    while (j < base.len and (std.ascii.isAlphanumeric(base[j]) or '_' == base[j])) {
+                        j += 1;
+                    }
+                    if (j >= base.len or '}' != base[j] or j == i + 1) {
+                        out.append(base[i]) catch {};
+                        i += 1;
+                        continue;
+                    }
+                    const name = base[i + 1 .. j];
+                    const val: []const u8 = switch (h.getp(server, name)) {
+                        .string => |s| s,
+                        else => "",
+                    };
+                    if (0 == val.len) {
+                        if (testmode) {
+                            out.appendSlice("test-") catch {};
+                            out.appendSlice(name) catch {};
+                        } else {
+                            std.debug.panic(
+                                "{s}: the server variable '{s}' is required: the API " ++
+                                    "base URL is '{s}' - pass .server = .{{ .{s} = \"...\" }} " ++
+                                    "in the SDK options",
+                                .{ sdkname, name, base, name },
+                            );
+                        }
+                    } else {
+                        out.appendSlice(val) catch {};
+                    }
+                    i = j + 1;
+                }
+                h.setp(opts, "base", h.vstr(out.toOwnedSlice() catch base));
+            }
+        },
+        else => {},
     }
 
     // Restore system.fetch.
@@ -437,6 +521,29 @@ pub fn make_options_util(ctx: *Context) Value {
 // make_point (gotcha #2: rbac PrePoint short-circuit)
 // ============================================================================
 
+// How many path segments a point has.
+fn point_parts_len(point: Value) i64 {
+    const parts = h.getp(point, "parts");
+    if (parts != .array) return 0;
+    return @intCast(parts.array.data.items.len);
+}
+
+// Does this point's path end in a parameter? A record route ends in the
+// record's identifier (/boards/{id}); a cross-reference that also returns the
+// entity ends in the relationship's name (/posts/{id}/author). That, then
+// fewest segments, is what tells the entity's own route from a
+// cross-reference. The same rule runs at generation time, in
+// helpers/opShape.ts — both sides must move together.
+fn point_terminal_param(point: Value) bool {
+    const parts = h.getp(point, "parts");
+    if (parts != .array) return false;
+    const items = parts.array.data.items;
+    if (0 == items.len) return false;
+    const last = items[items.len - 1];
+    if (last != .string) return false;
+    return 0 < last.string.len and '{' == last.string[0];
+}
+
 pub fn make_point_util(ctx: *Context) E!Value {
     if (ctx.out_get("point")) |ov| {
         switch (ov) {
@@ -476,10 +583,11 @@ pub fn make_point_util(ctx: *Context) E!Value {
         const selector: Value = if (std.mem.eql(u8, op.input, "data")) ctx.data else ctx.mtch;
 
         var point: Value = h.vnull();
+        var matched = false;
         var i: i64 = 0;
         while (i < plen) : (i += 1) {
-            point = h.get_elem(points, h.vnum(i), h.vnull());
-            const select_def = h.to_map(h.getp(point, "select"));
+            const cand = h.get_elem(points, h.vnum(i), h.vnull());
+            const select_def = h.to_map(h.getp(cand, "select"));
             var found = true;
 
             if (!h.is_noval(selector) and !h.is_noval(select_def)) {
@@ -505,7 +613,46 @@ pub fn make_point_util(ctx: *Context) E!Value {
                 if (!h.veq(req_action, select_action)) found = false;
             }
 
-            if (found) break;
+            if (found) {
+                point = cand;
+                matched = true;
+                break;
+            }
+        }
+
+        // select.exist can list more than the params needed to pick a point
+        // (for /boards/{id} it is Trello's 17 optional query-includes), so a
+        // plain {id} call matches NOTHING. Fall back to the entity's own
+        // route rather than whichever point came last.
+        if (!matched) {
+            // A request naming an action reaches here only because that
+            // action's own point failed its exist test, so it is unbuildable
+            // whatever we pick. Refuse it BEFORE choosing a fallback: the
+            // guard below compares the chosen point's $action and would wave
+            // the request through whenever the fallback lands on the action
+            // point itself.
+            const unmatched_action = h.getp(reqselector, "$action");
+            if (!h.is_noval(unmatched_action)) {
+                return ctx.fail("point_action_invalid", fmt("Operation \"{s}\" action \"{s}\" is not valid.", .{ op.name, h.stringify(unmatched_action) }));
+            }
+
+            // A terminal parameter marks a record route (/boards/{id}); a
+            // cross-reference ends in the relationship's name
+            // (/posts/{id}/author). Failing that, the shallower path wins.
+            // The same rule runs at generation time, in helpers/opShape.ts —
+            // both sides must move together.
+            point = h.get_elem(points, h.vnum(0), h.vnull());
+            var j: i64 = 0;
+            while (j < plen) : (j += 1) {
+                const cand = h.get_elem(points, h.vnum(j), h.vnull());
+                const cand_term = point_terminal_param(cand);
+                const best_term = point_terminal_param(point);
+                if (cand_term != best_term) {
+                    if (cand_term) point = cand;
+                } else if (point_parts_len(cand) < point_parts_len(point)) {
+                    point = cand;
+                }
+            }
         }
 
         const req_action = h.getp(reqselector, "$action");

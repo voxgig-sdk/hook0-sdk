@@ -5,6 +5,6 @@ import type { Health, HealthLoadMatch } from '../Hook0Types';
 declare class HealthEntity extends Hook0EntityBase<Health> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: HealthEntity): HealthEntity;
-    load(this: any, reqmatch?: HealthLoadMatch, ctrl?: Control): Promise<Health>;
+    load(this: any, reqmatch?: HealthLoadMatch, ctrl?: Control): Promise<HealthEntity>;
 }
 export { HealthEntity };

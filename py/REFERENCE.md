@@ -180,12 +180,12 @@ application = client.Application()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `str` | Yes |  |
-| `consumption` | `dict` | Yes |  |
-| `name` | `str` | Yes |  |
-| `onboarding_steps` | `dict` | Yes |  |
-| `organization_id` | `str` | Yes |  |
-| `quotas` | `dict` | Yes |  |
+| `application_id` | `str` | Yes | Unique identifier of the application. |
+| `consumption` | `dict` | Yes | Current consumption metrics for this application. |
+| `name` | `str` | Yes | Name of the application. |
+| `onboarding_steps` | `dict` | Yes | Onboarding completion status for this application. |
+| `organization_id` | `str` | Yes | UUID of the organization this application belongs to. |
+| `quotas` | `dict` | Yes | Quota limits for this application. |
 
 ### Operations
 
@@ -804,14 +804,14 @@ ingested_event = client.IngestedEvent()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `str` | Yes |  |
-| `event_id` | `str` | No |  |
-| `event_type` | `str` | Yes |  |
-| `labels` | `dict` | Yes |  |
-| `metadata` | `dict` | No |  |
-| `occurred_at` | `str` | Yes |  |
-| `payload` | `str` | Yes |  |
-| `payload_content_type` | `str` | Yes |  |
+| `application_id` | `str` | Yes | UUID of the application this event belongs to. |
+| `event_id` | `str` | No | Optional unique identifier for this event (client-generated UUID). |
+| `event_type` | `str` | Yes | The type of event (e.g., 'user.created', 'order.completed'). |
+| `labels` | `dict` | Yes | Labels for event filtering and routing to subscriptions. |
+| `metadata` | `dict` | No | Optional metadata key-value pairs associated with the event. |
+| `occurred_at` | `str` | Yes | Timestamp when the event occurred. |
+| `payload` | `str` | Yes | The event payload. |
+| `payload_content_type` | `str` | Yes | Content type of the payload. |
 
 ### Operations
 
@@ -1257,7 +1257,7 @@ registration = client.Registration()
 | --- | --- | --- | --- |
 | `email` | `str` | Yes |  |
 | `first_name` | `str` | Yes |  |
-| `gclid` | `str` | No |  |
+| `gclid` | `str` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `str` | Yes |  |
 | `password` | `str` | Yes |  |
 | `turnstile_token` | `str` | No |  |
@@ -1326,7 +1326,7 @@ request_attempt = client.RequestAttempt()
 | `request_attempt_id` | `str` | Yes |  |
 | `response_id` | `str` | No |  |
 | `retry_count` | `int` | Yes |  |
-| `status` | `dict` | Yes |  |
+| `status` | `dict` | Yes | Status of a request attempt. |
 | `subscription` | `dict` | Yes |  |
 | `succeeded_at` | `str` | No |  |
 
@@ -1583,8 +1583,8 @@ subscription = client.Subscription()
 | `description` | `str` | No |  |
 | `event_types` | `list` | Yes |  |
 | `is_enabled` | `bool` | Yes |  |
-| `label_key` | `str` | Yes |  |
-| `label_value` | `str` | Yes |  |
+| `label_key` | `str` | Yes | _Kept for backward compatibility, you should use `labels`_ |
+| `label_value` | `str` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `labels` | `dict` | Yes |  |
 | `metadata` | `dict` | Yes |  |
 | `secret` | `str` | Yes |  |

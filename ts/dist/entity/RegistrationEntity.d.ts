@@ -5,6 +5,6 @@ import type { Registration, RegistrationCreateData } from '../Hook0Types';
 declare class RegistrationEntity extends Hook0EntityBase<Registration> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: RegistrationEntity): RegistrationEntity;
-    create(this: any, reqdata?: RegistrationCreateData, ctrl?: Control): Promise<Registration>;
+    create(this: any, reqdata?: RegistrationCreateData, ctrl?: Control): Promise<RegistrationEntity>;
 }
 export { RegistrationEntity };

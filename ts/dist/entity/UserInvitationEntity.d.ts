@@ -5,6 +5,6 @@ import type { UserInvitation, UserInvitationCreateData } from '../Hook0Types';
 declare class UserInvitationEntity extends Hook0EntityBase<UserInvitation> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: UserInvitationEntity): UserInvitationEntity;
-    create(this: any, reqdata?: UserInvitationCreateData, ctrl?: Control): Promise<UserInvitation>;
+    create(this: any, reqdata?: UserInvitationCreateData, ctrl?: Control): Promise<UserInvitationEntity>;
 }
 export { UserInvitationEntity };

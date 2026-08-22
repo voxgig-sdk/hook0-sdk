@@ -5,10 +5,10 @@ import type { Organization, OrganizationLoadMatch, OrganizationListMatch, Organi
 declare class OrganizationEntity extends Hook0EntityBase<Organization> {
     constructor(client: Hook0SDK, entopts: any);
     make(this: OrganizationEntity): OrganizationEntity;
-    load(this: any, reqmatch?: OrganizationLoadMatch, ctrl?: Control): Promise<Organization>;
-    list(this: any, reqmatch?: OrganizationListMatch, ctrl?: Control): Promise<Organization[]>;
-    create(this: any, reqdata?: OrganizationCreateData, ctrl?: Control): Promise<Organization>;
-    update(this: any, reqdata?: OrganizationUpdateData, ctrl?: Control): Promise<Organization>;
-    remove(this: any, reqmatch?: OrganizationRemoveMatch, ctrl?: Control): Promise<Organization>;
+    load(this: any, reqmatch?: OrganizationLoadMatch, ctrl?: Control): Promise<OrganizationEntity>;
+    list(this: any, reqmatch?: OrganizationListMatch, ctrl?: Control): Promise<OrganizationEntity[]>;
+    create(this: any, reqdata?: OrganizationCreateData, ctrl?: Control): Promise<OrganizationEntity>;
+    update(this: any, reqdata?: OrganizationUpdateData, ctrl?: Control): Promise<OrganizationEntity>;
+    remove(this: any, reqmatch?: OrganizationRemoveMatch, ctrl?: Control): Promise<OrganizationEntity>;
 }
 export { OrganizationEntity };

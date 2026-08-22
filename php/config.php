@@ -33,6 +33,9 @@ class Hook0Config
         return [
             "main" => [
                 "name" => "Hook0",
+                "slug" => "hook0",
+                "version" => "0.0.1",
+                "target" => "php",
             ],
             "feature" => [
                 "test" => [
@@ -82,31 +85,37 @@ class Hook0Config
             [
               'name' => 'application_id',
               'req' => true,
+              'short' => 'Unique identifier of the application.',
               'type' => '`$STRING`',
             ],
             [
               'name' => 'consumption',
               'req' => true,
+              'short' => 'Current consumption metrics for this application.',
               'type' => '`$OBJECT`',
             ],
             [
               'name' => 'name',
               'req' => true,
+              'short' => 'Name of the application.',
               'type' => '`$STRING`',
             ],
             [
               'name' => 'onboarding_steps',
               'req' => true,
+              'short' => 'Onboarding completion status for this application.',
               'type' => '`$OBJECT`',
             ],
             [
               'name' => 'organization_id',
               'req' => true,
+              'short' => 'UUID of the organization this application belongs to.',
               'type' => '`$STRING`',
             ],
             [
               'name' => 'quotas',
               'req' => true,
+              'short' => 'Quota limits for this application.',
               'type' => '`$OBJECT`',
             ],
           ],
@@ -1201,39 +1210,47 @@ class Hook0Config
             [
               'name' => 'application_id',
               'req' => true,
+              'short' => 'UUID of the application this event belongs to.',
               'type' => '`$STRING`',
             ],
             [
               'name' => 'event_id',
+              'short' => 'Optional unique identifier for this event (client-generated UUID).',
               'type' => '`$STRING`',
             ],
             [
               'name' => 'event_type',
               'req' => true,
+              'short' => 'The type of event (e.g., \'user.created\', \'order.completed\').',
               'type' => '`$STRING`',
             ],
             [
               'name' => 'labels',
               'req' => true,
+              'short' => 'Labels for event filtering and routing to subscriptions.',
               'type' => '`$OBJECT`',
             ],
             [
               'name' => 'metadata',
+              'short' => 'Optional metadata key-value pairs associated with the event.',
               'type' => '`$OBJECT`',
             ],
             [
               'name' => 'occurred_at',
               'req' => true,
+              'short' => 'Timestamp when the event occurred.',
               'type' => '`$STRING`',
             ],
             [
               'name' => 'payload',
               'req' => true,
+              'short' => 'The event payload.',
               'type' => '`$STRING`',
             ],
             [
               'name' => 'payload_content_type',
               'req' => true,
+              'short' => 'Content type of the payload.',
               'type' => '`$STRING`',
             ],
           ],
@@ -1819,6 +1836,7 @@ class Hook0Config
             ],
             [
               'name' => 'gclid',
+              'short' => 'Optional Google Ads click identifier captured during the user\'s journey from a Google Ad.',
               'type' => '`$STRING`',
             ],
             [
@@ -1915,6 +1933,7 @@ class Hook0Config
             [
               'name' => 'status',
               'req' => true,
+              'short' => 'Status of a request attempt.',
               'type' => '`$OBJECT`',
             ],
             [
@@ -2465,6 +2484,7 @@ class Hook0Config
                 ],
               ],
               'req' => true,
+              'short' => '_Kept for backward compatibility, you should use `labels`_',
               'type' => '`$STRING`',
             ],
             [
@@ -2478,6 +2498,7 @@ class Hook0Config
                 ],
               ],
               'req' => true,
+              'short' => '_Kept for backward compatibility, you should use `labels`_',
               'type' => '`$STRING`',
             ],
             [

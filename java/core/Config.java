@@ -14,6 +14,27 @@ public final class Config {
     return (Map<String, Object>) Json.parse(configJson());
   }
 
+  // SHARED CONFIG (sdkgen rung L2).
+  //
+  // The SDK reads the config on every request and never writes to it, so one
+  // instance is shared by every client rather than rebuilt per client - the
+  // difference between parsing the embedded JSON once and once per client.
+  //
+  // Initialization-on-demand holder: the JLS guarantees the class initializer
+  // runs once, lazily, and safely under concurrency, with no locking on the
+  // read path.
+  private static final class SharedHolder {
+    static final Map<String, Object> VALUE = makeConfig();
+  }
+
+  // The process-wide config, built once on first use.
+  //
+  // The returned map is SHARED: treat it as read-only. Callers that need to
+  // mutate should use makeConfig, which always parses a fresh copy.
+  public static Map<String, Object> sharedConfig() {
+    return SharedHolder.VALUE;
+  }
+
   public static Feature makeFeature(String name) {
     switch (name) {
       case "test":
@@ -27,7 +48,10 @@ public final class Config {
     StringBuilder b = new StringBuilder();
     b.append("{");
     b.append(" \"main\": {");
-    b.append("  \"name\": \"Hook0\"");
+    b.append("  \"name\": \"Hook0\",");
+    b.append("  \"slug\": \"hook0\",");
+    b.append("  \"version\": \"0.0.1\",");
+    b.append("  \"target\": \"java\"");
     b.append(" },");
     b.append(" \"feature\": {");
     b.append("  \"test\": {");
@@ -77,31 +101,37 @@ public final class Config {
     b.append("    {");
     b.append("     \"name\": \"application_id\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Unique identifier of the application.\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"consumption\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Current consumption metrics for this application.\",");
     b.append("     \"type\": \"`$OBJECT`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"name\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Name of the application.\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"onboarding_steps\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Onboarding completion status for this application.\",");
     b.append("     \"type\": \"`$OBJECT`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"organization_id\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"UUID of the organization this application belongs to.\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"quotas\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Quota limits for this application.\",");
     b.append("     \"type\": \"`$OBJECT`\"");
     b.append("    }");
     b.append("   ],");
@@ -1196,39 +1226,47 @@ public final class Config {
     b.append("    {");
     b.append("     \"name\": \"application_id\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"UUID of the application this event belongs to.\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"event_id\",");
+    b.append("     \"short\": \"Optional unique identifier for this event (client-generated UUID).\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"event_type\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"The type of event (e.g., 'user.created', 'order.completed').\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"labels\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Labels for event filtering and routing to subscriptions.\",");
     b.append("     \"type\": \"`$OBJECT`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"metadata\",");
+    b.append("     \"short\": \"Optional metadata key-value pairs associated with the event.\",");
     b.append("     \"type\": \"`$OBJECT`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"occurred_at\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Timestamp when the event occurred.\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"payload\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"The event payload.\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"payload_content_type\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Content type of the payload.\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    }");
     b.append("   ],");
@@ -1814,6 +1852,7 @@ public final class Config {
     b.append("    },");
     b.append("    {");
     b.append("     \"name\": \"gclid\",");
+    b.append("     \"short\": \"Optional Google Ads click identifier captured during the user's journey from a Google Ad.\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
@@ -1910,6 +1949,7 @@ public final class Config {
     b.append("    {");
     b.append("     \"name\": \"status\",");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"Status of a request attempt.\",");
     b.append("     \"type\": \"`$OBJECT`\"");
     b.append("    },");
     b.append("    {");
@@ -2460,6 +2500,7 @@ public final class Config {
     b.append("      }");
     b.append("     },");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"_Kept for backward compatibility, you should use `labels`_\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
@@ -2473,6 +2514,7 @@ public final class Config {
     b.append("      }");
     b.append("     },");
     b.append("     \"req\": true,");
+    b.append("     \"short\": \"_Kept for backward compatibility, you should use `labels`_\",");
     b.append("     \"type\": \"`$STRING`\"");
     b.append("    },");
     b.append("    {");
