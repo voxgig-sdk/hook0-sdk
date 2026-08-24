@@ -1,6 +1,15 @@
 {
+  "NAME": "HOOK0",
+  "Name": "Hook0",
   "def": "hook0-openapi.json",
   "main": {
+    "api": {
+      "entity": {},
+      "guide": {}
+    },
+    "custom": {
+      "plurals": {}
+    },
     "def": {
       "desc": ""
     },
@@ -5130,5 +5139,8 @@
     }
   },
   "name": "hook0",
+  "name-": "hook0",
+  "name_": "hook0",
+  "name__orig": "hook0",
   "origin": "voxgig-sdk"
 }
