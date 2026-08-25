@@ -42,6 +42,7 @@ class Hook0Config
           'options' => [
             'active' => false,
           ],
+          'transport' => 'base',
         ],
             ],
             "options" => [
