@@ -80,6 +80,7 @@ class TestApplicationEntity:
 
         application_ref01_data = helpers.to_map(runner.entity_data(application_ref01_ent.create(application_ref01_data, None)))
         assert application_ref01_data is not None
+        assert application_ref01_data["id"] is not None
 
         # LIST
         application_ref01_match = {}
@@ -87,8 +88,14 @@ class TestApplicationEntity:
         application_ref01_list_result = application_ref01_ent.list(application_ref01_match, None)
         assert isinstance(application_ref01_list_result, list)
 
+        found_item = vs.select(
+            runner.entity_list_to_data(application_ref01_list_result),
+            {"id": application_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
         # UPDATE
         application_ref01_data_up0_up = {
+            "id": application_ref01_data["id"],
         }
 
         application_ref01_markdef_up0_name = "application_id"
@@ -97,19 +104,34 @@ class TestApplicationEntity:
 
         application_ref01_resdata_up0 = helpers.to_map(runner.entity_data(application_ref01_ent.update(application_ref01_data_up0_up, None)))
         assert application_ref01_resdata_up0 is not None
+        assert application_ref01_resdata_up0["id"] == application_ref01_data_up0_up["id"]
         assert application_ref01_resdata_up0[application_ref01_markdef_up0_name] == application_ref01_markdef_up0_value
 
         # LOAD
-        application_ref01_match_dt0 = {}
+        application_ref01_match_dt0 = {
+            "id": application_ref01_data["id"],
+        }
         application_ref01_data_dt0_loaded = application_ref01_ent.load(application_ref01_match_dt0, None)
-        assert application_ref01_data_dt0_loaded is not None
+        application_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(application_ref01_data_dt0_loaded))
+        assert application_ref01_data_dt0_load_result is not None
+        assert application_ref01_data_dt0_load_result["id"] == application_ref01_data["id"]
 
+        # REMOVE
+        application_ref01_match_rm0 = {
+            "id": application_ref01_data["id"],
+        }
+        application_ref01_ent.remove(application_ref01_match_rm0, None)
 
         # LIST
         application_ref01_match_rt0 = {}
 
         application_ref01_list_rt0_result = application_ref01_ent.list(application_ref01_match_rt0, None)
         assert isinstance(application_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(application_ref01_list_rt0_result),
+            {"id": application_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 

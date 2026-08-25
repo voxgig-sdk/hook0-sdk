@@ -10,6 +10,7 @@
  * @typedef {Object} Application
  * @property {string} application_id
  * @property {Object} consumption
+ * @property {string} [id]
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
@@ -25,6 +26,7 @@
  * @typedef {Object} ApplicationListMatch
  * @property {string} [application_id]
  * @property {Object} [consumption]
+ * @property {string} [id]
  * @property {string} [name]
  * @property {Object} [onboarding_steps]
  * @property {string} [organization_id]
@@ -35,6 +37,7 @@
  * @typedef {Object} ApplicationCreateData
  * @property {string} application_id
  * @property {Object} consumption
+ * @property {string} [id]
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
@@ -62,6 +65,7 @@
  * @property {string} application_id
  * @property {string} created_at
  * @property {string} [deleted_at]
+ * @property {string} [id]
  * @property {string} [name]
  * @property {string} token
  */
@@ -71,6 +75,7 @@
  * @property {string} [application_id]
  * @property {string} [created_at]
  * @property {string} [deleted_at]
+ * @property {string} [id]
  * @property {string} [name]
  * @property {string} [token]
  */
@@ -80,6 +85,7 @@
  * @property {string} application_id
  * @property {string} created_at
  * @property {string} [deleted_at]
+ * @property {string} [id]
  * @property {string} [name]
  * @property {string} token
  */
@@ -107,6 +113,7 @@
  * @typedef {Object} Event
  * @property {string} event_id
  * @property {string} event_type_name
+ * @property {string} [id]
  * @property {string} ip
  * @property {Object} labels
  * @property {Object} [metadata]
@@ -125,6 +132,7 @@
  * @typedef {Object} EventListMatch
  * @property {string} [event_id]
  * @property {string} [event_type_name]
+ * @property {string} [id]
  * @property {string} [ip]
  * @property {Object} [labels]
  * @property {Object} [metadata]
@@ -138,6 +146,7 @@
  * @typedef {Object} EventType
  * @property {string} application_id
  * @property {string} event_type_name
+ * @property {string} [id]
  * @property {string} resource_type
  * @property {string} resource_type_name
  * @property {string} service
@@ -155,6 +164,7 @@
  * @typedef {Object} EventTypeListMatch
  * @property {string} [application_id]
  * @property {string} [event_type_name]
+ * @property {string} [id]
  * @property {string} [resource_type]
  * @property {string} [resource_type_name]
  * @property {string} [service]
@@ -167,6 +177,7 @@
  * @typedef {Object} EventTypeCreateData
  * @property {string} application_id
  * @property {string} event_type_name
+ * @property {string} [id]
  * @property {string} resource_type
  * @property {string} resource_type_name
  * @property {string} service
@@ -325,6 +336,7 @@
 /**
  * @typedef {Object} Organization
  * @property {Object} consumption
+ * @property {string} [id]
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
@@ -342,6 +354,7 @@
 /**
  * @typedef {Object} OrganizationListMatch
  * @property {Object} [consumption]
+ * @property {string} [id]
  * @property {string} [name]
  * @property {Object} [onboarding_steps]
  * @property {string} [organization_id]
@@ -354,6 +367,7 @@
 /**
  * @typedef {Object} OrganizationCreateData
  * @property {Object} consumption
+ * @property {string} [id]
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
@@ -383,6 +397,7 @@
 
 /**
  * @typedef {Object} OrganizationEditRole
+ * @property {string} [id]
  * @property {string} role
  * @property {string} user_id
  */
@@ -458,6 +473,7 @@
  * @property {string} event_id
  * @property {string} [failed_at]
  * @property {number} [http_response_status]
+ * @property {string} [id]
  * @property {string} [picked_at]
  * @property {string} request_attempt_id
  * @property {string} [response_id]
@@ -480,6 +496,7 @@
  * @property {string} [event_id]
  * @property {string} [failed_at]
  * @property {number} [http_response_status]
+ * @property {string} [id]
  * @property {string} [picked_at]
  * @property {string} [request_attempt_id]
  * @property {string} [response_id]
@@ -491,6 +508,7 @@
 
 /**
  * @typedef {Object} Response
+ * @property {string} [id]
  */
 
 /**
@@ -511,6 +529,7 @@
  * @typedef {Object} ServiceToken
  * @property {string} biscuit
  * @property {string} created_at
+ * @property {string} [id]
  * @property {string} name
  * @property {string} organization_id
  * @property {string} token_id
@@ -525,6 +544,7 @@
  * @typedef {Object} ServiceTokenListMatch
  * @property {string} [biscuit]
  * @property {string} [created_at]
+ * @property {string} [id]
  * @property {string} [name]
  * @property {string} [organization_id]
  * @property {string} [token_id]
@@ -534,6 +554,7 @@
  * @typedef {Object} ServiceTokenCreateData
  * @property {string} biscuit
  * @property {string} created_at
+ * @property {string} [id]
  * @property {string} name
  * @property {string} organization_id
  * @property {string} token_id
@@ -561,6 +582,7 @@
  * @property {Array} dedicated_workers
  * @property {string} [description]
  * @property {Array} event_types
+ * @property {string} [id]
  * @property {boolean} is_enabled
  * @property {string} label_key
  * @property {string} label_value
@@ -584,6 +606,7 @@
  * @property {Array} [dedicated_workers]
  * @property {string} [description]
  * @property {Array} [event_types]
+ * @property {string} [id]
  * @property {boolean} [is_enabled]
  * @property {string} [label_key]
  * @property {string} [label_value]
@@ -602,6 +625,7 @@
  * @property {Array} dedicated_workers
  * @property {string} [description]
  * @property {Array} event_types
+ * @property {string} [id]
  * @property {boolean} is_enabled
  * @property {string} label_key
  * @property {string} label_value

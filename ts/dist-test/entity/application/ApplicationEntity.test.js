@@ -75,20 +75,31 @@ const utility_1 = require("../../utility");
         const application_ref01_ent = client.Application();
         let application_ref01_data = setup.data.new.application['application_ref01'];
         application_ref01_data = (await application_ref01_ent.create(application_ref01_data)).data();
-        (0, node_assert_1.default)(null != application_ref01_data);
+        (0, node_assert_1.default)(null != application_ref01_data.id);
         // LIST
         const application_ref01_match = {};
         const application_ref01_list = (await application_ref01_ent.list(application_ref01_match)).map((e) => e.data());
+        (0, node_assert_1.default)(!isempty(select(application_ref01_list, { id: application_ref01_data.id })));
         // UPDATE
         const application_ref01_data_up0 = {};
+        application_ref01_data_up0.id = application_ref01_data.id;
         const application_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-application_ref01_' + setup.now };
         application_ref01_data_up0[application_ref01_markdef_up0.name] = application_ref01_markdef_up0.value;
         const application_ref01_resdata_up0 = (await application_ref01_ent.update(application_ref01_data_up0)).data();
-        (0, node_assert_1.default)(null != application_ref01_resdata_up0);
+        (0, node_assert_1.default)(application_ref01_resdata_up0.id === application_ref01_data_up0.id);
         (0, node_assert_1.default)(application_ref01_resdata_up0[application_ref01_markdef_up0.name] === application_ref01_markdef_up0.value);
+        // LOAD
+        const application_ref01_match_dt0 = {};
+        application_ref01_match_dt0.id = application_ref01_data.id;
+        const application_ref01_data_dt0 = (await application_ref01_ent.load(application_ref01_match_dt0)).data();
+        (0, node_assert_1.default)(application_ref01_data_dt0.id === application_ref01_data.id);
+        // REMOVE
+        const application_ref01_match_rm0 = { id: application_ref01_data.id };
+        await application_ref01_ent.remove(application_ref01_match_rm0);
         // LIST
         const application_ref01_match_rt0 = {};
         const application_ref01_list_rt0 = (await application_ref01_ent.list(application_ref01_match_rt0)).map((e) => e.data());
+        (0, node_assert_1.default)(isempty(select(application_ref01_list_rt0, { id: application_ref01_data.id })));
     });
 });
 function basicSetup(extra) {

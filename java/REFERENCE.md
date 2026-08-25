@@ -207,6 +207,7 @@ SdkEntity application = client.application(null);
 | --- | --- | --- | --- |
 | `application_id` | `String` | Yes | Unique identifier of the application. |
 | `consumption` | `Map<String, Object>` | Yes | Current consumption metrics for this application. |
+| `id` | `String` | No |  |
 | `name` | `String` | Yes | Name of the application. |
 | `onboarding_steps` | `Map<String, Object>` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `String` | Yes | UUID of the organization this application belongs to. |
@@ -298,6 +299,7 @@ SdkEntity applicationSecret = client.applicationSecret(null);
 | `application_id` | `String` | Yes |  |
 | `created_at` | `String` | Yes |  |
 | `deleted_at` | `String` | No |  |
+| `id` | `String` | No |  |
 | `name` | `String` | No |  |
 | `token` | `String` | Yes |  |
 
@@ -404,6 +406,7 @@ SdkEntity event = client.event(null);
 | --- | --- | --- | --- |
 | `event_id` | `String` | Yes |  |
 | `event_type_name` | `String` | Yes |  |
+| `id` | `String` | No |  |
 | `ip` | `String` | Yes |  |
 | `labels` | `Map<String, Object>` | Yes |  |
 | `metadata` | `Map<String, Object>` | No |  |
@@ -464,6 +467,7 @@ SdkEntity eventType = client.eventType(null);
 | --- | --- | --- | --- |
 | `application_id` | `String` | Yes |  |
 | `event_type_name` | `String` | Yes |  |
+| `id` | `String` | No |  |
 | `resource_type` | `String` | Yes |  |
 | `resource_type_name` | `String` | Yes |  |
 | `service` | `String` | Yes |  |
@@ -905,6 +909,7 @@ SdkEntity organization = client.organization(null);
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `consumption` | `Map<String, Object>` | Yes |  |
+| `id` | `String` | No |  |
 | `name` | `String` | Yes |  |
 | `onboarding_steps` | `Map<String, Object>` | Yes |  |
 | `organization_id` | `String` | Yes |  |
@@ -998,6 +1003,7 @@ SdkEntity organizationEditRole = client.organizationEditRole(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `id` | `String` | No |  |
 | `role` | `String` | Yes |  |
 | `user_id` | `String` | Yes |  |
 
@@ -1198,6 +1204,7 @@ SdkEntity requestAttempt = client.requestAttempt(null);
 | `event_id` | `String` | Yes |  |
 | `failed_at` | `String` | No |  |
 | `http_response_status` | `Long` | No |  |
+| `id` | `String` | No |  |
 | `picked_at` | `String` | No |  |
 | `request_attempt_id` | `String` | Yes |  |
 | `response_id` | `String` | No |  |
@@ -1251,6 +1258,12 @@ Return the entity name.
 ```java
 SdkEntity response = client.response(null);
 ```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `String` | No |  |
 
 ### Operations
 
@@ -1332,6 +1345,7 @@ SdkEntity serviceToken = client.serviceToken(null);
 | --- | --- | --- | --- |
 | `biscuit` | `String` | Yes |  |
 | `created_at` | `String` | Yes |  |
+| `id` | `String` | No |  |
 | `name` | `String` | Yes |  |
 | `organization_id` | `String` | Yes |  |
 | `token_id` | `String` | Yes |  |
@@ -1423,6 +1437,7 @@ SdkEntity subscription = client.subscription(null);
 | `dedicated_workers` | `List<Object>` | Yes |  |
 | `description` | `String` | No |  |
 | `event_types` | `List<Object>` | Yes |  |
+| `id` | `String` | No |  |
 | `is_enabled` | `Boolean` | Yes |  |
 | `label_key` | `String` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `String` | Yes | _Kept for backward compatibility, you should use `labels`_ |
@@ -1442,6 +1457,7 @@ SdkEntity subscription = client.subscription(null);
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
 | `event_types` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |

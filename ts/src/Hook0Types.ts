@@ -8,6 +8,7 @@
 export interface Application {
   application_id: string
   consumption: Record<string, any>
+  id?: string
   name: string
   onboarding_steps: Record<string, any>
   organization_id: string
@@ -21,6 +22,7 @@ export interface ApplicationLoadMatch {
 export interface ApplicationListMatch {
   application_id?: string
   consumption?: Record<string, any>
+  id?: string
   name?: string
   onboarding_steps?: Record<string, any>
   organization_id?: string
@@ -30,6 +32,7 @@ export interface ApplicationListMatch {
 export interface ApplicationCreateData {
   application_id: string
   consumption: Record<string, any>
+  id?: string
   name: string
   onboarding_steps: Record<string, any>
   organization_id: string
@@ -54,6 +57,7 @@ export interface ApplicationSecret {
   application_id: string
   created_at: string
   deleted_at?: string
+  id?: string
   name?: string
   token: string
 }
@@ -62,6 +66,7 @@ export interface ApplicationSecretListMatch {
   application_id?: string
   created_at?: string
   deleted_at?: string
+  id?: string
   name?: string
   token?: string
 }
@@ -70,6 +75,7 @@ export interface ApplicationSecretCreateData {
   application_id: string
   created_at: string
   deleted_at?: string
+  id?: string
   name?: string
   token: string
 }
@@ -93,6 +99,7 @@ export interface ApplicationsManagementRemoveMatch {
 export interface Event {
   event_id: string
   event_type_name: string
+  id?: string
   ip: string
   labels: Record<string, any>
   metadata?: Record<string, any>
@@ -109,6 +116,7 @@ export interface EventLoadMatch {
 export interface EventListMatch {
   event_id?: string
   event_type_name?: string
+  id?: string
   ip?: string
   labels?: Record<string, any>
   metadata?: Record<string, any>
@@ -121,6 +129,7 @@ export interface EventListMatch {
 export interface EventType {
   application_id: string
   event_type_name: string
+  id?: string
   resource_type: string
   resource_type_name: string
   service: string
@@ -136,6 +145,7 @@ export interface EventTypeLoadMatch {
 export interface EventTypeListMatch {
   application_id?: string
   event_type_name?: string
+  id?: string
   resource_type?: string
   resource_type_name?: string
   service?: string
@@ -147,6 +157,7 @@ export interface EventTypeListMatch {
 export interface EventTypeCreateData {
   application_id: string
   event_type_name: string
+  id?: string
   resource_type: string
   resource_type_name: string
   service: string
@@ -288,6 +299,7 @@ export interface LoginCreateData {
 
 export interface Organization {
   consumption: Record<string, any>
+  id?: string
   name: string
   onboarding_steps: Record<string, any>
   organization_id: string
@@ -303,6 +315,7 @@ export interface OrganizationLoadMatch {
 
 export interface OrganizationListMatch {
   consumption?: Record<string, any>
+  id?: string
   name?: string
   onboarding_steps?: Record<string, any>
   organization_id?: string
@@ -314,6 +327,7 @@ export interface OrganizationListMatch {
 
 export interface OrganizationCreateData {
   consumption: Record<string, any>
+  id?: string
   name: string
   onboarding_steps: Record<string, any>
   organization_id: string
@@ -340,6 +354,7 @@ export interface OrganizationRemoveMatch {
 }
 
 export interface OrganizationEditRole {
+  id?: string
   role: string
   user_id: string
 }
@@ -413,6 +428,7 @@ export interface RequestAttempt {
   event_id: string
   failed_at?: string
   http_response_status?: number
+  id?: string
   picked_at?: string
   request_attempt_id: string
   response_id?: string
@@ -433,6 +449,7 @@ export interface RequestAttemptListMatch {
   event_id?: string
   failed_at?: string
   http_response_status?: number
+  id?: string
   picked_at?: string
   request_attempt_id?: string
   response_id?: string
@@ -443,6 +460,7 @@ export interface RequestAttemptListMatch {
 }
 
 export interface Response {
+  id?: string
 }
 
 export interface ResponseLoadMatch {
@@ -459,6 +477,7 @@ export interface RevokeRemoveMatch {
 export interface ServiceToken {
   biscuit: string
   created_at: string
+  id?: string
   name: string
   organization_id: string
   token_id: string
@@ -471,6 +490,7 @@ export interface ServiceTokenLoadMatch {
 export interface ServiceTokenListMatch {
   biscuit?: string
   created_at?: string
+  id?: string
   name?: string
   organization_id?: string
   token_id?: string
@@ -479,6 +499,7 @@ export interface ServiceTokenListMatch {
 export interface ServiceTokenCreateData {
   biscuit: string
   created_at: string
+  id?: string
   name: string
   organization_id: string
   token_id: string
@@ -503,6 +524,7 @@ export interface Subscription {
   dedicated_workers: any[]
   description?: string
   event_types: any[]
+  id?: string
   is_enabled: boolean
   label_key: string
   label_value: string
@@ -524,6 +546,7 @@ export interface SubscriptionListMatch {
   dedicated_workers?: any[]
   description?: string
   event_types?: any[]
+  id?: string
   is_enabled?: boolean
   label_key?: string
   label_value?: string
@@ -541,6 +564,7 @@ export interface SubscriptionCreateData {
   dedicated_workers: any[]
   description?: string
   event_types: any[]
+  id?: string
   is_enabled: boolean
   label_key: string
   label_value: string

@@ -53,12 +53,17 @@ declare class Config {
     };
     entity: {
         application: {
-            fields: {
+            fields: ({
                 name: string;
                 req: boolean;
                 short: string;
                 type: string;
-            }[];
+            } | {
+                name: string;
+                type: string;
+                req?: undefined;
+                short?: undefined;
+            })[];
             name: string;
             op: {
                 create: {
@@ -415,11 +420,15 @@ declare class Config {
             };
         };
         event_type: {
-            fields: {
+            fields: ({
                 name: string;
                 req: boolean;
                 type: string;
-            }[];
+            } | {
+                name: string;
+                type: string;
+                req?: undefined;
+            })[];
             name: string;
             op: {
                 create: {
@@ -813,11 +822,15 @@ declare class Config {
             };
         };
         organization: {
-            fields: {
+            fields: ({
                 name: string;
                 req: boolean;
                 type: string;
-            }[];
+            } | {
+                name: string;
+                type: string;
+                req?: undefined;
+            })[];
             name: string;
             op: {
                 create: {
@@ -951,11 +964,15 @@ declare class Config {
             };
         };
         organization_edit_role: {
-            fields: {
+            fields: ({
+                name: string;
+                type: string;
+                req?: undefined;
+            } | {
                 name: string;
                 req: boolean;
                 type: string;
-            }[];
+            })[];
             name: string;
             op: {
                 update: {
@@ -1188,7 +1205,10 @@ declare class Config {
             };
         };
         response: {
-            fields: never[];
+            fields: {
+                name: string;
+                type: string;
+            }[];
             name: string;
             op: {
                 load: {
@@ -1270,11 +1290,15 @@ declare class Config {
             };
         };
         service_token: {
-            fields: {
+            fields: ({
                 name: string;
                 req: boolean;
                 type: string;
-            }[];
+            } | {
+                name: string;
+                type: string;
+                req?: undefined;
+            })[];
             name: string;
             op: {
                 create: {

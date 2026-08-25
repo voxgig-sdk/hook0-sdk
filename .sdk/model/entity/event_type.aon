@@ -16,6 +16,11 @@ main: kit: entity: event_type: {
       type: "`$STRING`"
     }
     {
+      name: "id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
       name: "resource_type"
       req: true
       type: "`$STRING`"
@@ -46,6 +51,11 @@ main: kit: entity: event_type: {
       type: "`$STRING`"
     }
   ]
+
+  id: {
+    field: "id"
+    name: "id"
+  }
 
   name: "event_type"
   op: {

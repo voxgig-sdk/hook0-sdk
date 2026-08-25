@@ -80,6 +80,7 @@ class TestEventTypeEntity:
 
         event_type_ref01_data = helpers.to_map(runner.entity_data(event_type_ref01_ent.create(event_type_ref01_data, None)))
         assert event_type_ref01_data is not None
+        assert event_type_ref01_data["id"] is not None
 
         # LIST
         event_type_ref01_match = {}
@@ -87,10 +88,19 @@ class TestEventTypeEntity:
         event_type_ref01_list_result = event_type_ref01_ent.list(event_type_ref01_match, None)
         assert isinstance(event_type_ref01_list_result, list)
 
+        found_item = vs.select(
+            runner.entity_list_to_data(event_type_ref01_list_result),
+            {"id": event_type_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
         # LOAD
-        event_type_ref01_match_dt0 = {}
+        event_type_ref01_match_dt0 = {
+            "id": event_type_ref01_data["id"],
+        }
         event_type_ref01_data_dt0_loaded = event_type_ref01_ent.load(event_type_ref01_match_dt0, None)
-        assert event_type_ref01_data_dt0_loaded is not None
+        event_type_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(event_type_ref01_data_dt0_loaded))
+        assert event_type_ref01_data_dt0_load_result is not None
+        assert event_type_ref01_data_dt0_load_result["id"] == event_type_ref01_data["id"]
 
 
 

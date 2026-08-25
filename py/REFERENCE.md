@@ -182,6 +182,7 @@ application = client.Application()
 | --- | --- | --- | --- |
 | `application_id` | `str` | Yes | Unique identifier of the application. |
 | `consumption` | `dict` | Yes | Current consumption metrics for this application. |
+| `id` | `str` | No |  |
 | `name` | `str` | Yes | Name of the application. |
 | `onboarding_steps` | `dict` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `str` | Yes | UUID of the organization this application belongs to. |
@@ -283,6 +284,7 @@ application_secret = client.ApplicationSecret()
 | `application_id` | `str` | Yes |  |
 | `created_at` | `str` | Yes |  |
 | `deleted_at` | `str` | No |  |
+| `id` | `str` | No |  |
 | `name` | `str` | No |  |
 | `token` | `str` | Yes |  |
 
@@ -407,6 +409,7 @@ event = client.Event()
 | --- | --- | --- | --- |
 | `event_id` | `str` | Yes |  |
 | `event_type_name` | `str` | Yes |  |
+| `id` | `str` | No |  |
 | `ip` | `str` | Yes |  |
 | `labels` | `dict` | Yes |  |
 | `metadata` | `dict` | No |  |
@@ -476,6 +479,7 @@ event_type = client.EventType()
 | --- | --- | --- | --- |
 | `application_id` | `str` | Yes |  |
 | `event_type_name` | `str` | Yes |  |
+| `id` | `str` | No |  |
 | `resource_type` | `str` | Yes |  |
 | `resource_type_name` | `str` | Yes |  |
 | `service` | `str` | Yes |  |
@@ -985,6 +989,7 @@ organization = client.Organization()
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `consumption` | `dict` | Yes |  |
+| `id` | `str` | No |  |
 | `name` | `str` | Yes |  |
 | `onboarding_steps` | `dict` | Yes |  |
 | `organization_id` | `str` | Yes |  |
@@ -1088,6 +1093,7 @@ organization_edit_role = client.OrganizationEditRole()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `id` | `str` | No |  |
 | `role` | `str` | Yes |  |
 | `user_id` | `str` | Yes |  |
 
@@ -1322,6 +1328,7 @@ request_attempt = client.RequestAttempt()
 | `event_id` | `str` | Yes |  |
 | `failed_at` | `str` | No |  |
 | `http_response_status` | `int` | No |  |
+| `id` | `str` | No |  |
 | `picked_at` | `str` | No |  |
 | `request_attempt_id` | `str` | Yes |  |
 | `response_id` | `str` | No |  |
@@ -1384,6 +1391,12 @@ Return the entity name.
 ```python
 response = client.Response()
 ```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `str` | No |  |
 
 ### Operations
 
@@ -1481,6 +1494,7 @@ service_token = client.ServiceToken()
 | --- | --- | --- | --- |
 | `biscuit` | `str` | Yes |  |
 | `created_at` | `str` | Yes |  |
+| `id` | `str` | No |  |
 | `name` | `str` | Yes |  |
 | `organization_id` | `str` | Yes |  |
 | `token_id` | `str` | Yes |  |
@@ -1582,6 +1596,7 @@ subscription = client.Subscription()
 | `dedicated_workers` | `list` | Yes |  |
 | `description` | `str` | No |  |
 | `event_types` | `list` | Yes |  |
+| `id` | `str` | No |  |
 | `is_enabled` | `bool` | Yes |  |
 | `label_key` | `str` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `str` | Yes | _Kept for backward compatibility, you should use `labels`_ |
@@ -1601,6 +1616,7 @@ subscription = client.Subscription()
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
 | `event_types` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |

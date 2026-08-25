@@ -96,6 +96,10 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'name' => 'id',
+              'type' => '`$STRING`',
+            ],
+            [
               'name' => 'name',
               'req' => true,
               'short' => 'Name of the application.',
@@ -328,6 +332,10 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'name' => 'id',
+              'type' => '`$STRING`',
+            ],
+            [
               'name' => 'name',
               'type' => '`$STRING`',
             ],
@@ -517,6 +525,10 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'name' => 'id',
+              'type' => '`$STRING`',
+            ],
+            [
               'name' => 'ip',
               'req' => true,
               'type' => '`$STRING`',
@@ -656,6 +668,10 @@ class Hook0Config
             [
               'name' => 'event_type_name',
               'req' => true,
+              'type' => '`$STRING`',
+            ],
+            [
+              'name' => 'id',
               'type' => '`$STRING`',
             ],
             [
@@ -1433,6 +1449,10 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'name' => 'id',
+              'type' => '`$STRING`',
+            ],
+            [
               'name' => 'name',
               'req' => true,
               'type' => '`$STRING`',
@@ -1647,6 +1667,10 @@ class Hook0Config
         ],
         'organization_edit_role' => [
           'fields' => [
+            [
+              'name' => 'id',
+              'type' => '`$STRING`',
+            ],
             [
               'name' => 'role',
               'req' => true,
@@ -1914,6 +1938,10 @@ class Hook0Config
               'type' => '`$INTEGER`',
             ],
             [
+              'name' => 'id',
+              'type' => '`$STRING`',
+            ],
+            [
               'name' => 'picked_at',
               'type' => '`$STRING`',
             ],
@@ -2085,7 +2113,12 @@ class Hook0Config
           ],
         ],
         'response' => [
-          'fields' => [],
+          'fields' => [
+            [
+              'name' => 'id',
+              'type' => '`$STRING`',
+            ],
+          ],
           'name' => 'response',
           'op' => [
             'load' => [
@@ -2206,6 +2239,10 @@ class Hook0Config
             [
               'name' => 'created_at',
               'req' => true,
+              'type' => '`$STRING`',
+            ],
+            [
+              'name' => 'id',
               'type' => '`$STRING`',
             ],
             [
@@ -2468,6 +2505,10 @@ class Hook0Config
               'name' => 'event_types',
               'req' => true,
               'type' => '`$ARRAY`',
+            ],
+            [
+              'name' => 'id',
+              'type' => '`$STRING`',
             ],
             [
               'name' => 'is_enabled',

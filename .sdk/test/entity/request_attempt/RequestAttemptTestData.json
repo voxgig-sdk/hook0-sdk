@@ -2,71 +2,71 @@
   "existing": {
     "request_attempt": {
       "REQUEST_ATTEMPT00": {
-        "created_at": "s82",
-        "delay_until": "s83",
+        "created_at": "s8c",
+        "delay_until": "s8d",
         "event": {},
         "event_id": "EVENT01",
-        "failed_at": "s86",
-        "http_response_status": "s87",
-        "picked_at": "s88",
+        "failed_at": "s90",
+        "http_response_status": "s91",
+        "id": "REQUEST_ATTEMPT00",
+        "picked_at": "s93",
         "request_attempt_id": "REQUEST_ATTEMPT01",
         "response_id": "RESPONSE01",
-        "retry_count": "s8b",
+        "retry_count": "s96",
         "status": {},
         "subscription": {},
-        "succeeded_at": "s8e",
-        "id": "REQUEST_ATTEMPT00"
+        "succeeded_at": "s99"
       },
       "REQUEST_ATTEMPT01": {
-        "created_at": "s104",
-        "delay_until": "s105",
+        "created_at": "s118",
+        "delay_until": "s119",
         "event": {},
         "event_id": "EVENT01",
-        "failed_at": "s108",
-        "http_response_status": "s109",
-        "picked_at": "s10a",
+        "failed_at": "s11c",
+        "http_response_status": "s11d",
+        "id": "REQUEST_ATTEMPT01",
+        "picked_at": "s11f",
         "request_attempt_id": "REQUEST_ATTEMPT01",
         "response_id": "RESPONSE01",
-        "retry_count": "s10d",
+        "retry_count": "s122",
         "status": {},
         "subscription": {},
-        "succeeded_at": "s110",
-        "id": "REQUEST_ATTEMPT01"
+        "succeeded_at": "s125"
       },
       "REQUEST_ATTEMPT02": {
-        "created_at": "s186",
-        "delay_until": "s187",
+        "created_at": "s1a4",
+        "delay_until": "s1a5",
         "event": {},
         "event_id": "EVENT01",
-        "failed_at": "s18a",
-        "http_response_status": "s18b",
-        "picked_at": "s18c",
+        "failed_at": "s1a8",
+        "http_response_status": "s1a9",
+        "id": "REQUEST_ATTEMPT02",
+        "picked_at": "s1ab",
         "request_attempt_id": "REQUEST_ATTEMPT01",
         "response_id": "RESPONSE01",
-        "retry_count": "s18f",
+        "retry_count": "s1ae",
         "status": {},
         "subscription": {},
-        "succeeded_at": "s192",
-        "id": "REQUEST_ATTEMPT02"
+        "succeeded_at": "s1b1"
       }
     }
   },
   "new": {
     "request_attempt": {
       "request_attempt_ref01": {
-        "created_at": "s208",
-        "delay_until": "s209",
+        "created_at": "s230",
+        "delay_until": "s231",
         "event": {},
         "event_id": "EVENT01",
-        "failed_at": "s20c",
-        "http_response_status": "s20d",
-        "picked_at": "s20e",
+        "failed_at": "s234",
+        "http_response_status": "s235",
+        "picked_at": "s237",
         "request_attempt_id": "REQUEST_ATTEMPT01",
         "response_id": "RESPONSE01",
-        "retry_count": "s211",
+        "retry_count": "s23a",
         "status": {},
         "subscription": {},
-        "succeeded_at": "s214"
+        "succeeded_at": "s23d"
       }
     }
   }

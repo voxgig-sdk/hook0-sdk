@@ -62,12 +62,13 @@ describe('OrganizationEditRoleEntity', async () => {
     // UPDATE
     const organization_edit_role_ref01_ent = client.OrganizationEditRole()
     const organization_edit_role_ref01_data_up0: any = {}
+    organization_edit_role_ref01_data_up0.id = organization_edit_role_ref01_data.id
 
     const organization_edit_role_ref01_markdef_up0 = { name: 'role', value: 'Mark01-organization_edit_role_ref01_' + setup.now }
     ;(organization_edit_role_ref01_data_up0 as any)[organization_edit_role_ref01_markdef_up0.name] = organization_edit_role_ref01_markdef_up0.value
 
     const organization_edit_role_ref01_resdata_up0 = (await organization_edit_role_ref01_ent.update(organization_edit_role_ref01_data_up0)).data()
-    assert(null != organization_edit_role_ref01_resdata_up0)
+    assert(organization_edit_role_ref01_resdata_up0.id === organization_edit_role_ref01_data_up0.id)
 
     assert((organization_edit_role_ref01_resdata_up0 as any)[organization_edit_role_ref01_markdef_up0.name] === organization_edit_role_ref01_markdef_up0.value)
 

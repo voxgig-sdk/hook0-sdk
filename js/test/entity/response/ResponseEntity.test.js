@@ -44,8 +44,9 @@ describe('ResponseEntity', async () => {
     // LOAD
     const response_ref01_ent = client.Response()
     const response_ref01_match_dt0 = {}
+    response_ref01_match_dt0.id = response_ref01_data.id
     const response_ref01_data_dt0 = (await response_ref01_ent.load(response_ref01_match_dt0)).data()
-    assert(null != response_ref01_data_dt0)
+    assert(response_ref01_data_dt0.id === response_ref01_data.id)
 
 
   })

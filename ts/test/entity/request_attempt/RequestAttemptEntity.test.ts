@@ -66,6 +66,12 @@ describe('RequestAttemptEntity', async () => {
     const request_attempt_ref01_list = (await request_attempt_ref01_ent.list(request_attempt_ref01_match)).map((e: any) => e.data())
 
 
+    // LOAD
+    const request_attempt_ref01_match_dt0: any = {}
+    request_attempt_ref01_match_dt0.id = request_attempt_ref01_data.id
+    const request_attempt_ref01_data_dt0 = (await request_attempt_ref01_ent.load(request_attempt_ref01_match_dt0)).data()
+    assert(request_attempt_ref01_data_dt0.id === request_attempt_ref01_data.id)
+
 
   })
 })

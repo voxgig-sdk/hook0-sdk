@@ -66,8 +66,12 @@ public class EventEntityTest {
 
     // LOAD
     Map<String, Object> eventRef01MatchDt0 = new LinkedHashMap<>();
+    eventRef01MatchDt0.put("id", eventRef01Data.get("id"));
     Object eventRef01DataDt0Loaded = eventRef01Ent.load(eventRef01MatchDt0, null);
-    assertNotNull(eventRef01DataDt0Loaded, "expected load result to be non-null");
+    Map<String, Object> eventRef01DataDt0LoadResult = Helpers.toMapAny(eventRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) eventRef01DataDt0Loaded).data() : eventRef01DataDt0Loaded);
+    assertNotNull(eventRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(eventRef01Data.get("id"), eventRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
 
   }
 

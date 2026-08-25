@@ -17,6 +17,7 @@ class Application
 {
     public string $application_id;
     public array $consumption;
+    public ?string $id = null;
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
@@ -34,6 +35,7 @@ class ApplicationListMatch
 {
     public ?string $application_id = null;
     public ?array $consumption = null;
+    public ?string $id = null;
     public ?string $name = null;
     public ?array $onboarding_steps = null;
     public ?string $organization_id = null;
@@ -45,6 +47,7 @@ class ApplicationCreateData
 {
     public string $application_id;
     public array $consumption;
+    public ?string $id = null;
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
@@ -75,6 +78,7 @@ class ApplicationSecret
     public string $application_id;
     public string $created_at;
     public ?string $deleted_at = null;
+    public ?string $id = null;
     public ?string $name = null;
     public string $token;
 }
@@ -85,6 +89,7 @@ class ApplicationSecretListMatch
     public ?string $application_id = null;
     public ?string $created_at = null;
     public ?string $deleted_at = null;
+    public ?string $id = null;
     public ?string $name = null;
     public ?string $token = null;
 }
@@ -95,6 +100,7 @@ class ApplicationSecretCreateData
     public string $application_id;
     public string $created_at;
     public ?string $deleted_at = null;
+    public ?string $id = null;
     public ?string $name = null;
     public string $token;
 }
@@ -126,6 +132,7 @@ class Event
 {
     public string $event_id;
     public string $event_type_name;
+    public ?string $id = null;
     public string $ip;
     public array $labels;
     public ?array $metadata = null;
@@ -146,6 +153,7 @@ class EventListMatch
 {
     public ?string $event_id = null;
     public ?string $event_type_name = null;
+    public ?string $id = null;
     public ?string $ip = null;
     public ?array $labels = null;
     public ?array $metadata = null;
@@ -160,6 +168,7 @@ class EventType
 {
     public string $application_id;
     public string $event_type_name;
+    public ?string $id = null;
     public string $resource_type;
     public string $resource_type_name;
     public string $service;
@@ -179,6 +188,7 @@ class EventTypeListMatch
 {
     public ?string $application_id = null;
     public ?string $event_type_name = null;
+    public ?string $id = null;
     public ?string $resource_type = null;
     public ?string $resource_type_name = null;
     public ?string $service = null;
@@ -192,6 +202,7 @@ class EventTypeCreateData
 {
     public string $application_id;
     public string $event_type_name;
+    public ?string $id = null;
     public string $resource_type;
     public string $resource_type_name;
     public string $service;
@@ -367,6 +378,7 @@ class LoginCreateData
 class Organization
 {
     public array $consumption;
+    public ?string $id = null;
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
@@ -386,6 +398,7 @@ class OrganizationLoadMatch
 class OrganizationListMatch
 {
     public ?array $consumption = null;
+    public ?string $id = null;
     public ?string $name = null;
     public ?array $onboarding_steps = null;
     public ?string $organization_id = null;
@@ -399,6 +412,7 @@ class OrganizationListMatch
 class OrganizationCreateData
 {
     public array $consumption;
+    public ?string $id = null;
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
@@ -431,6 +445,7 @@ class OrganizationRemoveMatch
 /** OrganizationEditRole entity data model. */
 class OrganizationEditRole
 {
+    public ?string $id = null;
     public string $role;
     public string $user_id;
 }
@@ -514,6 +529,7 @@ class RequestAttempt
     public string $event_id;
     public ?string $failed_at = null;
     public ?int $http_response_status = null;
+    public ?string $id = null;
     public ?string $picked_at = null;
     public string $request_attempt_id;
     public ?string $response_id = null;
@@ -538,6 +554,7 @@ class RequestAttemptListMatch
     public ?string $event_id = null;
     public ?string $failed_at = null;
     public ?int $http_response_status = null;
+    public ?string $id = null;
     public ?string $picked_at = null;
     public ?string $request_attempt_id = null;
     public ?string $response_id = null;
@@ -550,6 +567,7 @@ class RequestAttemptListMatch
 /** Response entity data model. */
 class Response
 {
+    public ?string $id = null;
 }
 
 /** Request payload for Response#load. */
@@ -574,6 +592,7 @@ class ServiceToken
 {
     public string $biscuit;
     public string $created_at;
+    public ?string $id = null;
     public string $name;
     public string $organization_id;
     public string $token_id;
@@ -590,6 +609,7 @@ class ServiceTokenListMatch
 {
     public ?string $biscuit = null;
     public ?string $created_at = null;
+    public ?string $id = null;
     public ?string $name = null;
     public ?string $organization_id = null;
     public ?string $token_id = null;
@@ -600,6 +620,7 @@ class ServiceTokenCreateData
 {
     public string $biscuit;
     public string $created_at;
+    public ?string $id = null;
     public string $name;
     public string $organization_id;
     public string $token_id;
@@ -630,6 +651,7 @@ class Subscription
     public array $dedicated_workers;
     public ?string $description = null;
     public array $event_types;
+    public ?string $id = null;
     public bool $is_enabled;
     public string $label_key;
     public string $label_value;
@@ -655,6 +677,7 @@ class SubscriptionListMatch
     public ?array $dedicated_workers = null;
     public ?string $description = null;
     public ?array $event_types = null;
+    public ?string $id = null;
     public ?bool $is_enabled = null;
     public ?string $label_key = null;
     public ?string $label_value = null;
@@ -674,6 +697,7 @@ class SubscriptionCreateData
     public array $dedicated_workers;
     public ?string $description = null;
     public array $event_types;
+    public ?string $id = null;
     public bool $is_enabled;
     public string $label_key;
     public string $label_value;

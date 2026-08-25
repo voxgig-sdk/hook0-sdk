@@ -210,6 +210,7 @@ const application = client.application(h.vnull());
 | --- | --- | --- | --- |
 | `application_id` | `[]const u8` | Yes | Unique identifier of the application. |
 | `consumption` | `Value (object)` | Yes | Current consumption metrics for this application. |
+| `id` | `[]const u8` | No |  |
 | `name` | `[]const u8` | Yes | Name of the application. |
 | `onboarding_steps` | `Value (object)` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `[]const u8` | Yes | UUID of the organization this application belongs to. |
@@ -316,6 +317,7 @@ const application_secret = client.application_secret(h.vnull());
 | `application_id` | `[]const u8` | Yes |  |
 | `created_at` | `[]const u8` | Yes |  |
 | `deleted_at` | `[]const u8` | No |  |
+| `id` | `[]const u8` | No |  |
 | `name` | `[]const u8` | No |  |
 | `token` | `[]const u8` | Yes |  |
 
@@ -434,6 +436,7 @@ const event = client.event(h.vnull());
 | --- | --- | --- | --- |
 | `event_id` | `[]const u8` | Yes |  |
 | `event_type_name` | `[]const u8` | Yes |  |
+| `id` | `[]const u8` | No |  |
 | `ip` | `[]const u8` | Yes |  |
 | `labels` | `Value (object)` | Yes |  |
 | `metadata` | `Value (object)` | No |  |
@@ -499,6 +502,7 @@ const event_type = client.event_type(h.vnull());
 | --- | --- | --- | --- |
 | `application_id` | `[]const u8` | Yes |  |
 | `event_type_name` | `[]const u8` | Yes |  |
+| `id` | `[]const u8` | No |  |
 | `resource_type` | `[]const u8` | Yes |  |
 | `resource_type_name` | `[]const u8` | Yes |  |
 | `service` | `[]const u8` | Yes |  |
@@ -972,6 +976,7 @@ const organization = client.organization(h.vnull());
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `consumption` | `Value (object)` | Yes |  |
+| `id` | `[]const u8` | No |  |
 | `name` | `[]const u8` | Yes |  |
 | `onboarding_steps` | `Value (object)` | Yes |  |
 | `organization_id` | `[]const u8` | Yes |  |
@@ -1080,6 +1085,7 @@ const organization_edit_role = client.organization_edit_role(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `id` | `[]const u8` | No |  |
 | `role` | `[]const u8` | Yes |  |
 | `user_id` | `[]const u8` | Yes |  |
 
@@ -1292,6 +1298,7 @@ const request_attempt = client.request_attempt(h.vnull());
 | `event_id` | `[]const u8` | Yes |  |
 | `failed_at` | `[]const u8` | No |  |
 | `http_response_status` | `i64` | No |  |
+| `id` | `[]const u8` | No |  |
 | `picked_at` | `[]const u8` | No |  |
 | `request_attempt_id` | `[]const u8` | Yes |  |
 | `response_id` | `[]const u8` | No |  |
@@ -1350,6 +1357,12 @@ Return the entity name.
 ```zig
 const response = client.response(h.vnull());
 ```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `[]const u8` | No |  |
 
 ### Operations
 
@@ -1437,6 +1450,7 @@ const service_token = client.service_token(h.vnull());
 | --- | --- | --- | --- |
 | `biscuit` | `[]const u8` | Yes |  |
 | `created_at` | `[]const u8` | Yes |  |
+| `id` | `[]const u8` | No |  |
 | `name` | `[]const u8` | Yes |  |
 | `organization_id` | `[]const u8` | Yes |  |
 | `token_id` | `[]const u8` | Yes |  |
@@ -1543,6 +1557,7 @@ const subscription = client.subscription(h.vnull());
 | `dedicated_workers` | `Value (array)` | Yes |  |
 | `description` | `[]const u8` | No |  |
 | `event_types` | `Value (array)` | Yes |  |
+| `id` | `[]const u8` | No |  |
 | `is_enabled` | `bool` | Yes |  |
 | `label_key` | `[]const u8` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `[]const u8` | Yes | _Kept for backward compatibility, you should use `labels`_ |
@@ -1562,6 +1577,7 @@ const subscription = client.subscription(h.vnull());
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
 | `event_types` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |

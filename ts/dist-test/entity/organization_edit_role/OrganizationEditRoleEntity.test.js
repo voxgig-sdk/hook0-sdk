@@ -75,10 +75,11 @@ const utility_1 = require("../../utility");
         // UPDATE
         const organization_edit_role_ref01_ent = client.OrganizationEditRole();
         const organization_edit_role_ref01_data_up0 = {};
+        organization_edit_role_ref01_data_up0.id = organization_edit_role_ref01_data.id;
         const organization_edit_role_ref01_markdef_up0 = { name: 'role', value: 'Mark01-organization_edit_role_ref01_' + setup.now };
         organization_edit_role_ref01_data_up0[organization_edit_role_ref01_markdef_up0.name] = organization_edit_role_ref01_markdef_up0.value;
         const organization_edit_role_ref01_resdata_up0 = (await organization_edit_role_ref01_ent.update(organization_edit_role_ref01_data_up0)).data();
-        (0, node_assert_1.default)(null != organization_edit_role_ref01_resdata_up0);
+        (0, node_assert_1.default)(organization_edit_role_ref01_resdata_up0.id === organization_edit_role_ref01_data_up0.id);
         (0, node_assert_1.default)(organization_edit_role_ref01_resdata_up0[organization_edit_role_ref01_markdef_up0.name] === organization_edit_role_ref01_markdef_up0.value);
     });
 });

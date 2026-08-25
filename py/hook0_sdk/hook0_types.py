@@ -16,13 +16,17 @@ from __future__ import annotations
 from typing import TypedDict, Any
 
 
-class Application(TypedDict):
+class ApplicationRequired(TypedDict):
     application_id: str
     consumption: dict
     name: str
     onboarding_steps: dict
     organization_id: str
     quotas: dict
+
+
+class Application(ApplicationRequired, total=False):
+    id: str
 
 
 class ApplicationLoadMatch(TypedDict):
@@ -32,19 +36,24 @@ class ApplicationLoadMatch(TypedDict):
 class ApplicationListMatch(TypedDict, total=False):
     application_id: str
     consumption: dict
+    id: str
     name: str
     onboarding_steps: dict
     organization_id: str
     quotas: dict
 
 
-class ApplicationCreateData(TypedDict):
+class ApplicationCreateDataRequired(TypedDict):
     application_id: str
     consumption: dict
     name: str
     onboarding_steps: dict
     organization_id: str
     quotas: dict
+
+
+class ApplicationCreateData(ApplicationCreateDataRequired, total=False):
+    id: str
 
 
 class ApplicationUpdateDataRequired(TypedDict):
@@ -72,6 +81,7 @@ class ApplicationSecretRequired(TypedDict):
 
 class ApplicationSecret(ApplicationSecretRequired, total=False):
     deleted_at: str
+    id: str
     name: str
 
 
@@ -79,6 +89,7 @@ class ApplicationSecretListMatch(TypedDict, total=False):
     application_id: str
     created_at: str
     deleted_at: str
+    id: str
     name: str
     token: str
 
@@ -91,6 +102,7 @@ class ApplicationSecretCreateDataRequired(TypedDict):
 
 class ApplicationSecretCreateData(ApplicationSecretCreateDataRequired, total=False):
     deleted_at: str
+    id: str
     name: str
 
 
@@ -126,6 +138,7 @@ class EventRequired(TypedDict):
 
 
 class Event(EventRequired, total=False):
+    id: str
     metadata: dict
 
 
@@ -136,6 +149,7 @@ class EventLoadMatch(TypedDict):
 class EventListMatch(TypedDict, total=False):
     event_id: str
     event_type_name: str
+    id: str
     ip: str
     labels: dict
     metadata: dict
@@ -145,7 +159,7 @@ class EventListMatch(TypedDict, total=False):
     received_at: str
 
 
-class EventType(TypedDict):
+class EventTypeRequired(TypedDict):
     application_id: str
     event_type_name: str
     resource_type: str
@@ -154,6 +168,10 @@ class EventType(TypedDict):
     service_name: str
     verb: str
     verb_name: str
+
+
+class EventType(EventTypeRequired, total=False):
+    id: str
 
 
 class EventTypeLoadMatch(TypedDict):
@@ -163,6 +181,7 @@ class EventTypeLoadMatch(TypedDict):
 class EventTypeListMatch(TypedDict, total=False):
     application_id: str
     event_type_name: str
+    id: str
     resource_type: str
     resource_type_name: str
     service: str
@@ -171,7 +190,7 @@ class EventTypeListMatch(TypedDict, total=False):
     verb_name: str
 
 
-class EventTypeCreateData(TypedDict):
+class EventTypeCreateDataRequired(TypedDict):
     application_id: str
     event_type_name: str
     resource_type: str
@@ -180,6 +199,10 @@ class EventTypeCreateData(TypedDict):
     service_name: str
     verb: str
     verb_name: str
+
+
+class EventTypeCreateData(EventTypeCreateDataRequired, total=False):
+    id: str
 
 
 class EventsManagement(TypedDict):
@@ -328,7 +351,7 @@ class LoginCreateData(TypedDict):
     password: str
 
 
-class Organization(TypedDict):
+class OrganizationRequired(TypedDict):
     consumption: dict
     name: str
     onboarding_steps: dict
@@ -337,6 +360,10 @@ class Organization(TypedDict):
     quotas: dict
     role: str
     users: list
+
+
+class Organization(OrganizationRequired, total=False):
+    id: str
 
 
 class OrganizationLoadMatch(TypedDict):
@@ -345,6 +372,7 @@ class OrganizationLoadMatch(TypedDict):
 
 class OrganizationListMatch(TypedDict, total=False):
     consumption: dict
+    id: str
     name: str
     onboarding_steps: dict
     organization_id: str
@@ -354,7 +382,7 @@ class OrganizationListMatch(TypedDict, total=False):
     users: list
 
 
-class OrganizationCreateData(TypedDict):
+class OrganizationCreateDataRequired(TypedDict):
     consumption: dict
     name: str
     onboarding_steps: dict
@@ -363,6 +391,10 @@ class OrganizationCreateData(TypedDict):
     quotas: dict
     role: str
     users: list
+
+
+class OrganizationCreateData(OrganizationCreateDataRequired, total=False):
+    id: str
 
 
 class OrganizationUpdateDataRequired(TypedDict):
@@ -384,9 +416,13 @@ class OrganizationRemoveMatch(TypedDict):
     id: str
 
 
-class OrganizationEditRole(TypedDict):
+class OrganizationEditRoleRequired(TypedDict):
     role: str
     user_id: str
+
+
+class OrganizationEditRole(OrganizationEditRoleRequired, total=False):
+    id: str
 
 
 class OrganizationEditRoleUpdateDataRequired(TypedDict):
@@ -468,6 +504,7 @@ class RequestAttempt(RequestAttemptRequired, total=False):
     delay_until: str
     failed_at: str
     http_response_status: int
+    id: str
     picked_at: str
     response_id: str
     succeeded_at: str
@@ -484,6 +521,7 @@ class RequestAttemptListMatch(TypedDict, total=False):
     event_id: str
     failed_at: str
     http_response_status: int
+    id: str
     picked_at: str
     request_attempt_id: str
     response_id: str
@@ -493,8 +531,8 @@ class RequestAttemptListMatch(TypedDict, total=False):
     succeeded_at: str
 
 
-class Response(TypedDict):
-    pass
+class Response(TypedDict, total=False):
+    id: str
 
 
 class ResponseLoadMatch(TypedDict):
@@ -509,12 +547,16 @@ class RevokeRemoveMatch(TypedDict):
     organization_id: str
 
 
-class ServiceToken(TypedDict):
+class ServiceTokenRequired(TypedDict):
     biscuit: str
     created_at: str
     name: str
     organization_id: str
     token_id: str
+
+
+class ServiceToken(ServiceTokenRequired, total=False):
+    id: str
 
 
 class ServiceTokenLoadMatch(TypedDict):
@@ -524,17 +566,22 @@ class ServiceTokenLoadMatch(TypedDict):
 class ServiceTokenListMatch(TypedDict, total=False):
     biscuit: str
     created_at: str
+    id: str
     name: str
     organization_id: str
     token_id: str
 
 
-class ServiceTokenCreateData(TypedDict):
+class ServiceTokenCreateDataRequired(TypedDict):
     biscuit: str
     created_at: str
     name: str
     organization_id: str
     token_id: str
+
+
+class ServiceTokenCreateData(ServiceTokenCreateDataRequired, total=False):
+    id: str
 
 
 class ServiceTokenUpdateDataRequired(TypedDict):
@@ -571,6 +618,7 @@ class SubscriptionRequired(TypedDict):
 
 class Subscription(SubscriptionRequired, total=False):
     description: str
+    id: str
 
 
 class SubscriptionLoadMatch(TypedDict):
@@ -583,6 +631,7 @@ class SubscriptionListMatch(TypedDict, total=False):
     dedicated_workers: list
     description: str
     event_types: list
+    id: str
     is_enabled: bool
     label_key: str
     label_value: str
@@ -612,6 +661,7 @@ class SubscriptionCreateDataRequired(TypedDict):
 
 class SubscriptionCreateData(SubscriptionCreateDataRequired, total=False):
     description: str
+    id: str
 
 
 class SubscriptionUpdateDataRequired(TypedDict):

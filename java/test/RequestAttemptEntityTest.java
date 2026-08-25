@@ -66,8 +66,12 @@ public class RequestAttemptEntityTest {
 
     // LOAD
     Map<String, Object> requestAttemptRef01MatchDt0 = new LinkedHashMap<>();
+    requestAttemptRef01MatchDt0.put("id", requestAttemptRef01Data.get("id"));
     Object requestAttemptRef01DataDt0Loaded = requestAttemptRef01Ent.load(requestAttemptRef01MatchDt0, null);
-    assertNotNull(requestAttemptRef01DataDt0Loaded, "expected load result to be non-null");
+    Map<String, Object> requestAttemptRef01DataDt0LoadResult = Helpers.toMapAny(requestAttemptRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) requestAttemptRef01DataDt0Loaded).data() : requestAttemptRef01DataDt0Loaded);
+    assertNotNull(requestAttemptRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(requestAttemptRef01Data.get("id"), requestAttemptRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
 
   }
 

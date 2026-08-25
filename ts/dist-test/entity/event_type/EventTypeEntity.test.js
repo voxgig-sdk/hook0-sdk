@@ -75,10 +75,16 @@ const utility_1 = require("../../utility");
         const event_type_ref01_ent = client.EventType();
         let event_type_ref01_data = setup.data.new.event_type['event_type_ref01'];
         event_type_ref01_data = (await event_type_ref01_ent.create(event_type_ref01_data)).data();
-        (0, node_assert_1.default)(null != event_type_ref01_data);
+        (0, node_assert_1.default)(null != event_type_ref01_data.id);
         // LIST
         const event_type_ref01_match = {};
         const event_type_ref01_list = (await event_type_ref01_ent.list(event_type_ref01_match)).map((e) => e.data());
+        (0, node_assert_1.default)(!isempty(select(event_type_ref01_list, { id: event_type_ref01_data.id })));
+        // LOAD
+        const event_type_ref01_match_dt0 = {};
+        event_type_ref01_match_dt0.id = event_type_ref01_data.id;
+        const event_type_ref01_data_dt0 = (await event_type_ref01_ent.load(event_type_ref01_match_dt0)).data();
+        (0, node_assert_1.default)(event_type_ref01_data_dt0.id === event_type_ref01_data.id);
     });
 });
 function basicSetup(extra) {

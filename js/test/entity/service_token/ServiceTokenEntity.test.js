@@ -45,7 +45,7 @@ describe('ServiceTokenEntity', async () => {
     let service_token_ref01_data = setup.data.new.service_token['service_token_ref01']
 
     service_token_ref01_data = (await service_token_ref01_ent.create(service_token_ref01_data)).data()
-    assert(null != service_token_ref01_data)
+    assert(null != service_token_ref01_data.id)
 
 
     // LIST
@@ -53,30 +53,41 @@ describe('ServiceTokenEntity', async () => {
 
     const service_token_ref01_list = (await service_token_ref01_ent.list(service_token_ref01_match)).map((e) => e.data())
 
+    assert(!isempty(select(service_token_ref01_list, { id: service_token_ref01_data.id })))
+
 
     // UPDATE
     const service_token_ref01_data_up0 = {}
+    service_token_ref01_data_up0.id = service_token_ref01_data.id
 
     const service_token_ref01_markdef_up0 = { name: 'biscuit', value: 'Mark01-service_token_ref01_' + setup.now }
     service_token_ref01_data_up0 [service_token_ref01_markdef_up0.name] = service_token_ref01_markdef_up0.value
 
     const service_token_ref01_resdata_up0 = (await service_token_ref01_ent.update(service_token_ref01_data_up0)).data()
-    assert(null != service_token_ref01_resdata_up0)
+    assert(service_token_ref01_resdata_up0.id === service_token_ref01_data_up0.id)
 
     assert(service_token_ref01_resdata_up0[service_token_ref01_markdef_up0.name] === service_token_ref01_markdef_up0.value)
 
 
     // LOAD
     const service_token_ref01_match_dt0 = {}
+    service_token_ref01_match_dt0.id = service_token_ref01_data.id
     const service_token_ref01_data_dt0 = (await service_token_ref01_ent.load(service_token_ref01_match_dt0)).data()
-    assert(null != service_token_ref01_data_dt0)
+    assert(service_token_ref01_data_dt0.id === service_token_ref01_data.id)
 
 
+    // REMOVE
+    const service_token_ref01_match_rm0 = {}
+    service_token_ref01_match_rm0.id = service_token_ref01_data.id
+    await service_token_ref01_ent.remove(service_token_ref01_match_rm0)
+  
 
     // LIST
     const service_token_ref01_match_rt0 = {}
 
     const service_token_ref01_list_rt0 = (await service_token_ref01_ent.list(service_token_ref01_match_rt0)).map((e) => e.data())
+
+    assert(isempty(select(service_token_ref01_list_rt0, { id: service_token_ref01_data.id })))
 
 
   })

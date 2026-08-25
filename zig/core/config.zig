@@ -73,6 +73,10 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                    h.jo(&.{
                         .{ "name", h.vstr("name") },
                         .{ "req", h.vbool(true) },
                         .{ "short", h.vstr("Name of the application.") },
@@ -305,6 +309,10 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                    h.jo(&.{
                         .{ "name", h.vstr("name") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
@@ -494,6 +502,10 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                    h.jo(&.{
                         .{ "name", h.vstr("ip") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -633,6 +645,10 @@ pub fn make_config() Value {
                     h.jo(&.{
                         .{ "name", h.vstr("event_type_name") },
                         .{ "req", h.vbool(true) },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("id") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
@@ -1410,6 +1426,10 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                    h.jo(&.{
                         .{ "name", h.vstr("name") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -1624,6 +1644,10 @@ pub fn make_config() Value {
             }) },
             .{ "organization_edit_role", h.jo(&.{
                 .{ "fields", h.ja(&.{
+                    h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
                     h.jo(&.{
                         .{ "name", h.vstr("role") },
                         .{ "req", h.vbool(true) },
@@ -1891,6 +1915,10 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
                     h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                    h.jo(&.{
                         .{ "name", h.vstr("picked_at") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
@@ -2062,7 +2090,12 @@ pub fn make_config() Value {
                 }) },
             }) },
             .{ "response", h.jo(&.{
-                .{ "fields", h.olist() },
+                .{ "fields", h.ja(&.{
+                    h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                }) },
                 .{ "name", h.vstr("response") },
                 .{ "op", h.jo(&.{
                     .{ "load", h.jo(&.{
@@ -2183,6 +2216,10 @@ pub fn make_config() Value {
                     h.jo(&.{
                         .{ "name", h.vstr("created_at") },
                         .{ "req", h.vbool(true) },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("id") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
@@ -2445,6 +2482,10 @@ pub fn make_config() Value {
                         .{ "name", h.vstr("event_types") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$ARRAY`") },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("is_enabled") },

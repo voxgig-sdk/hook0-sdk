@@ -76,6 +76,11 @@ const utility_1 = require("../../utility");
         const request_attempt_ref01_ent = client.RequestAttempt();
         const request_attempt_ref01_match = {};
         const request_attempt_ref01_list = (await request_attempt_ref01_ent.list(request_attempt_ref01_match)).map((e) => e.data());
+        // LOAD
+        const request_attempt_ref01_match_dt0 = {};
+        request_attempt_ref01_match_dt0.id = request_attempt_ref01_data.id;
+        const request_attempt_ref01_data_dt0 = (await request_attempt_ref01_ent.load(request_attempt_ref01_match_dt0)).data();
+        (0, node_assert_1.default)(request_attempt_ref01_data_dt0.id === request_attempt_ref01_data.id);
     });
 });
 function basicSetup(extra) {

@@ -63,7 +63,7 @@ describe('ApplicationSecretEntity', async () => {
     let application_secret_ref01_data = setup.data.new.application_secret['application_secret_ref01']
 
     application_secret_ref01_data = (await application_secret_ref01_ent.create(application_secret_ref01_data)).data()
-    assert(null != application_secret_ref01_data)
+    assert(null != application_secret_ref01_data.id)
 
 
     // LIST
@@ -71,15 +71,18 @@ describe('ApplicationSecretEntity', async () => {
 
     const application_secret_ref01_list = (await application_secret_ref01_ent.list(application_secret_ref01_match)).map((e: any) => e.data())
 
+    assert(!isempty(select(application_secret_ref01_list, { id: application_secret_ref01_data.id })))
+
 
     // UPDATE
     const application_secret_ref01_data_up0: any = {}
+    application_secret_ref01_data_up0.id = application_secret_ref01_data.id
 
     const application_secret_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-application_secret_ref01_' + setup.now }
     ;(application_secret_ref01_data_up0 as any)[application_secret_ref01_markdef_up0.name] = application_secret_ref01_markdef_up0.value
 
     const application_secret_ref01_resdata_up0 = (await application_secret_ref01_ent.update(application_secret_ref01_data_up0)).data()
-    assert(null != application_secret_ref01_resdata_up0)
+    assert(application_secret_ref01_resdata_up0.id === application_secret_ref01_data_up0.id)
 
     assert((application_secret_ref01_resdata_up0 as any)[application_secret_ref01_markdef_up0.name] === application_secret_ref01_markdef_up0.value)
 

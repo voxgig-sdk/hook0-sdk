@@ -63,7 +63,7 @@ describe('OrganizationEntity', async () => {
     let organization_ref01_data = setup.data.new.organization['organization_ref01']
 
     organization_ref01_data = (await organization_ref01_ent.create(organization_ref01_data)).data()
-    assert(null != organization_ref01_data)
+    assert(null != organization_ref01_data.id)
 
 
     // LIST
@@ -71,25 +71,40 @@ describe('OrganizationEntity', async () => {
 
     const organization_ref01_list = (await organization_ref01_ent.list(organization_ref01_match)).map((e: any) => e.data())
 
+    assert(!isempty(select(organization_ref01_list, { id: organization_ref01_data.id })))
+
 
     // UPDATE
     const organization_ref01_data_up0: any = {}
+    organization_ref01_data_up0.id = organization_ref01_data.id
 
     const organization_ref01_markdef_up0 = { name: 'name', value: 'Mark01-organization_ref01_' + setup.now }
     ;(organization_ref01_data_up0 as any)[organization_ref01_markdef_up0.name] = organization_ref01_markdef_up0.value
 
     const organization_ref01_resdata_up0 = (await organization_ref01_ent.update(organization_ref01_data_up0)).data()
-    assert(null != organization_ref01_resdata_up0)
+    assert(organization_ref01_resdata_up0.id === organization_ref01_data_up0.id)
 
     assert((organization_ref01_resdata_up0 as any)[organization_ref01_markdef_up0.name] === organization_ref01_markdef_up0.value)
 
 
+    // LOAD
+    const organization_ref01_match_dt0: any = {}
+    organization_ref01_match_dt0.id = organization_ref01_data.id
+    const organization_ref01_data_dt0 = (await organization_ref01_ent.load(organization_ref01_match_dt0)).data()
+    assert(organization_ref01_data_dt0.id === organization_ref01_data.id)
 
+
+    // REMOVE
+    const organization_ref01_match_rm0: any = { id: organization_ref01_data.id }
+    await organization_ref01_ent.remove(organization_ref01_match_rm0)
+  
 
     // LIST
     const organization_ref01_match_rt0: any = {}
 
     const organization_ref01_list_rt0 = (await organization_ref01_ent.list(organization_ref01_match_rt0)).map((e: any) => e.data())
+
+    assert(isempty(select(organization_ref01_list_rt0, { id: organization_ref01_data.id })))
 
 
   })

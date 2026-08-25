@@ -187,6 +187,7 @@ $application = $client->Application();
 | --- | --- | --- | --- |
 | `application_id` | `string` | Yes | Unique identifier of the application. |
 | `consumption` | `array` | Yes | Current consumption metrics for this application. |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes | Name of the application. |
 | `onboarding_steps` | `array` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
@@ -287,6 +288,7 @@ $application_secret = $client->ApplicationSecret();
 | `application_id` | `string` | Yes |  |
 | `created_at` | `string` | Yes |  |
 | `deleted_at` | `string` | No |  |
+| `id` | `string` | No |  |
 | `name` | `string` | No |  |
 | `token` | `string` | Yes |  |
 
@@ -411,6 +413,7 @@ $event = $client->Event();
 | --- | --- | --- | --- |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `ip` | `string` | Yes |  |
 | `labels` | `array` | Yes |  |
 | `metadata` | `array` | No |  |
@@ -479,6 +482,7 @@ $event_type = $client->EventType();
 | --- | --- | --- | --- |
 | `application_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `resource_type` | `string` | Yes |  |
 | `resource_type_name` | `string` | Yes |  |
 | `service` | `string` | Yes |  |
@@ -988,6 +992,7 @@ $organization = $client->Organization();
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `consumption` | `array` | Yes |  |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `array` | Yes |  |
 | `organization_id` | `string` | Yes |  |
@@ -1090,6 +1095,7 @@ $organization_edit_role = $client->OrganizationEditRole();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `id` | `string` | No |  |
 | `role` | `string` | Yes |  |
 | `user_id` | `string` | Yes |  |
 
@@ -1326,6 +1332,7 @@ $request_attempt = $client->RequestAttempt();
 | `event_id` | `string` | Yes |  |
 | `failed_at` | `string` | No |  |
 | `http_response_status` | `int` | No |  |
+| `id` | `string` | No |  |
 | `picked_at` | `string` | No |  |
 | `request_attempt_id` | `string` | Yes |  |
 | `response_id` | `string` | No |  |
@@ -1387,6 +1394,12 @@ Return the entity name.
 ```php
 $response = $client->Response();
 ```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | No |  |
 
 ### Operations
 
@@ -1486,6 +1499,7 @@ $service_token = $client->ServiceToken();
 | --- | --- | --- | --- |
 | `biscuit` | `string` | Yes |  |
 | `created_at` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes |  |
 | `organization_id` | `string` | Yes |  |
 | `token_id` | `string` | Yes |  |
@@ -1586,6 +1600,7 @@ $subscription = $client->Subscription();
 | `dedicated_workers` | `array` | Yes |  |
 | `description` | `string` | No |  |
 | `event_types` | `array` | Yes |  |
+| `id` | `string` | No |  |
 | `is_enabled` | `bool` | Yes |  |
 | `label_key` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
@@ -1605,6 +1620,7 @@ $subscription = $client->Subscription();
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
 | `event_types` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |

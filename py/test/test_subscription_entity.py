@@ -80,6 +80,7 @@ class TestSubscriptionEntity:
 
         subscription_ref01_data = helpers.to_map(runner.entity_data(subscription_ref01_ent.create(subscription_ref01_data, None)))
         assert subscription_ref01_data is not None
+        assert subscription_ref01_data["id"] is not None
 
         # LIST
         subscription_ref01_match = {}
@@ -87,8 +88,14 @@ class TestSubscriptionEntity:
         subscription_ref01_list_result = subscription_ref01_ent.list(subscription_ref01_match, None)
         assert isinstance(subscription_ref01_list_result, list)
 
+        found_item = vs.select(
+            runner.entity_list_to_data(subscription_ref01_list_result),
+            {"id": subscription_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
         # UPDATE
         subscription_ref01_data_up0_up = {
+            "id": subscription_ref01_data["id"],
         }
 
         subscription_ref01_markdef_up0_name = "application_id"
@@ -97,19 +104,34 @@ class TestSubscriptionEntity:
 
         subscription_ref01_resdata_up0 = helpers.to_map(runner.entity_data(subscription_ref01_ent.update(subscription_ref01_data_up0_up, None)))
         assert subscription_ref01_resdata_up0 is not None
+        assert subscription_ref01_resdata_up0["id"] == subscription_ref01_data_up0_up["id"]
         assert subscription_ref01_resdata_up0[subscription_ref01_markdef_up0_name] == subscription_ref01_markdef_up0_value
 
         # LOAD
-        subscription_ref01_match_dt0 = {}
+        subscription_ref01_match_dt0 = {
+            "id": subscription_ref01_data["id"],
+        }
         subscription_ref01_data_dt0_loaded = subscription_ref01_ent.load(subscription_ref01_match_dt0, None)
-        assert subscription_ref01_data_dt0_loaded is not None
+        subscription_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(subscription_ref01_data_dt0_loaded))
+        assert subscription_ref01_data_dt0_load_result is not None
+        assert subscription_ref01_data_dt0_load_result["id"] == subscription_ref01_data["id"]
 
+        # REMOVE
+        subscription_ref01_match_rm0 = {
+            "id": subscription_ref01_data["id"],
+        }
+        subscription_ref01_ent.remove(subscription_ref01_match_rm0, None)
 
         # LIST
         subscription_ref01_match_rt0 = {}
 
         subscription_ref01_list_rt0_result = subscription_ref01_ent.list(subscription_ref01_match_rt0, None)
         assert isinstance(subscription_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(subscription_ref01_list_rt0_result),
+            {"id": subscription_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 

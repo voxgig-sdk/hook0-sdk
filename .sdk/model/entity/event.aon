@@ -16,6 +16,11 @@ main: kit: entity: event: {
       type: "`$STRING`"
     }
     {
+      name: "id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
       name: "ip"
       req: true
       type: "`$STRING`"
@@ -51,6 +56,11 @@ main: kit: entity: event: {
       type: "`$STRING`"
     }
   ]
+
+  id: {
+    field: "id"
+    name: "id"
+  }
 
   name: "event"
   op: {

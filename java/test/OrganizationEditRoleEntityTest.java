@@ -59,6 +59,7 @@ public class OrganizationEditRoleEntityTest {
     // UPDATE
     SdkEntity organizationEditRoleRef01Ent = client.organizationEditRole(null);
     Map<String, Object> organizationEditRoleRef01DataUp0Up = new LinkedHashMap<>();
+    organizationEditRoleRef01DataUp0Up.put("id", organizationEditRoleRef01Data.get("id"));
 
     String organizationEditRoleRef01MarkdefUp0Name = "role";
     String organizationEditRoleRef01MarkdefUp0Value = "Mark01-organization_edit_role_ref01_" + setup.now;
@@ -67,6 +68,8 @@ public class OrganizationEditRoleEntityTest {
     Object organizationEditRoleRef01ResdataUp0Result = organizationEditRoleRef01Ent.update(organizationEditRoleRef01DataUp0Up, null);
     Map<String, Object> organizationEditRoleRef01ResdataUp0 = Helpers.toMapAny(organizationEditRoleRef01ResdataUp0Result instanceof SdkEntity ? ((SdkEntity) organizationEditRoleRef01ResdataUp0Result).data() : organizationEditRoleRef01ResdataUp0Result);
     assertNotNull(organizationEditRoleRef01ResdataUp0, "expected update result to be a map");
+    assertEquals(organizationEditRoleRef01DataUp0Up.get("id"), organizationEditRoleRef01ResdataUp0.get("id"),
+        "expected update result id to match");
     assertEquals(organizationEditRoleRef01MarkdefUp0Value, organizationEditRoleRef01ResdataUp0.get(organizationEditRoleRef01MarkdefUp0Name),
         "expected " + organizationEditRoleRef01MarkdefUp0Name + " to be updated");
 

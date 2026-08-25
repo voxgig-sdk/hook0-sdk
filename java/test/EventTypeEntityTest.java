@@ -58,6 +58,7 @@ public class EventTypeEntityTest {
     Object eventTypeRef01DataResult = eventTypeRef01Ent.create(eventTypeRef01Data, null);
     eventTypeRef01Data = Helpers.toMapAny(eventTypeRef01DataResult instanceof SdkEntity ? ((SdkEntity) eventTypeRef01DataResult).data() : eventTypeRef01DataResult);
     assertNotNull(eventTypeRef01Data, "expected create result to be a map");
+    assertNotNull(eventTypeRef01Data.get("id"), "expected created entity to have an id");
 
     // LIST
     Map<String, Object> eventTypeRef01Match = new LinkedHashMap<>();
@@ -74,8 +75,12 @@ public class EventTypeEntityTest {
 
     // LOAD
     Map<String, Object> eventTypeRef01MatchDt0 = new LinkedHashMap<>();
+    eventTypeRef01MatchDt0.put("id", eventTypeRef01Data.get("id"));
     Object eventTypeRef01DataDt0Loaded = eventTypeRef01Ent.load(eventTypeRef01MatchDt0, null);
-    assertNotNull(eventTypeRef01DataDt0Loaded, "expected load result to be non-null");
+    Map<String, Object> eventTypeRef01DataDt0LoadResult = Helpers.toMapAny(eventTypeRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) eventTypeRef01DataDt0Loaded).data() : eventTypeRef01DataDt0Loaded);
+    assertNotNull(eventTypeRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(eventTypeRef01Data.get("id"), eventTypeRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
 
   }
 

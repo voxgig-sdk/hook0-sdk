@@ -41,6 +41,11 @@ main: kit: entity: subscription: {
       type: "`$ARRAY`"
     }
     {
+      name: "id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
       name: "is_enabled"
       req: true
       type: "`$BOOLEAN`"
@@ -128,6 +133,11 @@ main: kit: entity: subscription: {
       type: "`$STRING`"
     }
   ]
+
+  id: {
+    field: "id"
+    name: "id"
+  }
 
   name: "subscription"
   op: {

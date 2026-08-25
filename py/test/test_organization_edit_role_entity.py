@@ -49,6 +49,7 @@ class TestOrganizationEditRoleEntity:
         # UPDATE
         organization_edit_role_ref01_ent = client.OrganizationEditRole(None)
         organization_edit_role_ref01_data_up0_up = {
+            "id": organization_edit_role_ref01_data["id"],
         }
 
         organization_edit_role_ref01_markdef_up0_name = "role"
@@ -57,6 +58,7 @@ class TestOrganizationEditRoleEntity:
 
         organization_edit_role_ref01_resdata_up0 = helpers.to_map(runner.entity_data(organization_edit_role_ref01_ent.update(organization_edit_role_ref01_data_up0_up, None)))
         assert organization_edit_role_ref01_resdata_up0 is not None
+        assert organization_edit_role_ref01_resdata_up0["id"] == organization_edit_role_ref01_data_up0_up["id"]
         assert organization_edit_role_ref01_resdata_up0[organization_edit_role_ref01_markdef_up0_name] == organization_edit_role_ref01_markdef_up0_value
 
 

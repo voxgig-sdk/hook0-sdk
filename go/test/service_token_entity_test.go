@@ -111,6 +111,9 @@ func TestServiceTokenEntity(t *testing.T) {
 		if serviceTokenRef01Data == nil {
 			t.Fatal("expected create result to be a map")
 		}
+		if serviceTokenRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
 
 		// LIST
 		serviceTokenRef01Match := map[string]any{}
@@ -119,13 +122,19 @@ func TestServiceTokenEntity(t *testing.T) {
 		if err != nil {
 			t.Fatalf("list failed: %v", err)
 		}
-		_, serviceTokenRef01ListOk := serviceTokenRef01ListResult.([]any)
+		serviceTokenRef01List, serviceTokenRef01ListOk := serviceTokenRef01ListResult.([]any)
 		if !serviceTokenRef01ListOk {
 			t.Fatalf("expected list result to be an array, got %T", serviceTokenRef01ListResult)
 		}
 
+		foundItem := vs.Select(entityListToData(serviceTokenRef01List), map[string]any{"id": serviceTokenRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
 		// UPDATE
 		serviceTokenRef01DataUp0Up := map[string]any{
+			"id": serviceTokenRef01Data["id"],
 		}
 
 		serviceTokenRef01MarkdefUp0Name := "biscuit"
@@ -140,20 +149,37 @@ func TestServiceTokenEntity(t *testing.T) {
 		if serviceTokenRef01ResdataUp0 == nil {
 			t.Fatal("expected update result to be a map")
 		}
+		if serviceTokenRef01ResdataUp0["id"] != serviceTokenRef01DataUp0Up["id"] {
+			t.Fatal("expected update result id to match")
+		}
 		if serviceTokenRef01ResdataUp0[serviceTokenRef01MarkdefUp0Name] != serviceTokenRef01MarkdefUp0Value {
 			t.Fatalf("expected %s to be updated, got %v", serviceTokenRef01MarkdefUp0Name, serviceTokenRef01ResdataUp0[serviceTokenRef01MarkdefUp0Name])
 		}
 
 		// LOAD
-		serviceTokenRef01MatchDt0 := map[string]any{}
+		serviceTokenRef01MatchDt0 := map[string]any{
+			"id": serviceTokenRef01Data["id"],
+		}
 		serviceTokenRef01DataDt0Loaded, err := serviceTokenRef01Ent.Load(serviceTokenRef01MatchDt0, nil)
 		if err != nil {
 			t.Fatalf("load failed: %v", err)
 		}
-		if serviceTokenRef01DataDt0Loaded == nil {
-			t.Fatal("expected load result to be non-nil")
+		serviceTokenRef01DataDt0LoadResult := core.ToMapAny(entityData(serviceTokenRef01DataDt0Loaded))
+		if serviceTokenRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if serviceTokenRef01DataDt0LoadResult["id"] != serviceTokenRef01Data["id"] {
+			t.Fatal("expected load result id to match")
 		}
 
+		// REMOVE
+		serviceTokenRef01MatchRm0 := map[string]any{
+			"id": serviceTokenRef01Data["id"],
+		}
+		_, err = serviceTokenRef01Ent.Remove(serviceTokenRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
 
 		// LIST
 		serviceTokenRef01MatchRt0 := map[string]any{}
@@ -162,9 +188,14 @@ func TestServiceTokenEntity(t *testing.T) {
 		if err != nil {
 			t.Fatalf("list failed: %v", err)
 		}
-		_, serviceTokenRef01ListRt0Ok := serviceTokenRef01ListRt0Result.([]any)
+		serviceTokenRef01ListRt0, serviceTokenRef01ListRt0Ok := serviceTokenRef01ListRt0Result.([]any)
 		if !serviceTokenRef01ListRt0Ok {
 			t.Fatalf("expected list result to be an array, got %T", serviceTokenRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(serviceTokenRef01ListRt0), map[string]any{"id": serviceTokenRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})

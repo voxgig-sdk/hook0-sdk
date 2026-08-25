@@ -110,6 +110,9 @@ func TestEventTypeEntity(t *testing.T) {
 		if eventTypeRef01Data == nil {
 			t.Fatal("expected create result to be a map")
 		}
+		if eventTypeRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
 
 		// LIST
 		eventTypeRef01Match := map[string]any{}
@@ -118,19 +121,30 @@ func TestEventTypeEntity(t *testing.T) {
 		if err != nil {
 			t.Fatalf("list failed: %v", err)
 		}
-		_, eventTypeRef01ListOk := eventTypeRef01ListResult.([]any)
+		eventTypeRef01List, eventTypeRef01ListOk := eventTypeRef01ListResult.([]any)
 		if !eventTypeRef01ListOk {
 			t.Fatalf("expected list result to be an array, got %T", eventTypeRef01ListResult)
 		}
 
+		foundItem := vs.Select(entityListToData(eventTypeRef01List), map[string]any{"id": eventTypeRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
 		// LOAD
-		eventTypeRef01MatchDt0 := map[string]any{}
+		eventTypeRef01MatchDt0 := map[string]any{
+			"id": eventTypeRef01Data["id"],
+		}
 		eventTypeRef01DataDt0Loaded, err := eventTypeRef01Ent.Load(eventTypeRef01MatchDt0, nil)
 		if err != nil {
 			t.Fatalf("load failed: %v", err)
 		}
-		if eventTypeRef01DataDt0Loaded == nil {
-			t.Fatal("expected load result to be non-nil")
+		eventTypeRef01DataDt0LoadResult := core.ToMapAny(entityData(eventTypeRef01DataDt0Loaded))
+		if eventTypeRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if eventTypeRef01DataDt0LoadResult["id"] != eventTypeRef01Data["id"] {
+			t.Fatal("expected load result id to match")
 		}
 
 	})

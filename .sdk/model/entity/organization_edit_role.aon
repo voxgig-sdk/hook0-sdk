@@ -6,6 +6,11 @@ main: kit: entity: organization_edit_role: {
 
   fields: [
     {
+      name: "id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
       name: "role"
       req: true
       type: "`$STRING`"
@@ -16,6 +21,11 @@ main: kit: entity: organization_edit_role: {
       type: "`$STRING`"
     }
   ]
+
+  id: {
+    field: "id"
+    name: "id"
+  }
 
   name: "organization_edit_role"
   op: {

@@ -18,6 +18,11 @@ main: kit: entity: application: {
       type: "`$OBJECT`"
     }
     {
+      name: "id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
       name: "name"
       req: true
       short: "Name of the application."
@@ -42,6 +47,11 @@ main: kit: entity: application: {
       type: "`$OBJECT`"
     }
   ]
+
+  id: {
+    field: "id"
+    name: "id"
+  }
 
   name: "application"
   op: {

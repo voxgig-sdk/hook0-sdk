@@ -45,7 +45,7 @@ describe('EventTypeEntity', async () => {
     let event_type_ref01_data = setup.data.new.event_type['event_type_ref01']
 
     event_type_ref01_data = (await event_type_ref01_ent.create(event_type_ref01_data)).data()
-    assert(null != event_type_ref01_data)
+    assert(null != event_type_ref01_data.id)
 
 
     // LIST
@@ -53,11 +53,14 @@ describe('EventTypeEntity', async () => {
 
     const event_type_ref01_list = (await event_type_ref01_ent.list(event_type_ref01_match)).map((e) => e.data())
 
+    assert(!isempty(select(event_type_ref01_list, { id: event_type_ref01_data.id })))
+
 
     // LOAD
     const event_type_ref01_match_dt0 = {}
+    event_type_ref01_match_dt0.id = event_type_ref01_data.id
     const event_type_ref01_data_dt0 = (await event_type_ref01_ent.load(event_type_ref01_match_dt0)).data()
-    assert(null != event_type_ref01_data_dt0)
+    assert(event_type_ref01_data_dt0.id === event_type_ref01_data.id)
 
 
   })

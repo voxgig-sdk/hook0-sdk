@@ -74,6 +74,10 @@ func MakeConfig() map[string]any {
 						"type": "`$OBJECT`",
 					},
 					map[string]any{
+						"name": "id",
+						"type": "`$STRING`",
+					},
+					map[string]any{
 						"name": "name",
 						"req": true,
 						"short": "Name of the application.",
@@ -306,6 +310,10 @@ func MakeConfig() map[string]any {
 						"type": "`$STRING`",
 					},
 					map[string]any{
+						"name": "id",
+						"type": "`$STRING`",
+					},
+					map[string]any{
 						"name": "name",
 						"type": "`$STRING`",
 					},
@@ -495,6 +503,10 @@ func MakeConfig() map[string]any {
 						"type": "`$STRING`",
 					},
 					map[string]any{
+						"name": "id",
+						"type": "`$STRING`",
+					},
+					map[string]any{
 						"name": "ip",
 						"req": true,
 						"type": "`$STRING`",
@@ -634,6 +646,10 @@ func MakeConfig() map[string]any {
 					map[string]any{
 						"name": "event_type_name",
 						"req": true,
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "id",
 						"type": "`$STRING`",
 					},
 					map[string]any{
@@ -1411,6 +1427,10 @@ func MakeConfig() map[string]any {
 						"type": "`$OBJECT`",
 					},
 					map[string]any{
+						"name": "id",
+						"type": "`$STRING`",
+					},
+					map[string]any{
 						"name": "name",
 						"req": true,
 						"type": "`$STRING`",
@@ -1625,6 +1645,10 @@ func MakeConfig() map[string]any {
 			},
 			"organization_edit_role": map[string]any{
 				"fields": []any{
+					map[string]any{
+						"name": "id",
+						"type": "`$STRING`",
+					},
 					map[string]any{
 						"name": "role",
 						"req": true,
@@ -1892,6 +1916,10 @@ func MakeConfig() map[string]any {
 						"type": "`$INTEGER`",
 					},
 					map[string]any{
+						"name": "id",
+						"type": "`$STRING`",
+					},
+					map[string]any{
 						"name": "picked_at",
 						"type": "`$STRING`",
 					},
@@ -2063,7 +2091,12 @@ func MakeConfig() map[string]any {
 				},
 			},
 			"response": map[string]any{
-				"fields": []any{},
+				"fields": []any{
+					map[string]any{
+						"name": "id",
+						"type": "`$STRING`",
+					},
+				},
 				"name": "response",
 				"op": map[string]any{
 					"load": map[string]any{
@@ -2184,6 +2217,10 @@ func MakeConfig() map[string]any {
 					map[string]any{
 						"name": "created_at",
 						"req": true,
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "id",
 						"type": "`$STRING`",
 					},
 					map[string]any{
@@ -2446,6 +2483,10 @@ func MakeConfig() map[string]any {
 						"name": "event_types",
 						"req": true,
 						"type": "`$ARRAY`",
+					},
+					map[string]any{
+						"name": "id",
+						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "is_enabled",

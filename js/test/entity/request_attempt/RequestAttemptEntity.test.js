@@ -50,8 +50,9 @@ describe('RequestAttemptEntity', async () => {
 
     // LOAD
     const request_attempt_ref01_match_dt0 = {}
+    request_attempt_ref01_match_dt0.id = request_attempt_ref01_data.id
     const request_attempt_ref01_data_dt0 = (await request_attempt_ref01_ent.load(request_attempt_ref01_match_dt0)).data()
-    assert(null != request_attempt_ref01_data_dt0)
+    assert(request_attempt_ref01_data_dt0.id === request_attempt_ref01_data.id)
 
 
   })

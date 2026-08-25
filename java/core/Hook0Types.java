@@ -20,23 +20,23 @@ public final class Hook0Types {
 
   private Hook0Types() {}
 
-  public record Application(String application_id, Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
+  public record Application(String application_id, Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
 
   public record ApplicationLoadMatch(String id) {}
 
-  public record ApplicationListMatch(String application_id, Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
+  public record ApplicationListMatch(String application_id, Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
 
-  public record ApplicationCreateData(String application_id, Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
+  public record ApplicationCreateData(String application_id, Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
 
   public record ApplicationUpdateData(String id, String application_id, Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
 
   public record ApplicationRemoveMatch(String id) {}
 
-  public record ApplicationSecret(String application_id, String created_at, String deleted_at, String name, String token) {}
+  public record ApplicationSecret(String application_id, String created_at, String deleted_at, String id, String name, String token) {}
 
-  public record ApplicationSecretListMatch(String application_id, String created_at, String deleted_at, String name, String token) {}
+  public record ApplicationSecretListMatch(String application_id, String created_at, String deleted_at, String id, String name, String token) {}
 
-  public record ApplicationSecretCreateData(String application_id, String created_at, String deleted_at, String name, String token) {}
+  public record ApplicationSecretCreateData(String application_id, String created_at, String deleted_at, String id, String name, String token) {}
 
   public record ApplicationSecretUpdateData(String id, String application_id, String created_at, String deleted_at, String name, String token) {}
 
@@ -44,19 +44,19 @@ public final class Hook0Types {
 
   public record ApplicationsManagementRemoveMatch(String application_secret_token) {}
 
-  public record Event(String event_id, String event_type_name, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
+  public record Event(String event_id, String event_type_name, String id, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
 
   public record EventLoadMatch(String id) {}
 
-  public record EventListMatch(String event_id, String event_type_name, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
+  public record EventListMatch(String event_id, String event_type_name, String id, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
 
-  public record EventType(String application_id, String event_type_name, String resource_type, String resource_type_name, String service, String service_name, String verb, String verb_name) {}
+  public record EventType(String application_id, String event_type_name, String id, String resource_type, String resource_type_name, String service, String service_name, String verb, String verb_name) {}
 
   public record EventTypeLoadMatch(String id) {}
 
-  public record EventTypeListMatch(String application_id, String event_type_name, String resource_type, String resource_type_name, String service, String service_name, String verb, String verb_name) {}
+  public record EventTypeListMatch(String application_id, String event_type_name, String id, String resource_type, String resource_type_name, String service, String service_name, String verb, String verb_name) {}
 
-  public record EventTypeCreateData(String application_id, String event_type_name, String resource_type, String resource_type_name, String service, String service_name, String verb, String verb_name) {}
+  public record EventTypeCreateData(String application_id, String event_type_name, String id, String resource_type, String resource_type_name, String service, String service_name, String verb, String verb_name) {}
 
   public record EventsManagement(String application_id) {}
 
@@ -90,19 +90,19 @@ public final class Hook0Types {
 
   public record LoginCreateData(String email, String password) {}
 
-  public record Organization(Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
+  public record Organization(Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
   public record OrganizationLoadMatch(String id) {}
 
-  public record OrganizationListMatch(Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
+  public record OrganizationListMatch(Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
-  public record OrganizationCreateData(Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
+  public record OrganizationCreateData(Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
   public record OrganizationUpdateData(String id, Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
   public record OrganizationRemoveMatch(String id) {}
 
-  public record OrganizationEditRole(String role, String user_id) {}
+  public record OrganizationEditRole(String id, String role, String user_id) {}
 
   public record OrganizationEditRoleUpdateData(String id, String role, String user_id) {}
 
@@ -118,13 +118,13 @@ public final class Hook0Types {
 
   public record RegistrationCreateData(String email, String first_name, String gclid, String last_name, String password, String turnstile_token) {}
 
-  public record RequestAttempt(String created_at, String delay_until, Map<String, Object> event, String event_id, String failed_at, Long http_response_status, String picked_at, String request_attempt_id, String response_id, Long retry_count, Map<String, Object> status, Map<String, Object> subscription, String succeeded_at) {}
+  public record RequestAttempt(String created_at, String delay_until, Map<String, Object> event, String event_id, String failed_at, Long http_response_status, String id, String picked_at, String request_attempt_id, String response_id, Long retry_count, Map<String, Object> status, Map<String, Object> subscription, String succeeded_at) {}
 
   public record RequestAttemptLoadMatch(String id) {}
 
-  public record RequestAttemptListMatch(String created_at, String delay_until, Map<String, Object> event, String event_id, String failed_at, Long http_response_status, String picked_at, String request_attempt_id, String response_id, Long retry_count, Map<String, Object> status, Map<String, Object> subscription, String succeeded_at) {}
+  public record RequestAttemptListMatch(String created_at, String delay_until, Map<String, Object> event, String event_id, String failed_at, Long http_response_status, String id, String picked_at, String request_attempt_id, String response_id, Long retry_count, Map<String, Object> status, Map<String, Object> subscription, String succeeded_at) {}
 
-  public record Response() {}
+  public record Response(String id) {}
 
   public record ResponseLoadMatch(String id) {}
 
@@ -132,25 +132,25 @@ public final class Hook0Types {
 
   public record RevokeRemoveMatch(String organization_id) {}
 
-  public record ServiceToken(String biscuit, String created_at, String name, String organization_id, String token_id) {}
+  public record ServiceToken(String biscuit, String created_at, String id, String name, String organization_id, String token_id) {}
 
   public record ServiceTokenLoadMatch(String id) {}
 
-  public record ServiceTokenListMatch(String biscuit, String created_at, String name, String organization_id, String token_id) {}
+  public record ServiceTokenListMatch(String biscuit, String created_at, String id, String name, String organization_id, String token_id) {}
 
-  public record ServiceTokenCreateData(String biscuit, String created_at, String name, String organization_id, String token_id) {}
+  public record ServiceTokenCreateData(String biscuit, String created_at, String id, String name, String organization_id, String token_id) {}
 
   public record ServiceTokenUpdateData(String id, String biscuit, String created_at, String name, String organization_id, String token_id) {}
 
   public record ServiceTokenRemoveMatch(String id) {}
 
-  public record Subscription(String application_id, String created_at, List<Object> dedicated_workers, String description, List<Object> event_types, Boolean is_enabled, String label_key, String label_value, Map<String, Object> labels, Map<String, Object> metadata, String secret, String subscription_id, Map<String, Object> target, String updated_at) {}
+  public record Subscription(String application_id, String created_at, List<Object> dedicated_workers, String description, List<Object> event_types, String id, Boolean is_enabled, String label_key, String label_value, Map<String, Object> labels, Map<String, Object> metadata, String secret, String subscription_id, Map<String, Object> target, String updated_at) {}
 
   public record SubscriptionLoadMatch(String id) {}
 
-  public record SubscriptionListMatch(String application_id, String created_at, List<Object> dedicated_workers, String description, List<Object> event_types, Boolean is_enabled, String label_key, String label_value, Map<String, Object> labels, Map<String, Object> metadata, String secret, String subscription_id, Map<String, Object> target, String updated_at) {}
+  public record SubscriptionListMatch(String application_id, String created_at, List<Object> dedicated_workers, String description, List<Object> event_types, String id, Boolean is_enabled, String label_key, String label_value, Map<String, Object> labels, Map<String, Object> metadata, String secret, String subscription_id, Map<String, Object> target, String updated_at) {}
 
-  public record SubscriptionCreateData(String application_id, String created_at, List<Object> dedicated_workers, String description, List<Object> event_types, Boolean is_enabled, String label_key, String label_value, Map<String, Object> labels, Map<String, Object> metadata, String secret, String subscription_id, Map<String, Object> target, String updated_at) {}
+  public record SubscriptionCreateData(String application_id, String created_at, List<Object> dedicated_workers, String description, List<Object> event_types, String id, Boolean is_enabled, String label_key, String label_value, Map<String, Object> labels, Map<String, Object> metadata, String secret, String subscription_id, Map<String, Object> target, String updated_at) {}
 
   public record SubscriptionUpdateData(String id, String application_id, String created_at, List<Object> dedicated_workers, String description, List<Object> event_types, Boolean is_enabled, String label_key, String label_value, Map<String, Object> labels, Map<String, Object> metadata, String secret, String subscription_id, Map<String, Object> target, String updated_at) {}
 

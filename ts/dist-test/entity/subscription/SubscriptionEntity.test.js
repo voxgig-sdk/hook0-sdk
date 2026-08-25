@@ -75,20 +75,31 @@ const utility_1 = require("../../utility");
         const subscription_ref01_ent = client.Subscription();
         let subscription_ref01_data = setup.data.new.subscription['subscription_ref01'];
         subscription_ref01_data = (await subscription_ref01_ent.create(subscription_ref01_data)).data();
-        (0, node_assert_1.default)(null != subscription_ref01_data);
+        (0, node_assert_1.default)(null != subscription_ref01_data.id);
         // LIST
         const subscription_ref01_match = {};
         const subscription_ref01_list = (await subscription_ref01_ent.list(subscription_ref01_match)).map((e) => e.data());
+        (0, node_assert_1.default)(!isempty(select(subscription_ref01_list, { id: subscription_ref01_data.id })));
         // UPDATE
         const subscription_ref01_data_up0 = {};
+        subscription_ref01_data_up0.id = subscription_ref01_data.id;
         const subscription_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-subscription_ref01_' + setup.now };
         subscription_ref01_data_up0[subscription_ref01_markdef_up0.name] = subscription_ref01_markdef_up0.value;
         const subscription_ref01_resdata_up0 = (await subscription_ref01_ent.update(subscription_ref01_data_up0)).data();
-        (0, node_assert_1.default)(null != subscription_ref01_resdata_up0);
+        (0, node_assert_1.default)(subscription_ref01_resdata_up0.id === subscription_ref01_data_up0.id);
         (0, node_assert_1.default)(subscription_ref01_resdata_up0[subscription_ref01_markdef_up0.name] === subscription_ref01_markdef_up0.value);
+        // LOAD
+        const subscription_ref01_match_dt0 = {};
+        subscription_ref01_match_dt0.id = subscription_ref01_data.id;
+        const subscription_ref01_data_dt0 = (await subscription_ref01_ent.load(subscription_ref01_match_dt0)).data();
+        (0, node_assert_1.default)(subscription_ref01_data_dt0.id === subscription_ref01_data.id);
+        // REMOVE
+        const subscription_ref01_match_rm0 = { id: subscription_ref01_data.id };
+        await subscription_ref01_ent.remove(subscription_ref01_match_rm0);
         // LIST
         const subscription_ref01_match_rt0 = {};
         const subscription_ref01_list_rt0 = (await subscription_ref01_ent.list(subscription_ref01_match_rt0)).map((e) => e.data());
+        (0, node_assert_1.default)(isempty(select(subscription_ref01_list_rt0, { id: subscription_ref01_data.id })));
     });
 });
 function basicSetup(extra) {

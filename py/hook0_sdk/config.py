@@ -91,6 +91,10 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "name": "id",
+            "type": "`$STRING`",
+          },
+          {
             "name": "name",
             "req": True,
             "short": "Name of the application.",
@@ -323,6 +327,10 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "name": "id",
+            "type": "`$STRING`",
+          },
+          {
             "name": "name",
             "type": "`$STRING`",
           },
@@ -512,6 +520,10 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "name": "id",
+            "type": "`$STRING`",
+          },
+          {
             "name": "ip",
             "req": True,
             "type": "`$STRING`",
@@ -651,6 +663,10 @@ def make_config():
           {
             "name": "event_type_name",
             "req": True,
+            "type": "`$STRING`",
+          },
+          {
+            "name": "id",
             "type": "`$STRING`",
           },
           {
@@ -1428,6 +1444,10 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "name": "id",
+            "type": "`$STRING`",
+          },
+          {
             "name": "name",
             "req": True,
             "type": "`$STRING`",
@@ -1642,6 +1662,10 @@ def make_config():
       },
       "organization_edit_role": {
         "fields": [
+          {
+            "name": "id",
+            "type": "`$STRING`",
+          },
           {
             "name": "role",
             "req": True,
@@ -1909,6 +1933,10 @@ def make_config():
             "type": "`$INTEGER`",
           },
           {
+            "name": "id",
+            "type": "`$STRING`",
+          },
+          {
             "name": "picked_at",
             "type": "`$STRING`",
           },
@@ -2080,7 +2108,12 @@ def make_config():
         },
       },
       "response": {
-        "fields": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": "`$STRING`",
+          },
+        ],
         "name": "response",
         "op": {
           "load": {
@@ -2201,6 +2234,10 @@ def make_config():
           {
             "name": "created_at",
             "req": True,
+            "type": "`$STRING`",
+          },
+          {
+            "name": "id",
             "type": "`$STRING`",
           },
           {
@@ -2463,6 +2500,10 @@ def make_config():
             "name": "event_types",
             "req": True,
             "type": "`$ARRAY`",
+          },
+          {
+            "name": "id",
+            "type": "`$STRING`",
           },
           {
             "name": "is_enabled",

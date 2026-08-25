@@ -3,54 +3,54 @@
     "subscription": {
       "SUBSCRIPTION00": {
         "application_id": "APPLICATION01",
-        "created_at": "s8d",
+        "created_at": "s97",
         "dedicated_workers": [],
-        "description": "s8f",
+        "description": "s99",
         "event_types": [],
-        "is_enabled": false,
-        "label_key": "s92",
-        "label_value": "s93",
+        "id": "SUBSCRIPTION00",
+        "is_enabled": true,
+        "label_key": "s9d",
+        "label_value": "s9e",
         "labels": {},
         "metadata": {},
-        "secret": "s96",
+        "secret": "sa1",
         "subscription_id": "SUBSCRIPTION01",
         "target": {},
-        "updated_at": "s99",
-        "id": "SUBSCRIPTION00"
+        "updated_at": "sa4"
       },
       "SUBSCRIPTION01": {
         "application_id": "APPLICATION01",
-        "created_at": "s119",
+        "created_at": "s12d",
         "dedicated_workers": [],
-        "description": "s11b",
+        "description": "s12f",
         "event_types": [],
-        "is_enabled": false,
-        "label_key": "s11e",
-        "label_value": "s11f",
+        "id": "SUBSCRIPTION01",
+        "is_enabled": true,
+        "label_key": "s133",
+        "label_value": "s134",
         "labels": {},
         "metadata": {},
-        "secret": "s122",
+        "secret": "s137",
         "subscription_id": "SUBSCRIPTION01",
         "target": {},
-        "updated_at": "s125",
-        "id": "SUBSCRIPTION01"
+        "updated_at": "s13a"
       },
       "SUBSCRIPTION02": {
         "application_id": "APPLICATION01",
-        "created_at": "s1a5",
+        "created_at": "s1c3",
         "dedicated_workers": [],
-        "description": "s1a7",
+        "description": "s1c5",
         "event_types": [],
-        "is_enabled": false,
-        "label_key": "s1aa",
-        "label_value": "s1ab",
+        "id": "SUBSCRIPTION02",
+        "is_enabled": true,
+        "label_key": "s1c9",
+        "label_value": "s1ca",
         "labels": {},
         "metadata": {},
-        "secret": "s1ae",
+        "secret": "s1cd",
         "subscription_id": "SUBSCRIPTION01",
         "target": {},
-        "updated_at": "s1b1",
-        "id": "SUBSCRIPTION02"
+        "updated_at": "s1d0"
       }
     }
   },
@@ -58,19 +58,19 @@
     "subscription": {
       "subscription_ref01": {
         "application_id": "APPLICATION01",
-        "created_at": "s231",
+        "created_at": "s259",
         "dedicated_workers": [],
-        "description": "s233",
+        "description": "s25b",
         "event_types": [],
-        "is_enabled": false,
-        "label_key": "s236",
-        "label_value": "s237",
+        "is_enabled": true,
+        "label_key": "s25f",
+        "label_value": "s260",
         "labels": {},
         "metadata": {},
-        "secret": "s23a",
+        "secret": "s263",
         "subscription_id": "SUBSCRIPTION01",
         "target": {},
-        "updated_at": "s23d"
+        "updated_at": "s266"
       }
     }
   }

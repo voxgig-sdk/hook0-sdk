@@ -59,8 +59,12 @@ public class ResponseEntityTest {
     // LOAD
     SdkEntity responseRef01Ent = client.response(null);
     Map<String, Object> responseRef01MatchDt0 = new LinkedHashMap<>();
+    responseRef01MatchDt0.put("id", responseRef01Data.get("id"));
     Object responseRef01DataDt0Loaded = responseRef01Ent.load(responseRef01MatchDt0, null);
-    assertNotNull(responseRef01DataDt0Loaded, "expected load result to be non-null");
+    Map<String, Object> responseRef01DataDt0LoadResult = Helpers.toMapAny(responseRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) responseRef01DataDt0Loaded).data() : responseRef01DataDt0Loaded);
+    assertNotNull(responseRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(responseRef01Data.get("id"), responseRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
 
   }
 

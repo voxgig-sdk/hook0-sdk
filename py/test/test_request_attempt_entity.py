@@ -88,9 +88,13 @@ class TestRequestAttemptEntity:
         assert isinstance(request_attempt_ref01_list_result, list)
 
         # LOAD
-        request_attempt_ref01_match_dt0 = {}
+        request_attempt_ref01_match_dt0 = {
+            "id": request_attempt_ref01_data["id"],
+        }
         request_attempt_ref01_data_dt0_loaded = request_attempt_ref01_ent.load(request_attempt_ref01_match_dt0, None)
-        assert request_attempt_ref01_data_dt0_loaded is not None
+        request_attempt_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(request_attempt_ref01_data_dt0_loaded))
+        assert request_attempt_ref01_data_dt0_load_result is not None
+        assert request_attempt_ref01_data_dt0_load_result["id"] == request_attempt_ref01_data["id"]
 
 
 

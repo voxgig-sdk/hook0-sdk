@@ -85,6 +85,7 @@ class ApplicationEntityTest extends TestCase
         $application_ref01_data_result = $application_ref01_ent->create($application_ref01_data, null);
         $application_ref01_data = Helpers::to_map(is_object($application_ref01_data_result) && method_exists($application_ref01_data_result, 'data_get') ? $application_ref01_data_result->data_get() : $application_ref01_data_result);
         $this->assertNotNull($application_ref01_data);
+        $this->assertNotNull($application_ref01_data["id"]);
 
         // LIST
         $application_ref01_match = [];
@@ -92,8 +93,14 @@ class ApplicationEntityTest extends TestCase
         $application_ref01_list_result = $application_ref01_ent->list($application_ref01_match, null);
         $this->assertIsArray($application_ref01_list_result);
 
+        $found_item = sdk_select(
+            Runner::entity_list_to_data($application_ref01_list_result),
+            ["id" => $application_ref01_data["id"]]);
+        $this->assertNotEmpty($found_item);
+
         // UPDATE
         $application_ref01_data_up0_up = [
+            "id" => $application_ref01_data["id"],
         ];
 
         $application_ref01_markdef_up0_name = "application_id";
@@ -103,19 +110,34 @@ class ApplicationEntityTest extends TestCase
         $application_ref01_resdata_up0_result = $application_ref01_ent->update($application_ref01_data_up0_up, null);
         $application_ref01_resdata_up0 = Helpers::to_map(is_object($application_ref01_resdata_up0_result) && method_exists($application_ref01_resdata_up0_result, 'data_get') ? $application_ref01_resdata_up0_result->data_get() : $application_ref01_resdata_up0_result);
         $this->assertNotNull($application_ref01_resdata_up0);
+        $this->assertEquals($application_ref01_resdata_up0["id"], $application_ref01_data_up0_up["id"]);
         $this->assertEquals($application_ref01_resdata_up0[$application_ref01_markdef_up0_name], $application_ref01_markdef_up0_value);
 
         // LOAD
-        $application_ref01_match_dt0 = [];
+        $application_ref01_match_dt0 = [
+            "id" => $application_ref01_data["id"],
+        ];
         $application_ref01_data_dt0_loaded = $application_ref01_ent->load($application_ref01_match_dt0, null);
-        $this->assertNotNull($application_ref01_data_dt0_loaded);
+        $application_ref01_data_dt0_load_result = Helpers::to_map(is_object($application_ref01_data_dt0_loaded) && method_exists($application_ref01_data_dt0_loaded, 'data_get') ? $application_ref01_data_dt0_loaded->data_get() : $application_ref01_data_dt0_loaded);
+        $this->assertNotNull($application_ref01_data_dt0_load_result);
+        $this->assertEquals($application_ref01_data_dt0_load_result["id"], $application_ref01_data["id"]);
 
+        // REMOVE
+        $application_ref01_match_rm0 = [
+            "id" => $application_ref01_data["id"],
+        ];
+        $application_ref01_ent->remove($application_ref01_match_rm0, null);
 
         // LIST
         $application_ref01_match_rt0 = [];
 
         $application_ref01_list_rt0_result = $application_ref01_ent->list($application_ref01_match_rt0, null);
         $this->assertIsArray($application_ref01_list_rt0_result);
+
+        $not_found_item = sdk_select(
+            Runner::entity_list_to_data($application_ref01_list_rt0_result),
+            ["id" => $application_ref01_data["id"]]);
+        $this->assertEmpty($not_found_item);
 
     }
 }

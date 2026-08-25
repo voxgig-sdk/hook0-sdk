@@ -58,6 +58,7 @@ public class ApplicationEntityTest {
     Object applicationRef01DataResult = applicationRef01Ent.create(applicationRef01Data, null);
     applicationRef01Data = Helpers.toMapAny(applicationRef01DataResult instanceof SdkEntity ? ((SdkEntity) applicationRef01DataResult).data() : applicationRef01DataResult);
     assertNotNull(applicationRef01Data, "expected create result to be a map");
+    assertNotNull(applicationRef01Data.get("id"), "expected created entity to have an id");
 
     // LIST
     Map<String, Object> applicationRef01Match = new LinkedHashMap<>();
@@ -74,6 +75,7 @@ public class ApplicationEntityTest {
 
     // UPDATE
     Map<String, Object> applicationRef01DataUp0Up = new LinkedHashMap<>();
+    applicationRef01DataUp0Up.put("id", applicationRef01Data.get("id"));
 
     String applicationRef01MarkdefUp0Name = "application_id";
     String applicationRef01MarkdefUp0Value = "Mark01-application_ref01_" + setup.now;
@@ -82,13 +84,19 @@ public class ApplicationEntityTest {
     Object applicationRef01ResdataUp0Result = applicationRef01Ent.update(applicationRef01DataUp0Up, null);
     Map<String, Object> applicationRef01ResdataUp0 = Helpers.toMapAny(applicationRef01ResdataUp0Result instanceof SdkEntity ? ((SdkEntity) applicationRef01ResdataUp0Result).data() : applicationRef01ResdataUp0Result);
     assertNotNull(applicationRef01ResdataUp0, "expected update result to be a map");
+    assertEquals(applicationRef01DataUp0Up.get("id"), applicationRef01ResdataUp0.get("id"),
+        "expected update result id to match");
     assertEquals(applicationRef01MarkdefUp0Value, applicationRef01ResdataUp0.get(applicationRef01MarkdefUp0Name),
         "expected " + applicationRef01MarkdefUp0Name + " to be updated");
 
     // LOAD
     Map<String, Object> applicationRef01MatchDt0 = new LinkedHashMap<>();
+    applicationRef01MatchDt0.put("id", applicationRef01Data.get("id"));
     Object applicationRef01DataDt0Loaded = applicationRef01Ent.load(applicationRef01MatchDt0, null);
-    assertNotNull(applicationRef01DataDt0Loaded, "expected load result to be non-null");
+    Map<String, Object> applicationRef01DataDt0LoadResult = Helpers.toMapAny(applicationRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) applicationRef01DataDt0Loaded).data() : applicationRef01DataDt0Loaded);
+    assertNotNull(applicationRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(applicationRef01Data.get("id"), applicationRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
 
     // REMOVE
     Map<String, Object> applicationRef01MatchRm0 = new LinkedHashMap<>();

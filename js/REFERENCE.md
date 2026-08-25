@@ -395,6 +395,7 @@ const application = client.Application()
 | --- | --- | --- | --- |
 | `application_id` | `string` | Yes | Unique identifier of the application. |
 | `consumption` | `Object` | Yes | Current consumption metrics for this application. |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes | Name of the application. |
 | `onboarding_steps` | `Object` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
@@ -493,6 +494,7 @@ const application_secret = client.ApplicationSecret()
 | `application_id` | `string` | Yes |  |
 | `created_at` | `string` | Yes |  |
 | `deleted_at` | `string` | No |  |
+| `id` | `string` | No |  |
 | `name` | `string` | No |  |
 | `token` | `string` | Yes |  |
 
@@ -613,6 +615,7 @@ const event = client.Event()
 | --- | --- | --- | --- |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `ip` | `string` | Yes |  |
 | `labels` | `Object` | Yes |  |
 | `metadata` | `Object` | No |  |
@@ -679,6 +682,7 @@ const event_type = client.EventType()
 | --- | --- | --- | --- |
 | `application_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `resource_type` | `string` | Yes |  |
 | `resource_type_name` | `string` | Yes |  |
 | `service` | `string` | Yes |  |
@@ -1172,6 +1176,7 @@ const organization = client.Organization()
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `consumption` | `Object` | Yes |  |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `Object` | Yes |  |
 | `organization_id` | `string` | Yes |  |
@@ -1272,6 +1277,7 @@ const organization_edit_role = client.OrganizationEditRole()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `id` | `string` | No |  |
 | `role` | `string` | Yes |  |
 | `user_id` | `string` | Yes |  |
 
@@ -1500,6 +1506,7 @@ const request_attempt = client.RequestAttempt()
 | `event_id` | `string` | Yes |  |
 | `failed_at` | `string` | No |  |
 | `http_response_status` | `number` | No |  |
+| `id` | `string` | No |  |
 | `picked_at` | `string` | No |  |
 | `request_attempt_id` | `string` | Yes |  |
 | `response_id` | `string` | No |  |
@@ -1559,6 +1566,12 @@ Return a copy of the entity options.
 ```ts
 const response = client.Response()
 ```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | No |  |
 
 ### Operations
 
@@ -1654,6 +1667,7 @@ const service_token = client.ServiceToken()
 | --- | --- | --- | --- |
 | `biscuit` | `string` | Yes |  |
 | `created_at` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes |  |
 | `organization_id` | `string` | Yes |  |
 | `token_id` | `string` | Yes |  |
@@ -1752,6 +1766,7 @@ const subscription = client.Subscription()
 | `dedicated_workers` | `Array` | Yes |  |
 | `description` | `string` | No |  |
 | `event_types` | `Array` | Yes |  |
+| `id` | `string` | No |  |
 | `is_enabled` | `boolean` | Yes |  |
 | `label_key` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
@@ -1771,6 +1786,7 @@ const subscription = client.Subscription()
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
 | `event_types` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |

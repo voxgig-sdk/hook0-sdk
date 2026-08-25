@@ -75,16 +75,18 @@ const utility_1 = require("../../utility");
         const application_secret_ref01_ent = client.ApplicationSecret();
         let application_secret_ref01_data = setup.data.new.application_secret['application_secret_ref01'];
         application_secret_ref01_data = (await application_secret_ref01_ent.create(application_secret_ref01_data)).data();
-        (0, node_assert_1.default)(null != application_secret_ref01_data);
+        (0, node_assert_1.default)(null != application_secret_ref01_data.id);
         // LIST
         const application_secret_ref01_match = {};
         const application_secret_ref01_list = (await application_secret_ref01_ent.list(application_secret_ref01_match)).map((e) => e.data());
+        (0, node_assert_1.default)(!isempty(select(application_secret_ref01_list, { id: application_secret_ref01_data.id })));
         // UPDATE
         const application_secret_ref01_data_up0 = {};
+        application_secret_ref01_data_up0.id = application_secret_ref01_data.id;
         const application_secret_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-application_secret_ref01_' + setup.now };
         application_secret_ref01_data_up0[application_secret_ref01_markdef_up0.name] = application_secret_ref01_markdef_up0.value;
         const application_secret_ref01_resdata_up0 = (await application_secret_ref01_ent.update(application_secret_ref01_data_up0)).data();
-        (0, node_assert_1.default)(null != application_secret_ref01_resdata_up0);
+        (0, node_assert_1.default)(application_secret_ref01_resdata_up0.id === application_secret_ref01_data_up0.id);
         (0, node_assert_1.default)(application_secret_ref01_resdata_up0[application_secret_ref01_markdef_up0.name] === application_secret_ref01_markdef_up0.value);
     });
 });

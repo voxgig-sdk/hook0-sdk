@@ -185,6 +185,7 @@ local application = client:Application(nil)
 | --- | --- | --- | --- |
 | `application_id` | `string` | Yes | Unique identifier of the application. |
 | `consumption` | `table` | Yes | Current consumption metrics for this application. |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes | Name of the application. |
 | `onboarding_steps` | `table` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
@@ -285,6 +286,7 @@ local application_secret = client:ApplicationSecret(nil)
 | `application_id` | `string` | Yes |  |
 | `created_at` | `string` | Yes |  |
 | `deleted_at` | `string` | No |  |
+| `id` | `string` | No |  |
 | `name` | `string` | No |  |
 | `token` | `string` | Yes |  |
 
@@ -409,6 +411,7 @@ local event = client:Event(nil)
 | --- | --- | --- | --- |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `ip` | `string` | Yes |  |
 | `labels` | `table` | Yes |  |
 | `metadata` | `table` | No |  |
@@ -477,6 +480,7 @@ local event_type = client:EventType(nil)
 | --- | --- | --- | --- |
 | `application_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `resource_type` | `string` | Yes |  |
 | `resource_type_name` | `string` | Yes |  |
 | `service` | `string` | Yes |  |
@@ -986,6 +990,7 @@ local organization = client:Organization(nil)
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `consumption` | `table` | Yes |  |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `table` | Yes |  |
 | `organization_id` | `string` | Yes |  |
@@ -1088,6 +1093,7 @@ local organization_edit_role = client:OrganizationEditRole(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `id` | `string` | No |  |
 | `role` | `string` | Yes |  |
 | `user_id` | `string` | Yes |  |
 
@@ -1324,6 +1330,7 @@ local request_attempt = client:RequestAttempt(nil)
 | `event_id` | `string` | Yes |  |
 | `failed_at` | `string` | No |  |
 | `http_response_status` | `number` | No |  |
+| `id` | `string` | No |  |
 | `picked_at` | `string` | No |  |
 | `request_attempt_id` | `string` | Yes |  |
 | `response_id` | `string` | No |  |
@@ -1385,6 +1392,12 @@ Return the entity name.
 ```lua
 local response = client:Response(nil)
 ```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | No |  |
 
 ### Operations
 
@@ -1484,6 +1497,7 @@ local service_token = client:ServiceToken(nil)
 | --- | --- | --- | --- |
 | `biscuit` | `string` | Yes |  |
 | `created_at` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes |  |
 | `organization_id` | `string` | Yes |  |
 | `token_id` | `string` | Yes |  |
@@ -1584,6 +1598,7 @@ local subscription = client:Subscription(nil)
 | `dedicated_workers` | `table` | Yes |  |
 | `description` | `string` | No |  |
 | `event_types` | `table` | Yes |  |
+| `id` | `string` | No |  |
 | `is_enabled` | `boolean` | Yes |  |
 | `label_key` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
@@ -1603,6 +1618,7 @@ local subscription = client:Subscription(nil)
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
 | `event_types` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |

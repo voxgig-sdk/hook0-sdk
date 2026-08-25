@@ -16,6 +16,7 @@ import (
 type Application struct {
 	ApplicationId string `json:"application_id"`
 	Consumption map[string]any `json:"consumption"`
+	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
@@ -31,6 +32,7 @@ type ApplicationLoadMatch struct {
 type ApplicationListMatch struct {
 	ApplicationId *string `json:"application_id,omitempty"`
 	Consumption *map[string]any `json:"consumption,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
@@ -41,6 +43,7 @@ type ApplicationListMatch struct {
 type ApplicationCreateData struct {
 	ApplicationId string `json:"application_id"`
 	Consumption map[string]any `json:"consumption"`
+	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
@@ -68,6 +71,7 @@ type ApplicationSecret struct {
 	ApplicationId string `json:"application_id"`
 	CreatedAt string `json:"created_at"`
 	DeletedAt *string `json:"deleted_at,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Token string `json:"token"`
 }
@@ -77,6 +81,7 @@ type ApplicationSecretListMatch struct {
 	ApplicationId *string `json:"application_id,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	DeletedAt *string `json:"deleted_at,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Token *string `json:"token,omitempty"`
 }
@@ -86,6 +91,7 @@ type ApplicationSecretCreateData struct {
 	ApplicationId string `json:"application_id"`
 	CreatedAt string `json:"created_at"`
 	DeletedAt *string `json:"deleted_at,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Token string `json:"token"`
 }
@@ -113,6 +119,7 @@ type ApplicationsManagementRemoveMatch struct {
 type Event struct {
 	EventId string `json:"event_id"`
 	EventTypeName string `json:"event_type_name"`
+	Id *string `json:"id,omitempty"`
 	Ip string `json:"ip"`
 	Labels map[string]any `json:"labels"`
 	Metadata *map[string]any `json:"metadata,omitempty"`
@@ -131,6 +138,7 @@ type EventLoadMatch struct {
 type EventListMatch struct {
 	EventId *string `json:"event_id,omitempty"`
 	EventTypeName *string `json:"event_type_name,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Ip *string `json:"ip,omitempty"`
 	Labels *map[string]any `json:"labels,omitempty"`
 	Metadata *map[string]any `json:"metadata,omitempty"`
@@ -144,6 +152,7 @@ type EventListMatch struct {
 type EventType struct {
 	ApplicationId string `json:"application_id"`
 	EventTypeName string `json:"event_type_name"`
+	Id *string `json:"id,omitempty"`
 	ResourceType string `json:"resource_type"`
 	ResourceTypeName string `json:"resource_type_name"`
 	Service string `json:"service"`
@@ -161,6 +170,7 @@ type EventTypeLoadMatch struct {
 type EventTypeListMatch struct {
 	ApplicationId *string `json:"application_id,omitempty"`
 	EventTypeName *string `json:"event_type_name,omitempty"`
+	Id *string `json:"id,omitempty"`
 	ResourceType *string `json:"resource_type,omitempty"`
 	ResourceTypeName *string `json:"resource_type_name,omitempty"`
 	Service *string `json:"service,omitempty"`
@@ -173,6 +183,7 @@ type EventTypeListMatch struct {
 type EventTypeCreateData struct {
 	ApplicationId string `json:"application_id"`
 	EventTypeName string `json:"event_type_name"`
+	Id *string `json:"id,omitempty"`
 	ResourceType string `json:"resource_type"`
 	ResourceTypeName string `json:"resource_type_name"`
 	Service string `json:"service"`
@@ -331,6 +342,7 @@ type LoginCreateData struct {
 // Organization is the typed data model for the organization entity.
 type Organization struct {
 	Consumption map[string]any `json:"consumption"`
+	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
@@ -348,6 +360,7 @@ type OrganizationLoadMatch struct {
 // OrganizationListMatch is the typed request payload for Organization.ListTyped.
 type OrganizationListMatch struct {
 	Consumption *map[string]any `json:"consumption,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
@@ -360,6 +373,7 @@ type OrganizationListMatch struct {
 // OrganizationCreateData is the typed request payload for Organization.CreateTyped.
 type OrganizationCreateData struct {
 	Consumption map[string]any `json:"consumption"`
+	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
@@ -389,6 +403,7 @@ type OrganizationRemoveMatch struct {
 
 // OrganizationEditRole is the typed data model for the organization_edit_role entity.
 type OrganizationEditRole struct {
+	Id *string `json:"id,omitempty"`
 	Role string `json:"role"`
 	UserId string `json:"user_id"`
 }
@@ -464,6 +479,7 @@ type RequestAttempt struct {
 	EventId string `json:"event_id"`
 	FailedAt *string `json:"failed_at,omitempty"`
 	HttpResponseStatus *int `json:"http_response_status,omitempty"`
+	Id *string `json:"id,omitempty"`
 	PickedAt *string `json:"picked_at,omitempty"`
 	RequestAttemptId string `json:"request_attempt_id"`
 	ResponseId *string `json:"response_id,omitempty"`
@@ -486,6 +502,7 @@ type RequestAttemptListMatch struct {
 	EventId *string `json:"event_id,omitempty"`
 	FailedAt *string `json:"failed_at,omitempty"`
 	HttpResponseStatus *int `json:"http_response_status,omitempty"`
+	Id *string `json:"id,omitempty"`
 	PickedAt *string `json:"picked_at,omitempty"`
 	RequestAttemptId *string `json:"request_attempt_id,omitempty"`
 	ResponseId *string `json:"response_id,omitempty"`
@@ -497,6 +514,7 @@ type RequestAttemptListMatch struct {
 
 // Response is the typed data model for the response entity.
 type Response struct {
+	Id *string `json:"id,omitempty"`
 }
 
 // ResponseLoadMatch is the typed request payload for Response.LoadTyped.
@@ -517,6 +535,7 @@ type RevokeRemoveMatch struct {
 type ServiceToken struct {
 	Biscuit string `json:"biscuit"`
 	CreatedAt string `json:"created_at"`
+	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	OrganizationId string `json:"organization_id"`
 	TokenId string `json:"token_id"`
@@ -531,6 +550,7 @@ type ServiceTokenLoadMatch struct {
 type ServiceTokenListMatch struct {
 	Biscuit *string `json:"biscuit,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
 	TokenId *string `json:"token_id,omitempty"`
@@ -540,6 +560,7 @@ type ServiceTokenListMatch struct {
 type ServiceTokenCreateData struct {
 	Biscuit string `json:"biscuit"`
 	CreatedAt string `json:"created_at"`
+	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	OrganizationId string `json:"organization_id"`
 	TokenId string `json:"token_id"`
@@ -567,6 +588,7 @@ type Subscription struct {
 	DedicatedWorkers []any `json:"dedicated_workers"`
 	Description *string `json:"description,omitempty"`
 	EventTypes []any `json:"event_types"`
+	Id *string `json:"id,omitempty"`
 	IsEnabled bool `json:"is_enabled"`
 	LabelKey string `json:"label_key"`
 	LabelValue string `json:"label_value"`
@@ -590,6 +612,7 @@ type SubscriptionListMatch struct {
 	DedicatedWorkers *[]any `json:"dedicated_workers,omitempty"`
 	Description *string `json:"description,omitempty"`
 	EventTypes *[]any `json:"event_types,omitempty"`
+	Id *string `json:"id,omitempty"`
 	IsEnabled *bool `json:"is_enabled,omitempty"`
 	LabelKey *string `json:"label_key,omitempty"`
 	LabelValue *string `json:"label_value,omitempty"`
@@ -608,6 +631,7 @@ type SubscriptionCreateData struct {
 	DedicatedWorkers []any `json:"dedicated_workers"`
 	Description *string `json:"description,omitempty"`
 	EventTypes []any `json:"event_types"`
+	Id *string `json:"id,omitempty"`
 	IsEnabled bool `json:"is_enabled"`
 	LabelKey string `json:"label_key"`
 	LabelValue string `json:"label_value"`

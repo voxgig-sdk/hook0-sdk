@@ -92,10 +92,14 @@ describe("RequestAttemptEntity", function()
     assert.is_table(request_attempt_ref01_list_result)
 
     -- LOAD
-    local request_attempt_ref01_match_dt0 = {}
+    local request_attempt_ref01_match_dt0 = {
+      id = request_attempt_ref01_data["id"],
+    }
     local request_attempt_ref01_data_dt0_loaded, err = request_attempt_ref01_ent:load(request_attempt_ref01_match_dt0, nil)
     assert.is_nil(err)
-    assert.is_not_nil(request_attempt_ref01_data_dt0_loaded)
+    local request_attempt_ref01_data_dt0_load_result = helpers.to_map(type(request_attempt_ref01_data_dt0_loaded) == 'table' and request_attempt_ref01_data_dt0_loaded.data_get and request_attempt_ref01_data_dt0_loaded:data_get() or request_attempt_ref01_data_dt0_loaded)
+    assert.is_not_nil(request_attempt_ref01_data_dt0_load_result)
+    assert.are.equal(request_attempt_ref01_data_dt0_load_result["id"], request_attempt_ref01_data["id"])
 
   end)
 end)

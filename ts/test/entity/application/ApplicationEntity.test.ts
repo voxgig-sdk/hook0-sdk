@@ -63,7 +63,7 @@ describe('ApplicationEntity', async () => {
     let application_ref01_data = setup.data.new.application['application_ref01']
 
     application_ref01_data = (await application_ref01_ent.create(application_ref01_data)).data()
-    assert(null != application_ref01_data)
+    assert(null != application_ref01_data.id)
 
 
     // LIST
@@ -71,25 +71,40 @@ describe('ApplicationEntity', async () => {
 
     const application_ref01_list = (await application_ref01_ent.list(application_ref01_match)).map((e: any) => e.data())
 
+    assert(!isempty(select(application_ref01_list, { id: application_ref01_data.id })))
+
 
     // UPDATE
     const application_ref01_data_up0: any = {}
+    application_ref01_data_up0.id = application_ref01_data.id
 
     const application_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-application_ref01_' + setup.now }
     ;(application_ref01_data_up0 as any)[application_ref01_markdef_up0.name] = application_ref01_markdef_up0.value
 
     const application_ref01_resdata_up0 = (await application_ref01_ent.update(application_ref01_data_up0)).data()
-    assert(null != application_ref01_resdata_up0)
+    assert(application_ref01_resdata_up0.id === application_ref01_data_up0.id)
 
     assert((application_ref01_resdata_up0 as any)[application_ref01_markdef_up0.name] === application_ref01_markdef_up0.value)
 
 
+    // LOAD
+    const application_ref01_match_dt0: any = {}
+    application_ref01_match_dt0.id = application_ref01_data.id
+    const application_ref01_data_dt0 = (await application_ref01_ent.load(application_ref01_match_dt0)).data()
+    assert(application_ref01_data_dt0.id === application_ref01_data.id)
 
+
+    // REMOVE
+    const application_ref01_match_rm0: any = { id: application_ref01_data.id }
+    await application_ref01_ent.remove(application_ref01_match_rm0)
+  
 
     // LIST
     const application_ref01_match_rt0: any = {}
 
     const application_ref01_list_rt0 = (await application_ref01_ent.list(application_ref01_match_rt0)).map((e: any) => e.data())
+
+    assert(isempty(select(application_ref01_list_rt0, { id: application_ref01_data.id })))
 
 
   })

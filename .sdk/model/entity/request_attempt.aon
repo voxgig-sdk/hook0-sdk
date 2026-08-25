@@ -36,6 +36,11 @@ main: kit: entity: request_attempt: {
       type: "`$INTEGER`"
     }
     {
+      name: "id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
       name: "picked_at"
       req: false
       type: "`$STRING`"
@@ -72,6 +77,11 @@ main: kit: entity: request_attempt: {
       type: "`$STRING`"
     }
   ]
+
+  id: {
+    field: "id"
+    name: "id"
+  }
 
   name: "request_attempt"
   op: {

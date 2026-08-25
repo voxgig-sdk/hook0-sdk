@@ -85,6 +85,7 @@ class OrganizationEntityTest extends TestCase
         $organization_ref01_data_result = $organization_ref01_ent->create($organization_ref01_data, null);
         $organization_ref01_data = Helpers::to_map(is_object($organization_ref01_data_result) && method_exists($organization_ref01_data_result, 'data_get') ? $organization_ref01_data_result->data_get() : $organization_ref01_data_result);
         $this->assertNotNull($organization_ref01_data);
+        $this->assertNotNull($organization_ref01_data["id"]);
 
         // LIST
         $organization_ref01_match = [];
@@ -92,8 +93,14 @@ class OrganizationEntityTest extends TestCase
         $organization_ref01_list_result = $organization_ref01_ent->list($organization_ref01_match, null);
         $this->assertIsArray($organization_ref01_list_result);
 
+        $found_item = sdk_select(
+            Runner::entity_list_to_data($organization_ref01_list_result),
+            ["id" => $organization_ref01_data["id"]]);
+        $this->assertNotEmpty($found_item);
+
         // UPDATE
         $organization_ref01_data_up0_up = [
+            "id" => $organization_ref01_data["id"],
         ];
 
         $organization_ref01_markdef_up0_name = "name";
@@ -103,19 +110,34 @@ class OrganizationEntityTest extends TestCase
         $organization_ref01_resdata_up0_result = $organization_ref01_ent->update($organization_ref01_data_up0_up, null);
         $organization_ref01_resdata_up0 = Helpers::to_map(is_object($organization_ref01_resdata_up0_result) && method_exists($organization_ref01_resdata_up0_result, 'data_get') ? $organization_ref01_resdata_up0_result->data_get() : $organization_ref01_resdata_up0_result);
         $this->assertNotNull($organization_ref01_resdata_up0);
+        $this->assertEquals($organization_ref01_resdata_up0["id"], $organization_ref01_data_up0_up["id"]);
         $this->assertEquals($organization_ref01_resdata_up0[$organization_ref01_markdef_up0_name], $organization_ref01_markdef_up0_value);
 
         // LOAD
-        $organization_ref01_match_dt0 = [];
+        $organization_ref01_match_dt0 = [
+            "id" => $organization_ref01_data["id"],
+        ];
         $organization_ref01_data_dt0_loaded = $organization_ref01_ent->load($organization_ref01_match_dt0, null);
-        $this->assertNotNull($organization_ref01_data_dt0_loaded);
+        $organization_ref01_data_dt0_load_result = Helpers::to_map(is_object($organization_ref01_data_dt0_loaded) && method_exists($organization_ref01_data_dt0_loaded, 'data_get') ? $organization_ref01_data_dt0_loaded->data_get() : $organization_ref01_data_dt0_loaded);
+        $this->assertNotNull($organization_ref01_data_dt0_load_result);
+        $this->assertEquals($organization_ref01_data_dt0_load_result["id"], $organization_ref01_data["id"]);
 
+        // REMOVE
+        $organization_ref01_match_rm0 = [
+            "id" => $organization_ref01_data["id"],
+        ];
+        $organization_ref01_ent->remove($organization_ref01_match_rm0, null);
 
         // LIST
         $organization_ref01_match_rt0 = [];
 
         $organization_ref01_list_rt0_result = $organization_ref01_ent->list($organization_ref01_match_rt0, null);
         $this->assertIsArray($organization_ref01_list_rt0_result);
+
+        $not_found_item = sdk_select(
+            Runner::entity_list_to_data($organization_ref01_list_rt0_result),
+            ["id" => $organization_ref01_data["id"]]);
+        $this->assertEmpty($not_found_item);
 
     }
 }

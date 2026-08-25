@@ -84,6 +84,7 @@ describe("ServiceTokenEntity", function()
     assert.is_nil(err)
     service_token_ref01_data = helpers.to_map(type(service_token_ref01_data_result) == 'table' and service_token_ref01_data_result.data_get and service_token_ref01_data_result:data_get() or service_token_ref01_data_result)
     assert.is_not_nil(service_token_ref01_data)
+    assert.is_not_nil(service_token_ref01_data["id"])
 
     -- LIST
     local service_token_ref01_match = {}
@@ -92,8 +93,14 @@ describe("ServiceTokenEntity", function()
     assert.is_nil(err)
     assert.is_table(service_token_ref01_list_result)
 
+    local found_item = vs.select(
+      runner.entity_list_to_data(service_token_ref01_list_result),
+      { id = service_token_ref01_data["id"] })
+    assert.is_false(vs.isempty(found_item))
+
     -- UPDATE
     local service_token_ref01_data_up0_up = {
+      id = service_token_ref01_data["id"],
     }
 
     local service_token_ref01_markdef_up0_name = "biscuit"
@@ -104,14 +111,25 @@ describe("ServiceTokenEntity", function()
     assert.is_nil(err)
     local service_token_ref01_resdata_up0 = helpers.to_map(type(service_token_ref01_resdata_up0_result) == 'table' and service_token_ref01_resdata_up0_result.data_get and service_token_ref01_resdata_up0_result:data_get() or service_token_ref01_resdata_up0_result)
     assert.is_not_nil(service_token_ref01_resdata_up0)
+    assert.are.equal(service_token_ref01_resdata_up0["id"], service_token_ref01_data_up0_up["id"])
     assert.are.equal(service_token_ref01_resdata_up0[service_token_ref01_markdef_up0_name], service_token_ref01_markdef_up0_value)
 
     -- LOAD
-    local service_token_ref01_match_dt0 = {}
+    local service_token_ref01_match_dt0 = {
+      id = service_token_ref01_data["id"],
+    }
     local service_token_ref01_data_dt0_loaded, err = service_token_ref01_ent:load(service_token_ref01_match_dt0, nil)
     assert.is_nil(err)
-    assert.is_not_nil(service_token_ref01_data_dt0_loaded)
+    local service_token_ref01_data_dt0_load_result = helpers.to_map(type(service_token_ref01_data_dt0_loaded) == 'table' and service_token_ref01_data_dt0_loaded.data_get and service_token_ref01_data_dt0_loaded:data_get() or service_token_ref01_data_dt0_loaded)
+    assert.is_not_nil(service_token_ref01_data_dt0_load_result)
+    assert.are.equal(service_token_ref01_data_dt0_load_result["id"], service_token_ref01_data["id"])
 
+    -- REMOVE
+    local service_token_ref01_match_rm0 = {
+      id = service_token_ref01_data["id"],
+    }
+    local _, err = service_token_ref01_ent:remove(service_token_ref01_match_rm0, nil)
+    assert.is_nil(err)
 
     -- LIST
     local service_token_ref01_match_rt0 = {}
@@ -119,6 +137,11 @@ describe("ServiceTokenEntity", function()
     local service_token_ref01_list_rt0_result, err = service_token_ref01_ent:list(service_token_ref01_match_rt0, nil)
     assert.is_nil(err)
     assert.is_table(service_token_ref01_list_rt0_result)
+
+    local not_found_item = vs.select(
+      runner.entity_list_to_data(service_token_ref01_list_rt0_result),
+      { id = service_token_ref01_data["id"] })
+    assert.is_true(vs.isempty(not_found_item))
 
   end)
 end)

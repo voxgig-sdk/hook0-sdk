@@ -9,6 +9,7 @@
 ---@class Application
 ---@field application_id string
 ---@field consumption table
+---@field id? string
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
@@ -20,6 +21,7 @@
 ---@class ApplicationListMatch
 ---@field application_id? string
 ---@field consumption? table
+---@field id? string
 ---@field name? string
 ---@field onboarding_steps? table
 ---@field organization_id? string
@@ -28,6 +30,7 @@
 ---@class ApplicationCreateData
 ---@field application_id string
 ---@field consumption table
+---@field id? string
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
@@ -49,6 +52,7 @@
 ---@field application_id string
 ---@field created_at string
 ---@field deleted_at? string
+---@field id? string
 ---@field name? string
 ---@field token string
 
@@ -56,6 +60,7 @@
 ---@field application_id? string
 ---@field created_at? string
 ---@field deleted_at? string
+---@field id? string
 ---@field name? string
 ---@field token? string
 
@@ -63,6 +68,7 @@
 ---@field application_id string
 ---@field created_at string
 ---@field deleted_at? string
+---@field id? string
 ---@field name? string
 ---@field token string
 
@@ -82,6 +88,7 @@
 ---@class Event
 ---@field event_id string
 ---@field event_type_name string
+---@field id? string
 ---@field ip string
 ---@field labels table
 ---@field metadata? table
@@ -96,6 +103,7 @@
 ---@class EventListMatch
 ---@field event_id? string
 ---@field event_type_name? string
+---@field id? string
 ---@field ip? string
 ---@field labels? table
 ---@field metadata? table
@@ -107,6 +115,7 @@
 ---@class EventType
 ---@field application_id string
 ---@field event_type_name string
+---@field id? string
 ---@field resource_type string
 ---@field resource_type_name string
 ---@field service string
@@ -120,6 +129,7 @@
 ---@class EventTypeListMatch
 ---@field application_id? string
 ---@field event_type_name? string
+---@field id? string
 ---@field resource_type? string
 ---@field resource_type_name? string
 ---@field service? string
@@ -130,6 +140,7 @@
 ---@class EventTypeCreateData
 ---@field application_id string
 ---@field event_type_name string
+---@field id? string
 ---@field resource_type string
 ---@field resource_type_name string
 ---@field service string
@@ -254,6 +265,7 @@
 
 ---@class Organization
 ---@field consumption table
+---@field id? string
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
@@ -267,6 +279,7 @@
 
 ---@class OrganizationListMatch
 ---@field consumption? table
+---@field id? string
 ---@field name? string
 ---@field onboarding_steps? table
 ---@field organization_id? string
@@ -277,6 +290,7 @@
 
 ---@class OrganizationCreateData
 ---@field consumption table
+---@field id? string
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
@@ -300,6 +314,7 @@
 ---@field id string
 
 ---@class OrganizationEditRole
+---@field id? string
 ---@field role string
 ---@field user_id string
 
@@ -359,6 +374,7 @@
 ---@field event_id string
 ---@field failed_at? string
 ---@field http_response_status? number
+---@field id? string
 ---@field picked_at? string
 ---@field request_attempt_id string
 ---@field response_id? string
@@ -377,6 +393,7 @@
 ---@field event_id? string
 ---@field failed_at? string
 ---@field http_response_status? number
+---@field id? string
 ---@field picked_at? string
 ---@field request_attempt_id? string
 ---@field response_id? string
@@ -386,6 +403,7 @@
 ---@field succeeded_at? string
 
 ---@class Response
+---@field id? string
 
 ---@class ResponseLoadMatch
 ---@field id string
@@ -398,6 +416,7 @@
 ---@class ServiceToken
 ---@field biscuit string
 ---@field created_at string
+---@field id? string
 ---@field name string
 ---@field organization_id string
 ---@field token_id string
@@ -408,6 +427,7 @@
 ---@class ServiceTokenListMatch
 ---@field biscuit? string
 ---@field created_at? string
+---@field id? string
 ---@field name? string
 ---@field organization_id? string
 ---@field token_id? string
@@ -415,6 +435,7 @@
 ---@class ServiceTokenCreateData
 ---@field biscuit string
 ---@field created_at string
+---@field id? string
 ---@field name string
 ---@field organization_id string
 ---@field token_id string
@@ -436,6 +457,7 @@
 ---@field dedicated_workers table
 ---@field description? string
 ---@field event_types table
+---@field id? string
 ---@field is_enabled boolean
 ---@field label_key string
 ---@field label_value string
@@ -455,6 +477,7 @@
 ---@field dedicated_workers? table
 ---@field description? string
 ---@field event_types? table
+---@field id? string
 ---@field is_enabled? boolean
 ---@field label_key? string
 ---@field label_value? string
@@ -471,6 +494,7 @@
 ---@field dedicated_workers table
 ---@field description? string
 ---@field event_types table
+---@field id? string
 ---@field is_enabled boolean
 ---@field label_key string
 ---@field label_value string

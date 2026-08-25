@@ -93,9 +93,13 @@ class RequestAttemptEntityTest extends TestCase
         $this->assertIsArray($request_attempt_ref01_list_result);
 
         // LOAD
-        $request_attempt_ref01_match_dt0 = [];
+        $request_attempt_ref01_match_dt0 = [
+            "id" => $request_attempt_ref01_data["id"],
+        ];
         $request_attempt_ref01_data_dt0_loaded = $request_attempt_ref01_ent->load($request_attempt_ref01_match_dt0, null);
-        $this->assertNotNull($request_attempt_ref01_data_dt0_loaded);
+        $request_attempt_ref01_data_dt0_load_result = Helpers::to_map(is_object($request_attempt_ref01_data_dt0_loaded) && method_exists($request_attempt_ref01_data_dt0_loaded, 'data_get') ? $request_attempt_ref01_data_dt0_loaded->data_get() : $request_attempt_ref01_data_dt0_loaded);
+        $this->assertNotNull($request_attempt_ref01_data_dt0_load_result);
+        $this->assertEquals($request_attempt_ref01_data_dt0_load_result["id"], $request_attempt_ref01_data["id"]);
 
     }
 }

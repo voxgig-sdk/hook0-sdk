@@ -45,7 +45,8 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
     const {
       makeContext,
       done,
-      error,
+      // The registry name is `makeError`; `error` is the local alias.
+      makeError: error,
       featureHook,
       makePoint,
       makeRequest,
@@ -166,7 +167,8 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
     const {
       makeContext,
       done,
-      error,
+      // The registry name is `makeError`; `error` is the local alias.
+      makeError: error,
       featureHook,
       makePoint,
       makeRequest,
@@ -274,7 +276,8 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
     const {
       makeContext,
       done,
-      error,
+      // The registry name is `makeError`; `error` is the local alias.
+      makeError: error,
       featureHook,
       makePoint,
       makeRequest,

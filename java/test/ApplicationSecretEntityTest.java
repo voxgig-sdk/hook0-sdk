@@ -58,6 +58,7 @@ public class ApplicationSecretEntityTest {
     Object applicationSecretRef01DataResult = applicationSecretRef01Ent.create(applicationSecretRef01Data, null);
     applicationSecretRef01Data = Helpers.toMapAny(applicationSecretRef01DataResult instanceof SdkEntity ? ((SdkEntity) applicationSecretRef01DataResult).data() : applicationSecretRef01DataResult);
     assertNotNull(applicationSecretRef01Data, "expected create result to be a map");
+    assertNotNull(applicationSecretRef01Data.get("id"), "expected created entity to have an id");
 
     // LIST
     Map<String, Object> applicationSecretRef01Match = new LinkedHashMap<>();
@@ -74,6 +75,7 @@ public class ApplicationSecretEntityTest {
 
     // UPDATE
     Map<String, Object> applicationSecretRef01DataUp0Up = new LinkedHashMap<>();
+    applicationSecretRef01DataUp0Up.put("id", applicationSecretRef01Data.get("id"));
 
     String applicationSecretRef01MarkdefUp0Name = "application_id";
     String applicationSecretRef01MarkdefUp0Value = "Mark01-application_secret_ref01_" + setup.now;
@@ -82,6 +84,8 @@ public class ApplicationSecretEntityTest {
     Object applicationSecretRef01ResdataUp0Result = applicationSecretRef01Ent.update(applicationSecretRef01DataUp0Up, null);
     Map<String, Object> applicationSecretRef01ResdataUp0 = Helpers.toMapAny(applicationSecretRef01ResdataUp0Result instanceof SdkEntity ? ((SdkEntity) applicationSecretRef01ResdataUp0Result).data() : applicationSecretRef01ResdataUp0Result);
     assertNotNull(applicationSecretRef01ResdataUp0, "expected update result to be a map");
+    assertEquals(applicationSecretRef01DataUp0Up.get("id"), applicationSecretRef01ResdataUp0.get("id"),
+        "expected update result id to match");
     assertEquals(applicationSecretRef01MarkdefUp0Value, applicationSecretRef01ResdataUp0.get(applicationSecretRef01MarkdefUp0Name),
         "expected " + applicationSecretRef01MarkdefUp0Name + " to be updated");
 

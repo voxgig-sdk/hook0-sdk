@@ -45,6 +45,7 @@ describe("OrganizationEditRoleEntity", function()
     -- UPDATE
     local organization_edit_role_ref01_ent = client:OrganizationEditRole(nil)
     local organization_edit_role_ref01_data_up0_up = {
+      id = organization_edit_role_ref01_data["id"],
     }
 
     local organization_edit_role_ref01_markdef_up0_name = "role"
@@ -55,6 +56,7 @@ describe("OrganizationEditRoleEntity", function()
     assert.is_nil(err)
     local organization_edit_role_ref01_resdata_up0 = helpers.to_map(type(organization_edit_role_ref01_resdata_up0_result) == 'table' and organization_edit_role_ref01_resdata_up0_result.data_get and organization_edit_role_ref01_resdata_up0_result:data_get() or organization_edit_role_ref01_resdata_up0_result)
     assert.is_not_nil(organization_edit_role_ref01_resdata_up0)
+    assert.are.equal(organization_edit_role_ref01_resdata_up0["id"], organization_edit_role_ref01_data_up0_up["id"])
     assert.are.equal(organization_edit_role_ref01_resdata_up0[organization_edit_role_ref01_markdef_up0_name], organization_edit_role_ref01_markdef_up0_value)
 
   end)

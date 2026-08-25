@@ -80,6 +80,7 @@ class TestServiceTokenEntity:
 
         service_token_ref01_data = helpers.to_map(runner.entity_data(service_token_ref01_ent.create(service_token_ref01_data, None)))
         assert service_token_ref01_data is not None
+        assert service_token_ref01_data["id"] is not None
 
         # LIST
         service_token_ref01_match = {}
@@ -87,8 +88,14 @@ class TestServiceTokenEntity:
         service_token_ref01_list_result = service_token_ref01_ent.list(service_token_ref01_match, None)
         assert isinstance(service_token_ref01_list_result, list)
 
+        found_item = vs.select(
+            runner.entity_list_to_data(service_token_ref01_list_result),
+            {"id": service_token_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
         # UPDATE
         service_token_ref01_data_up0_up = {
+            "id": service_token_ref01_data["id"],
         }
 
         service_token_ref01_markdef_up0_name = "biscuit"
@@ -97,19 +104,34 @@ class TestServiceTokenEntity:
 
         service_token_ref01_resdata_up0 = helpers.to_map(runner.entity_data(service_token_ref01_ent.update(service_token_ref01_data_up0_up, None)))
         assert service_token_ref01_resdata_up0 is not None
+        assert service_token_ref01_resdata_up0["id"] == service_token_ref01_data_up0_up["id"]
         assert service_token_ref01_resdata_up0[service_token_ref01_markdef_up0_name] == service_token_ref01_markdef_up0_value
 
         # LOAD
-        service_token_ref01_match_dt0 = {}
+        service_token_ref01_match_dt0 = {
+            "id": service_token_ref01_data["id"],
+        }
         service_token_ref01_data_dt0_loaded = service_token_ref01_ent.load(service_token_ref01_match_dt0, None)
-        assert service_token_ref01_data_dt0_loaded is not None
+        service_token_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(service_token_ref01_data_dt0_loaded))
+        assert service_token_ref01_data_dt0_load_result is not None
+        assert service_token_ref01_data_dt0_load_result["id"] == service_token_ref01_data["id"]
 
+        # REMOVE
+        service_token_ref01_match_rm0 = {
+            "id": service_token_ref01_data["id"],
+        }
+        service_token_ref01_ent.remove(service_token_ref01_match_rm0, None)
 
         # LIST
         service_token_ref01_match_rt0 = {}
 
         service_token_ref01_list_rt0_result = service_token_ref01_ent.list(service_token_ref01_match_rt0, None)
         assert isinstance(service_token_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(service_token_ref01_list_rt0_result),
+            {"id": service_token_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 

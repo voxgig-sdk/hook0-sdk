@@ -44,10 +44,14 @@ describe("ResponseEntity", function()
 
     -- LOAD
     local response_ref01_ent = client:Response(nil)
-    local response_ref01_match_dt0 = {}
+    local response_ref01_match_dt0 = {
+      id = response_ref01_data["id"],
+    }
     local response_ref01_data_dt0_loaded, err = response_ref01_ent:load(response_ref01_match_dt0, nil)
     assert.is_nil(err)
-    assert.is_not_nil(response_ref01_data_dt0_loaded)
+    local response_ref01_data_dt0_load_result = helpers.to_map(type(response_ref01_data_dt0_loaded) == 'table' and response_ref01_data_dt0_loaded.data_get and response_ref01_data_dt0_loaded:data_get() or response_ref01_data_dt0_loaded)
+    assert.is_not_nil(response_ref01_data_dt0_load_result)
+    assert.are.equal(response_ref01_data_dt0_load_result["id"], response_ref01_data["id"])
 
   end)
 end)

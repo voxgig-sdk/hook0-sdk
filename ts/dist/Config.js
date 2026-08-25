@@ -83,6 +83,10 @@ class Config {
                     "type": "`$OBJECT`"
                 },
                 {
+                    "name": "id",
+                    "type": "`$STRING`"
+                },
+                {
                     "name": "name",
                     "req": true,
                     "short": "Name of the application.",
@@ -315,6 +319,10 @@ class Config {
                     "type": "`$STRING`"
                 },
                 {
+                    "name": "id",
+                    "type": "`$STRING`"
+                },
+                {
                     "name": "name",
                     "type": "`$STRING`"
                 },
@@ -504,6 +512,10 @@ class Config {
                     "type": "`$STRING`"
                 },
                 {
+                    "name": "id",
+                    "type": "`$STRING`"
+                },
+                {
                     "name": "ip",
                     "req": true,
                     "type": "`$STRING`"
@@ -643,6 +655,10 @@ class Config {
                 {
                     "name": "event_type_name",
                     "req": true,
+                    "type": "`$STRING`"
+                },
+                {
+                    "name": "id",
                     "type": "`$STRING`"
                 },
                 {
@@ -1420,6 +1436,10 @@ class Config {
                     "type": "`$OBJECT`"
                 },
                 {
+                    "name": "id",
+                    "type": "`$STRING`"
+                },
+                {
                     "name": "name",
                     "req": true,
                     "type": "`$STRING`"
@@ -1634,6 +1654,10 @@ class Config {
         },
         "organization_edit_role": {
             "fields": [
+                {
+                    "name": "id",
+                    "type": "`$STRING`"
+                },
                 {
                     "name": "role",
                     "req": true,
@@ -1901,6 +1925,10 @@ class Config {
                     "type": "`$INTEGER`"
                 },
                 {
+                    "name": "id",
+                    "type": "`$STRING`"
+                },
+                {
                     "name": "picked_at",
                     "type": "`$STRING`"
                 },
@@ -2072,7 +2100,12 @@ class Config {
             }
         },
         "response": {
-            "fields": [],
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "`$STRING`"
+                }
+            ],
             "name": "response",
             "op": {
                 "load": {
@@ -2193,6 +2226,10 @@ class Config {
                 {
                     "name": "created_at",
                     "req": true,
+                    "type": "`$STRING`"
+                },
+                {
+                    "name": "id",
                     "type": "`$STRING`"
                 },
                 {
@@ -2455,6 +2492,10 @@ class Config {
                     "name": "event_types",
                     "req": true,
                     "type": "`$ARRAY`"
+                },
+                {
+                    "name": "id",
+                    "type": "`$STRING`"
                 },
                 {
                     "name": "is_enabled",

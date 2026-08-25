@@ -80,6 +80,7 @@ class TestOrganizationEntity:
 
         organization_ref01_data = helpers.to_map(runner.entity_data(organization_ref01_ent.create(organization_ref01_data, None)))
         assert organization_ref01_data is not None
+        assert organization_ref01_data["id"] is not None
 
         # LIST
         organization_ref01_match = {}
@@ -87,8 +88,14 @@ class TestOrganizationEntity:
         organization_ref01_list_result = organization_ref01_ent.list(organization_ref01_match, None)
         assert isinstance(organization_ref01_list_result, list)
 
+        found_item = vs.select(
+            runner.entity_list_to_data(organization_ref01_list_result),
+            {"id": organization_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
         # UPDATE
         organization_ref01_data_up0_up = {
+            "id": organization_ref01_data["id"],
         }
 
         organization_ref01_markdef_up0_name = "name"
@@ -97,19 +104,34 @@ class TestOrganizationEntity:
 
         organization_ref01_resdata_up0 = helpers.to_map(runner.entity_data(organization_ref01_ent.update(organization_ref01_data_up0_up, None)))
         assert organization_ref01_resdata_up0 is not None
+        assert organization_ref01_resdata_up0["id"] == organization_ref01_data_up0_up["id"]
         assert organization_ref01_resdata_up0[organization_ref01_markdef_up0_name] == organization_ref01_markdef_up0_value
 
         # LOAD
-        organization_ref01_match_dt0 = {}
+        organization_ref01_match_dt0 = {
+            "id": organization_ref01_data["id"],
+        }
         organization_ref01_data_dt0_loaded = organization_ref01_ent.load(organization_ref01_match_dt0, None)
-        assert organization_ref01_data_dt0_loaded is not None
+        organization_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(organization_ref01_data_dt0_loaded))
+        assert organization_ref01_data_dt0_load_result is not None
+        assert organization_ref01_data_dt0_load_result["id"] == organization_ref01_data["id"]
 
+        # REMOVE
+        organization_ref01_match_rm0 = {
+            "id": organization_ref01_data["id"],
+        }
+        organization_ref01_ent.remove(organization_ref01_match_rm0, None)
 
         # LIST
         organization_ref01_match_rt0 = {}
 
         organization_ref01_list_rt0_result = organization_ref01_ent.list(organization_ref01_match_rt0, None)
         assert isinstance(organization_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(organization_ref01_list_rt0_result),
+            {"id": organization_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 

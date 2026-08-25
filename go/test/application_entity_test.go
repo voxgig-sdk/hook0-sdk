@@ -111,6 +111,9 @@ func TestApplicationEntity(t *testing.T) {
 		if applicationRef01Data == nil {
 			t.Fatal("expected create result to be a map")
 		}
+		if applicationRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
 
 		// LIST
 		applicationRef01Match := map[string]any{}
@@ -119,13 +122,19 @@ func TestApplicationEntity(t *testing.T) {
 		if err != nil {
 			t.Fatalf("list failed: %v", err)
 		}
-		_, applicationRef01ListOk := applicationRef01ListResult.([]any)
+		applicationRef01List, applicationRef01ListOk := applicationRef01ListResult.([]any)
 		if !applicationRef01ListOk {
 			t.Fatalf("expected list result to be an array, got %T", applicationRef01ListResult)
 		}
 
+		foundItem := vs.Select(entityListToData(applicationRef01List), map[string]any{"id": applicationRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
 		// UPDATE
 		applicationRef01DataUp0Up := map[string]any{
+			"id": applicationRef01Data["id"],
 		}
 
 		applicationRef01MarkdefUp0Name := "application_id"
@@ -140,20 +149,37 @@ func TestApplicationEntity(t *testing.T) {
 		if applicationRef01ResdataUp0 == nil {
 			t.Fatal("expected update result to be a map")
 		}
+		if applicationRef01ResdataUp0["id"] != applicationRef01DataUp0Up["id"] {
+			t.Fatal("expected update result id to match")
+		}
 		if applicationRef01ResdataUp0[applicationRef01MarkdefUp0Name] != applicationRef01MarkdefUp0Value {
 			t.Fatalf("expected %s to be updated, got %v", applicationRef01MarkdefUp0Name, applicationRef01ResdataUp0[applicationRef01MarkdefUp0Name])
 		}
 
 		// LOAD
-		applicationRef01MatchDt0 := map[string]any{}
+		applicationRef01MatchDt0 := map[string]any{
+			"id": applicationRef01Data["id"],
+		}
 		applicationRef01DataDt0Loaded, err := applicationRef01Ent.Load(applicationRef01MatchDt0, nil)
 		if err != nil {
 			t.Fatalf("load failed: %v", err)
 		}
-		if applicationRef01DataDt0Loaded == nil {
-			t.Fatal("expected load result to be non-nil")
+		applicationRef01DataDt0LoadResult := core.ToMapAny(entityData(applicationRef01DataDt0Loaded))
+		if applicationRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if applicationRef01DataDt0LoadResult["id"] != applicationRef01Data["id"] {
+			t.Fatal("expected load result id to match")
 		}
 
+		// REMOVE
+		applicationRef01MatchRm0 := map[string]any{
+			"id": applicationRef01Data["id"],
+		}
+		_, err = applicationRef01Ent.Remove(applicationRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
 
 		// LIST
 		applicationRef01MatchRt0 := map[string]any{}
@@ -162,9 +188,14 @@ func TestApplicationEntity(t *testing.T) {
 		if err != nil {
 			t.Fatalf("list failed: %v", err)
 		}
-		_, applicationRef01ListRt0Ok := applicationRef01ListRt0Result.([]any)
+		applicationRef01ListRt0, applicationRef01ListRt0Ok := applicationRef01ListRt0Result.([]any)
 		if !applicationRef01ListRt0Ok {
 			t.Fatalf("expected list result to be an array, got %T", applicationRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(applicationRef01ListRt0), map[string]any{"id": applicationRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})

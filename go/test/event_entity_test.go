@@ -121,13 +121,19 @@ func TestEventEntity(t *testing.T) {
 		}
 
 		// LOAD
-		eventRef01MatchDt0 := map[string]any{}
+		eventRef01MatchDt0 := map[string]any{
+			"id": eventRef01Data["id"],
+		}
 		eventRef01DataDt0Loaded, err := eventRef01Ent.Load(eventRef01MatchDt0, nil)
 		if err != nil {
 			t.Fatalf("load failed: %v", err)
 		}
-		if eventRef01DataDt0Loaded == nil {
-			t.Fatal("expected load result to be non-nil")
+		eventRef01DataDt0LoadResult := core.ToMapAny(entityData(eventRef01DataDt0Loaded))
+		if eventRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if eventRef01DataDt0LoadResult["id"] != eventRef01Data["id"] {
+			t.Fatal("expected load result id to match")
 		}
 
 	})

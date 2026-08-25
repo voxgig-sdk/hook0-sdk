@@ -85,6 +85,7 @@ class EventTypeEntityTest extends TestCase
         $event_type_ref01_data_result = $event_type_ref01_ent->create($event_type_ref01_data, null);
         $event_type_ref01_data = Helpers::to_map(is_object($event_type_ref01_data_result) && method_exists($event_type_ref01_data_result, 'data_get') ? $event_type_ref01_data_result->data_get() : $event_type_ref01_data_result);
         $this->assertNotNull($event_type_ref01_data);
+        $this->assertNotNull($event_type_ref01_data["id"]);
 
         // LIST
         $event_type_ref01_match = [];
@@ -92,10 +93,19 @@ class EventTypeEntityTest extends TestCase
         $event_type_ref01_list_result = $event_type_ref01_ent->list($event_type_ref01_match, null);
         $this->assertIsArray($event_type_ref01_list_result);
 
+        $found_item = sdk_select(
+            Runner::entity_list_to_data($event_type_ref01_list_result),
+            ["id" => $event_type_ref01_data["id"]]);
+        $this->assertNotEmpty($found_item);
+
         // LOAD
-        $event_type_ref01_match_dt0 = [];
+        $event_type_ref01_match_dt0 = [
+            "id" => $event_type_ref01_data["id"],
+        ];
         $event_type_ref01_data_dt0_loaded = $event_type_ref01_ent->load($event_type_ref01_match_dt0, null);
-        $this->assertNotNull($event_type_ref01_data_dt0_loaded);
+        $event_type_ref01_data_dt0_load_result = Helpers::to_map(is_object($event_type_ref01_data_dt0_loaded) && method_exists($event_type_ref01_data_dt0_loaded, 'data_get') ? $event_type_ref01_data_dt0_loaded->data_get() : $event_type_ref01_data_dt0_loaded);
+        $this->assertNotNull($event_type_ref01_data_dt0_load_result);
+        $this->assertEquals($event_type_ref01_data_dt0_load_result["id"], $event_type_ref01_data["id"]);
 
     }
 }

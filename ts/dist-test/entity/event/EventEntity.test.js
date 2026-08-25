@@ -76,6 +76,11 @@ const utility_1 = require("../../utility");
         const event_ref01_ent = client.Event();
         const event_ref01_match = {};
         const event_ref01_list = (await event_ref01_ent.list(event_ref01_match)).map((e) => e.data());
+        // LOAD
+        const event_ref01_match_dt0 = {};
+        event_ref01_match_dt0.id = event_ref01_data.id;
+        const event_ref01_data_dt0 = (await event_ref01_ent.load(event_ref01_match_dt0)).data();
+        (0, node_assert_1.default)(event_ref01_data_dt0.id === event_ref01_data.id);
     });
 });
 function basicSetup(extra) {

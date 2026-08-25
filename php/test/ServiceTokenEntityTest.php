@@ -85,6 +85,7 @@ class ServiceTokenEntityTest extends TestCase
         $service_token_ref01_data_result = $service_token_ref01_ent->create($service_token_ref01_data, null);
         $service_token_ref01_data = Helpers::to_map(is_object($service_token_ref01_data_result) && method_exists($service_token_ref01_data_result, 'data_get') ? $service_token_ref01_data_result->data_get() : $service_token_ref01_data_result);
         $this->assertNotNull($service_token_ref01_data);
+        $this->assertNotNull($service_token_ref01_data["id"]);
 
         // LIST
         $service_token_ref01_match = [];
@@ -92,8 +93,14 @@ class ServiceTokenEntityTest extends TestCase
         $service_token_ref01_list_result = $service_token_ref01_ent->list($service_token_ref01_match, null);
         $this->assertIsArray($service_token_ref01_list_result);
 
+        $found_item = sdk_select(
+            Runner::entity_list_to_data($service_token_ref01_list_result),
+            ["id" => $service_token_ref01_data["id"]]);
+        $this->assertNotEmpty($found_item);
+
         // UPDATE
         $service_token_ref01_data_up0_up = [
+            "id" => $service_token_ref01_data["id"],
         ];
 
         $service_token_ref01_markdef_up0_name = "biscuit";
@@ -103,19 +110,34 @@ class ServiceTokenEntityTest extends TestCase
         $service_token_ref01_resdata_up0_result = $service_token_ref01_ent->update($service_token_ref01_data_up0_up, null);
         $service_token_ref01_resdata_up0 = Helpers::to_map(is_object($service_token_ref01_resdata_up0_result) && method_exists($service_token_ref01_resdata_up0_result, 'data_get') ? $service_token_ref01_resdata_up0_result->data_get() : $service_token_ref01_resdata_up0_result);
         $this->assertNotNull($service_token_ref01_resdata_up0);
+        $this->assertEquals($service_token_ref01_resdata_up0["id"], $service_token_ref01_data_up0_up["id"]);
         $this->assertEquals($service_token_ref01_resdata_up0[$service_token_ref01_markdef_up0_name], $service_token_ref01_markdef_up0_value);
 
         // LOAD
-        $service_token_ref01_match_dt0 = [];
+        $service_token_ref01_match_dt0 = [
+            "id" => $service_token_ref01_data["id"],
+        ];
         $service_token_ref01_data_dt0_loaded = $service_token_ref01_ent->load($service_token_ref01_match_dt0, null);
-        $this->assertNotNull($service_token_ref01_data_dt0_loaded);
+        $service_token_ref01_data_dt0_load_result = Helpers::to_map(is_object($service_token_ref01_data_dt0_loaded) && method_exists($service_token_ref01_data_dt0_loaded, 'data_get') ? $service_token_ref01_data_dt0_loaded->data_get() : $service_token_ref01_data_dt0_loaded);
+        $this->assertNotNull($service_token_ref01_data_dt0_load_result);
+        $this->assertEquals($service_token_ref01_data_dt0_load_result["id"], $service_token_ref01_data["id"]);
 
+        // REMOVE
+        $service_token_ref01_match_rm0 = [
+            "id" => $service_token_ref01_data["id"],
+        ];
+        $service_token_ref01_ent->remove($service_token_ref01_match_rm0, null);
 
         // LIST
         $service_token_ref01_match_rt0 = [];
 
         $service_token_ref01_list_rt0_result = $service_token_ref01_ent->list($service_token_ref01_match_rt0, null);
         $this->assertIsArray($service_token_ref01_list_rt0_result);
+
+        $not_found_item = sdk_select(
+            Runner::entity_list_to_data($service_token_ref01_list_rt0_result),
+            ["id" => $service_token_ref01_data["id"]]);
+        $this->assertEmpty($not_found_item);
 
     }
 }

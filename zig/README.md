@@ -313,6 +313,7 @@ On error, `ok` is `false` and `err` carries the error message.
 | --- | --- |
 | `application_id` | Unique identifier of the application. |
 | `consumption` | Current consumption metrics for this application. |
+| `id` |  |
 | `name` | Name of the application. |
 | `onboarding_steps` | Onboarding completion status for this application. |
 | `organization_id` | UUID of the organization this application belongs to. |
@@ -329,6 +330,7 @@ API path: `/api/v1/applications/`
 | `application_id` |  |
 | `created_at` |  |
 | `deleted_at` |  |
+| `id` |  |
 | `name` |  |
 | `token` |  |
 
@@ -351,6 +353,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | --- | --- |
 | `event_id` |  |
 | `event_type_name` |  |
+| `id` |  |
 | `ip` |  |
 | `labels` |  |
 | `metadata` |  |
@@ -369,6 +372,7 @@ API path: `/api/v1/events/`
 | --- | --- |
 | `application_id` |  |
 | `event_type_name` |  |
+| `id` |  |
 | `resource_type` |  |
 | `resource_type_name` |  |
 | `service` |  |
@@ -488,6 +492,7 @@ API path: `/api/v1/auth/login`
 | Field | Description |
 | --- | --- |
 | `consumption` |  |
+| `id` |  |
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
@@ -504,6 +509,7 @@ API path: `/api/v1/organizations/`
 
 | Field | Description |
 | --- | --- |
+| `id` |  |
 | `role` |  |
 | `user_id` |  |
 
@@ -564,6 +570,7 @@ API path: `/api/v1/register/`
 | `event_id` |  |
 | `failed_at` |  |
 | `http_response_status` |  |
+| `id` |  |
 | `picked_at` |  |
 | `request_attempt_id` |  |
 | `response_id` |  |
@@ -580,6 +587,7 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `id` |  |
 
 Operations: Load.
 
@@ -600,6 +608,7 @@ API path: `/api/v1/organizations/{organization_id}/invite`
 | --- | --- |
 | `biscuit` |  |
 | `created_at` |  |
+| `id` |  |
 | `name` |  |
 | `organization_id` |  |
 | `token_id` |  |
@@ -617,6 +626,7 @@ API path: `/api/v1/service_token/`
 | `dedicated_workers` |  |
 | `description` |  |
 | `event_types` |  |
+| `id` |  |
 | `is_enabled` |  |
 | `label_key` | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | _Kept for backward compatibility, you should use `labels`_ |
@@ -682,6 +692,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | --- | --- | --- |
 | `application_id` | `[]const u8` | Unique identifier of the application. |
 | `consumption` | `Value (object)` | Current consumption metrics for this application. |
+| `id` | `[]const u8` |  |
 | `name` | `[]const u8` | Name of the application. |
 | `onboarding_steps` | `Value (object)` | Onboarding completion status for this application. |
 | `organization_id` | `[]const u8` | UUID of the organization this application belongs to. |
@@ -744,6 +755,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | `application_id` | `[]const u8` |  |
 | `created_at` | `[]const u8` |  |
 | `deleted_at` | `[]const u8` |  |
+| `id` | `[]const u8` |  |
 | `name` | `[]const u8` |  |
 | `token` | `[]const u8` |  |
 
@@ -804,6 +816,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | --- | --- | --- |
 | `event_id` | `[]const u8` |  |
 | `event_type_name` | `[]const u8` |  |
+| `id` | `[]const u8` |  |
 | `ip` | `[]const u8` |  |
 | `labels` | `Value (object)` |  |
 | `metadata` | `Value (object)` |  |
@@ -852,6 +865,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | --- | --- | --- |
 | `application_id` | `[]const u8` |  |
 | `event_type_name` | `[]const u8` |  |
+| `id` | `[]const u8` |  |
 | `resource_type` | `[]const u8` |  |
 | `resource_type_name` | `[]const u8` |  |
 | `service` | `[]const u8` |  |
@@ -1178,6 +1192,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | Field | Type | Description |
 | --- | --- | --- |
 | `consumption` | `Value (object)` |  |
+| `id` | `[]const u8` |  |
 | `name` | `[]const u8` |  |
 | `onboarding_steps` | `Value (object)` |  |
 | `organization_id` | `[]const u8` |  |
@@ -1240,6 +1255,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `id` | `[]const u8` |  |
 | `role` | `[]const u8` |  |
 | `user_id` | `[]const u8` |  |
 
@@ -1373,6 +1389,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | `event_id` | `[]const u8` |  |
 | `failed_at` | `[]const u8` |  |
 | `http_response_status` | `i64` |  |
+| `id` | `[]const u8` |  |
 | `picked_at` | `[]const u8` |  |
 | `request_attempt_id` | `[]const u8` |  |
 | `response_id` | `[]const u8` |  |
@@ -1412,6 +1429,12 @@ Create an instance: `const response = client.response(h.vnull());`
 
 Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
 carries the result `Value`, `.err => |e|` carries the branded error.
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `[]const u8` |  |
 
 #### Example: Load
 
@@ -1460,6 +1483,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | --- | --- | --- |
 | `biscuit` | `[]const u8` |  |
 | `created_at` | `[]const u8` |  |
+| `id` | `[]const u8` |  |
 | `name` | `[]const u8` |  |
 | `organization_id` | `[]const u8` |  |
 | `token_id` | `[]const u8` |  |
@@ -1524,6 +1548,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 | `dedicated_workers` | `Value (array)` |  |
 | `description` | `[]const u8` |  |
 | `event_types` | `Value (array)` |  |
+| `id` | `[]const u8` |  |
 | `is_enabled` | `bool` |  |
 | `label_key` | `[]const u8` | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `[]const u8` | _Kept for backward compatibility, you should use `labels`_ |

@@ -50,8 +50,9 @@ describe('EventEntity', async () => {
 
     // LOAD
     const event_ref01_match_dt0 = {}
+    event_ref01_match_dt0.id = event_ref01_data.id
     const event_ref01_data_dt0 = (await event_ref01_ent.load(event_ref01_match_dt0)).data()
-    assert(null != event_ref01_data_dt0)
+    assert(event_ref01_data_dt0.id === event_ref01_data.id)
 
 
   })

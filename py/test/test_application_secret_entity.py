@@ -80,6 +80,7 @@ class TestApplicationSecretEntity:
 
         application_secret_ref01_data = helpers.to_map(runner.entity_data(application_secret_ref01_ent.create(application_secret_ref01_data, None)))
         assert application_secret_ref01_data is not None
+        assert application_secret_ref01_data["id"] is not None
 
         # LIST
         application_secret_ref01_match = {}
@@ -87,8 +88,14 @@ class TestApplicationSecretEntity:
         application_secret_ref01_list_result = application_secret_ref01_ent.list(application_secret_ref01_match, None)
         assert isinstance(application_secret_ref01_list_result, list)
 
+        found_item = vs.select(
+            runner.entity_list_to_data(application_secret_ref01_list_result),
+            {"id": application_secret_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
         # UPDATE
         application_secret_ref01_data_up0_up = {
+            "id": application_secret_ref01_data["id"],
         }
 
         application_secret_ref01_markdef_up0_name = "application_id"
@@ -97,6 +104,7 @@ class TestApplicationSecretEntity:
 
         application_secret_ref01_resdata_up0 = helpers.to_map(runner.entity_data(application_secret_ref01_ent.update(application_secret_ref01_data_up0_up, None)))
         assert application_secret_ref01_resdata_up0 is not None
+        assert application_secret_ref01_resdata_up0["id"] == application_secret_ref01_data_up0_up["id"]
         assert application_secret_ref01_resdata_up0[application_secret_ref01_markdef_up0_name] == application_secret_ref01_markdef_up0_value
 
 

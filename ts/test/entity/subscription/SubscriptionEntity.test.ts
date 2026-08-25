@@ -63,7 +63,7 @@ describe('SubscriptionEntity', async () => {
     let subscription_ref01_data = setup.data.new.subscription['subscription_ref01']
 
     subscription_ref01_data = (await subscription_ref01_ent.create(subscription_ref01_data)).data()
-    assert(null != subscription_ref01_data)
+    assert(null != subscription_ref01_data.id)
 
 
     // LIST
@@ -71,25 +71,40 @@ describe('SubscriptionEntity', async () => {
 
     const subscription_ref01_list = (await subscription_ref01_ent.list(subscription_ref01_match)).map((e: any) => e.data())
 
+    assert(!isempty(select(subscription_ref01_list, { id: subscription_ref01_data.id })))
+
 
     // UPDATE
     const subscription_ref01_data_up0: any = {}
+    subscription_ref01_data_up0.id = subscription_ref01_data.id
 
     const subscription_ref01_markdef_up0 = { name: 'application_id', value: 'Mark01-subscription_ref01_' + setup.now }
     ;(subscription_ref01_data_up0 as any)[subscription_ref01_markdef_up0.name] = subscription_ref01_markdef_up0.value
 
     const subscription_ref01_resdata_up0 = (await subscription_ref01_ent.update(subscription_ref01_data_up0)).data()
-    assert(null != subscription_ref01_resdata_up0)
+    assert(subscription_ref01_resdata_up0.id === subscription_ref01_data_up0.id)
 
     assert((subscription_ref01_resdata_up0 as any)[subscription_ref01_markdef_up0.name] === subscription_ref01_markdef_up0.value)
 
 
+    // LOAD
+    const subscription_ref01_match_dt0: any = {}
+    subscription_ref01_match_dt0.id = subscription_ref01_data.id
+    const subscription_ref01_data_dt0 = (await subscription_ref01_ent.load(subscription_ref01_match_dt0)).data()
+    assert(subscription_ref01_data_dt0.id === subscription_ref01_data.id)
 
+
+    // REMOVE
+    const subscription_ref01_match_rm0: any = { id: subscription_ref01_data.id }
+    await subscription_ref01_ent.remove(subscription_ref01_match_rm0)
+  
 
     // LIST
     const subscription_ref01_match_rt0: any = {}
 
     const subscription_ref01_list_rt0 = (await subscription_ref01_ent.list(subscription_ref01_match_rt0)).map((e: any) => e.data())
+
+    assert(isempty(select(subscription_ref01_list_rt0, { id: subscription_ref01_data.id })))
 
 
   })

@@ -49,6 +49,7 @@ class OrganizationEditRoleEntityTest extends TestCase
         // UPDATE
         $organization_edit_role_ref01_ent = $client->OrganizationEditRole(null);
         $organization_edit_role_ref01_data_up0_up = [
+            "id" => $organization_edit_role_ref01_data["id"],
         ];
 
         $organization_edit_role_ref01_markdef_up0_name = "role";
@@ -58,6 +59,7 @@ class OrganizationEditRoleEntityTest extends TestCase
         $organization_edit_role_ref01_resdata_up0_result = $organization_edit_role_ref01_ent->update($organization_edit_role_ref01_data_up0_up, null);
         $organization_edit_role_ref01_resdata_up0 = Helpers::to_map(is_object($organization_edit_role_ref01_resdata_up0_result) && method_exists($organization_edit_role_ref01_resdata_up0_result, 'data_get') ? $organization_edit_role_ref01_resdata_up0_result->data_get() : $organization_edit_role_ref01_resdata_up0_result);
         $this->assertNotNull($organization_edit_role_ref01_resdata_up0);
+        $this->assertEquals($organization_edit_role_ref01_resdata_up0["id"], $organization_edit_role_ref01_data_up0_up["id"]);
         $this->assertEquals($organization_edit_role_ref01_resdata_up0[$organization_edit_role_ref01_markdef_up0_name], $organization_edit_role_ref01_markdef_up0_value);
 
     }

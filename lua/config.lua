@@ -70,6 +70,10 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
+          },
+          {
             ["name"] = "name",
             ["req"] = true,
             ["short"] = "Name of the application.",
@@ -302,6 +306,10 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
+          },
+          {
             ["name"] = "name",
             ["type"] = "`$STRING`",
           },
@@ -491,6 +499,10 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
+          },
+          {
             ["name"] = "ip",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -630,6 +642,10 @@ local function make_config()
           {
             ["name"] = "event_type_name",
             ["req"] = true,
+            ["type"] = "`$STRING`",
+          },
+          {
+            ["name"] = "id",
             ["type"] = "`$STRING`",
           },
           {
@@ -1407,6 +1423,10 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
+          },
+          {
             ["name"] = "name",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -1621,6 +1641,10 @@ local function make_config()
       },
       ["organization_edit_role"] = {
         ["fields"] = {
+          {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
+          },
           {
             ["name"] = "role",
             ["req"] = true,
@@ -1888,6 +1912,10 @@ local function make_config()
             ["type"] = "`$INTEGER`",
           },
           {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
+          },
+          {
             ["name"] = "picked_at",
             ["type"] = "`$STRING`",
           },
@@ -2059,7 +2087,12 @@ local function make_config()
         },
       },
       ["response"] = {
-        ["fields"] = {},
+        ["fields"] = {
+          {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
+          },
+        },
         ["name"] = "response",
         ["op"] = {
           ["load"] = {
@@ -2180,6 +2213,10 @@ local function make_config()
           {
             ["name"] = "created_at",
             ["req"] = true,
+            ["type"] = "`$STRING`",
+          },
+          {
+            ["name"] = "id",
             ["type"] = "`$STRING`",
           },
           {
@@ -2442,6 +2479,10 @@ local function make_config()
             ["name"] = "event_types",
             ["req"] = true,
             ["type"] = "`$ARRAY`",
+          },
+          {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
           },
           {
             ["name"] = "is_enabled",

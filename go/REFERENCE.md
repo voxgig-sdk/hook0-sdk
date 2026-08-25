@@ -193,6 +193,7 @@ fmt.Println(application.GetName()) // "application"
 | --- | --- | --- | --- |
 | `application_id` | `string` | Yes | Unique identifier of the application. |
 | `consumption` | `map[string]any` | Yes | Current consumption metrics for this application. |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes | Name of the application. |
 | `onboarding_steps` | `map[string]any` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
@@ -308,6 +309,7 @@ fmt.Println(applicationSecret.GetName()) // "application_secret"
 | `application_id` | `string` | Yes |  |
 | `created_at` | `string` | Yes |  |
 | `deleted_at` | `string` | No |  |
+| `id` | `string` | No |  |
 | `name` | `string` | No |  |
 | `token` | `string` | Yes |  |
 
@@ -438,6 +440,7 @@ fmt.Println(event.GetName()) // "event"
 | --- | --- | --- | --- |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `ip` | `string` | Yes |  |
 | `labels` | `map[string]any` | Yes |  |
 | `metadata` | `map[string]any` | No |  |
@@ -509,6 +512,7 @@ fmt.Println(eventType.GetName()) // "event_type"
 | --- | --- | --- | --- |
 | `application_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `resource_type` | `string` | Yes |  |
 | `resource_type_name` | `string` | Yes |  |
 | `service` | `string` | Yes |  |
@@ -1026,6 +1030,7 @@ fmt.Println(organization.GetName()) // "organization"
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `consumption` | `map[string]any` | Yes |  |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `map[string]any` | Yes |  |
 | `organization_id` | `string` | Yes |  |
@@ -1143,6 +1148,7 @@ fmt.Println(organizationEditRole.GetName()) // "organization_edit_role"
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `id` | `string` | No |  |
 | `role` | `string` | Yes |  |
 | `user_id` | `string` | Yes |  |
 
@@ -1375,6 +1381,7 @@ fmt.Println(requestAttempt.GetName()) // "request_attempt"
 | `event_id` | `string` | Yes |  |
 | `failed_at` | `string` | No |  |
 | `http_response_status` | `int` | No |  |
+| `id` | `string` | No |  |
 | `picked_at` | `string` | No |  |
 | `request_attempt_id` | `string` | Yes |  |
 | `response_id` | `string` | No |  |
@@ -1439,6 +1446,12 @@ Return the entity name.
 response := client.Response(nil)
 fmt.Println(response.GetName()) // "response"
 ```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | No |  |
 
 ### Operations
 
@@ -1536,6 +1549,7 @@ fmt.Println(serviceToken.GetName()) // "service_token"
 | --- | --- | --- | --- |
 | `biscuit` | `string` | Yes |  |
 | `created_at` | `string` | Yes |  |
+| `id` | `string` | No |  |
 | `name` | `string` | Yes |  |
 | `organization_id` | `string` | Yes |  |
 | `token_id` | `string` | Yes |  |
@@ -1651,6 +1665,7 @@ fmt.Println(subscription.GetName()) // "subscription"
 | `dedicated_workers` | `[]any` | Yes |  |
 | `description` | `string` | No |  |
 | `event_types` | `[]any` | Yes |  |
+| `id` | `string` | No |  |
 | `is_enabled` | `bool` | Yes |  |
 | `label_key` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `string` | Yes | _Kept for backward compatibility, you should use `labels`_ |
@@ -1670,6 +1685,7 @@ fmt.Println(subscription.GetName()) // "subscription"
 | `dedicated_workers` | - | - | Yes | Yes | - |
 | `description` | - | - | - | - | - |
 | `event_types` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
 | `is_enabled` | - | - | - | - | - |
 | `label_key` | - | - | Yes | Yes | - |
 | `label_value` | - | - | Yes | Yes | - |

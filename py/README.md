@@ -71,11 +71,11 @@ except Exception as err:
 # Create — returns the ENTITY (call data_get() for the record)
 created = client.Application().create({"application_id": "example_application_id", "consumption": {}, "name": "example_name", "onboarding_steps": {}, "organization_id": "example_organization_id", "quotas": {}})
 
-# Update
-client.Application().update({"id": "example_id", "application_id": "example_application_id", "consumption": {}})
+# Update — the created record's id is a plain dict key
+client.Application().update({"id": created.data_get()["id"], "application_id": "example_application_id", "consumption": {}})
 
 # Remove
-client.Application().remove({"id": "example_id"})
+client.Application().remove({"id": created.data_get()["id"]})
 ```
 
 
@@ -302,6 +302,7 @@ On error, `ok` is `False` and `err` contains the error value.
 | --- | --- |
 | `application_id` | Unique identifier of the application. |
 | `consumption` | Current consumption metrics for this application. |
+| `id` |  |
 | `name` | Name of the application. |
 | `onboarding_steps` | Onboarding completion status for this application. |
 | `organization_id` | UUID of the organization this application belongs to. |
@@ -318,6 +319,7 @@ API path: `/api/v1/applications/`
 | `application_id` |  |
 | `created_at` |  |
 | `deleted_at` |  |
+| `id` |  |
 | `name` |  |
 | `token` |  |
 
@@ -340,6 +342,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | --- | --- |
 | `event_id` |  |
 | `event_type_name` |  |
+| `id` |  |
 | `ip` |  |
 | `labels` |  |
 | `metadata` |  |
@@ -358,6 +361,7 @@ API path: `/api/v1/events/`
 | --- | --- |
 | `application_id` |  |
 | `event_type_name` |  |
+| `id` |  |
 | `resource_type` |  |
 | `resource_type_name` |  |
 | `service` |  |
@@ -477,6 +481,7 @@ API path: `/api/v1/auth/login`
 | Field | Description |
 | --- | --- |
 | `consumption` |  |
+| `id` |  |
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
@@ -493,6 +498,7 @@ API path: `/api/v1/organizations/`
 
 | Field | Description |
 | --- | --- |
+| `id` |  |
 | `role` |  |
 | `user_id` |  |
 
@@ -553,6 +559,7 @@ API path: `/api/v1/register/`
 | `event_id` |  |
 | `failed_at` |  |
 | `http_response_status` |  |
+| `id` |  |
 | `picked_at` |  |
 | `request_attempt_id` |  |
 | `response_id` |  |
@@ -569,6 +576,7 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `id` |  |
 
 Operations: Load.
 
@@ -589,6 +597,7 @@ API path: `/api/v1/organizations/{organization_id}/invite`
 | --- | --- |
 | `biscuit` |  |
 | `created_at` |  |
+| `id` |  |
 | `name` |  |
 | `organization_id` |  |
 | `token_id` |  |
@@ -606,6 +615,7 @@ API path: `/api/v1/service_token/`
 | `dedicated_workers` |  |
 | `description` |  |
 | `event_types` |  |
+| `id` |  |
 | `is_enabled` |  |
 | `label_key` | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | _Kept for backward compatibility, you should use `labels`_ |
@@ -668,6 +678,7 @@ Create an instance: `application = client.Application()`
 | --- | --- | --- |
 | `application_id` | `str` | Unique identifier of the application. |
 | `consumption` | `dict` | Current consumption metrics for this application. |
+| `id` | `str` |  |
 | `name` | `str` | Name of the application. |
 | `onboarding_steps` | `dict` | Onboarding completion status for this application. |
 | `organization_id` | `str` | UUID of the organization this application belongs to. |
@@ -718,6 +729,7 @@ Create an instance: `application_secret = client.ApplicationSecret()`
 | `application_id` | `str` |  |
 | `created_at` | `str` |  |
 | `deleted_at` | `str` |  |
+| `id` | `str` |  |
 | `name` | `str` |  |
 | `token` | `str` |  |
 
@@ -766,6 +778,7 @@ Create an instance: `event = client.Event()`
 | --- | --- | --- |
 | `event_id` | `str` |  |
 | `event_type_name` | `str` |  |
+| `id` | `str` |  |
 | `ip` | `str` |  |
 | `labels` | `dict` |  |
 | `metadata` | `dict` |  |
@@ -805,6 +818,7 @@ Create an instance: `event_type = client.EventType()`
 | --- | --- | --- |
 | `application_id` | `str` |  |
 | `event_type_name` | `str` |  |
+| `id` | `str` |  |
 | `resource_type` | `str` |  |
 | `resource_type_name` | `str` |  |
 | `service` | `str` |  |
@@ -1074,6 +1088,7 @@ Create an instance: `organization = client.Organization()`
 | Field | Type | Description |
 | --- | --- | --- |
 | `consumption` | `dict` |  |
+| `id` | `str` |  |
 | `name` | `str` |  |
 | `onboarding_steps` | `dict` |  |
 | `organization_id` | `str` |  |
@@ -1124,6 +1139,7 @@ Create an instance: `organization_edit_role = client.OrganizationEditRole()`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `id` | `str` |  |
 | `role` | `str` |  |
 | `user_id` | `str` |  |
 
@@ -1236,6 +1252,7 @@ Create an instance: `request_attempt = client.RequestAttempt()`
 | `event_id` | `str` |  |
 | `failed_at` | `str` |  |
 | `http_response_status` | `int` |  |
+| `id` | `str` |  |
 | `picked_at` | `str` |  |
 | `request_attempt_id` | `str` |  |
 | `response_id` | `str` |  |
@@ -1266,6 +1283,12 @@ Create an instance: `response = client.Response()`
 | Method | Description |
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `str` |  |
 
 #### Example: Load
 
@@ -1305,6 +1328,7 @@ Create an instance: `service_token = client.ServiceToken()`
 | --- | --- | --- |
 | `biscuit` | `str` |  |
 | `created_at` | `str` |  |
+| `id` | `str` |  |
 | `name` | `str` |  |
 | `organization_id` | `str` |  |
 | `token_id` | `str` |  |
@@ -1357,6 +1381,7 @@ Create an instance: `subscription = client.Subscription()`
 | `dedicated_workers` | `list` |  |
 | `description` | `str` |  |
 | `event_types` | `list` |  |
+| `id` | `str` |  |
 | `is_enabled` | `bool` |  |
 | `label_key` | `str` | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `str` | _Kept for backward compatibility, you should use `labels`_ |

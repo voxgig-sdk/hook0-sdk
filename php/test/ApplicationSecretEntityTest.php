@@ -85,6 +85,7 @@ class ApplicationSecretEntityTest extends TestCase
         $application_secret_ref01_data_result = $application_secret_ref01_ent->create($application_secret_ref01_data, null);
         $application_secret_ref01_data = Helpers::to_map(is_object($application_secret_ref01_data_result) && method_exists($application_secret_ref01_data_result, 'data_get') ? $application_secret_ref01_data_result->data_get() : $application_secret_ref01_data_result);
         $this->assertNotNull($application_secret_ref01_data);
+        $this->assertNotNull($application_secret_ref01_data["id"]);
 
         // LIST
         $application_secret_ref01_match = [];
@@ -92,8 +93,14 @@ class ApplicationSecretEntityTest extends TestCase
         $application_secret_ref01_list_result = $application_secret_ref01_ent->list($application_secret_ref01_match, null);
         $this->assertIsArray($application_secret_ref01_list_result);
 
+        $found_item = sdk_select(
+            Runner::entity_list_to_data($application_secret_ref01_list_result),
+            ["id" => $application_secret_ref01_data["id"]]);
+        $this->assertNotEmpty($found_item);
+
         // UPDATE
         $application_secret_ref01_data_up0_up = [
+            "id" => $application_secret_ref01_data["id"],
         ];
 
         $application_secret_ref01_markdef_up0_name = "application_id";
@@ -103,6 +110,7 @@ class ApplicationSecretEntityTest extends TestCase
         $application_secret_ref01_resdata_up0_result = $application_secret_ref01_ent->update($application_secret_ref01_data_up0_up, null);
         $application_secret_ref01_resdata_up0 = Helpers::to_map(is_object($application_secret_ref01_resdata_up0_result) && method_exists($application_secret_ref01_resdata_up0_result, 'data_get') ? $application_secret_ref01_resdata_up0_result->data_get() : $application_secret_ref01_resdata_up0_result);
         $this->assertNotNull($application_secret_ref01_resdata_up0);
+        $this->assertEquals($application_secret_ref01_resdata_up0["id"], $application_secret_ref01_data_up0_up["id"]);
         $this->assertEquals($application_secret_ref01_resdata_up0[$application_secret_ref01_markdef_up0_name], $application_secret_ref01_markdef_up0_value);
 
     }

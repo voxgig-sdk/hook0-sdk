@@ -63,6 +63,7 @@ func TestOrganizationEditRoleEntity(t *testing.T) {
 		// UPDATE
 		organizationEditRoleRef01Ent := client.OrganizationEditRole(nil)
 		organizationEditRoleRef01DataUp0Up := map[string]any{
+			"id": organizationEditRoleRef01Data["id"],
 		}
 
 		organizationEditRoleRef01MarkdefUp0Name := "role"
@@ -76,6 +77,9 @@ func TestOrganizationEditRoleEntity(t *testing.T) {
 		organizationEditRoleRef01ResdataUp0 := core.ToMapAny(entityData(organizationEditRoleRef01ResdataUp0Result))
 		if organizationEditRoleRef01ResdataUp0 == nil {
 			t.Fatal("expected update result to be a map")
+		}
+		if organizationEditRoleRef01ResdataUp0["id"] != organizationEditRoleRef01DataUp0Up["id"] {
+			t.Fatal("expected update result id to match")
 		}
 		if organizationEditRoleRef01ResdataUp0[organizationEditRoleRef01MarkdefUp0Name] != organizationEditRoleRef01MarkdefUp0Value {
 			t.Fatalf("expected %s to be updated, got %v", organizationEditRoleRef01MarkdefUp0Name, organizationEditRoleRef01ResdataUp0[organizationEditRoleRef01MarkdefUp0Name])

@@ -48,9 +48,13 @@ class TestResponseEntity:
 
         # LOAD
         response_ref01_ent = client.Response(None)
-        response_ref01_match_dt0 = {}
+        response_ref01_match_dt0 = {
+            "id": response_ref01_data["id"],
+        }
         response_ref01_data_dt0_loaded = response_ref01_ent.load(response_ref01_match_dt0, None)
-        assert response_ref01_data_dt0_loaded is not None
+        response_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(response_ref01_data_dt0_loaded))
+        assert response_ref01_data_dt0_load_result is not None
+        assert response_ref01_data_dt0_load_result["id"] == response_ref01_data["id"]
 
 
 

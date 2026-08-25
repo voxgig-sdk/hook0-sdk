@@ -84,6 +84,7 @@ describe("EventTypeEntity", function()
     assert.is_nil(err)
     event_type_ref01_data = helpers.to_map(type(event_type_ref01_data_result) == 'table' and event_type_ref01_data_result.data_get and event_type_ref01_data_result:data_get() or event_type_ref01_data_result)
     assert.is_not_nil(event_type_ref01_data)
+    assert.is_not_nil(event_type_ref01_data["id"])
 
     -- LIST
     local event_type_ref01_match = {}
@@ -92,11 +93,20 @@ describe("EventTypeEntity", function()
     assert.is_nil(err)
     assert.is_table(event_type_ref01_list_result)
 
+    local found_item = vs.select(
+      runner.entity_list_to_data(event_type_ref01_list_result),
+      { id = event_type_ref01_data["id"] })
+    assert.is_false(vs.isempty(found_item))
+
     -- LOAD
-    local event_type_ref01_match_dt0 = {}
+    local event_type_ref01_match_dt0 = {
+      id = event_type_ref01_data["id"],
+    }
     local event_type_ref01_data_dt0_loaded, err = event_type_ref01_ent:load(event_type_ref01_match_dt0, nil)
     assert.is_nil(err)
-    assert.is_not_nil(event_type_ref01_data_dt0_loaded)
+    local event_type_ref01_data_dt0_load_result = helpers.to_map(type(event_type_ref01_data_dt0_loaded) == 'table' and event_type_ref01_data_dt0_loaded.data_get and event_type_ref01_data_dt0_loaded:data_get() or event_type_ref01_data_dt0_loaded)
+    assert.is_not_nil(event_type_ref01_data_dt0_load_result)
+    assert.are.equal(event_type_ref01_data_dt0_load_result["id"], event_type_ref01_data["id"])
 
   end)
 end)

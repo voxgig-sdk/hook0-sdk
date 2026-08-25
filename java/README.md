@@ -303,6 +303,7 @@ On error, `ok` is `false` and `err` contains the error value.
 | --- | --- |
 | `application_id` | Unique identifier of the application. |
 | `consumption` | Current consumption metrics for this application. |
+| `id` |  |
 | `name` | Name of the application. |
 | `onboarding_steps` | Onboarding completion status for this application. |
 | `organization_id` | UUID of the organization this application belongs to. |
@@ -319,6 +320,7 @@ API path: `/api/v1/applications/`
 | `application_id` |  |
 | `created_at` |  |
 | `deleted_at` |  |
+| `id` |  |
 | `name` |  |
 | `token` |  |
 
@@ -341,6 +343,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | --- | --- |
 | `event_id` |  |
 | `event_type_name` |  |
+| `id` |  |
 | `ip` |  |
 | `labels` |  |
 | `metadata` |  |
@@ -359,6 +362,7 @@ API path: `/api/v1/events/`
 | --- | --- |
 | `application_id` |  |
 | `event_type_name` |  |
+| `id` |  |
 | `resource_type` |  |
 | `resource_type_name` |  |
 | `service` |  |
@@ -478,6 +482,7 @@ API path: `/api/v1/auth/login`
 | Field | Description |
 | --- | --- |
 | `consumption` |  |
+| `id` |  |
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
@@ -494,6 +499,7 @@ API path: `/api/v1/organizations/`
 
 | Field | Description |
 | --- | --- |
+| `id` |  |
 | `role` |  |
 | `user_id` |  |
 
@@ -554,6 +560,7 @@ API path: `/api/v1/register/`
 | `event_id` |  |
 | `failed_at` |  |
 | `http_response_status` |  |
+| `id` |  |
 | `picked_at` |  |
 | `request_attempt_id` |  |
 | `response_id` |  |
@@ -570,6 +577,7 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `id` |  |
 
 Operations: load.
 
@@ -590,6 +598,7 @@ API path: `/api/v1/organizations/{organization_id}/invite`
 | --- | --- |
 | `biscuit` |  |
 | `created_at` |  |
+| `id` |  |
 | `name` |  |
 | `organization_id` |  |
 | `token_id` |  |
@@ -607,6 +616,7 @@ API path: `/api/v1/service_token/`
 | `dedicated_workers` |  |
 | `description` |  |
 | `event_types` |  |
+| `id` |  |
 | `is_enabled` |  |
 | `label_key` | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | _Kept for backward compatibility, you should use `labels`_ |
@@ -669,6 +679,7 @@ Create an instance: `SdkEntity application = client.application(null);`
 | --- | --- | --- |
 | `application_id` | `String` | Unique identifier of the application. |
 | `consumption` | `Map<String, Object>` | Current consumption metrics for this application. |
+| `id` | `String` |  |
 | `name` | `String` | Name of the application. |
 | `onboarding_steps` | `Map<String, Object>` | Onboarding completion status for this application. |
 | `organization_id` | `String` | UUID of the organization this application belongs to. |
@@ -719,6 +730,7 @@ Create an instance: `SdkEntity applicationSecret = client.applicationSecret(null
 | `application_id` | `String` |  |
 | `created_at` | `String` |  |
 | `deleted_at` | `String` |  |
+| `id` | `String` |  |
 | `name` | `String` |  |
 | `token` | `String` |  |
 
@@ -767,6 +779,7 @@ Create an instance: `SdkEntity event = client.event(null);`
 | --- | --- | --- |
 | `event_id` | `String` |  |
 | `event_type_name` | `String` |  |
+| `id` | `String` |  |
 | `ip` | `String` |  |
 | `labels` | `Map<String, Object>` |  |
 | `metadata` | `Map<String, Object>` |  |
@@ -806,6 +819,7 @@ Create an instance: `SdkEntity eventType = client.eventType(null);`
 | --- | --- | --- |
 | `application_id` | `String` |  |
 | `event_type_name` | `String` |  |
+| `id` | `String` |  |
 | `resource_type` | `String` |  |
 | `resource_type_name` | `String` |  |
 | `service` | `String` |  |
@@ -1075,6 +1089,7 @@ Create an instance: `SdkEntity organization = client.organization(null);`
 | Field | Type | Description |
 | --- | --- | --- |
 | `consumption` | `Map<String, Object>` |  |
+| `id` | `String` |  |
 | `name` | `String` |  |
 | `onboarding_steps` | `Map<String, Object>` |  |
 | `organization_id` | `String` |  |
@@ -1125,6 +1140,7 @@ Create an instance: `SdkEntity organizationEditRole = client.organizationEditRol
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `id` | `String` |  |
 | `role` | `String` |  |
 | `user_id` | `String` |  |
 
@@ -1237,6 +1253,7 @@ Create an instance: `SdkEntity requestAttempt = client.requestAttempt(null);`
 | `event_id` | `String` |  |
 | `failed_at` | `String` |  |
 | `http_response_status` | `Long` |  |
+| `id` | `String` |  |
 | `picked_at` | `String` |  |
 | `request_attempt_id` | `String` |  |
 | `response_id` | `String` |  |
@@ -1267,6 +1284,12 @@ Create an instance: `SdkEntity response = client.response(null);`
 | Method | Description |
 | --- | --- |
 | `load(match, null)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `String` |  |
 
 #### Example: Load
 
@@ -1306,6 +1329,7 @@ Create an instance: `SdkEntity serviceToken = client.serviceToken(null);`
 | --- | --- | --- |
 | `biscuit` | `String` |  |
 | `created_at` | `String` |  |
+| `id` | `String` |  |
 | `name` | `String` |  |
 | `organization_id` | `String` |  |
 | `token_id` | `String` |  |
@@ -1358,6 +1382,7 @@ Create an instance: `SdkEntity subscription = client.subscription(null);`
 | `dedicated_workers` | `List<Object>` |  |
 | `description` | `String` |  |
 | `event_types` | `List<Object>` |  |
+| `id` | `String` |  |
 | `is_enabled` | `Boolean` |  |
 | `label_key` | `String` | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `String` | _Kept for backward compatibility, you should use `labels`_ |

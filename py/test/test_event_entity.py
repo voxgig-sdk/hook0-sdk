@@ -88,9 +88,13 @@ class TestEventEntity:
         assert isinstance(event_ref01_list_result, list)
 
         # LOAD
-        event_ref01_match_dt0 = {}
+        event_ref01_match_dt0 = {
+            "id": event_ref01_data["id"],
+        }
         event_ref01_data_dt0_loaded = event_ref01_ent.load(event_ref01_match_dt0, None)
-        assert event_ref01_data_dt0_loaded is not None
+        event_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(event_ref01_data_dt0_loaded))
+        assert event_ref01_data_dt0_load_result is not None
+        assert event_ref01_data_dt0_load_result["id"] == event_ref01_data["id"]
 
 
 

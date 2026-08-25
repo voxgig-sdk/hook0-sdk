@@ -45,7 +45,7 @@ local applications, err = client:Application():list()
 if err then error(err) end
 
 for _, item in ipairs(applications) do
-  print(item["application_id"])
+  print(item["id"], item["application_id"])
 end
 ```
 
@@ -65,10 +65,10 @@ local created, err = client:Application():create({ application_id = "example_app
 if err then error(err) end
 
 -- Update
-client:Application():update({ id = "example_id", application_id = "example_application_id", consumption = {} })
+client:Application():update({ id = created:data_get()["id"], application_id = "example_application_id", consumption = {} })
 
 -- Remove
-client:Application():remove({ id = "example_id" })
+client:Application():remove({ id = created:data_get()["id"] })
 ```
 
 
@@ -287,6 +287,7 @@ Only `direct()` returns a response envelope — a `table` with `ok`,
 | --- | --- |
 | `application_id` | Unique identifier of the application. |
 | `consumption` | Current consumption metrics for this application. |
+| `id` |  |
 | `name` | Name of the application. |
 | `onboarding_steps` | Onboarding completion status for this application. |
 | `organization_id` | UUID of the organization this application belongs to. |
@@ -303,6 +304,7 @@ API path: `/api/v1/applications/`
 | `application_id` |  |
 | `created_at` |  |
 | `deleted_at` |  |
+| `id` |  |
 | `name` |  |
 | `token` |  |
 
@@ -325,6 +327,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | --- | --- |
 | `event_id` |  |
 | `event_type_name` |  |
+| `id` |  |
 | `ip` |  |
 | `labels` |  |
 | `metadata` |  |
@@ -343,6 +346,7 @@ API path: `/api/v1/events/`
 | --- | --- |
 | `application_id` |  |
 | `event_type_name` |  |
+| `id` |  |
 | `resource_type` |  |
 | `resource_type_name` |  |
 | `service` |  |
@@ -462,6 +466,7 @@ API path: `/api/v1/auth/login`
 | Field | Description |
 | --- | --- |
 | `consumption` |  |
+| `id` |  |
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
@@ -478,6 +483,7 @@ API path: `/api/v1/organizations/`
 
 | Field | Description |
 | --- | --- |
+| `id` |  |
 | `role` |  |
 | `user_id` |  |
 
@@ -538,6 +544,7 @@ API path: `/api/v1/register/`
 | `event_id` |  |
 | `failed_at` |  |
 | `http_response_status` |  |
+| `id` |  |
 | `picked_at` |  |
 | `request_attempt_id` |  |
 | `response_id` |  |
@@ -554,6 +561,7 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `id` |  |
 
 Operations: Load.
 
@@ -574,6 +582,7 @@ API path: `/api/v1/organizations/{organization_id}/invite`
 | --- | --- |
 | `biscuit` |  |
 | `created_at` |  |
+| `id` |  |
 | `name` |  |
 | `organization_id` |  |
 | `token_id` |  |
@@ -591,6 +600,7 @@ API path: `/api/v1/service_token/`
 | `dedicated_workers` |  |
 | `description` |  |
 | `event_types` |  |
+| `id` |  |
 | `is_enabled` |  |
 | `label_key` | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | _Kept for backward compatibility, you should use `labels`_ |
@@ -653,6 +663,7 @@ Create an instance: `local application = client:Application(nil)`
 | --- | --- | --- |
 | `application_id` | `string` | Unique identifier of the application. |
 | `consumption` | `table` | Current consumption metrics for this application. |
+| `id` | `string` |  |
 | `name` | `string` | Name of the application. |
 | `onboarding_steps` | `table` | Onboarding completion status for this application. |
 | `organization_id` | `string` | UUID of the organization this application belongs to. |
@@ -703,6 +714,7 @@ Create an instance: `local application_secret = client:ApplicationSecret(nil)`
 | `application_id` | `string` |  |
 | `created_at` | `string` |  |
 | `deleted_at` | `string` |  |
+| `id` | `string` |  |
 | `name` | `string` |  |
 | `token` | `string` |  |
 
@@ -751,6 +763,7 @@ Create an instance: `local event = client:Event(nil)`
 | --- | --- | --- |
 | `event_id` | `string` |  |
 | `event_type_name` | `string` |  |
+| `id` | `string` |  |
 | `ip` | `string` |  |
 | `labels` | `table` |  |
 | `metadata` | `table` |  |
@@ -790,6 +803,7 @@ Create an instance: `local event_type = client:EventType(nil)`
 | --- | --- | --- |
 | `application_id` | `string` |  |
 | `event_type_name` | `string` |  |
+| `id` | `string` |  |
 | `resource_type` | `string` |  |
 | `resource_type_name` | `string` |  |
 | `service` | `string` |  |
@@ -1059,6 +1073,7 @@ Create an instance: `local organization = client:Organization(nil)`
 | Field | Type | Description |
 | --- | --- | --- |
 | `consumption` | `table` |  |
+| `id` | `string` |  |
 | `name` | `string` |  |
 | `onboarding_steps` | `table` |  |
 | `organization_id` | `string` |  |
@@ -1109,6 +1124,7 @@ Create an instance: `local organization_edit_role = client:OrganizationEditRole(
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `id` | `string` |  |
 | `role` | `string` |  |
 | `user_id` | `string` |  |
 
@@ -1221,6 +1237,7 @@ Create an instance: `local request_attempt = client:RequestAttempt(nil)`
 | `event_id` | `string` |  |
 | `failed_at` | `string` |  |
 | `http_response_status` | `number` |  |
+| `id` | `string` |  |
 | `picked_at` | `string` |  |
 | `request_attempt_id` | `string` |  |
 | `response_id` | `string` |  |
@@ -1251,6 +1268,12 @@ Create an instance: `local response = client:Response(nil)`
 | Method | Description |
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` |  |
 
 #### Example: Load
 
@@ -1290,6 +1313,7 @@ Create an instance: `local service_token = client:ServiceToken(nil)`
 | --- | --- | --- |
 | `biscuit` | `string` |  |
 | `created_at` | `string` |  |
+| `id` | `string` |  |
 | `name` | `string` |  |
 | `organization_id` | `string` |  |
 | `token_id` | `string` |  |
@@ -1342,6 +1366,7 @@ Create an instance: `local subscription = client:Subscription(nil)`
 | `dedicated_workers` | `table` |  |
 | `description` | `string` |  |
 | `event_types` | `table` |  |
+| `id` | `string` |  |
 | `is_enabled` | `boolean` |  |
 | `label_key` | `string` | _Kept for backward compatibility, you should use `labels`_ |
 | `label_value` | `string` | _Kept for backward compatibility, you should use `labels`_ |

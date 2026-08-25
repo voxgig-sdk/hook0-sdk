@@ -75,20 +75,31 @@ const utility_1 = require("../../utility");
         const organization_ref01_ent = client.Organization();
         let organization_ref01_data = setup.data.new.organization['organization_ref01'];
         organization_ref01_data = (await organization_ref01_ent.create(organization_ref01_data)).data();
-        (0, node_assert_1.default)(null != organization_ref01_data);
+        (0, node_assert_1.default)(null != organization_ref01_data.id);
         // LIST
         const organization_ref01_match = {};
         const organization_ref01_list = (await organization_ref01_ent.list(organization_ref01_match)).map((e) => e.data());
+        (0, node_assert_1.default)(!isempty(select(organization_ref01_list, { id: organization_ref01_data.id })));
         // UPDATE
         const organization_ref01_data_up0 = {};
+        organization_ref01_data_up0.id = organization_ref01_data.id;
         const organization_ref01_markdef_up0 = { name: 'name', value: 'Mark01-organization_ref01_' + setup.now };
         organization_ref01_data_up0[organization_ref01_markdef_up0.name] = organization_ref01_markdef_up0.value;
         const organization_ref01_resdata_up0 = (await organization_ref01_ent.update(organization_ref01_data_up0)).data();
-        (0, node_assert_1.default)(null != organization_ref01_resdata_up0);
+        (0, node_assert_1.default)(organization_ref01_resdata_up0.id === organization_ref01_data_up0.id);
         (0, node_assert_1.default)(organization_ref01_resdata_up0[organization_ref01_markdef_up0.name] === organization_ref01_markdef_up0.value);
+        // LOAD
+        const organization_ref01_match_dt0 = {};
+        organization_ref01_match_dt0.id = organization_ref01_data.id;
+        const organization_ref01_data_dt0 = (await organization_ref01_ent.load(organization_ref01_match_dt0)).data();
+        (0, node_assert_1.default)(organization_ref01_data_dt0.id === organization_ref01_data.id);
+        // REMOVE
+        const organization_ref01_match_rm0 = { id: organization_ref01_data.id };
+        await organization_ref01_ent.remove(organization_ref01_match_rm0);
         // LIST
         const organization_ref01_match_rt0 = {};
         const organization_ref01_list_rt0 = (await organization_ref01_ent.list(organization_ref01_match_rt0)).map((e) => e.data());
+        (0, node_assert_1.default)(isempty(select(organization_ref01_list_rt0, { id: organization_ref01_data.id })));
     });
 });
 function basicSetup(extra) {

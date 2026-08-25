@@ -2,37 +2,37 @@
   "existing": {
     "service_token": {
       "SERVICE_TOKEN00": {
-        "biscuit": "s32",
-        "created_at": "s33",
-        "name": "s34",
+        "biscuit": "s3c",
+        "created_at": "s3d",
+        "id": "SERVICE_TOKEN00",
+        "name": "s3f",
         "organization_id": "ORGANIZATION01",
-        "token_id": "TOKEN01",
-        "id": "SERVICE_TOKEN00"
+        "token_id": "TOKEN01"
       },
       "SERVICE_TOKEN01": {
-        "biscuit": "s64",
-        "created_at": "s65",
-        "name": "s66",
+        "biscuit": "s78",
+        "created_at": "s79",
+        "id": "SERVICE_TOKEN01",
+        "name": "s7b",
         "organization_id": "ORGANIZATION01",
-        "token_id": "TOKEN01",
-        "id": "SERVICE_TOKEN01"
+        "token_id": "TOKEN01"
       },
       "SERVICE_TOKEN02": {
-        "biscuit": "s96",
-        "created_at": "s97",
-        "name": "s98",
+        "biscuit": "sb4",
+        "created_at": "sb5",
+        "id": "SERVICE_TOKEN02",
+        "name": "sb7",
         "organization_id": "ORGANIZATION01",
-        "token_id": "TOKEN01",
-        "id": "SERVICE_TOKEN02"
+        "token_id": "TOKEN01"
       }
     }
   },
   "new": {
     "service_token": {
       "service_token_ref01": {
-        "biscuit": "sc8",
-        "created_at": "sc9",
-        "name": "sca",
+        "biscuit": "sf0",
+        "created_at": "sf1",
+        "name": "sf3",
         "organization_id": "ORGANIZATION01",
         "token_id": "TOKEN01"
       }

@@ -111,6 +111,9 @@ func TestSubscriptionEntity(t *testing.T) {
 		if subscriptionRef01Data == nil {
 			t.Fatal("expected create result to be a map")
 		}
+		if subscriptionRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
 
 		// LIST
 		subscriptionRef01Match := map[string]any{}
@@ -119,13 +122,19 @@ func TestSubscriptionEntity(t *testing.T) {
 		if err != nil {
 			t.Fatalf("list failed: %v", err)
 		}
-		_, subscriptionRef01ListOk := subscriptionRef01ListResult.([]any)
+		subscriptionRef01List, subscriptionRef01ListOk := subscriptionRef01ListResult.([]any)
 		if !subscriptionRef01ListOk {
 			t.Fatalf("expected list result to be an array, got %T", subscriptionRef01ListResult)
 		}
 
+		foundItem := vs.Select(entityListToData(subscriptionRef01List), map[string]any{"id": subscriptionRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
 		// UPDATE
 		subscriptionRef01DataUp0Up := map[string]any{
+			"id": subscriptionRef01Data["id"],
 		}
 
 		subscriptionRef01MarkdefUp0Name := "application_id"
@@ -140,20 +149,37 @@ func TestSubscriptionEntity(t *testing.T) {
 		if subscriptionRef01ResdataUp0 == nil {
 			t.Fatal("expected update result to be a map")
 		}
+		if subscriptionRef01ResdataUp0["id"] != subscriptionRef01DataUp0Up["id"] {
+			t.Fatal("expected update result id to match")
+		}
 		if subscriptionRef01ResdataUp0[subscriptionRef01MarkdefUp0Name] != subscriptionRef01MarkdefUp0Value {
 			t.Fatalf("expected %s to be updated, got %v", subscriptionRef01MarkdefUp0Name, subscriptionRef01ResdataUp0[subscriptionRef01MarkdefUp0Name])
 		}
 
 		// LOAD
-		subscriptionRef01MatchDt0 := map[string]any{}
+		subscriptionRef01MatchDt0 := map[string]any{
+			"id": subscriptionRef01Data["id"],
+		}
 		subscriptionRef01DataDt0Loaded, err := subscriptionRef01Ent.Load(subscriptionRef01MatchDt0, nil)
 		if err != nil {
 			t.Fatalf("load failed: %v", err)
 		}
-		if subscriptionRef01DataDt0Loaded == nil {
-			t.Fatal("expected load result to be non-nil")
+		subscriptionRef01DataDt0LoadResult := core.ToMapAny(entityData(subscriptionRef01DataDt0Loaded))
+		if subscriptionRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if subscriptionRef01DataDt0LoadResult["id"] != subscriptionRef01Data["id"] {
+			t.Fatal("expected load result id to match")
 		}
 
+		// REMOVE
+		subscriptionRef01MatchRm0 := map[string]any{
+			"id": subscriptionRef01Data["id"],
+		}
+		_, err = subscriptionRef01Ent.Remove(subscriptionRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
 
 		// LIST
 		subscriptionRef01MatchRt0 := map[string]any{}
@@ -162,9 +188,14 @@ func TestSubscriptionEntity(t *testing.T) {
 		if err != nil {
 			t.Fatalf("list failed: %v", err)
 		}
-		_, subscriptionRef01ListRt0Ok := subscriptionRef01ListRt0Result.([]any)
+		subscriptionRef01ListRt0, subscriptionRef01ListRt0Ok := subscriptionRef01ListRt0Result.([]any)
 		if !subscriptionRef01ListRt0Ok {
 			t.Fatalf("expected list result to be an array, got %T", subscriptionRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(subscriptionRef01ListRt0), map[string]any{"id": subscriptionRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})

@@ -85,6 +85,7 @@ class SubscriptionEntityTest extends TestCase
         $subscription_ref01_data_result = $subscription_ref01_ent->create($subscription_ref01_data, null);
         $subscription_ref01_data = Helpers::to_map(is_object($subscription_ref01_data_result) && method_exists($subscription_ref01_data_result, 'data_get') ? $subscription_ref01_data_result->data_get() : $subscription_ref01_data_result);
         $this->assertNotNull($subscription_ref01_data);
+        $this->assertNotNull($subscription_ref01_data["id"]);
 
         // LIST
         $subscription_ref01_match = [];
@@ -92,8 +93,14 @@ class SubscriptionEntityTest extends TestCase
         $subscription_ref01_list_result = $subscription_ref01_ent->list($subscription_ref01_match, null);
         $this->assertIsArray($subscription_ref01_list_result);
 
+        $found_item = sdk_select(
+            Runner::entity_list_to_data($subscription_ref01_list_result),
+            ["id" => $subscription_ref01_data["id"]]);
+        $this->assertNotEmpty($found_item);
+
         // UPDATE
         $subscription_ref01_data_up0_up = [
+            "id" => $subscription_ref01_data["id"],
         ];
 
         $subscription_ref01_markdef_up0_name = "application_id";
@@ -103,19 +110,34 @@ class SubscriptionEntityTest extends TestCase
         $subscription_ref01_resdata_up0_result = $subscription_ref01_ent->update($subscription_ref01_data_up0_up, null);
         $subscription_ref01_resdata_up0 = Helpers::to_map(is_object($subscription_ref01_resdata_up0_result) && method_exists($subscription_ref01_resdata_up0_result, 'data_get') ? $subscription_ref01_resdata_up0_result->data_get() : $subscription_ref01_resdata_up0_result);
         $this->assertNotNull($subscription_ref01_resdata_up0);
+        $this->assertEquals($subscription_ref01_resdata_up0["id"], $subscription_ref01_data_up0_up["id"]);
         $this->assertEquals($subscription_ref01_resdata_up0[$subscription_ref01_markdef_up0_name], $subscription_ref01_markdef_up0_value);
 
         // LOAD
-        $subscription_ref01_match_dt0 = [];
+        $subscription_ref01_match_dt0 = [
+            "id" => $subscription_ref01_data["id"],
+        ];
         $subscription_ref01_data_dt0_loaded = $subscription_ref01_ent->load($subscription_ref01_match_dt0, null);
-        $this->assertNotNull($subscription_ref01_data_dt0_loaded);
+        $subscription_ref01_data_dt0_load_result = Helpers::to_map(is_object($subscription_ref01_data_dt0_loaded) && method_exists($subscription_ref01_data_dt0_loaded, 'data_get') ? $subscription_ref01_data_dt0_loaded->data_get() : $subscription_ref01_data_dt0_loaded);
+        $this->assertNotNull($subscription_ref01_data_dt0_load_result);
+        $this->assertEquals($subscription_ref01_data_dt0_load_result["id"], $subscription_ref01_data["id"]);
 
+        // REMOVE
+        $subscription_ref01_match_rm0 = [
+            "id" => $subscription_ref01_data["id"],
+        ];
+        $subscription_ref01_ent->remove($subscription_ref01_match_rm0, null);
 
         // LIST
         $subscription_ref01_match_rt0 = [];
 
         $subscription_ref01_list_rt0_result = $subscription_ref01_ent->list($subscription_ref01_match_rt0, null);
         $this->assertIsArray($subscription_ref01_list_rt0_result);
+
+        $not_found_item = sdk_select(
+            Runner::entity_list_to_data($subscription_ref01_list_rt0_result),
+            ["id" => $subscription_ref01_data["id"]]);
+        $this->assertEmpty($not_found_item);
 
     }
 }
