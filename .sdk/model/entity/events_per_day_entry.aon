@@ -6,11 +6,13 @@ main: kit: entity: events_per_day_entry: {
 
   fields: [
     {
+      format: "int32"
       name: "amount"
       req: true
       type: "`$INTEGER`"
     }
     {
+      format: "uuid"
       name: "application_id"
       req: true
       type: "`$STRING`"
@@ -21,6 +23,7 @@ main: kit: entity: events_per_day_entry: {
       type: "`$STRING`"
     }
     {
+      format: "date"
       name: "date"
       req: true
       type: "`$STRING`"
@@ -65,11 +68,19 @@ main: kit: entity: events_per_day_entry: {
           }
           method: "GET"
           orig: "/api/v1/events_per_day/application"
-          parts: [
-            "api"
-            "v1"
-            "events_per_day"
-            "application"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "events_per_day"
+            }
+            {
+              lit: "application"
+            }
           ]
           select: {
             exist: [
@@ -111,11 +122,19 @@ main: kit: entity: events_per_day_entry: {
           }
           method: "GET"
           orig: "/api/v1/events_per_day/organization"
-          parts: [
-            "api"
-            "v1"
-            "events_per_day"
-            "organization"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "events_per_day"
+            }
+            {
+              lit: "organization"
+            }
           ]
           select: {
             exist: [

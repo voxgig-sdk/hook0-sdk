@@ -36,12 +36,22 @@ main: kit: entity: user_invitation: {
           }
           method: "POST"
           orig: "/api/v1/organizations/{organization_id}/invite"
-          parts: [
-            "api"
-            "v1"
-            "organizations"
-            "{organization_id}"
-            "invite"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "organizations"
+            }
+            {
+              var: "organization_id"
+            }
+            {
+              lit: "invite"
+            }
           ]
           select: {
             exist: [

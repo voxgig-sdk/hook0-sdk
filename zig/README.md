@@ -351,6 +351,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
+| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -362,9 +363,9 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | `payload_content_type` |  |
 | `received_at` |  |
 
-Operations: List, Load.
+Operations: Create, List, Load.
 
-API path: `/api/v1/events/`
+API path: `/api/v1/events/{event_id}/replay`
 
 #### EventType
 
@@ -388,11 +389,10 @@ API path: `/api/v1/event_types/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 
-Operations: Create, List, Remove.
+Operations: List, Remove.
 
-API path: `/api/v1/events/{event_id}/replay`
+API path: `/api/v1/payload_content_types/`
 
 #### EventsPerDayEntry
 
@@ -804,6 +804,7 @@ Create an instance: `const event = client.event(h.vnull());`
 
 | Method | Description |
 | --- | --- |
+| `create(reqdata, ctrl)` | Create a new entity with the given data. |
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
 
@@ -814,6 +815,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `application_id` | `[]const u8` |  |
 | `event_id` | `[]const u8` |  |
 | `event_type_name` | `[]const u8` |  |
 | `id` | `[]const u8` |  |
@@ -828,7 +830,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 #### Example: Load
 
 ```zig
-switch (client.event(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_id") }}), h.vnull())) {
+switch (client.event(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |event| std.debug.print("{s}\n", .{h.stringify(event)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -840,6 +842,26 @@ switch (client.event(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_id") }}), h.
 switch (client.event(h.vnull()).list(h.vnull(), h.vnull())) {
     .ok => |events| std.debug.print("{s}\n", .{h.stringify(events)}),
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
+}
+```
+
+#### Example: Create
+
+```zig
+switch (client.event(h.vnull()).create(h.jo(&.{
+    .{ "id", h.vstr("example_id") }, // []const u8
+    .{ "application_id", h.vstr("example_application_id") }, // []const u8
+    .{ "event_id", h.vstr("example_event_id") }, // []const u8
+    .{ "event_type_name", h.vstr("example_event_type_name") }, // []const u8
+    .{ "ip", h.vstr("example_ip") }, // []const u8
+    .{ "labels", h.omap() }, // Value (object)
+    .{ "occurred_at", h.vstr("example_occurred_at") }, // []const u8
+    .{ "payload", h.vstr("example_payload") }, // []const u8
+    .{ "payload_content_type", h.vstr("example_payload_content_type") }, // []const u8
+    .{ "received_at", h.vstr("example_received_at") }, // []const u8
+}), h.vnull())) {
+    .ok => |event| std.debug.print("{s}\n", .{h.stringify(event)}),
+    .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -876,7 +898,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 #### Example: Load
 
 ```zig
-switch (client.event_type(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_type_id") }}), h.vnull())) {
+switch (client.event_type(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_type_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |event_type| std.debug.print("{s}\n", .{h.stringify(event_type)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -918,18 +940,11 @@ Create an instance: `const events_management = client.events_management(h.vnull(
 
 | Method | Description |
 | --- | --- |
-| `create(reqdata, ctrl)` | Create a new entity with the given data. |
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 | `remove(reqmatch, ctrl)` | Remove the matching entity. |
 
 Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
 carries the result `Value`, `.err => |e|` carries the branded error.
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `application_id` | `[]const u8` |  |
 
 #### Example: List
 
@@ -937,18 +952,6 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 switch (client.events_management(h.vnull()).list(h.vnull(), h.vnull())) {
     .ok => |events_managements| std.debug.print("{s}\n", .{h.stringify(events_managements)}),
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
-}
-```
-
-#### Example: Create
-
-```zig
-switch (client.events_management(h.vnull()).create(h.jo(&.{
-    .{ "event_id", h.vstr("example_event_id") }, // []const u8
-    .{ "application_id", h.vstr("example_application_id") }, // []const u8
-}), h.vnull())) {
-    .ok => |events_management| std.debug.print("{s}\n", .{h.stringify(events_management)}),
-    .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -1401,7 +1404,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 #### Example: Load
 
 ```zig
-switch (client.request_attempt(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("request_attempt_id") }}), h.vnull())) {
+switch (client.request_attempt(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("request_attempt_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |request_attempt| std.debug.print("{s}\n", .{h.stringify(request_attempt)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -1439,7 +1442,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 #### Example: Load
 
 ```zig
-switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("response_id") }}), h.vnull())) {
+switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("response_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |response| std.debug.print("{s}\n", .{h.stringify(response)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -1491,7 +1494,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 #### Example: Load
 
 ```zig
-switch (client.service_token(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("service_token_id") }}), h.vnull())) {
+switch (client.service_token(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("service_token_id") }, .{ "organization_id", h.vstr("organization_id") }}), h.vnull())) {
     .ok => |service_token| std.debug.print("{s}\n", .{h.stringify(service_token)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -1668,6 +1671,29 @@ switch (client.user_invitation(h.vnull()).create(h.jo(&.{
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
+
+## Features
+
+This SDK ships 1 optional features. Each is **inactive until you
+switch it on**, so an SDK you have not configured behaves exactly as if none of
+them existed — no retries, no cache, no logging, no measurable overhead.
+
+Activate a feature by name in the client options, alongside the options shown
+above:
+
+| Feature | What it does |
+|---|---|
+| [`test`](#test) | In-memory mock transport for testing without a live server |
+
+### test
+
+In-memory mock transport for testing without a live server.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Set `feature.test.active` to enable it, then override any of the options above.
 
 
 ## Advanced

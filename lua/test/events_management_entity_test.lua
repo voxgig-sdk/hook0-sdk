@@ -60,7 +60,7 @@ describe("EventsManagementEntity", function()
     local setup = events_management_basic_setup(nil)
     -- Per-op sdk-test-control.json skip.
     local _live = setup.live or false
-    for _, _op in ipairs({"create", "list", "remove"}) do
+    for _, _op in ipairs({"list"}) do
       local _should_skip, _reason = runner.is_control_skipped("entityOp", "events_management." .. _op, _live and "live" or "unit")
       if _should_skip then
         pending(_reason or "skipped via sdk-test-control.json")
@@ -75,31 +75,21 @@ describe("EventsManagementEntity", function()
     end
     local client = setup.client
 
-    -- CREATE
-    local events_management_ref01_ent = client:EventsManagement(nil)
-    local events_management_ref01_data = helpers.to_map(vs.getprop(
-      vs.getpath(setup.data, "new.events_management"), "events_management_ref01"))
-    events_management_ref01_data["event_id"] = setup.idmap["event01"]
-
-    local events_management_ref01_data_result, err = events_management_ref01_ent:create(events_management_ref01_data, nil)
-    assert.is_nil(err)
-    events_management_ref01_data = helpers.to_map(type(events_management_ref01_data_result) == 'table' and events_management_ref01_data_result.data_get and events_management_ref01_data_result:data_get() or events_management_ref01_data_result)
-    assert.is_not_nil(events_management_ref01_data)
+    -- Bootstrap entity data from existing test data.
+    local events_management_ref01_data_raw = vs.items(helpers.to_map(
+      vs.getpath(setup.data, "existing.events_management")))
+    local events_management_ref01_data = nil
+    if #events_management_ref01_data_raw > 0 then
+      events_management_ref01_data = helpers.to_map(events_management_ref01_data_raw[1][2])
+    end
 
     -- LIST
+    local events_management_ref01_ent = client:EventsManagement(nil)
     local events_management_ref01_match = {}
 
     local events_management_ref01_list_result, err = events_management_ref01_ent:list(events_management_ref01_match, nil)
     assert.is_nil(err)
     assert.is_table(events_management_ref01_list_result)
-
-
-    -- LIST
-    local events_management_ref01_match_rt0 = {}
-
-    local events_management_ref01_list_rt0_result, err = events_management_ref01_ent:list(events_management_ref01_match_rt0, nil)
-    assert.is_nil(err)
-    assert.is_table(events_management_ref01_list_rt0_result)
 
   end)
 end)
@@ -124,7 +114,7 @@ function events_management_basic_setup(extra)
 
   -- Generate idmap via transform.
   local idmap = vs.transform(
-    { "events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03", "event01", "event02", "event03" },
+    { "events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03" },
     {
       ["`$PACK`"] = { "", {
         ["`$KEY`"] = "`$COPY`",
@@ -143,7 +133,7 @@ function events_management_basic_setup(extra)
     ["HOOK0_TEST_EVENTS_MANAGEMENT_ENTID"] = idmap,
     ["HOOK0_TEST_LIVE"] = "FALSE",
     ["HOOK0_TEST_EXPLAIN"] = "FALSE",
-    ["HOOK0_APIKEY"] = "NONE",
+    ["HOOK0_APIKEY"] = "",
   })
 
   local idmap_resolved = helpers.to_map(
@@ -154,6 +144,9 @@ function events_management_basic_setup(extra)
 
   if env["HOOK0_TEST_LIVE"] == "TRUE" then
     local merged_opts = vs.merge({
+      -- FIRST, so the generated fields below win: sdk-test-control.json's
+      -- test.client.options adds to the live client, it does not redirect it.
+      runner.live_client_options(),
       {
         apikey = env["HOOK0_APIKEY"],
       },

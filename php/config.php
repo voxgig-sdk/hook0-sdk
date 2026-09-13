@@ -84,6 +84,7 @@ class Hook0Config
         'application' => [
           'fields' => [
             [
+              'format' => 'uuid',
               'name' => 'application_id',
               'req' => true,
               'short' => 'Unique identifier of the application.',
@@ -112,6 +113,7 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'organization_id',
               'req' => true,
               'short' => 'UUID of the organization this application belongs to.',
@@ -124,6 +126,10 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
           ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
+          ],
           'name' => 'application',
           'op' => [
             'create' => [
@@ -135,15 +141,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/applications/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'applications',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'applications',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'applications',
                   ],
                 ],
               ],
@@ -167,10 +184,16 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/applications/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'applications',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'applications',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -180,6 +203,11 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'applications',
                   ],
                 ],
               ],
@@ -203,15 +231,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/applications/{application_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'applications',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'application_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'applications',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -222,6 +258,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'applications',
+                    '{id}',
                   ],
                 ],
               ],
@@ -245,15 +287,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'DELETE',
                   'orig' => '/api/v1/applications/{application_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'applications',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'application_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'applications',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -264,6 +314,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'applications',
+                    '{id}',
                   ],
                 ],
               ],
@@ -287,15 +343,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'PUT',
                   'orig' => '/api/v1/applications/{application_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'applications',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'application_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'applications',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -306,6 +370,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'applications',
+                    '{id}',
                   ],
                 ],
               ],
@@ -318,16 +388,19 @@ class Hook0Config
         'application_secret' => [
           'fields' => [
             [
+              'format' => 'uuid',
               'name' => 'application_id',
               'req' => true,
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'created_at',
               'req' => true,
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'deleted_at',
               'type' => '`$STRING`',
             ],
@@ -340,10 +413,15 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'token',
               'req' => true,
               'type' => '`$STRING`',
             ],
+          ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
           ],
           'name' => 'application_secret',
           'op' => [
@@ -356,15 +434,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/application_secrets/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'application_secrets',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'application_secrets',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'application_secrets',
                   ],
                 ],
               ],
@@ -388,10 +477,16 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/application_secrets/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'application_secrets',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'application_secrets',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -401,6 +496,11 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'application_secrets',
                   ],
                 ],
               ],
@@ -424,15 +524,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'PUT',
                   'orig' => '/api/v1/application_secrets/{application_secret_token}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'application_secrets',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'application_secret_token' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'application_secrets',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -443,6 +551,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'application_secrets',
+                    '{id}',
                   ],
                 ],
               ],
@@ -484,11 +598,19 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'DELETE',
                   'orig' => '/api/v1/application_secrets/{application_secret_token}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'application_secrets',
-                    '{application_secret_token}',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'application_secrets',
+                    ],
+                    [
+                      'var' => 'application_secret_token',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -499,6 +621,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'application_secrets',
+                    '{application_secret_token}',
                   ],
                 ],
               ],
@@ -515,6 +643,13 @@ class Hook0Config
         'event' => [
           'fields' => [
             [
+              'format' => 'uuid',
+              'name' => 'application_id',
+              'req' => true,
+              'type' => '`$STRING`',
+            ],
+            [
+              'format' => 'uuid',
               'name' => 'event_id',
               'req' => true,
               'type' => '`$STRING`',
@@ -543,6 +678,7 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'occurred_at',
               'req' => true,
               'type' => '`$STRING`',
@@ -558,13 +694,79 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'received_at',
               'req' => true,
               'type' => '`$STRING`',
             ],
           ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
+          ],
           'name' => 'event',
           'op' => [
+            'create' => [
+              'input' => 'data',
+              'name' => 'create',
+              'points' => [
+                [
+                  'args' => [
+                    'params' => [
+                      [
+                        'kind' => 'param',
+                        'name' => 'id',
+                        'orig' => 'event_id',
+                        'reqd' => true,
+                        'type' => '`$STRING`',
+                      ],
+                    ],
+                  ],
+                  'kind' => 'http',
+                  'method' => 'POST',
+                  'orig' => '/api/v1/events/{event_id}/replay',
+                  'rename' => [
+                    'param' => [
+                      'event_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'events',
+                    ],
+                    [
+                      'var' => 'id',
+                    ],
+                    [
+                      'lit' => 'replay',
+                    ],
+                  ],
+                  'select' => [
+                    '$action' => 'replay',
+                    'exist' => [
+                      'id',
+                    ],
+                  ],
+                  'transform' => [
+                    'req' => '`reqdata`',
+                    'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'events',
+                    '{id}',
+                    'replay',
+                  ],
+                ],
+              ],
+            ],
             'list' => [
               'input' => 'data',
               'name' => 'list',
@@ -584,10 +786,16 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/events/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'events',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'events',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -597,6 +805,11 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'events',
                   ],
                 ],
               ],
@@ -629,15 +842,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/events/{event_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'events',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'event_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'events',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -650,6 +871,12 @@ class Hook0Config
                     'req' => '`reqdata`',
                     'res' => '`body`',
                   ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'events',
+                    '{id}',
+                  ],
                 ],
               ],
             ],
@@ -661,6 +888,7 @@ class Hook0Config
         'event_type' => [
           'fields' => [
             [
+              'format' => 'uuid',
               'name' => 'application_id',
               'req' => true,
               'type' => '`$STRING`',
@@ -705,6 +933,10 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
           ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
+          ],
           'name' => 'event_type',
           'op' => [
             'create' => [
@@ -716,15 +948,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/event_types/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'event_types',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'event_types',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'event_types',
                   ],
                 ],
               ],
@@ -748,10 +991,16 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/event_types/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'event_types',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'event_types',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -761,6 +1010,11 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'event_types',
                   ],
                 ],
               ],
@@ -793,15 +1047,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/event_types/{event_type_name}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'event_types',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'event_type_name' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'event_types',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -814,6 +1076,12 @@ class Hook0Config
                     'req' => '`reqdata`',
                     'res' => '`body`',
                   ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'event_types',
+                    '{id}',
+                  ],
                 ],
               ],
             ],
@@ -823,53 +1091,9 @@ class Hook0Config
           ],
         ],
         'events_management' => [
-          'fields' => [
-            [
-              'name' => 'application_id',
-              'req' => true,
-              'type' => '`$STRING`',
-            ],
-          ],
+          'fields' => [],
           'name' => 'events_management',
           'op' => [
-            'create' => [
-              'input' => 'data',
-              'name' => 'create',
-              'points' => [
-                [
-                  'args' => [
-                    'params' => [
-                      [
-                        'kind' => 'param',
-                        'name' => 'event_id',
-                        'orig' => 'event_id',
-                        'reqd' => true,
-                        'type' => '`$STRING`',
-                      ],
-                    ],
-                  ],
-                  'kind' => 'http',
-                  'method' => 'POST',
-                  'orig' => '/api/v1/events/{event_id}/replay',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'events',
-                    '{event_id}',
-                    'replay',
-                  ],
-                  'select' => [
-                    'exist' => [
-                      'event_id',
-                    ],
-                  ],
-                  'transform' => [
-                    'req' => '`reqdata`',
-                    'res' => '`body`',
-                  ],
-                ],
-              ],
-            ],
             'list' => [
               'input' => 'data',
               'name' => 'list',
@@ -879,15 +1103,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/payload_content_types/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'payload_content_types',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'payload_content_types',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'payload_content_types',
                   ],
                 ],
               ],
@@ -920,11 +1155,19 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'DELETE',
                   'orig' => '/api/v1/event_types/{event_type_name}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'event_types',
-                    '{event_type_name}',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'event_types',
+                    ],
+                    [
+                      'var' => 'event_type_name',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -936,6 +1179,12 @@ class Hook0Config
                     'req' => '`reqdata`',
                     'res' => '`body`',
                   ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'event_types',
+                    '{event_type_name}',
+                  ],
                 ],
               ],
             ],
@@ -945,20 +1194,19 @@ class Hook0Config
               [
                 'event_type',
               ],
-              [
-                'event',
-              ],
             ],
           ],
         ],
         'events_per_day_entry' => [
           'fields' => [
             [
+              'format' => 'int32',
               'name' => 'amount',
               'req' => true,
               'type' => '`$INTEGER`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'application_id',
               'req' => true,
               'type' => '`$STRING`',
@@ -969,6 +1217,7 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date',
               'name' => 'date',
               'req' => true,
               'type' => '`$STRING`',
@@ -1012,11 +1261,19 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/events_per_day/application',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'events_per_day',
-                    'application',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'events_per_day',
+                    ],
+                    [
+                      'lit' => 'application',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -1028,6 +1285,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'events_per_day',
+                    'application',
                   ],
                 ],
                 [
@@ -1057,11 +1320,19 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/events_per_day/organization',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'events_per_day',
-                    'organization',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'events_per_day',
+                    ],
+                    [
+                      'lit' => 'organization',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -1073,6 +1344,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'events_per_day',
+                    'organization',
                   ],
                 ],
               ],
@@ -1090,6 +1367,7 @@ class Hook0Config
               'type' => '`$BOOLEAN`',
             ],
             [
+              'format' => 'int64',
               'name' => 'database_duration_ms',
               'req' => true,
               'type' => '`$INTEGER`',
@@ -1099,6 +1377,7 @@ class Hook0Config
               'type' => '`$BOOLEAN`',
             ],
             [
+              'format' => 'int64',
               'name' => 'object_storage_duration_ms',
               'type' => '`$INTEGER`',
             ],
@@ -1107,10 +1386,12 @@ class Hook0Config
               'type' => '`$BOOLEAN`',
             ],
             [
+              'format' => 'int64',
               'name' => 'pulsar_duration_ms',
               'type' => '`$INTEGER`',
             ],
             [
+              'format' => 'int64',
               'name' => 'total_duration_ms',
               'req' => true,
               'type' => '`$INTEGER`',
@@ -1136,10 +1417,16 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/health/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'health',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'health',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -1149,6 +1436,11 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'health',
                   ],
                 ],
               ],
@@ -1204,15 +1496,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/environment_variables/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'environment_variables',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'environment_variables',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'environment_variables',
                   ],
                 ],
               ],
@@ -1225,12 +1528,14 @@ class Hook0Config
         'ingested_event' => [
           'fields' => [
             [
+              'format' => 'uuid',
               'name' => 'application_id',
               'req' => true,
               'short' => 'UUID of the application this event belongs to.',
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'event_id',
               'short' => 'Optional unique identifier for this event (client-generated UUID).',
               'type' => '`$STRING`',
@@ -1253,6 +1558,7 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'occurred_at',
               'req' => true,
               'short' => 'Timestamp when the event occurred.',
@@ -1282,15 +1588,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/event/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'event',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'event',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'event',
                   ],
                 ],
               ],
@@ -1332,6 +1649,7 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'int32',
               'name' => 'password_minimum_length',
               'req' => true,
               'type' => '`$INTEGER`',
@@ -1363,15 +1681,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/instance/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'instance',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'instance',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'instance',
                   ],
                 ],
               ],
@@ -1405,16 +1734,30 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/auth/login',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'auth',
-                    'login',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'auth',
+                    ],
+                    [
+                      'lit' => 'login',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'auth',
+                    'login',
                   ],
                 ],
                 [
@@ -1422,16 +1765,30 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/auth/refresh',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'auth',
-                    'refresh',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'auth',
+                    ],
+                    [
+                      'lit' => 'refresh',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'auth',
+                    'refresh',
                   ],
                 ],
               ],
@@ -1463,6 +1820,7 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'organization_id',
               'req' => true,
               'type' => '`$STRING`',
@@ -1488,6 +1846,10 @@ class Hook0Config
               'type' => '`$ARRAY`',
             ],
           ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
+          ],
           'name' => 'organization',
           'op' => [
             'create' => [
@@ -1499,15 +1861,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/organizations/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'organizations',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'organizations',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'organizations',
                   ],
                 ],
               ],
@@ -1521,15 +1894,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/organizations/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'organizations',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'organizations',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'organizations',
                   ],
                 ],
               ],
@@ -1553,15 +1937,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/organizations/{organization_id}/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'organizations',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'organization_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'organizations',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -1572,6 +1964,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'organizations',
+                    '{id}',
                   ],
                 ],
               ],
@@ -1595,15 +1993,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'DELETE',
                   'orig' => '/api/v1/organizations/{organization_id}/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'organizations',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'organization_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'organizations',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -1614,6 +2020,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'organizations',
+                    '{id}',
                   ],
                 ],
               ],
@@ -1637,15 +2049,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'PUT',
                   'orig' => '/api/v1/organizations/{organization_id}/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'organizations',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'organization_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'organizations',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -1656,6 +2076,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'organizations',
+                    '{id}',
                   ],
                 ],
               ],
@@ -1677,10 +2103,15 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'user_id',
               'req' => true,
               'type' => '`$STRING`',
             ],
+          ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
           ],
           'name' => 'organization_edit_role',
           'op' => [
@@ -1703,16 +2134,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'PUT',
                   'orig' => '/api/v1/organizations/{organization_id}/invite',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'organizations',
-                    '{id}',
-                    'invite',
-                  ],
                   'rename' => [
                     'param' => [
                       'organization_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'organizations',
+                    ],
+                    [
+                      'var' => 'id',
+                    ],
+                    [
+                      'lit' => 'invite',
                     ],
                   ],
                   'select' => [
@@ -1724,6 +2165,13 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'organizations',
+                    '{id}',
+                    'invite',
                   ],
                 ],
               ],
@@ -1746,6 +2194,7 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'int32',
               'name' => 'status',
               'req' => true,
               'type' => '`$INTEGER`',
@@ -1755,6 +2204,10 @@ class Hook0Config
               'req' => true,
               'type' => '`$STRING`',
             ],
+          ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
           ],
           'name' => 'problem',
           'op' => [
@@ -1767,15 +2220,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/errors/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'errors',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'errors',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'errors',
                   ],
                 ],
               ],
@@ -1788,31 +2252,37 @@ class Hook0Config
         'quota' => [
           'fields' => [
             [
+              'format' => 'int32',
               'name' => 'global_applications_per_organization_limit',
               'req' => true,
               'type' => '`$INTEGER`',
             ],
             [
+              'format' => 'int32',
               'name' => 'global_days_of_events_retention_limit',
               'req' => true,
               'type' => '`$INTEGER`',
             ],
             [
+              'format' => 'int32',
               'name' => 'global_event_types_per_application_limit',
               'req' => true,
               'type' => '`$INTEGER`',
             ],
             [
+              'format' => 'int32',
               'name' => 'global_events_per_day_limit',
               'req' => true,
               'type' => '`$INTEGER`',
             ],
             [
+              'format' => 'int32',
               'name' => 'global_members_per_organization_limit',
               'req' => true,
               'type' => '`$INTEGER`',
             ],
             [
+              'format' => 'int32',
               'name' => 'global_subscriptions_per_application_limit',
               'req' => true,
               'type' => '`$INTEGER`',
@@ -1829,15 +2299,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/quotas/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'quotas',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'quotas',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body.limits`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'quotas',
                   ],
                 ],
               ],
@@ -1890,15 +2371,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/register/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'register',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'register',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'register',
                   ],
                 ],
               ],
@@ -1911,11 +2403,13 @@ class Hook0Config
         'request_attempt' => [
           'fields' => [
             [
+              'format' => 'date-time',
               'name' => 'created_at',
               'req' => true,
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'delay_until',
               'type' => '`$STRING`',
             ],
@@ -1925,15 +2419,18 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'event_id',
               'req' => true,
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'failed_at',
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'int32',
               'name' => 'http_response_status',
               'type' => '`$INTEGER`',
             ],
@@ -1942,19 +2439,23 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'picked_at',
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'request_attempt_id',
               'req' => true,
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'response_id',
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'int32',
               'name' => 'retry_count',
               'req' => true,
               'type' => '`$INTEGER`',
@@ -1971,9 +2472,14 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'succeeded_at',
               'type' => '`$STRING`',
             ],
+          ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
           ],
           'name' => 'request_attempt',
           'op' => [
@@ -2032,10 +2538,16 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/request_attempts/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'request_attempts',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'request_attempts',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -2051,6 +2563,11 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'request_attempts',
                   ],
                 ],
               ],
@@ -2083,15 +2600,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/request_attempts/{request_attempt_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'request_attempts',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'request_attempt_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'request_attempts',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -2103,6 +2628,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'request_attempts',
+                    '{id}',
                   ],
                 ],
               ],
@@ -2118,6 +2649,10 @@ class Hook0Config
               'name' => 'id',
               'type' => '`$STRING`',
             ],
+          ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
           ],
           'name' => 'response',
           'op' => [
@@ -2149,15 +2684,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/responses/{response_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'responses',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'response_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'responses',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -2169,6 +2712,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body.headers`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'responses',
+                    '{id}',
                   ],
                 ],
               ],
@@ -2201,12 +2750,22 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'DELETE',
                   'orig' => '/api/v1/organizations/{organization_id}/invite',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'organizations',
-                    '{organization_id}',
-                    'invite',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'organizations',
+                    ],
+                    [
+                      'var' => 'organization_id',
+                    ],
+                    [
+                      'lit' => 'invite',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -2216,6 +2775,13 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'organizations',
+                    '{organization_id}',
+                    'invite',
                   ],
                 ],
               ],
@@ -2237,6 +2803,7 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'created_at',
               'req' => true,
               'type' => '`$STRING`',
@@ -2251,15 +2818,21 @@ class Hook0Config
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'organization_id',
               'req' => true,
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'token_id',
               'req' => true,
               'type' => '`$STRING`',
             ],
+          ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
           ],
           'name' => 'service_token',
           'op' => [
@@ -2272,15 +2845,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/service_token/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'service_token',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'service_token',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'service_token',
                   ],
                 ],
               ],
@@ -2304,10 +2888,16 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/service_token/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'service_token',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'service_token',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -2317,6 +2907,11 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'service_token',
                   ],
                 ],
               ],
@@ -2349,15 +2944,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/service_token/{service_token_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'service_token',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'service_token_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'service_token',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -2369,6 +2972,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'service_token',
+                    '{id}',
                   ],
                 ],
               ],
@@ -2401,15 +3010,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'DELETE',
                   'orig' => '/api/v1/service_token/{service_token_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'service_token',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'service_token_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'service_token',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -2421,6 +3038,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'service_token',
+                    '{id}',
                   ],
                 ],
               ],
@@ -2444,15 +3067,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'PUT',
                   'orig' => '/api/v1/service_token/{service_token_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'service_token',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'service_token_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'service_token',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -2463,6 +3094,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'service_token',
+                    '{id}',
                   ],
                 ],
               ],
@@ -2475,11 +3112,13 @@ class Hook0Config
         'subscription' => [
           'fields' => [
             [
+              'format' => 'uuid',
               'name' => 'application_id',
               'req' => true,
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'created_at',
               'req' => true,
               'type' => '`$STRING`',
@@ -2570,11 +3209,13 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'secret',
               'req' => true,
               'type' => '`$STRING`',
             ],
             [
+              'format' => 'uuid',
               'name' => 'subscription_id',
               'req' => true,
               'type' => '`$STRING`',
@@ -2585,10 +3226,15 @@ class Hook0Config
               'type' => '`$OBJECT`',
             ],
             [
+              'format' => 'date-time',
               'name' => 'updated_at',
               'req' => true,
               'type' => '`$STRING`',
             ],
+          ],
+          'id' => [
+            'field' => 'id',
+            'name' => 'id',
           ],
           'name' => 'subscription',
           'op' => [
@@ -2601,15 +3247,26 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/subscriptions/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'subscriptions',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'subscriptions',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'subscriptions',
                   ],
                 ],
               ],
@@ -2633,10 +3290,16 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/subscriptions/',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'subscriptions',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'subscriptions',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -2646,6 +3309,11 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'subscriptions',
                   ],
                 ],
               ],
@@ -2669,15 +3337,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'GET',
                   'orig' => '/api/v1/subscriptions/{subscription_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'subscriptions',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'subscription_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'subscriptions',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -2688,6 +3364,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'subscriptions',
+                    '{id}',
                   ],
                 ],
               ],
@@ -2720,15 +3402,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'DELETE',
                   'orig' => '/api/v1/subscriptions/{subscription_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'subscriptions',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'subscription_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'subscriptions',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -2740,6 +3430,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'subscriptions',
+                    '{id}',
                   ],
                 ],
               ],
@@ -2763,15 +3459,23 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'PUT',
                   'orig' => '/api/v1/subscriptions/{subscription_id}',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'subscriptions',
-                    '{id}',
-                  ],
                   'rename' => [
                     'param' => [
                       'subscription_id' => 'id',
+                    ],
+                  ],
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'subscriptions',
+                    ],
+                    [
+                      'var' => 'id',
                     ],
                   ],
                   'select' => [
@@ -2782,6 +3486,12 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'subscriptions',
+                    '{id}',
                   ],
                 ],
               ],
@@ -2820,16 +3530,30 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/auth/begin-reset-password',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'auth',
-                    'begin-reset-password',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'auth',
+                    ],
+                    [
+                      'lit' => 'begin-reset-password',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'auth',
+                    'begin-reset-password',
                   ],
                 ],
                 [
@@ -2837,16 +3561,30 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/auth/logout',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'auth',
-                    'logout',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'auth',
+                    ],
+                    [
+                      'lit' => 'logout',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'auth',
+                    'logout',
                   ],
                 ],
                 [
@@ -2854,16 +3592,30 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/auth/password',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'auth',
-                    'password',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'auth',
+                    ],
+                    [
+                      'lit' => 'password',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'auth',
+                    'password',
                   ],
                 ],
                 [
@@ -2871,16 +3623,30 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/auth/reset-password',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'auth',
-                    'reset-password',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'auth',
+                    ],
+                    [
+                      'lit' => 'reset-password',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'auth',
+                    'reset-password',
                   ],
                 ],
                 [
@@ -2888,16 +3654,30 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/auth/verify-email',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'auth',
-                    'verify-email',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'auth',
+                    ],
+                    [
+                      'lit' => 'verify-email',
+                    ],
                   ],
                   'select' => [],
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'auth',
+                    'verify-email',
                   ],
                 ],
               ],
@@ -2941,12 +3721,22 @@ class Hook0Config
                   'kind' => 'http',
                   'method' => 'POST',
                   'orig' => '/api/v1/organizations/{organization_id}/invite',
-                  'parts' => [
-                    'api',
-                    'v1',
-                    'organizations',
-                    '{organization_id}',
-                    'invite',
+                  'segments' => [
+                    [
+                      'lit' => 'api',
+                    ],
+                    [
+                      'lit' => 'v1',
+                    ],
+                    [
+                      'lit' => 'organizations',
+                    ],
+                    [
+                      'var' => 'organization_id',
+                    ],
+                    [
+                      'lit' => 'invite',
+                    ],
                   ],
                   'select' => [
                     'exist' => [
@@ -2956,6 +3746,13 @@ class Hook0Config
                   'transform' => [
                     'req' => '`reqdata`',
                     'res' => '`body`',
+                  ],
+                  'parts' => [
+                    'api',
+                    'v1',
+                    'organizations',
+                    '{organization_id}',
+                    'invite',
                   ],
                 ],
               ],

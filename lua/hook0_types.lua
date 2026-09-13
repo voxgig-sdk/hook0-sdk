@@ -19,13 +19,7 @@
 ---@field id string
 
 ---@class ApplicationListMatch
----@field application_id? string
----@field consumption? table
----@field id? string
----@field name? string
----@field onboarding_steps? table
----@field organization_id? string
----@field quotas? table
+---@field organization_id string
 
 ---@class ApplicationCreateData
 ---@field application_id string
@@ -57,12 +51,7 @@
 ---@field token string
 
 ---@class ApplicationSecretListMatch
----@field application_id? string
----@field created_at? string
----@field deleted_at? string
----@field id? string
----@field name? string
----@field token? string
+---@field application_id string
 
 ---@class ApplicationSecretCreateData
 ---@field application_id string
@@ -84,8 +73,10 @@
 
 ---@class ApplicationsManagementRemoveMatch
 ---@field application_secret_token string
+---@field application_id string
 
 ---@class Event
+---@field application_id string
 ---@field event_id string
 ---@field event_type_name string
 ---@field id? string
@@ -99,18 +90,23 @@
 
 ---@class EventLoadMatch
 ---@field id string
+---@field application_id string
 
 ---@class EventListMatch
----@field event_id? string
----@field event_type_name? string
----@field id? string
----@field ip? string
----@field labels? table
+---@field application_id string
+
+---@class EventCreateData
+---@field id string
+---@field application_id string
+---@field event_id string
+---@field event_type_name string
+---@field ip string
+---@field labels table
 ---@field metadata? table
----@field occurred_at? string
----@field payload? string
----@field payload_content_type? string
----@field received_at? string
+---@field occurred_at string
+---@field payload string
+---@field payload_content_type string
+---@field received_at string
 
 ---@class EventType
 ---@field application_id string
@@ -125,17 +121,10 @@
 
 ---@class EventTypeLoadMatch
 ---@field id string
+---@field application_id string
 
 ---@class EventTypeListMatch
----@field application_id? string
----@field event_type_name? string
----@field id? string
----@field resource_type? string
----@field resource_type_name? string
----@field service? string
----@field service_name? string
----@field verb? string
----@field verb_name? string
+---@field application_id string
 
 ---@class EventTypeCreateData
 ---@field application_id string
@@ -149,17 +138,12 @@
 ---@field verb_name string
 
 ---@class EventsManagement
----@field application_id string
 
 ---@class EventsManagementListMatch
----@field application_id? string
-
----@class EventsManagementCreateData
----@field event_id string
----@field application_id string
 
 ---@class EventsManagementRemoveMatch
 ---@field event_type_name string
+---@field application_id string
 
 ---@class EventsPerDayEntry
 ---@field amount number
@@ -169,11 +153,9 @@
 ---@field is_provisional boolean
 
 ---@class EventsPerDayEntryListMatch
----@field amount? number
----@field application_id? string
----@field application_name? string
----@field date? string
----@field is_provisional? boolean
+---@field application_id string
+---@field from? string
+---@field to? string
 
 ---@class Health
 ---@field database boolean
@@ -185,13 +167,7 @@
 ---@field total_duration_ms number
 
 ---@class HealthLoadMatch
----@field database? boolean
----@field database_duration_ms? number
----@field object_storage? boolean
----@field object_storage_duration_ms? number
----@field pulsar? boolean
----@field pulsar_duration_ms? number
----@field total_duration_ms? number
+---@field key? string
 
 ---@class Hook0
 ---@field default? string
@@ -385,28 +361,23 @@
 
 ---@class RequestAttemptLoadMatch
 ---@field id string
+---@field application_id string
 
 ---@class RequestAttemptListMatch
----@field created_at? string
----@field delay_until? string
----@field event? table
+---@field application_id string
+---@field event_event_type_name? string
 ---@field event_id? string
----@field failed_at? string
----@field http_response_status? number
----@field id? string
----@field picked_at? string
----@field request_attempt_id? string
----@field response_id? string
----@field retry_count? number
----@field status? table
----@field subscription? table
----@field succeeded_at? string
+---@field max_created_at? string
+---@field min_created_at? string
+---@field pagination_cursor? string
+---@field subscription_id? string
 
 ---@class Response
 ---@field id? string
 
 ---@class ResponseLoadMatch
 ---@field id string
+---@field application_id string
 
 ---@class Revoke
 
@@ -423,14 +394,10 @@
 
 ---@class ServiceTokenLoadMatch
 ---@field id string
+---@field organization_id string
 
 ---@class ServiceTokenListMatch
----@field biscuit? string
----@field created_at? string
----@field id? string
----@field name? string
----@field organization_id? string
----@field token_id? string
+---@field organization_id string
 
 ---@class ServiceTokenCreateData
 ---@field biscuit string
@@ -450,6 +417,7 @@
 
 ---@class ServiceTokenRemoveMatch
 ---@field id string
+---@field organization_id string
 
 ---@class Subscription
 ---@field application_id string
@@ -472,21 +440,7 @@
 ---@field id string
 
 ---@class SubscriptionListMatch
----@field application_id? string
----@field created_at? string
----@field dedicated_workers? table
----@field description? string
----@field event_types? table
----@field id? string
----@field is_enabled? boolean
----@field label_key? string
----@field label_value? string
----@field labels? table
----@field metadata? table
----@field secret? string
----@field subscription_id? string
----@field target? table
----@field updated_at? string
+---@field application_id string
 
 ---@class SubscriptionCreateData
 ---@field application_id string
@@ -524,6 +478,7 @@
 
 ---@class SubscriptionRemoveMatch
 ---@field id string
+---@field application_id string
 
 ---@class UserAuthentication
 ---@field email string

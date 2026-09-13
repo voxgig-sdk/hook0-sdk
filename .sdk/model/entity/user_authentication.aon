@@ -30,11 +30,19 @@ main: kit: entity: user_authentication: {
         {
           method: "POST"
           orig: "/api/v1/auth/begin-reset-password"
-          parts: [
-            "api"
-            "v1"
-            "auth"
-            "begin-reset-password"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "begin-reset-password"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -44,11 +52,19 @@ main: kit: entity: user_authentication: {
         {
           method: "POST"
           orig: "/api/v1/auth/logout"
-          parts: [
-            "api"
-            "v1"
-            "auth"
-            "logout"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "logout"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -58,11 +74,19 @@ main: kit: entity: user_authentication: {
         {
           method: "POST"
           orig: "/api/v1/auth/password"
-          parts: [
-            "api"
-            "v1"
-            "auth"
-            "password"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "password"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -72,11 +96,19 @@ main: kit: entity: user_authentication: {
         {
           method: "POST"
           orig: "/api/v1/auth/reset-password"
-          parts: [
-            "api"
-            "v1"
-            "auth"
-            "reset-password"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "reset-password"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -86,11 +118,19 @@ main: kit: entity: user_authentication: {
         {
           method: "POST"
           orig: "/api/v1/auth/verify-email"
-          parts: [
-            "api"
-            "v1"
-            "auth"
-            "verify-email"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "verify-email"
+            }
           ]
           transform: {
             req: "`reqdata`"

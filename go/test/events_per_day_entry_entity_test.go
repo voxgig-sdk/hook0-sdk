@@ -98,7 +98,7 @@ func TestEventsPerDayEntryEntity(t *testing.T) {
 		client := setup.client
 
 		// Bootstrap entity data from existing test data (no create step in flow).
-		eventsPerDayEntryRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath("existing.events_per_day_entry", setup.data)))
+		eventsPerDayEntryRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.events_per_day_entry")))
 		var eventsPerDayEntryRef01Data map[string]any
 		if len(eventsPerDayEntryRef01DataRaw) > 0 {
 			eventsPerDayEntryRef01Data = core.ToMapAny(eventsPerDayEntryRef01DataRaw[0][1])
@@ -147,7 +147,7 @@ func events_per_day_entryBasicSetup(extra map[string]any) *entityTestSetup {
 	client := sdk.TestSDK(options, extra)
 
 	// Generate idmap via transform, matching TS pattern.
-	idmap := vs.Transform(
+	idmap, _ := vs.Transform(
 		[]any{"events_per_day_entry01", "events_per_day_entry02", "events_per_day_entry03"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
@@ -167,7 +167,7 @@ func events_per_day_entryBasicSetup(extra map[string]any) *entityTestSetup {
 		"HOOK0_TEST_EVENTS_PER_DAY_ENTRY_ENTID": idmap,
 		"HOOK0_TEST_LIVE":      "FALSE",
 		"HOOK0_TEST_EXPLAIN":   "FALSE",
-		"HOOK0_APIKEY":         "NONE",
+		"HOOK0_APIKEY":         "",
 	})
 
 	idmapResolved := core.ToMapAny(env["HOOK0_TEST_EVENTS_PER_DAY_ENTRY_ENTID"])
@@ -176,11 +176,23 @@ func events_per_day_entryBasicSetup(extra map[string]any) *entityTestSetup {
 	}
 
 	if env["HOOK0_TEST_LIVE"] == "TRUE" {
+		// An empty map, not a nil one: Merge returns nil when its last entry
+		// is nil, and BasicSetup is normally called with no extras - so a
+		// bare nil silently discarded the apikey and server values below.
+		extraOpts := extra
+		if extraOpts == nil {
+			extraOpts = map[string]any{}
+		}
+
 		mergedOpts := vs.Merge([]any{
+			// liveClientOptions() FIRST, so the generated fields below win:
+			// sdk-test-control.json's test.client.options adds to the live
+			// client, it does not redirect it.
+			liveClientOptions(),
 			map[string]any{
 				"apikey": env["HOOK0_APIKEY"],
 			},
-			extra,
+			extraOpts,
 		})
 		client = sdk.NewHook0SDK(core.ToMapAny(mergedOpts))
 	}

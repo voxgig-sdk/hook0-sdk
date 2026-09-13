@@ -51,27 +51,10 @@ public class EventsManagementEntity extends EntityBase {
 
 
 
-
   @Override
-  public Object create(Map<String, Object> reqdata, Map<String, Object> ctrl) {
-    Map<String, Object> ctxmap = new LinkedHashMap<>();
-    ctxmap.put("opname", "create");
-    ctxmap.put("ctrl", ctrl);
-    ctxmap.put("match", this.match);
-    ctxmap.put("data", this.data);
-    ctxmap.put("reqdata", reqdata);
-    Context ctx = this.utility.makeContext.apply(ctxmap, this.entctx);
-
-    return runOp(ctx, () -> {
-      if (ctx.result != null) {
-        if (ctx.result.resdata != null) {
-          Map<String, Object> d = Helpers.toMapAny(Struct.clone(ctx.result.resdata));
-          this.data = d == null ? new LinkedHashMap<>() : d;
-        }
-      }
-    });
+  public Object create(Map<String, Object> req, Map<String, Object> ctrl) {
+    throw Helpers.unsupportedOp("create", this.name);
   }
-
 
 
   @Override

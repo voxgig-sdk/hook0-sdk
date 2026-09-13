@@ -6,6 +6,7 @@ main: kit: entity: event_type: {
 
   fields: [
     {
+      format: "uuid"
       name: "application_id"
       req: true
       type: "`$STRING`"
@@ -65,10 +66,16 @@ main: kit: entity: event_type: {
         {
           method: "POST"
           orig: "/api/v1/event_types/"
-          parts: [
-            "api"
-            "v1"
-            "event_types"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event_types"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -94,10 +101,16 @@ main: kit: entity: event_type: {
           }
           method: "GET"
           orig: "/api/v1/event_types/"
-          parts: [
-            "api"
-            "v1"
-            "event_types"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event_types"
+            }
           ]
           select: {
             exist: [
@@ -137,17 +150,25 @@ main: kit: entity: event_type: {
           }
           method: "GET"
           orig: "/api/v1/event_types/{event_type_name}"
-          parts: [
-            "api"
-            "v1"
-            "event_types"
-            "{id}"
-          ]
           rename: {
             param: {
               event_type_name: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event_types"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "application_id"

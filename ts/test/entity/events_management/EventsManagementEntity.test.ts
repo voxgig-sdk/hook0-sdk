@@ -1,6 +1,4 @@
 
-const envlocal = __dirname + '/../../../.env.local'
-require('dotenv').config({ quiet: true, path: [envlocal] })
 
 import Path from 'node:path'
 import * as Fs from 'node:fs'
@@ -13,7 +11,9 @@ import { Hook0SDK, BaseFeature, stdutil } from '../../..'
 
 import {
   envOverride,
+  liveClientOptions,
   liveDelay,
+  loadEnvLocal,
   makeCtrl,
   makeMatch,
   makeReqdata,
@@ -21,6 +21,13 @@ import {
   makeValid,
   maybeSkipControl,
 } from '../../utility'
+
+
+// AFTER the imports on purpose: TypeScript hoists `import` above any
+// statement in the emitted CommonJS, so a loader placed above them would
+// run only after every imported module had already been evaluated - and
+// anything reading process.env at module scope would miss these values.
+loadEnvLocal(__dirname + '/../../../.env.local')
 
 
 describe('EventsManagementEntity', async () => {
@@ -39,7 +46,7 @@ describe('EventsManagementEntity', async () => {
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
-    for (const op of ['create', 'list', 'remove']) {
+    for (const op of ['list']) {
       if (maybeSkipControl(t, 'entityOp', 'events_management.' + op, live)) return
     }
 
@@ -57,27 +64,13 @@ describe('EventsManagementEntity', async () => {
     const isempty = struct.isempty
     const select = struct.select
 
-
-    // CREATE
-    const events_management_ref01_ent = client.EventsManagement()
-    let events_management_ref01_data = setup.data.new.events_management['events_management_ref01']
-    events_management_ref01_data['event_id'] = setup.idmap['event01']
-
-    events_management_ref01_data = (await events_management_ref01_ent.create(events_management_ref01_data)).data()
-    assert(null != events_management_ref01_data)
-
+    let events_management_ref01_data = Object.values(setup.data.existing.events_management)[0] as any
 
     // LIST
+    const events_management_ref01_ent = client.EventsManagement()
     const events_management_ref01_match: any = {}
 
     const events_management_ref01_list = (await events_management_ref01_ent.list(events_management_ref01_match)).map((e: any) => e.data())
-
-
-
-    // LIST
-    const events_management_ref01_match_rt0: any = {}
-
-    const events_management_ref01_list_rt0 = (await events_management_ref01_ent.list(events_management_ref01_match_rt0)).map((e: any) => e.data())
 
 
   })
@@ -108,7 +101,7 @@ function basicSetup(extra?: any) {
   const transform = struct.transform
 
   let idmap = transform(
-    ['events_management01','events_management02','events_management03','event_type01','event_type02','event_type03','event01','event02','event03'],
+    ['events_management01','events_management02','events_management03','event_type01','event_type02','event_type03'],
     {
       '`$PACK`': ['', {
         '`$KEY`': '`$COPY`',
@@ -127,7 +120,7 @@ function basicSetup(extra?: any) {
     'HOOK0_TEST_EVENTS_MANAGEMENT_ENTID': idmap,
     'HOOK0_TEST_LIVE': 'FALSE',
     'HOOK0_TEST_EXPLAIN': 'FALSE',
-    'HOOK0_APIKEY': 'NONE',
+    'HOOK0_APIKEY': '',
   })
 
   idmap = env['HOOK0_TEST_EVENTS_MANAGEMENT_ENTID']
@@ -136,10 +129,18 @@ function basicSetup(extra?: any) {
 
   if (live) {
     client = new Hook0SDK(merge([
+      // FIRST, so the generated fields below win: sdk-test-control.json's
+      // test.client.options adds to the live client, it does not redirect it.
+      liveClientOptions(),
       {
         apikey: env.HOOK0_APIKEY,
       },
-      extra
+      // 'extra || {}', not a bare 'extra': struct.merge returns UNDEFINED when the
+      // last entry is undefined, and basicSetup is normally called with no
+      // argument at all - so a bare 'extra' silently discarded the apikey
+      // and server values above and handed the SDK undefined. Harmless
+      // while there was nothing in that object; not harmless now.
+      extra || {}
     ]))
   }
 

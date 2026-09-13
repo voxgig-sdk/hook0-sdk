@@ -5,7 +5,7 @@ require('dotenv').config({ quiet: true, path: [envlocal] })
 const Path = require('node:path')
 const Fs = require('node:fs')
 
-const { test, describe } = require('node:test')
+const { test, describe, afterEach } = require('node:test')
 const assert = require('node:assert')
 
 
@@ -13,6 +13,8 @@ const { Hook0SDK, BaseFeature, stdutil, config } = require('../../..')
 
 const {
   envOverride,
+  liveClientOptions,
+  liveDelay,
   makeCtrl,
   makeMatch,
   makeReqdata,
@@ -22,6 +24,10 @@ const {
 
 
 describe('EventEntity', async () => {
+
+  // Per-test live pacing. Delay is read from sdk-test-control.json's
+  // `test.live.delayMs`; only sleeps when HOOK0_TEST_LIVE=TRUE.
+  afterEach(liveDelay('HOOK0_TEST_LIVE'))
 
   test('instance', async () => {
     const testsdk = Hook0SDK.test()
@@ -39,13 +45,22 @@ describe('EventEntity', async () => {
     const isempty = struct.isempty
     const select = struct.select
 
-    let event_ref01_data = Object.values(setup.data.existing.event)[0]
+
+    // CREATE
+    const event_ref01_ent = client.Event()
+    let event_ref01_data = setup.data.new.event['event_ref01']
+    event_ref01_data['event_id'] = setup.idmap['event01']
+
+    event_ref01_data = (await event_ref01_ent.create(event_ref01_data)).data()
+    assert(null != event_ref01_data.id)
+
 
     // LIST
-    const event_ref01_ent = client.Event()
     const event_ref01_match = {}
 
     const event_ref01_list = (await event_ref01_ent.list(event_ref01_match)).map((e) => e.data())
+
+    assert(!isempty(select(event_ref01_list, { id: event_ref01_data.id })))
 
 
     // LOAD
@@ -95,17 +110,24 @@ function basicSetup(extra) {
     'HOOK0_TEST_EVENT_ENTID': idmap,
     'HOOK0_TEST_LIVE': 'FALSE',
     'HOOK0_TEST_EXPLAIN': 'FALSE',
-    'HOOK0_APIKEY': 'NONE',
+    'HOOK0_APIKEY': '',
   })
 
   idmap = env['HOOK0_TEST_EVENT_ENTID']
 
   if ('TRUE' === env.HOOK0_TEST_LIVE) {
     client = new Hook0SDK(merge([
+      // FIRST, so the generated fields below win: sdk-test-control.json's
+      // test.client.options adds to the live client, it does not redirect it.
+      liveClientOptions(),
       {
         apikey: env.HOOK0_APIKEY,
       },
-      extra
+      // 'extra || {}', not a bare 'extra': struct.merge returns UNDEFINED when
+      // the last entry is undefined, and basicSetup is normally called with no
+      // argument at all - so a bare 'extra' silently discarded the apikey and
+      // server values above and handed the SDK undefined.
+      extra || {}
     ]))
   }
 

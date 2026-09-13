@@ -33,13 +33,7 @@ class ApplicationLoadMatch
 /** Request payload for Application#list. */
 class ApplicationListMatch
 {
-    public ?string $application_id = null;
-    public ?array $consumption = null;
-    public ?string $id = null;
-    public ?string $name = null;
-    public ?array $onboarding_steps = null;
-    public ?string $organization_id = null;
-    public ?array $quotas = null;
+    public string $organization_id;
 }
 
 /** Request payload for Application#create. */
@@ -86,12 +80,7 @@ class ApplicationSecret
 /** Request payload for ApplicationSecret#list. */
 class ApplicationSecretListMatch
 {
-    public ?string $application_id = null;
-    public ?string $created_at = null;
-    public ?string $deleted_at = null;
-    public ?string $id = null;
-    public ?string $name = null;
-    public ?string $token = null;
+    public string $application_id;
 }
 
 /** Request payload for ApplicationSecret#create. */
@@ -125,11 +114,13 @@ class ApplicationsManagement
 class ApplicationsManagementRemoveMatch
 {
     public string $application_secret_token;
+    public string $application_id;
 }
 
 /** Event entity data model. */
 class Event
 {
+    public string $application_id;
     public string $event_id;
     public string $event_type_name;
     public ?string $id = null;
@@ -146,21 +137,29 @@ class Event
 class EventLoadMatch
 {
     public string $id;
+    public string $application_id;
 }
 
 /** Request payload for Event#list. */
 class EventListMatch
 {
-    public ?string $event_id = null;
-    public ?string $event_type_name = null;
-    public ?string $id = null;
-    public ?string $ip = null;
-    public ?array $labels = null;
+    public string $application_id;
+}
+
+/** Request payload for Event#create. */
+class EventCreateData
+{
+    public string $id;
+    public string $application_id;
+    public string $event_id;
+    public string $event_type_name;
+    public string $ip;
+    public array $labels;
     public ?array $metadata = null;
-    public ?string $occurred_at = null;
-    public ?string $payload = null;
-    public ?string $payload_content_type = null;
-    public ?string $received_at = null;
+    public string $occurred_at;
+    public string $payload;
+    public string $payload_content_type;
+    public string $received_at;
 }
 
 /** EventType entity data model. */
@@ -181,20 +180,13 @@ class EventType
 class EventTypeLoadMatch
 {
     public string $id;
+    public string $application_id;
 }
 
 /** Request payload for EventType#list. */
 class EventTypeListMatch
 {
-    public ?string $application_id = null;
-    public ?string $event_type_name = null;
-    public ?string $id = null;
-    public ?string $resource_type = null;
-    public ?string $resource_type_name = null;
-    public ?string $service = null;
-    public ?string $service_name = null;
-    public ?string $verb = null;
-    public ?string $verb_name = null;
+    public string $application_id;
 }
 
 /** Request payload for EventType#create. */
@@ -214,26 +206,18 @@ class EventTypeCreateData
 /** EventsManagement entity data model. */
 class EventsManagement
 {
-    public string $application_id;
 }
 
 /** Request payload for EventsManagement#list. */
 class EventsManagementListMatch
 {
-    public ?string $application_id = null;
-}
-
-/** Request payload for EventsManagement#create. */
-class EventsManagementCreateData
-{
-    public string $event_id;
-    public string $application_id;
 }
 
 /** Request payload for EventsManagement#remove. */
 class EventsManagementRemoveMatch
 {
     public string $event_type_name;
+    public string $application_id;
 }
 
 /** EventsPerDayEntry entity data model. */
@@ -249,11 +233,9 @@ class EventsPerDayEntry
 /** Request payload for EventsPerDayEntry#list. */
 class EventsPerDayEntryListMatch
 {
-    public ?int $amount = null;
-    public ?string $application_id = null;
-    public ?string $application_name = null;
-    public ?string $date = null;
-    public ?bool $is_provisional = null;
+    public string $application_id;
+    public ?string $from = null;
+    public ?string $to = null;
 }
 
 /** Health entity data model. */
@@ -271,13 +253,7 @@ class Health
 /** Request payload for Health#load. */
 class HealthLoadMatch
 {
-    public ?bool $database = null;
-    public ?int $database_duration_ms = null;
-    public ?bool $object_storage = null;
-    public ?int $object_storage_duration_ms = null;
-    public ?bool $pulsar = null;
-    public ?int $pulsar_duration_ms = null;
-    public ?int $total_duration_ms = null;
+    public ?string $key = null;
 }
 
 /** Hook0 entity data model. */
@@ -543,25 +519,19 @@ class RequestAttempt
 class RequestAttemptLoadMatch
 {
     public string $id;
+    public string $application_id;
 }
 
 /** Request payload for RequestAttempt#list. */
 class RequestAttemptListMatch
 {
-    public ?string $created_at = null;
-    public ?string $delay_until = null;
-    public ?array $event = null;
+    public string $application_id;
+    public ?string $event_event_type_name = null;
     public ?string $event_id = null;
-    public ?string $failed_at = null;
-    public ?int $http_response_status = null;
-    public ?string $id = null;
-    public ?string $picked_at = null;
-    public ?string $request_attempt_id = null;
-    public ?string $response_id = null;
-    public ?int $retry_count = null;
-    public ?array $status = null;
-    public ?array $subscription = null;
-    public ?string $succeeded_at = null;
+    public ?string $max_created_at = null;
+    public ?string $min_created_at = null;
+    public ?string $pagination_cursor = null;
+    public ?string $subscription_id = null;
 }
 
 /** Response entity data model. */
@@ -574,6 +544,7 @@ class Response
 class ResponseLoadMatch
 {
     public string $id;
+    public string $application_id;
 }
 
 /** Revoke entity data model. */
@@ -602,17 +573,13 @@ class ServiceToken
 class ServiceTokenLoadMatch
 {
     public string $id;
+    public string $organization_id;
 }
 
 /** Request payload for ServiceToken#list. */
 class ServiceTokenListMatch
 {
-    public ?string $biscuit = null;
-    public ?string $created_at = null;
-    public ?string $id = null;
-    public ?string $name = null;
-    public ?string $organization_id = null;
-    public ?string $token_id = null;
+    public string $organization_id;
 }
 
 /** Request payload for ServiceToken#create. */
@@ -641,6 +608,7 @@ class ServiceTokenUpdateData
 class ServiceTokenRemoveMatch
 {
     public string $id;
+    public string $organization_id;
 }
 
 /** Subscription entity data model. */
@@ -672,21 +640,7 @@ class SubscriptionLoadMatch
 /** Request payload for Subscription#list. */
 class SubscriptionListMatch
 {
-    public ?string $application_id = null;
-    public ?string $created_at = null;
-    public ?array $dedicated_workers = null;
-    public ?string $description = null;
-    public ?array $event_types = null;
-    public ?string $id = null;
-    public ?bool $is_enabled = null;
-    public ?string $label_key = null;
-    public ?string $label_value = null;
-    public ?array $labels = null;
-    public ?array $metadata = null;
-    public ?string $secret = null;
-    public ?string $subscription_id = null;
-    public ?array $target = null;
-    public ?string $updated_at = null;
+    public string $application_id;
 }
 
 /** Request payload for Subscription#create. */
@@ -733,6 +687,7 @@ class SubscriptionUpdateData
 class SubscriptionRemoveMatch
 {
     public string $id;
+    public string $application_id;
 }
 
 /** UserAuthentication entity data model. */

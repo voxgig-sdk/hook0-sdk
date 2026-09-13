@@ -366,7 +366,7 @@ local applications_management = client:ApplicationsManagement(nil)
 Remove the entity matching the given criteria.
 
 ```lua
-local result, err = client:ApplicationsManagement():remove({ application_secret_token = "application_secret_token" })
+local result, err = client:ApplicationsManagement():remove({ application_secret_token = "application_secret_token", application_id = "application_id" })
 ```
 
 ### Common Methods
@@ -409,6 +409,7 @@ local event = client:Event(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `application_id` | `string` | Yes |  |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
 | `id` | `string` | No |  |
@@ -421,6 +422,25 @@ local event = client:Event(nil)
 | `received_at` | `string` | Yes |  |
 
 ### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:Event():create({
+  id = --[[ string ]],
+  application_id = --[[ string ]],
+  event_id = --[[ string ]],
+  event_type_name = --[[ string ]],
+  ip = --[[ string ]],
+  labels = --[[ table ]],
+  occurred_at = --[[ string ]],
+  payload = --[[ string ]],
+  payload_content_type = --[[ string ]],
+  received_at = --[[ string ]],
+})
+```
 
 #### `list(reqmatch, ctrl) -> any, err`
 
@@ -435,7 +455,7 @@ local results, err = client:Event():list()
 Load a single entity matching the given criteria.
 
 ```lua
-local result, err = client:Event():load({ id = "event_id" })
+local result, err = client:Event():load({ id = "event_id", application_id = "application_id" })
 ```
 
 ### Common Methods
@@ -520,7 +540,7 @@ local results, err = client:EventType():list()
 Load a single entity matching the given criteria.
 
 ```lua
-local result, err = client:EventType():load({ id = "event_type_id" })
+local result, err = client:EventType():load({ id = "event_type_id", application_id = "application_id" })
 ```
 
 ### Common Methods
@@ -559,24 +579,7 @@ Return the entity name.
 local events_management = client:EventsManagement(nil)
 ```
 
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-
 ### Operations
-
-#### `create(reqdata, ctrl) -> any, err`
-
-Create a new entity with the given data.
-
-```lua
-local result, err = client:EventsManagement():create({
-  event_id = --[[ string ]],
-  application_id = --[[ string ]],
-})
-```
 
 #### `list(reqmatch, ctrl) -> any, err`
 
@@ -591,7 +594,7 @@ local results, err = client:EventsManagement():list()
 Remove the entity matching the given criteria.
 
 ```lua
-local result, err = client:EventsManagement():remove({ event_type_name = "event_type_name" })
+local result, err = client:EventsManagement():remove({ event_type_name = "event_type_name", application_id = "application_id" })
 ```
 
 ### Common Methods
@@ -1354,7 +1357,7 @@ local results, err = client:RequestAttempt():list()
 Load a single entity matching the given criteria.
 
 ```lua
-local result, err = client:RequestAttempt():load({ id = "request_attempt_id" })
+local result, err = client:RequestAttempt():load({ id = "request_attempt_id", application_id = "application_id" })
 ```
 
 ### Common Methods
@@ -1406,7 +1409,7 @@ local response = client:Response(nil)
 Load a single entity matching the given criteria.
 
 ```lua
-local result, err = client:Response():load({ id = "response_id" })
+local result, err = client:Response():load({ id = "response_id", application_id = "application_id" })
 ```
 
 ### Common Methods
@@ -1531,7 +1534,7 @@ local results, err = client:ServiceToken():list()
 Load a single entity matching the given criteria.
 
 ```lua
-local result, err = client:ServiceToken():load({ id = "service_token_id" })
+local result, err = client:ServiceToken():load({ id = "service_token_id", organization_id = "organization_id" })
 ```
 
 #### `remove(reqmatch, ctrl) -> any, err`
@@ -1539,7 +1542,7 @@ local result, err = client:ServiceToken():load({ id = "service_token_id" })
 Remove the entity matching the given criteria.
 
 ```lua
-local result, err = client:ServiceToken():remove({ id = "service_token_id" })
+local result, err = client:ServiceToken():remove({ id = "service_token_id", organization_id = "organization_id" })
 ```
 
 #### `update(reqdata, ctrl) -> any, err`
@@ -1674,7 +1677,7 @@ local result, err = client:Subscription():load({ id = "subscription_id" })
 Remove the entity matching the given criteria.
 
 ```lua
-local result, err = client:Subscription():remove({ id = "subscription_id" })
+local result, err = client:Subscription():remove({ id = "subscription_id", application_id = "application_id" })
 ```
 
 #### `update(reqdata, ctrl) -> any, err`
@@ -1849,4 +1852,42 @@ local client = sdk.new({
   },
 })
 ```
+
+
+### Configuring features
+
+Each feature is inactive until switched on, and an SDK with no feature
+configured does no feature work at all. Every option below keeps its default
+unless you name it.
+
+The array form of \`feature\` is significant: several features wrap the
+transport, and the order you list them in is the order they nest.
+
+#### `test`
+
+In-memory mock transport for testing without a live server.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Options above are those the model carries a default for. A feature may
+also accept callback options — a `sink` to receive each record, for
+instance — which have no default and are covered in the full feature
+reference.
+
+**Usage**
+
+Set `feature.test.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Attaches to pipeline hooks, not the transport, so activation order does
+  not change what it observes.
+- Installs the BASE transport that the wrapping features wrap, so it must be
+  activated before them.
+- Inactive by default: leaving it out costs nothing at runtime.
 

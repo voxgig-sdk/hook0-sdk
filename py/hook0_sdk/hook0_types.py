@@ -33,14 +33,8 @@ class ApplicationLoadMatch(TypedDict):
     id: str
 
 
-class ApplicationListMatch(TypedDict, total=False):
-    application_id: str
-    consumption: dict
-    id: str
-    name: str
-    onboarding_steps: dict
+class ApplicationListMatch(TypedDict):
     organization_id: str
-    quotas: dict
 
 
 class ApplicationCreateDataRequired(TypedDict):
@@ -85,13 +79,8 @@ class ApplicationSecret(ApplicationSecretRequired, total=False):
     name: str
 
 
-class ApplicationSecretListMatch(TypedDict, total=False):
+class ApplicationSecretListMatch(TypedDict):
     application_id: str
-    created_at: str
-    deleted_at: str
-    id: str
-    name: str
-    token: str
 
 
 class ApplicationSecretCreateDataRequired(TypedDict):
@@ -124,9 +113,11 @@ class ApplicationsManagement(TypedDict):
 
 class ApplicationsManagementRemoveMatch(TypedDict):
     application_secret_token: str
+    application_id: str
 
 
 class EventRequired(TypedDict):
+    application_id: str
     event_id: str
     event_type_name: str
     ip: str
@@ -144,19 +135,28 @@ class Event(EventRequired, total=False):
 
 class EventLoadMatch(TypedDict):
     id: str
+    application_id: str
 
 
-class EventListMatch(TypedDict, total=False):
+class EventListMatch(TypedDict):
+    application_id: str
+
+
+class EventCreateDataRequired(TypedDict):
+    id: str
+    application_id: str
     event_id: str
     event_type_name: str
-    id: str
     ip: str
     labels: dict
-    metadata: dict
     occurred_at: str
     payload: str
     payload_content_type: str
     received_at: str
+
+
+class EventCreateData(EventCreateDataRequired, total=False):
+    metadata: dict
 
 
 class EventTypeRequired(TypedDict):
@@ -176,18 +176,11 @@ class EventType(EventTypeRequired, total=False):
 
 class EventTypeLoadMatch(TypedDict):
     id: str
-
-
-class EventTypeListMatch(TypedDict, total=False):
     application_id: str
-    event_type_name: str
-    id: str
-    resource_type: str
-    resource_type_name: str
-    service: str
-    service_name: str
-    verb: str
-    verb_name: str
+
+
+class EventTypeListMatch(TypedDict):
+    application_id: str
 
 
 class EventTypeCreateDataRequired(TypedDict):
@@ -206,20 +199,16 @@ class EventTypeCreateData(EventTypeCreateDataRequired, total=False):
 
 
 class EventsManagement(TypedDict):
-    application_id: str
+    pass
 
 
-class EventsManagementListMatch(TypedDict, total=False):
-    application_id: str
-
-
-class EventsManagementCreateData(TypedDict):
-    event_id: str
-    application_id: str
+class EventsManagementListMatch(TypedDict):
+    pass
 
 
 class EventsManagementRemoveMatch(TypedDict):
     event_type_name: str
+    application_id: str
 
 
 class EventsPerDayEntry(TypedDict):
@@ -230,12 +219,12 @@ class EventsPerDayEntry(TypedDict):
     is_provisional: bool
 
 
-class EventsPerDayEntryListMatch(TypedDict, total=False):
-    amount: int
+class EventsPerDayEntryListMatchRequired(TypedDict):
     application_id: str
-    application_name: str
-    date: str
-    is_provisional: bool
+
+
+class EventsPerDayEntryListMatch(EventsPerDayEntryListMatchRequired, total=False):
+    to: str
 
 
 class HealthRequired(TypedDict):
@@ -252,13 +241,7 @@ class Health(HealthRequired, total=False):
 
 
 class HealthLoadMatch(TypedDict, total=False):
-    database: bool
-    database_duration_ms: int
-    object_storage: bool
-    object_storage_duration_ms: int
-    pulsar: bool
-    pulsar_duration_ms: int
-    total_duration_ms: int
+    key: str
 
 
 class Hook0Required(TypedDict):
@@ -512,23 +495,20 @@ class RequestAttempt(RequestAttemptRequired, total=False):
 
 class RequestAttemptLoadMatch(TypedDict):
     id: str
+    application_id: str
 
 
-class RequestAttemptListMatch(TypedDict, total=False):
-    created_at: str
-    delay_until: str
-    event: dict
+class RequestAttemptListMatchRequired(TypedDict):
+    application_id: str
+
+
+class RequestAttemptListMatch(RequestAttemptListMatchRequired, total=False):
+    event_event_type_name: str
     event_id: str
-    failed_at: str
-    http_response_status: int
-    id: str
-    picked_at: str
-    request_attempt_id: str
-    response_id: str
-    retry_count: int
-    status: dict
-    subscription: dict
-    succeeded_at: str
+    max_created_at: str
+    min_created_at: str
+    pagination_cursor: str
+    subscription_id: str
 
 
 class Response(TypedDict, total=False):
@@ -537,6 +517,7 @@ class Response(TypedDict, total=False):
 
 class ResponseLoadMatch(TypedDict):
     id: str
+    application_id: str
 
 
 class Revoke(TypedDict):
@@ -561,15 +542,11 @@ class ServiceToken(ServiceTokenRequired, total=False):
 
 class ServiceTokenLoadMatch(TypedDict):
     id: str
-
-
-class ServiceTokenListMatch(TypedDict, total=False):
-    biscuit: str
-    created_at: str
-    id: str
-    name: str
     organization_id: str
-    token_id: str
+
+
+class ServiceTokenListMatch(TypedDict):
+    organization_id: str
 
 
 class ServiceTokenCreateDataRequired(TypedDict):
@@ -598,6 +575,7 @@ class ServiceTokenUpdateData(ServiceTokenUpdateDataRequired, total=False):
 
 class ServiceTokenRemoveMatch(TypedDict):
     id: str
+    organization_id: str
 
 
 class SubscriptionRequired(TypedDict):
@@ -625,22 +603,8 @@ class SubscriptionLoadMatch(TypedDict):
     id: str
 
 
-class SubscriptionListMatch(TypedDict, total=False):
+class SubscriptionListMatch(TypedDict):
     application_id: str
-    created_at: str
-    dedicated_workers: list
-    description: str
-    event_types: list
-    id: str
-    is_enabled: bool
-    label_key: str
-    label_value: str
-    labels: dict
-    metadata: dict
-    secret: str
-    subscription_id: str
-    target: dict
-    updated_at: str
 
 
 class SubscriptionCreateDataRequired(TypedDict):
@@ -687,6 +651,7 @@ class SubscriptionUpdateData(SubscriptionUpdateDataRequired, total=False):
 
 class SubscriptionRemoveMatch(TypedDict):
     id: str
+    application_id: str
 
 
 class UserAuthentication(TypedDict):

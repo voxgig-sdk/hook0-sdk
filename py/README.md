@@ -46,7 +46,7 @@ error — iterate it directly.
 
 ```python
 try:
-    applications = client.Application().list()
+    applications = client.Application().list({"organization_id": "example"})
     for application in applications:
         print(application)
 except Exception as err:
@@ -340,6 +340,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
+| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -351,9 +352,9 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | `payload_content_type` |  |
 | `received_at` |  |
 
-Operations: List, Load.
+Operations: Create, List, Load.
 
-API path: `/api/v1/events/`
+API path: `/api/v1/events/{event_id}/replay`
 
 #### EventType
 
@@ -377,11 +378,10 @@ API path: `/api/v1/event_types/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 
-Operations: Create, List, Remove.
+Operations: List, Remove.
 
-API path: `/api/v1/events/{event_id}/replay`
+API path: `/api/v1/payload_content_types/`
 
 #### EventsPerDayEntry
 
@@ -693,7 +693,7 @@ application = client.Application().load({"id": "application_id"})
 #### Example: List
 
 ```python
-applications = client.Application().list()
+applications = client.Application().list({"organization_id": "example"})
 ```
 
 #### Example: Create
@@ -736,7 +736,7 @@ Create an instance: `application_secret = client.ApplicationSecret()`
 #### Example: List
 
 ```python
-application_secrets = client.ApplicationSecret().list()
+application_secrets = client.ApplicationSecret().list({"application_id": "example"})
 ```
 
 #### Example: Create
@@ -769,6 +769,7 @@ Create an instance: `event = client.Event()`
 
 | Method | Description |
 | --- | --- |
+| `create(data)` | Create a new entity with the given data. |
 | `list()` | List entities, optionally matching the given criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 
@@ -776,6 +777,7 @@ Create an instance: `event = client.Event()`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `application_id` | `str` |  |
 | `event_id` | `str` |  |
 | `event_type_name` | `str` |  |
 | `id` | `str` |  |
@@ -790,13 +792,30 @@ Create an instance: `event = client.Event()`
 #### Example: Load
 
 ```python
-event = client.Event().load({"id": "event_id"})
+event = client.Event().load({"id": "event_id", "application_id": "application_id"})
 ```
 
 #### Example: List
 
 ```python
-events = client.Event().list()
+events = client.Event().list({"application_id": "example"})
+```
+
+#### Example: Create
+
+```python
+event = client.Event().create({
+    "id": "example_id",  # str
+    "application_id": "example_application_id",  # str
+    "event_id": "example_event_id",  # str
+    "event_type_name": "example_event_type_name",  # str
+    "ip": "example_ip",  # str
+    "labels": {},  # dict
+    "occurred_at": "example_occurred_at",  # str
+    "payload": "example_payload",  # str
+    "payload_content_type": "example_payload_content_type",  # str
+    "received_at": "example_received_at",  # str
+})
 ```
 
 
@@ -829,13 +848,13 @@ Create an instance: `event_type = client.EventType()`
 #### Example: Load
 
 ```python
-event_type = client.EventType().load({"id": "event_type_id"})
+event_type = client.EventType().load({"id": "event_type_id", "application_id": "application_id"})
 ```
 
 #### Example: List
 
 ```python
-event_types = client.EventType().list()
+event_types = client.EventType().list({"application_id": "example"})
 ```
 
 #### Example: Create
@@ -862,29 +881,13 @@ Create an instance: `events_management = client.EventsManagement()`
 
 | Method | Description |
 | --- | --- |
-| `create(data)` | Create a new entity with the given data. |
 | `list()` | List entities, optionally matching the given criteria. |
 | `remove(match)` | Remove the matching entity. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `application_id` | `str` |  |
 
 #### Example: List
 
 ```python
 events_managements = client.EventsManagement().list()
-```
-
-#### Example: Create
-
-```python
-events_management = client.EventsManagement().create({
-    "event_id": "example_event_id",  # str
-    "application_id": "example_application_id",  # str
-})
 ```
 
 
@@ -911,7 +914,7 @@ Create an instance: `events_per_day_entry = client.EventsPerDayEntry()`
 #### Example: List
 
 ```python
-events_per_day_entrys = client.EventsPerDayEntry().list()
+events_per_day_entrys = client.EventsPerDayEntry().list({"application_id": "example"})
 ```
 
 
@@ -1264,13 +1267,13 @@ Create an instance: `request_attempt = client.RequestAttempt()`
 #### Example: Load
 
 ```python
-request_attempt = client.RequestAttempt().load({"id": "request_attempt_id"})
+request_attempt = client.RequestAttempt().load({"id": "request_attempt_id", "application_id": "application_id"})
 ```
 
 #### Example: List
 
 ```python
-request_attempts = client.RequestAttempt().list()
+request_attempts = client.RequestAttempt().list({"application_id": "example"})
 ```
 
 
@@ -1293,7 +1296,7 @@ Create an instance: `response = client.Response()`
 #### Example: Load
 
 ```python
-response = client.Response().load({"id": "response_id"})
+response = client.Response().load({"id": "response_id", "application_id": "application_id"})
 ```
 
 
@@ -1336,13 +1339,13 @@ Create an instance: `service_token = client.ServiceToken()`
 #### Example: Load
 
 ```python
-service_token = client.ServiceToken().load({"id": "service_token_id"})
+service_token = client.ServiceToken().load({"id": "service_token_id", "organization_id": "organization_id"})
 ```
 
 #### Example: List
 
 ```python
-service_tokens = client.ServiceToken().list()
+service_tokens = client.ServiceToken().list({"organization_id": "example"})
 ```
 
 #### Example: Create
@@ -1401,7 +1404,7 @@ subscription = client.Subscription().load({"id": "subscription_id"})
 #### Example: List
 
 ```python
-subscriptions = client.Subscription().list()
+subscriptions = client.Subscription().list({"application_id": "example"})
 ```
 
 #### Example: Create
@@ -1480,6 +1483,29 @@ user_invitation = client.UserInvitation().create({
     "role": "example_role",  # str
 })
 ```
+
+## Features
+
+This SDK ships 1 optional features. Each is **inactive until you
+switch it on**, so an SDK you have not configured behaves exactly as if none of
+them existed — no retries, no cache, no logging, no measurable overhead.
+
+Activate a feature by name in the client options, alongside the options shown
+above:
+
+| Feature | What it does |
+|---|---|
+| [`test`](#test) | In-memory mock transport for testing without a live server |
+
+### test
+
+In-memory mock transport for testing without a live server.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Set `feature.test.active` to enable it, then override any of the options above.
 
 
 ## Advanced

@@ -11,6 +11,7 @@ main: kit: entity: service_token: {
       type: "`$STRING`"
     }
     {
+      format: "date-time"
       name: "created_at"
       req: true
       type: "`$STRING`"
@@ -26,11 +27,13 @@ main: kit: entity: service_token: {
       type: "`$STRING`"
     }
     {
+      format: "uuid"
       name: "organization_id"
       req: true
       type: "`$STRING`"
     }
     {
+      format: "uuid"
       name: "token_id"
       req: true
       type: "`$STRING`"
@@ -50,10 +53,16 @@ main: kit: entity: service_token: {
         {
           method: "POST"
           orig: "/api/v1/service_token/"
-          parts: [
-            "api"
-            "v1"
-            "service_token"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "service_token"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -79,10 +88,16 @@ main: kit: entity: service_token: {
           }
           method: "GET"
           orig: "/api/v1/service_token/"
-          parts: [
-            "api"
-            "v1"
-            "service_token"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "service_token"
+            }
           ]
           select: {
             exist: [
@@ -122,17 +137,25 @@ main: kit: entity: service_token: {
           }
           method: "GET"
           orig: "/api/v1/service_token/{service_token_id}"
-          parts: [
-            "api"
-            "v1"
-            "service_token"
-            "{id}"
-          ]
           rename: {
             param: {
               service_token_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "service_token"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"
@@ -172,17 +195,25 @@ main: kit: entity: service_token: {
           }
           method: "DELETE"
           orig: "/api/v1/service_token/{service_token_id}"
-          parts: [
-            "api"
-            "v1"
-            "service_token"
-            "{id}"
-          ]
           rename: {
             param: {
               service_token_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "service_token"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"
@@ -213,17 +244,25 @@ main: kit: entity: service_token: {
           }
           method: "PUT"
           orig: "/api/v1/service_token/{service_token_id}"
-          parts: [
-            "api"
-            "v1"
-            "service_token"
-            "{id}"
-          ]
           rename: {
             param: {
               service_token_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "service_token"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"

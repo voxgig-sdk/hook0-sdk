@@ -4,62 +4,24 @@ main: kit: entity: events_management: {
 
   alias: field: {}
 
-  fields: [
-    {
-      name: "application_id"
-      req: true
-      type: "`$STRING`"
-    }
-  ]
-
   name: "events_management"
   op: {
-    create: {
-      name: "create"
-      points: [
-        {
-          args: {
-            params: [
-              {
-                kind: "param"
-                name: "event_id"
-                orig: "event_id"
-                reqd: true
-                type: "`$STRING`"
-              }
-            ]
-          }
-          method: "POST"
-          orig: "/api/v1/events/{event_id}/replay"
-          parts: [
-            "api"
-            "v1"
-            "events"
-            "{event_id}"
-            "replay"
-          ]
-          select: {
-            exist: [
-              "event_id"
-            ]
-          }
-          transform: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-      ]
-    }
     list: {
       name: "list"
       points: [
         {
           method: "GET"
           orig: "/api/v1/payload_content_types/"
-          parts: [
-            "api"
-            "v1"
-            "payload_content_types"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "payload_content_types"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -94,11 +56,19 @@ main: kit: entity: events_management: {
           }
           method: "DELETE"
           orig: "/api/v1/event_types/{event_type_name}"
-          parts: [
-            "api"
-            "v1"
-            "event_types"
-            "{event_type_name}"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event_types"
+            }
+            {
+              var: "event_type_name"
+            }
           ]
           select: {
             exist: [
@@ -119,9 +89,6 @@ main: kit: entity: events_management: {
     ancestors: [
       [
         "event_type"
-      ]
-      [
-        "event"
       ]
     ]
   }

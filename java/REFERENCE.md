@@ -370,7 +370,7 @@ SdkEntity applicationsManagement = client.applicationsManagement(null);
 Remove the entity matching the given criteria. Raises on error.
 
 ```java
-Object result = client.applicationsManagement(null).remove(Map.of("application_secret_token", "application_secret_token"), null);
+Object result = client.applicationsManagement(null).remove(Map.of("application_secret_token", "application_secret_token", "application_id", "application_id"), null);
 ```
 
 ### Common Methods
@@ -404,6 +404,7 @@ SdkEntity event = client.event(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `application_id` | `String` | Yes |  |
 | `event_id` | `String` | Yes |  |
 | `event_type_name` | `String` | Yes |  |
 | `id` | `String` | No |  |
@@ -416,6 +417,25 @@ SdkEntity event = client.event(null);
 | `received_at` | `String` | Yes |  |
 
 ### Operations
+
+#### `create(reqdata, ctrl) -> Object`
+
+Create a new entity with the given data. Returns the created entity data and raises on error.
+
+```java
+Object result = client.event(null).create(Map.of(
+    "id", "example_id",  // String
+    "application_id", "example_application_id",  // String
+    "event_id", "example_event_id",  // String
+    "event_type_name", "example_event_type_name",  // String
+    "ip", "example_ip",  // String
+    "labels", Map.of(),  // Map<String, Object>
+    "occurred_at", "example_occurred_at",  // String
+    "payload", "example_payload",  // String
+    "payload_content_type", "example_payload_content_type",  // String
+    "received_at", "example_received_at"  // String
+), null);
+```
 
 #### `list(reqmatch, ctrl) -> Object`
 
@@ -431,7 +451,7 @@ System.out.println(results);
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```java
-Object result = client.event(null).load(Map.of("id", "event_id"), null);
+Object result = client.event(null).load(Map.of("id", "event_id", "application_id", "application_id"), null);
 ```
 
 ### Common Methods
@@ -508,7 +528,7 @@ System.out.println(results);
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```java
-Object result = client.eventType(null).load(Map.of("id", "event_type_id"), null);
+Object result = client.eventType(null).load(Map.of("id", "event_type_id", "application_id", "application_id"), null);
 ```
 
 ### Common Methods
@@ -538,24 +558,7 @@ Return the entity name.
 SdkEntity eventsManagement = client.eventsManagement(null);
 ```
 
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `application_id` | `String` | Yes |  |
-
 ### Operations
-
-#### `create(reqdata, ctrl) -> Object`
-
-Create a new entity with the given data. Returns the created entity data and raises on error.
-
-```java
-Object result = client.eventsManagement(null).create(Map.of(
-    "event_id", "example_event_id",  // String
-    "application_id", "example_application_id"  // String
-), null);
-```
 
 #### `list(reqmatch, ctrl) -> Object`
 
@@ -571,7 +574,7 @@ System.out.println(results);
 Remove the entity matching the given criteria. Raises on error.
 
 ```java
-Object result = client.eventsManagement(null).remove(Map.of("event_type_name", "event_type_name"), null);
+Object result = client.eventsManagement(null).remove(Map.of("event_type_name", "event_type_name", "application_id", "application_id"), null);
 ```
 
 ### Common Methods
@@ -1229,7 +1232,7 @@ System.out.println(results);
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```java
-Object result = client.requestAttempt(null).load(Map.of("id", "request_attempt_id"), null);
+Object result = client.requestAttempt(null).load(Map.of("id", "request_attempt_id", "application_id", "application_id"), null);
 ```
 
 ### Common Methods
@@ -1272,7 +1275,7 @@ SdkEntity response = client.response(null);
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```java
-Object result = client.response(null).load(Map.of("id", "response_id"), null);
+Object result = client.response(null).load(Map.of("id", "response_id", "application_id", "application_id"), null);
 ```
 
 ### Common Methods
@@ -1380,7 +1383,7 @@ System.out.println(results);
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```java
-Object result = client.serviceToken(null).load(Map.of("id", "service_token_id"), null);
+Object result = client.serviceToken(null).load(Map.of("id", "service_token_id", "organization_id", "organization_id"), null);
 ```
 
 #### `remove(reqmatch, ctrl) -> Object`
@@ -1388,7 +1391,7 @@ Object result = client.serviceToken(null).load(Map.of("id", "service_token_id"),
 Remove the entity matching the given criteria. Raises on error.
 
 ```java
-Object result = client.serviceToken(null).remove(Map.of("id", "service_token_id"), null);
+Object result = client.serviceToken(null).remove(Map.of("id", "service_token_id", "organization_id", "organization_id"), null);
 ```
 
 #### `update(reqdata, ctrl) -> Object`
@@ -1514,7 +1517,7 @@ Object result = client.subscription(null).load(Map.of("id", "subscription_id"), 
 Remove the entity matching the given criteria. Raises on error.
 
 ```java
-Object result = client.subscription(null).remove(Map.of("id", "subscription_id"), null);
+Object result = client.subscription(null).remove(Map.of("id", "subscription_id", "application_id", "application_id"), null);
 ```
 
 #### `update(reqdata, ctrl) -> Object`
@@ -1661,4 +1664,42 @@ Map<String, Object> options = new java.util.LinkedHashMap<>();
 options.put("feature", feature);
 Hook0SDK client = new Hook0SDK(options);
 ```
+
+
+### Configuring features
+
+Each feature is inactive until switched on, and an SDK with no feature
+configured does no feature work at all. Every option below keeps its default
+unless you name it.
+
+The array form of \`feature\` is significant: several features wrap the
+transport, and the order you list them in is the order they nest.
+
+#### `test`
+
+In-memory mock transport for testing without a live server.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Options above are those the model carries a default for. A feature may
+also accept callback options — a `sink` to receive each record, for
+instance — which have no default and are covered in the full feature
+reference.
+
+**Usage**
+
+Set `feature.test.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Attaches to pipeline hooks, not the transport, so activation order does
+  not change what it observes.
+- Installs the BASE transport that the wrapping features wrap, so it must be
+  activated before them.
+- Inactive by default: leaving it out costs nothing at runtime.
 

@@ -572,7 +572,7 @@ const applications_management = client.ApplicationsManagement()
 Remove the entity matching the given criteria.
 
 ```ts
-const result = await client.ApplicationsManagement().remove({ application_secret_token: 'application_secret_token' })
+const result = await client.ApplicationsManagement().remove({ application_secret_token: 'application_secret_token', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -613,6 +613,7 @@ const event = client.Event()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `application_id` | `string` | Yes |  |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
 | `id` | `string` | No |  |
@@ -625,6 +626,25 @@ const event = client.Event()
 | `received_at` | `string` | Yes |  |
 
 ### Operations
+
+#### `create(data: object, ctrl?: object)`
+
+Create a new entity with the given data.
+
+```ts
+const result = await client.Event().create({
+  id: 'example_id',
+  application_id: 'example_application_id',
+  event_id: 'example_event_id',
+  event_type_name: 'example_event_type_name',
+  ip: 'example_ip',
+  labels: {},
+  occurred_at: 'example_occurred_at',
+  payload: 'example_payload',
+  payload_content_type: 'example_payload_content_type',
+  received_at: 'example_received_at',
+})
+```
 
 #### `list(match: object, ctrl?: object)`
 
@@ -639,7 +659,7 @@ const results = await client.Event().list()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.Event().load({ id: 'event_id' })
+const result = await client.Event().load({ id: 'event_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -722,7 +742,7 @@ const results = await client.EventType().list()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.EventType().load({ id: 'event_type_id' })
+const result = await client.EventType().load({ id: 'event_type_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -759,24 +779,7 @@ Return a copy of the entity options.
 const events_management = client.EventsManagement()
 ```
 
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-
 ### Operations
-
-#### `create(data: object, ctrl?: object)`
-
-Create a new entity with the given data.
-
-```ts
-const result = await client.EventsManagement().create({
-  event_id: 'example_event_id',
-  application_id: 'example_application_id',
-})
-```
 
 #### `list(match: object, ctrl?: object)`
 
@@ -791,7 +794,7 @@ const results = await client.EventsManagement().list()
 Remove the entity matching the given criteria.
 
 ```ts
-const result = await client.EventsManagement().remove({ event_type_name: 'event_type_name' })
+const result = await client.EventsManagement().remove({ event_type_name: 'event_type_name', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -1530,7 +1533,7 @@ const results = await client.RequestAttempt().list()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.RequestAttempt().load({ id: 'request_attempt_id' })
+const result = await client.RequestAttempt().load({ id: 'request_attempt_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -1580,7 +1583,7 @@ const response = client.Response()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.Response().load({ id: 'response_id' })
+const result = await client.Response().load({ id: 'response_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -1701,7 +1704,7 @@ const results = await client.ServiceToken().list()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.ServiceToken().load({ id: 'service_token_id' })
+const result = await client.ServiceToken().load({ id: 'service_token_id', organization_id: 'organization_id' })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -1709,7 +1712,7 @@ const result = await client.ServiceToken().load({ id: 'service_token_id' })
 Remove the entity matching the given criteria.
 
 ```ts
-const result = await client.ServiceToken().remove({ id: 'service_token_id' })
+const result = await client.ServiceToken().remove({ id: 'service_token_id', organization_id: 'organization_id' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -1842,7 +1845,7 @@ const result = await client.Subscription().load({ id: 'subscription_id' })
 Remove the entity matching the given criteria.
 
 ```ts
-const result = await client.Subscription().remove({ id: 'subscription_id' })
+const result = await client.Subscription().remove({ id: 'subscription_id', application_id: 'application_id' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -2011,4 +2014,42 @@ const client = new Hook0SDK({
   }
 })
 ```
+
+
+### Configuring features
+
+Each feature is inactive until switched on, and an SDK with no feature
+configured does no feature work at all. Every option below keeps its default
+unless you name it.
+
+The array form of \`feature\` is significant: several features wrap the
+transport, and the order you list them in is the order they nest.
+
+#### `test`
+
+In-memory mock transport for testing without a live server.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Options above are those the model carries a default for. A feature may
+also accept callback options — a `sink` to receive each record, for
+instance — which have no default and are covered in the full feature
+reference.
+
+**Usage**
+
+Set `feature.test.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Attaches to pipeline hooks, not the transport, so activation order does
+  not change what it observes.
+- Installs the BASE transport that the wrapping features wrap, so it must be
+  activated before them.
+- Inactive by default: leaving it out costs nothing at runtime.
 

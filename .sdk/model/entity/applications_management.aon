@@ -32,11 +32,19 @@ main: kit: entity: applications_management: {
           }
           method: "DELETE"
           orig: "/api/v1/application_secrets/{application_secret_token}"
-          parts: [
-            "api"
-            "v1"
-            "application_secrets"
-            "{application_secret_token}"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "application_secrets"
+            }
+            {
+              var: "application_secret_token"
+            }
           ]
           select: {
             exist: [

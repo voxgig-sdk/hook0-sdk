@@ -80,7 +80,7 @@ func TestEventsManagementEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"create", "list", "remove"} {
+		for _, _op := range []string{"list"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "events_management." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -97,22 +97,18 @@ func TestEventsManagementEntity(t *testing.T) {
 		}
 		client := setup.client
 
-		// CREATE
-		eventsManagementRef01Ent := client.EventsManagement(nil)
-		eventsManagementRef01Data := core.ToMapAny(vs.GetProp(
-			vs.GetPath([]any{"new", "events_management"}, setup.data), "events_management_ref01"))
-		eventsManagementRef01Data["event_id"] = setup.idmap["event01"]
-
-		eventsManagementRef01DataResult, err := eventsManagementRef01Ent.Create(eventsManagementRef01Data, nil)
-		if err != nil {
-			t.Fatalf("create failed: %v", err)
+		// Bootstrap entity data from existing test data (no create step in flow).
+		eventsManagementRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.events_management")))
+		var eventsManagementRef01Data map[string]any
+		if len(eventsManagementRef01DataRaw) > 0 {
+			eventsManagementRef01Data = core.ToMapAny(eventsManagementRef01DataRaw[0][1])
 		}
-		eventsManagementRef01Data = core.ToMapAny(entityData(eventsManagementRef01DataResult))
-		if eventsManagementRef01Data == nil {
-			t.Fatal("expected create result to be a map")
-		}
+		// Discard guards against Go's unused-var check when the flow's steps
+		// happen not to consume the bootstrap data (e.g. list-only flows).
+		_ = eventsManagementRef01Data
 
 		// LIST
+		eventsManagementRef01Ent := client.EventsManagement(nil)
 		eventsManagementRef01Match := map[string]any{}
 
 		eventsManagementRef01ListResult, err := eventsManagementRef01Ent.List(eventsManagementRef01Match, nil)
@@ -122,19 +118,6 @@ func TestEventsManagementEntity(t *testing.T) {
 		_, eventsManagementRef01ListOk := eventsManagementRef01ListResult.([]any)
 		if !eventsManagementRef01ListOk {
 			t.Fatalf("expected list result to be an array, got %T", eventsManagementRef01ListResult)
-		}
-
-
-		// LIST
-		eventsManagementRef01MatchRt0 := map[string]any{}
-
-		eventsManagementRef01ListRt0Result, err := eventsManagementRef01Ent.List(eventsManagementRef01MatchRt0, nil)
-		if err != nil {
-			t.Fatalf("list failed: %v", err)
-		}
-		_, eventsManagementRef01ListRt0Ok := eventsManagementRef01ListRt0Result.([]any)
-		if !eventsManagementRef01ListRt0Ok {
-			t.Fatalf("expected list result to be an array, got %T", eventsManagementRef01ListRt0Result)
 		}
 
 	})
@@ -164,8 +147,8 @@ func events_managementBasicSetup(extra map[string]any) *entityTestSetup {
 	client := sdk.TestSDK(options, extra)
 
 	// Generate idmap via transform, matching TS pattern.
-	idmap := vs.Transform(
-		[]any{"events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03", "event01", "event02", "event03"},
+	idmap, _ := vs.Transform(
+		[]any{"events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",
@@ -184,7 +167,7 @@ func events_managementBasicSetup(extra map[string]any) *entityTestSetup {
 		"HOOK0_TEST_EVENTS_MANAGEMENT_ENTID": idmap,
 		"HOOK0_TEST_LIVE":      "FALSE",
 		"HOOK0_TEST_EXPLAIN":   "FALSE",
-		"HOOK0_APIKEY":         "NONE",
+		"HOOK0_APIKEY":         "",
 	})
 
 	idmapResolved := core.ToMapAny(env["HOOK0_TEST_EVENTS_MANAGEMENT_ENTID"])
@@ -193,11 +176,23 @@ func events_managementBasicSetup(extra map[string]any) *entityTestSetup {
 	}
 
 	if env["HOOK0_TEST_LIVE"] == "TRUE" {
+		// An empty map, not a nil one: Merge returns nil when its last entry
+		// is nil, and BasicSetup is normally called with no extras - so a
+		// bare nil silently discarded the apikey and server values below.
+		extraOpts := extra
+		if extraOpts == nil {
+			extraOpts = map[string]any{}
+		}
+
 		mergedOpts := vs.Merge([]any{
+			// liveClientOptions() FIRST, so the generated fields below win:
+			// sdk-test-control.json's test.client.options adds to the live
+			// client, it does not redirect it.
+			liveClientOptions(),
 			map[string]any{
 				"apikey": env["HOOK0_APIKEY"],
 			},
-			extra,
+			extraOpts,
 		})
 		client = sdk.NewHook0SDK(core.ToMapAny(mergedOpts))
 	}

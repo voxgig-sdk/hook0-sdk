@@ -16,6 +16,7 @@ main: kit: entity: organization_edit_role: {
       type: "`$STRING`"
     }
     {
+      format: "uuid"
       name: "user_id"
       req: true
       type: "`$STRING`"
@@ -46,18 +47,28 @@ main: kit: entity: organization_edit_role: {
           }
           method: "PUT"
           orig: "/api/v1/organizations/{organization_id}/invite"
-          parts: [
-            "api"
-            "v1"
-            "organizations"
-            "{id}"
-            "invite"
-          ]
           rename: {
             param: {
               organization_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "organizations"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "invite"
+            }
+          ]
           select: {
             "$action": "invite"
             exist: [

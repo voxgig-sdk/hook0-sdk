@@ -1,6 +1,7 @@
 .{
-    .name = "hook0_sdk",
+    .name = .hook0_sdk,
     .version = "0.1.1",
+    .fingerprint = 0xa8bd2198a5932676,
     .dependencies = .{},
     .paths = .{
         "src",

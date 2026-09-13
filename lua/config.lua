@@ -58,6 +58,7 @@ local function make_config()
       ["application"] = {
         ["fields"] = {
           {
+            ["format"] = "uuid",
             ["name"] = "application_id",
             ["req"] = true,
             ["short"] = "Unique identifier of the application.",
@@ -86,6 +87,7 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "organization_id",
             ["req"] = true,
             ["short"] = "UUID of the organization this application belongs to.",
@@ -98,6 +100,10 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
         },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
+        },
         ["name"] = "application",
         ["op"] = {
           ["create"] = {
@@ -109,15 +115,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/applications/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "applications",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "applications",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "applications",
                 },
               },
             },
@@ -141,10 +158,16 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/applications/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "applications",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "applications",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -154,6 +177,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "applications",
                 },
               },
             },
@@ -177,15 +205,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/applications/{application_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "applications",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["application_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "applications",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -196,6 +232,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "applications",
+                  "{id}",
                 },
               },
             },
@@ -219,15 +261,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/applications/{application_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "applications",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["application_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "applications",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -238,6 +288,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "applications",
+                  "{id}",
                 },
               },
             },
@@ -261,15 +317,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/applications/{application_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "applications",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["application_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "applications",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -280,6 +344,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "applications",
+                  "{id}",
                 },
               },
             },
@@ -292,16 +362,19 @@ local function make_config()
       ["application_secret"] = {
         ["fields"] = {
           {
+            ["format"] = "uuid",
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "created_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "deleted_at",
             ["type"] = "`$STRING`",
           },
@@ -314,10 +387,15 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "token",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
+        },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
         },
         ["name"] = "application_secret",
         ["op"] = {
@@ -330,15 +408,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/application_secrets/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "application_secrets",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "application_secrets",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "application_secrets",
                 },
               },
             },
@@ -362,10 +451,16 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/application_secrets/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "application_secrets",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "application_secrets",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -375,6 +470,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "application_secrets",
                 },
               },
             },
@@ -398,15 +498,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/application_secrets/{application_secret_token}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "application_secrets",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["application_secret_token"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "application_secrets",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -417,6 +525,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "application_secrets",
+                  "{id}",
                 },
               },
             },
@@ -458,11 +572,19 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/application_secrets/{application_secret_token}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "application_secrets",
-                  "{application_secret_token}",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "application_secrets",
+                  },
+                  {
+                    ["var"] = "application_secret_token",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -473,6 +595,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "application_secrets",
+                  "{application_secret_token}",
                 },
               },
             },
@@ -489,6 +617,13 @@ local function make_config()
       ["event"] = {
         ["fields"] = {
           {
+            ["format"] = "uuid",
+            ["name"] = "application_id",
+            ["req"] = true,
+            ["type"] = "`$STRING`",
+          },
+          {
+            ["format"] = "uuid",
             ["name"] = "event_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -517,6 +652,7 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "occurred_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -532,13 +668,79 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "received_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
         },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
+        },
         ["name"] = "event",
         ["op"] = {
+          ["create"] = {
+            ["input"] = "data",
+            ["name"] = "create",
+            ["points"] = {
+              {
+                ["args"] = {
+                  ["params"] = {
+                    {
+                      ["kind"] = "param",
+                      ["name"] = "id",
+                      ["orig"] = "event_id",
+                      ["reqd"] = true,
+                      ["type"] = "`$STRING`",
+                    },
+                  },
+                },
+                ["kind"] = "http",
+                ["method"] = "POST",
+                ["orig"] = "/api/v1/events/{event_id}/replay",
+                ["rename"] = {
+                  ["param"] = {
+                    ["event_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "events",
+                  },
+                  {
+                    ["var"] = "id",
+                  },
+                  {
+                    ["lit"] = "replay",
+                  },
+                },
+                ["select"] = {
+                  ["$action"] = "replay",
+                  ["exist"] = {
+                    "id",
+                  },
+                },
+                ["transform"] = {
+                  ["req"] = "`reqdata`",
+                  ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "events",
+                  "{id}",
+                  "replay",
+                },
+              },
+            },
+          },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
@@ -558,10 +760,16 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/events/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "events",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "events",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -571,6 +779,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "events",
                 },
               },
             },
@@ -603,15 +816,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/events/{event_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "events",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["event_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "events",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -624,6 +845,12 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "events",
+                  "{id}",
+                },
               },
             },
           },
@@ -635,6 +862,7 @@ local function make_config()
       ["event_type"] = {
         ["fields"] = {
           {
+            ["format"] = "uuid",
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -679,6 +907,10 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
         },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
+        },
         ["name"] = "event_type",
         ["op"] = {
           ["create"] = {
@@ -690,15 +922,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/event_types/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "event_types",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "event_types",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "event_types",
                 },
               },
             },
@@ -722,10 +965,16 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/event_types/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "event_types",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "event_types",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -735,6 +984,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "event_types",
                 },
               },
             },
@@ -767,15 +1021,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/event_types/{event_type_name}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "event_types",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["event_type_name"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "event_types",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -788,6 +1050,12 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "event_types",
+                  "{id}",
+                },
               },
             },
           },
@@ -797,53 +1065,9 @@ local function make_config()
         },
       },
       ["events_management"] = {
-        ["fields"] = {
-          {
-            ["name"] = "application_id",
-            ["req"] = true,
-            ["type"] = "`$STRING`",
-          },
-        },
+        ["fields"] = {},
         ["name"] = "events_management",
         ["op"] = {
-          ["create"] = {
-            ["input"] = "data",
-            ["name"] = "create",
-            ["points"] = {
-              {
-                ["args"] = {
-                  ["params"] = {
-                    {
-                      ["kind"] = "param",
-                      ["name"] = "event_id",
-                      ["orig"] = "event_id",
-                      ["reqd"] = true,
-                      ["type"] = "`$STRING`",
-                    },
-                  },
-                },
-                ["kind"] = "http",
-                ["method"] = "POST",
-                ["orig"] = "/api/v1/events/{event_id}/replay",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "events",
-                  "{event_id}",
-                  "replay",
-                },
-                ["select"] = {
-                  ["exist"] = {
-                    "event_id",
-                  },
-                },
-                ["transform"] = {
-                  ["req"] = "`reqdata`",
-                  ["res"] = "`body`",
-                },
-              },
-            },
-          },
           ["list"] = {
             ["input"] = "data",
             ["name"] = "list",
@@ -853,15 +1077,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/payload_content_types/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "payload_content_types",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "payload_content_types",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "payload_content_types",
                 },
               },
             },
@@ -894,11 +1129,19 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/event_types/{event_type_name}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "event_types",
-                  "{event_type_name}",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "event_types",
+                  },
+                  {
+                    ["var"] = "event_type_name",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -910,6 +1153,12 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "event_types",
+                  "{event_type_name}",
+                },
               },
             },
           },
@@ -919,20 +1168,19 @@ local function make_config()
             {
               "event_type",
             },
-            {
-              "event",
-            },
           },
         },
       },
       ["events_per_day_entry"] = {
         ["fields"] = {
           {
+            ["format"] = "int32",
             ["name"] = "amount",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -943,6 +1191,7 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date",
             ["name"] = "date",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -986,11 +1235,19 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/events_per_day/application",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "events_per_day",
-                  "application",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "events_per_day",
+                  },
+                  {
+                    ["lit"] = "application",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -1002,6 +1259,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "events_per_day",
+                  "application",
                 },
               },
               {
@@ -1031,11 +1294,19 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/events_per_day/organization",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "events_per_day",
-                  "organization",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "events_per_day",
+                  },
+                  {
+                    ["lit"] = "organization",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -1047,6 +1318,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "events_per_day",
+                  "organization",
                 },
               },
             },
@@ -1064,6 +1341,7 @@ local function make_config()
             ["type"] = "`$BOOLEAN`",
           },
           {
+            ["format"] = "int64",
             ["name"] = "database_duration_ms",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
@@ -1073,6 +1351,7 @@ local function make_config()
             ["type"] = "`$BOOLEAN`",
           },
           {
+            ["format"] = "int64",
             ["name"] = "object_storage_duration_ms",
             ["type"] = "`$INTEGER`",
           },
@@ -1081,10 +1360,12 @@ local function make_config()
             ["type"] = "`$BOOLEAN`",
           },
           {
+            ["format"] = "int64",
             ["name"] = "pulsar_duration_ms",
             ["type"] = "`$INTEGER`",
           },
           {
+            ["format"] = "int64",
             ["name"] = "total_duration_ms",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
@@ -1110,10 +1391,16 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/health/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "health",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "health",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -1123,6 +1410,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "health",
                 },
               },
             },
@@ -1178,15 +1470,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/environment_variables/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "environment_variables",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "environment_variables",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "environment_variables",
                 },
               },
             },
@@ -1199,12 +1502,14 @@ local function make_config()
       ["ingested_event"] = {
         ["fields"] = {
           {
+            ["format"] = "uuid",
             ["name"] = "application_id",
             ["req"] = true,
             ["short"] = "UUID of the application this event belongs to.",
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "event_id",
             ["short"] = "Optional unique identifier for this event (client-generated UUID).",
             ["type"] = "`$STRING`",
@@ -1227,6 +1532,7 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "occurred_at",
             ["req"] = true,
             ["short"] = "Timestamp when the event occurred.",
@@ -1256,15 +1562,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/event/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "event",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "event",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "event",
                 },
               },
             },
@@ -1306,6 +1623,7 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "password_minimum_length",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
@@ -1337,15 +1655,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/instance/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "instance",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "instance",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "instance",
                 },
               },
             },
@@ -1379,16 +1708,30 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/login",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "auth",
-                  "login",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "auth",
+                  },
+                  {
+                    ["lit"] = "login",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "auth",
+                  "login",
                 },
               },
               {
@@ -1396,16 +1739,30 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/refresh",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "auth",
-                  "refresh",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "auth",
+                  },
+                  {
+                    ["lit"] = "refresh",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "auth",
+                  "refresh",
                 },
               },
             },
@@ -1437,6 +1794,7 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "organization_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -1462,6 +1820,10 @@ local function make_config()
             ["type"] = "`$ARRAY`",
           },
         },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
+        },
         ["name"] = "organization",
         ["op"] = {
           ["create"] = {
@@ -1473,15 +1835,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/organizations/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "organizations",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "organizations",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "organizations",
                 },
               },
             },
@@ -1495,15 +1868,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/organizations/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "organizations",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "organizations",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "organizations",
                 },
               },
             },
@@ -1527,15 +1911,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/organizations/{organization_id}/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["organization_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "organizations",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -1546,6 +1938,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{id}",
                 },
               },
             },
@@ -1569,15 +1967,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/organizations/{organization_id}/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["organization_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "organizations",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -1588,6 +1994,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{id}",
                 },
               },
             },
@@ -1611,15 +2023,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/organizations/{organization_id}/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["organization_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "organizations",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -1630,6 +2050,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{id}",
                 },
               },
             },
@@ -1651,10 +2077,15 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "user_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
+        },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
         },
         ["name"] = "organization_edit_role",
         ["op"] = {
@@ -1677,16 +2108,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/organizations/{organization_id}/invite",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{id}",
-                  "invite",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["organization_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "organizations",
+                  },
+                  {
+                    ["var"] = "id",
+                  },
+                  {
+                    ["lit"] = "invite",
                   },
                 },
                 ["select"] = {
@@ -1698,6 +2139,13 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{id}",
+                  "invite",
                 },
               },
             },
@@ -1720,6 +2168,7 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "status",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
@@ -1729,6 +2178,10 @@ local function make_config()
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
+        },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
         },
         ["name"] = "problem",
         ["op"] = {
@@ -1741,15 +2194,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/errors/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "errors",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "errors",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "errors",
                 },
               },
             },
@@ -1762,31 +2226,37 @@ local function make_config()
       ["quota"] = {
         ["fields"] = {
           {
+            ["format"] = "int32",
             ["name"] = "global_applications_per_organization_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "global_days_of_events_retention_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "global_event_types_per_application_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "global_events_per_day_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "global_members_per_organization_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "global_subscriptions_per_application_limit",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
@@ -1803,15 +2273,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/quotas/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "quotas",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "quotas",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.limits`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "quotas",
                 },
               },
             },
@@ -1864,15 +2345,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/register/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "register",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "register",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "register",
                 },
               },
             },
@@ -1885,11 +2377,13 @@ local function make_config()
       ["request_attempt"] = {
         ["fields"] = {
           {
+            ["format"] = "date-time",
             ["name"] = "created_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "delay_until",
             ["type"] = "`$STRING`",
           },
@@ -1899,15 +2393,18 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "event_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "failed_at",
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "http_response_status",
             ["type"] = "`$INTEGER`",
           },
@@ -1916,19 +2413,23 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "picked_at",
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "request_attempt_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "response_id",
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "int32",
             ["name"] = "retry_count",
             ["req"] = true,
             ["type"] = "`$INTEGER`",
@@ -1945,9 +2446,14 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "succeeded_at",
             ["type"] = "`$STRING`",
           },
+        },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
         },
         ["name"] = "request_attempt",
         ["op"] = {
@@ -2006,10 +2512,16 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/request_attempts/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "request_attempts",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "request_attempts",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -2025,6 +2537,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "request_attempts",
                 },
               },
             },
@@ -2057,15 +2574,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/request_attempts/{request_attempt_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "request_attempts",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["request_attempt_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "request_attempts",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -2077,6 +2602,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "request_attempts",
+                  "{id}",
                 },
               },
             },
@@ -2092,6 +2623,10 @@ local function make_config()
             ["name"] = "id",
             ["type"] = "`$STRING`",
           },
+        },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
         },
         ["name"] = "response",
         ["op"] = {
@@ -2123,15 +2658,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/responses/{response_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "responses",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["response_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "responses",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -2143,6 +2686,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.headers`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "responses",
+                  "{id}",
                 },
               },
             },
@@ -2175,12 +2724,22 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/organizations/{organization_id}/invite",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{organization_id}",
-                  "invite",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "organizations",
+                  },
+                  {
+                    ["var"] = "organization_id",
+                  },
+                  {
+                    ["lit"] = "invite",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -2190,6 +2749,13 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{organization_id}",
+                  "invite",
                 },
               },
             },
@@ -2211,6 +2777,7 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "created_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -2225,15 +2792,21 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "organization_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "token_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
+        },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
         },
         ["name"] = "service_token",
         ["op"] = {
@@ -2246,15 +2819,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/service_token/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "service_token",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "service_token",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "service_token",
                 },
               },
             },
@@ -2278,10 +2862,16 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/service_token/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "service_token",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "service_token",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -2291,6 +2881,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "service_token",
                 },
               },
             },
@@ -2323,15 +2918,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/service_token/{service_token_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "service_token",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["service_token_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "service_token",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -2343,6 +2946,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "service_token",
+                  "{id}",
                 },
               },
             },
@@ -2375,15 +2984,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/service_token/{service_token_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "service_token",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["service_token_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "service_token",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -2395,6 +3012,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "service_token",
+                  "{id}",
                 },
               },
             },
@@ -2418,15 +3041,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/service_token/{service_token_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "service_token",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["service_token_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "service_token",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -2437,6 +3068,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "service_token",
+                  "{id}",
                 },
               },
             },
@@ -2449,11 +3086,13 @@ local function make_config()
       ["subscription"] = {
         ["fields"] = {
           {
+            ["format"] = "uuid",
             ["name"] = "application_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "created_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -2544,11 +3183,13 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "secret",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
           {
+            ["format"] = "uuid",
             ["name"] = "subscription_id",
             ["req"] = true,
             ["type"] = "`$STRING`",
@@ -2559,10 +3200,15 @@ local function make_config()
             ["type"] = "`$OBJECT`",
           },
           {
+            ["format"] = "date-time",
             ["name"] = "updated_at",
             ["req"] = true,
             ["type"] = "`$STRING`",
           },
+        },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
         },
         ["name"] = "subscription",
         ["op"] = {
@@ -2575,15 +3221,26 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/subscriptions/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "subscriptions",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "subscriptions",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "subscriptions",
                 },
               },
             },
@@ -2607,10 +3264,16 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/subscriptions/",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "subscriptions",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "subscriptions",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -2620,6 +3283,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "subscriptions",
                 },
               },
             },
@@ -2643,15 +3311,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/api/v1/subscriptions/{subscription_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "subscriptions",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["subscription_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "subscriptions",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -2662,6 +3338,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "subscriptions",
+                  "{id}",
                 },
               },
             },
@@ -2694,15 +3376,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "DELETE",
                 ["orig"] = "/api/v1/subscriptions/{subscription_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "subscriptions",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["subscription_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "subscriptions",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -2714,6 +3404,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "subscriptions",
+                  "{id}",
                 },
               },
             },
@@ -2737,15 +3433,23 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "PUT",
                 ["orig"] = "/api/v1/subscriptions/{subscription_id}",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "subscriptions",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["subscription_id"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "subscriptions",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -2756,6 +3460,12 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "subscriptions",
+                  "{id}",
                 },
               },
             },
@@ -2794,16 +3504,30 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/begin-reset-password",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "auth",
-                  "begin-reset-password",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "auth",
+                  },
+                  {
+                    ["lit"] = "begin-reset-password",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "auth",
+                  "begin-reset-password",
                 },
               },
               {
@@ -2811,16 +3535,30 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/logout",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "auth",
-                  "logout",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "auth",
+                  },
+                  {
+                    ["lit"] = "logout",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "auth",
+                  "logout",
                 },
               },
               {
@@ -2828,16 +3566,30 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/password",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "auth",
-                  "password",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "auth",
+                  },
+                  {
+                    ["lit"] = "password",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "auth",
+                  "password",
                 },
               },
               {
@@ -2845,16 +3597,30 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/reset-password",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "auth",
-                  "reset-password",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "auth",
+                  },
+                  {
+                    ["lit"] = "reset-password",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "auth",
+                  "reset-password",
                 },
               },
               {
@@ -2862,16 +3628,30 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/auth/verify-email",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "auth",
-                  "verify-email",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "auth",
+                  },
+                  {
+                    ["lit"] = "verify-email",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "auth",
+                  "verify-email",
                 },
               },
             },
@@ -2915,12 +3695,22 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/api/v1/organizations/{organization_id}/invite",
-                ["parts"] = {
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{organization_id}",
-                  "invite",
+                ["segments"] = {
+                  {
+                    ["lit"] = "api",
+                  },
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "organizations",
+                  },
+                  {
+                    ["var"] = "organization_id",
+                  },
+                  {
+                    ["lit"] = "invite",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -2930,6 +3720,13 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{organization_id}",
+                  "invite",
                 },
               },
             },

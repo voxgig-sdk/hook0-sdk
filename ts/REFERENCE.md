@@ -423,7 +423,7 @@ const result = await client.Application().create({
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.Application().list()
+const results = await client.Application().list({ organization_id: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -517,7 +517,7 @@ const result = await client.ApplicationSecret().create({
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.ApplicationSecret().list()
+const results = await client.ApplicationSecret().list({ application_id: "example" })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -572,7 +572,7 @@ const applications_management = client.ApplicationsManagement()
 Remove the entity matching the given criteria.
 
 ```ts
-const result = await client.ApplicationsManagement().remove({ application_secret_token: 'application_secret_token' })
+const result = await client.ApplicationsManagement().remove({ application_secret_token: 'application_secret_token', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -613,6 +613,7 @@ const event = client.Event()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `application_id` | `string` | Yes |  |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
 | `id` | `string` | No |  |
@@ -624,14 +625,53 @@ const event = client.Event()
 | `payload_content_type` | `string` | Yes |  |
 | `received_at` | `string` | Yes |  |
 
+### Actions
+
+This entity exposes custom API actions in addition to the standard
+operations. Select one with `$action` in the call's argument; the
+remaining keys are sent as that action's payload.
+
+| Action | Route | Call |
+| --- | --- | --- |
+| `replay` | `/api/v1/events/{event_id}/replay` | `client.Event().create({ $action: 'replay', ... })` |
+
+An action returns that action's OWN response, which is not necessarily a
+Event record — check the API definition for its shape.
+
+```ts
+const result = await client.Event().create({
+  $action: 'replay',
+  /* ...the action's own arguments */
+})
+```
+
 ### Operations
+
+#### `create(data: object, ctrl?: object)`
+
+Create a new entity with the given data.
+
+```ts
+const result = await client.Event().create({
+  id: 'example_id',
+  application_id: 'example_application_id',
+  event_id: 'example_event_id',
+  event_type_name: 'example_event_type_name',
+  ip: 'example_ip',
+  labels: {},
+  occurred_at: 'example_occurred_at',
+  payload: 'example_payload',
+  payload_content_type: 'example_payload_content_type',
+  received_at: 'example_received_at',
+})
+```
 
 #### `list(match: object, ctrl?: object)`
 
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.Event().list()
+const results = await client.Event().list({ application_id: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -639,7 +679,7 @@ const results = await client.Event().list()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.Event().load({ id: 'event_id' })
+const result = await client.Event().load({ id: 'event_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -714,7 +754,7 @@ const result = await client.EventType().create({
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.EventType().list()
+const results = await client.EventType().list({ application_id: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -722,7 +762,7 @@ const results = await client.EventType().list()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.EventType().load({ id: 'event_type_id' })
+const result = await client.EventType().load({ id: 'event_type_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -759,24 +799,7 @@ Return a copy of the entity options.
 const events_management = client.EventsManagement()
 ```
 
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-
 ### Operations
-
-#### `create(data: object, ctrl?: object)`
-
-Create a new entity with the given data.
-
-```ts
-const result = await client.EventsManagement().create({
-  event_id: 'example_event_id',
-  application_id: 'example_application_id',
-})
-```
 
 #### `list(match: object, ctrl?: object)`
 
@@ -791,7 +814,7 @@ const results = await client.EventsManagement().list()
 Remove the entity matching the given criteria.
 
 ```ts
-const result = await client.EventsManagement().remove({ event_type_name: 'event_type_name' })
+const result = await client.EventsManagement().remove({ event_type_name: 'event_type_name', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -845,7 +868,7 @@ const events_per_day_entry = client.EventsPerDayEntry()
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.EventsPerDayEntry().list()
+const results = await client.EventsPerDayEntry().list({ application_id: "example" })
 ```
 
 ### Common Methods
@@ -1542,7 +1565,7 @@ const request_attempt = client.RequestAttempt()
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.RequestAttempt().list()
+const results = await client.RequestAttempt().list({ application_id: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -1550,7 +1573,7 @@ const results = await client.RequestAttempt().list()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.RequestAttempt().load({ id: 'request_attempt_id' })
+const result = await client.RequestAttempt().load({ id: 'request_attempt_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -1600,7 +1623,7 @@ const response = client.Response()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.Response().load({ id: 'response_id' })
+const result = await client.Response().load({ id: 'response_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -1713,7 +1736,7 @@ const result = await client.ServiceToken().create({
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.ServiceToken().list()
+const results = await client.ServiceToken().list({ organization_id: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -1721,7 +1744,7 @@ const results = await client.ServiceToken().list()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.ServiceToken().load({ id: 'service_token_id' })
+const result = await client.ServiceToken().load({ id: 'service_token_id', organization_id: 'organization_id' })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -1729,7 +1752,7 @@ const result = await client.ServiceToken().load({ id: 'service_token_id' })
 Remove the entity matching the given criteria.
 
 ```ts
-const result = await client.ServiceToken().remove({ id: 'service_token_id' })
+const result = await client.ServiceToken().remove({ id: 'service_token_id', organization_id: 'organization_id' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -1846,7 +1869,7 @@ const result = await client.Subscription().create({
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.Subscription().list()
+const results = await client.Subscription().list({ application_id: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -1862,7 +1885,7 @@ const result = await client.Subscription().load({ id: 'subscription_id' })
 Remove the entity matching the given criteria.
 
 ```ts
-const result = await client.Subscription().remove({ id: 'subscription_id' })
+const result = await client.Subscription().remove({ id: 'subscription_id', application_id: 'application_id' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -2031,4 +2054,42 @@ const client = new Hook0SDK({
   }
 })
 ```
+
+
+### Configuring features
+
+Each feature is inactive until switched on, and an SDK with no feature
+configured does no feature work at all. Every option below keeps its default
+unless you name it.
+
+The array form of \`feature\` is significant: several features wrap the
+transport, and the order you list them in is the order they nest.
+
+#### `test`
+
+In-memory mock transport for testing without a live server.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Options above are those the model carries a default for. A feature may
+also accept callback options — a `sink` to receive each record, for
+instance — which have no default and are covered in the full feature
+reference.
+
+**Usage**
+
+Set `feature.test.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Attaches to pipeline hooks, not the transport, so activation order does
+  not change what it observes.
+- Installs the BASE transport that the wrapping features wrap, so it must be
+  activated before them.
+- Inactive by default: leaving it out costs nothing at runtime.
 

@@ -25,11 +25,19 @@ main: kit: entity: login: {
         {
           method: "POST"
           orig: "/api/v1/auth/login"
-          parts: [
-            "api"
-            "v1"
-            "auth"
-            "login"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "login"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -39,11 +47,19 @@ main: kit: entity: login: {
         {
           method: "POST"
           orig: "/api/v1/auth/refresh"
-          parts: [
-            "api"
-            "v1"
-            "auth"
-            "refresh"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "refresh"
+            }
           ]
           transform: {
             req: "`reqdata`"

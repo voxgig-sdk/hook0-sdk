@@ -38,7 +38,7 @@ public class EventsManagementEntityTest {
     // Per-op sdk-test-control.json skip — basic test exercises a flow
     // with multiple ops; skipping any op skips the whole flow.
     String mode = setup.live ? "live" : "unit";
-    for (String op : new String[] { "create", "list", "remove" }) {
+    for (String op : new String[] { "list" }) {
       String reason = RunnerSupport.skipReason("entityOp", "events_management." + op, mode);
       Assumptions.assumeTrue(reason == null,
           reason == null || "".equals(reason)
@@ -50,46 +50,19 @@ public class EventsManagementEntityTest {
         "live entity test uses synthetic IDs from fixture — set HOOK0_TEST_EVENTS_MANAGEMENT_ENTID JSON to run live");
     Hook0SDK client = setup.client;
 
-    // CREATE
-    SdkEntity eventsManagementRef01Ent = client.eventsManagement(null);
-    Map<String, Object> eventsManagementRef01Data = Helpers.toMapAny(Struct.getprop(
-        Struct.getpath(setup.data, "new.events_management"), "events_management_ref01"));
-    eventsManagementRef01Data.put("event_id", setup.idmap.get("event01"));
-
-    Object eventsManagementRef01DataResult = eventsManagementRef01Ent.create(eventsManagementRef01Data, null);
-    eventsManagementRef01Data = Helpers.toMapAny(eventsManagementRef01DataResult instanceof SdkEntity ? ((SdkEntity) eventsManagementRef01DataResult).data() : eventsManagementRef01DataResult);
-    assertNotNull(eventsManagementRef01Data, "expected create result to be a map");
+    // Bootstrap entity data from existing test data (no create step in flow).
+    List<List<Object>> eventsManagementRef01DataRaw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.events_management")));
+    Map<String, Object> eventsManagementRef01Data = eventsManagementRef01DataRaw.isEmpty()
+        ? null : Helpers.toMapAny(eventsManagementRef01DataRaw.get(0).get(1));
 
     // LIST
+    SdkEntity eventsManagementRef01Ent = client.eventsManagement(null);
     Map<String, Object> eventsManagementRef01Match = new LinkedHashMap<>();
 
     Object eventsManagementRef01ListResult = eventsManagementRef01Ent.list(eventsManagementRef01Match, null);
     assertTrue(eventsManagementRef01ListResult instanceof List,
         "expected list result to be an array, got " + eventsManagementRef01ListResult);
-    List<Object> eventsManagementRef01List = (List<Object>) eventsManagementRef01ListResult;
-
-    List<Object> foundItem = Struct.select(
-        RunnerSupport.entityListToData(eventsManagementRef01List),
-        Struct.jm("id", eventsManagementRef01Data.get("id")));
-    assertFalse(Struct.isempty(foundItem), "expected to find created entity in list");
-
-    // REMOVE
-    Map<String, Object> eventsManagementRef01MatchRm0 = new LinkedHashMap<>();
-    eventsManagementRef01MatchRm0.put("id", eventsManagementRef01Data.get("id"));
-    eventsManagementRef01Ent.remove(eventsManagementRef01MatchRm0, null);
-
-    // LIST
-    Map<String, Object> eventsManagementRef01MatchRt0 = new LinkedHashMap<>();
-
-    Object eventsManagementRef01ListRt0Result = eventsManagementRef01Ent.list(eventsManagementRef01MatchRt0, null);
-    assertTrue(eventsManagementRef01ListRt0Result instanceof List,
-        "expected list result to be an array, got " + eventsManagementRef01ListRt0Result);
-    List<Object> eventsManagementRef01ListRt0 = (List<Object>) eventsManagementRef01ListRt0Result;
-
-    List<Object> notFoundItem = Struct.select(
-        RunnerSupport.entityListToData(eventsManagementRef01ListRt0),
-        Struct.jm("id", eventsManagementRef01Data.get("id")));
-    assertTrue(Struct.isempty(notFoundItem), "expected removed entity to not be in list");
 
   }
 
@@ -157,9 +130,6 @@ public class EventsManagementEntityTest {
     idnames.add("event_type01");
     idnames.add("event_type02");
     idnames.add("event_type03");
-    idnames.add("event01");
-    idnames.add("event02");
-    idnames.add("event03");
     Object idmap = Struct.transform(idnames, Json.parse(
         "{\"`$PACK`\": [\"\", {"
         + "\"`$KEY`\": \"`$COPY`\","
@@ -178,7 +148,7 @@ public class EventsManagementEntityTest {
     envm.put("HOOK0_TEST_EVENTS_MANAGEMENT_ENTID", idmap);
     envm.put("HOOK0_TEST_LIVE", "FALSE");
     envm.put("HOOK0_TEST_EXPLAIN", "FALSE");
-    envm.put("HOOK0_APIKEY", "NONE");
+    envm.put("HOOK0_APIKEY", "");
     Map<String, Object> env = RunnerSupport.envOverride(envm);
 
     Map<String, Object> idmapResolved = Helpers.toMapAny(env.get("HOOK0_TEST_EVENTS_MANAGEMENT_ENTID"));
@@ -188,9 +158,18 @@ public class EventsManagementEntityTest {
 
     boolean live = "TRUE".equals(env.get("HOOK0_TEST_LIVE"));
     if (live) {
-      Map<String, Object> liveOpts = new LinkedHashMap<>();
+      // sdk-test-control.json's test.client.options seeds the live
+      // client; the generated fields below overwrite anything they name.
+      Map<String, Object> liveOpts =
+          new LinkedHashMap<>(RunnerSupport.liveClientOptions());
       liveOpts.put("apikey", env.get("HOOK0_APIKEY"));
-      Object mergedOpts = Struct.merge(Struct.jt(liveOpts, extra));
+      // An empty map, not a null one: merge answers null when its last
+      // entry is null, and basicSetup is normally called with no extras -
+      // so a bare null silently discarded the apikey and server values
+      // above.
+      Map<String, Object> extraOpts =
+          extra == null ? new LinkedHashMap<>() : extra;
+      Object mergedOpts = Struct.merge(Struct.jt(liveOpts, extraOpts));
       client = new Hook0SDK(Helpers.toMapAny(mergedOpts));
     }
 

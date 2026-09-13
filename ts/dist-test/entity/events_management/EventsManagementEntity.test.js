@@ -36,14 +36,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const envlocal = __dirname + '/../../../.env.local';
-require('dotenv').config({ quiet: true, path: [envlocal] });
 const node_path_1 = __importDefault(require("node:path"));
 const Fs = __importStar(require("node:fs"));
 const node_test_1 = require("node:test");
 const node_assert_1 = __importDefault(require("node:assert"));
 const __1 = require("../../..");
 const utility_1 = require("../../utility");
+// AFTER the imports on purpose: TypeScript hoists `import` above any
+// statement in the emitted CommonJS, so a loader placed above them would
+// run only after every imported module had already been evaluated - and
+// anything reading process.env at module scope would miss these values.
+(0, utility_1.loadEnvLocal)(__dirname + '/../../../.env.local');
 (0, node_test_1.describe)('EventsManagementEntity', async () => {
     // Per-test live pacing. Delay is read from sdk-test-control.json's
     // `test.live.delayMs`; only sleeps when HOOK0_TEST_LIVE=TRUE.
@@ -55,7 +58,7 @@ const utility_1 = require("../../utility");
     });
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.HOOK0_TEST_LIVE;
-        for (const op of ['create', 'list', 'remove']) {
+        for (const op of ['list']) {
             if ((0, utility_1.maybeSkipControl)(t, 'entityOp', 'events_management.' + op, live))
                 return;
         }
@@ -71,18 +74,11 @@ const utility_1 = require("../../utility");
         const struct = setup.struct;
         const isempty = struct.isempty;
         const select = struct.select;
-        // CREATE
-        const events_management_ref01_ent = client.EventsManagement();
-        let events_management_ref01_data = setup.data.new.events_management['events_management_ref01'];
-        events_management_ref01_data['event_id'] = setup.idmap['event01'];
-        events_management_ref01_data = (await events_management_ref01_ent.create(events_management_ref01_data)).data();
-        (0, node_assert_1.default)(null != events_management_ref01_data);
+        let events_management_ref01_data = Object.values(setup.data.existing.events_management)[0];
         // LIST
+        const events_management_ref01_ent = client.EventsManagement();
         const events_management_ref01_match = {};
         const events_management_ref01_list = (await events_management_ref01_ent.list(events_management_ref01_match)).map((e) => e.data());
-        // LIST
-        const events_management_ref01_match_rt0 = {};
-        const events_management_ref01_list_rt0 = (await events_management_ref01_ent.list(events_management_ref01_match_rt0)).map((e) => e.data());
     });
 });
 function basicSetup(extra) {
@@ -99,7 +95,7 @@ function basicSetup(extra) {
     const struct = client.utility().struct;
     const merge = struct.merge;
     const transform = struct.transform;
-    let idmap = transform(['events_management01', 'events_management02', 'events_management03', 'event_type01', 'event_type02', 'event_type03', 'event01', 'event02', 'event03'], {
+    let idmap = transform(['events_management01', 'events_management02', 'events_management03', 'event_type01', 'event_type02', 'event_type03'], {
         '`$PACK`': ['', {
                 '`$KEY`': '`$COPY`',
                 '`$VAL`': ['`$FORMAT`', 'upper', '`$COPY`']
@@ -115,16 +111,24 @@ function basicSetup(extra) {
         'HOOK0_TEST_EVENTS_MANAGEMENT_ENTID': idmap,
         'HOOK0_TEST_LIVE': 'FALSE',
         'HOOK0_TEST_EXPLAIN': 'FALSE',
-        'HOOK0_APIKEY': 'NONE',
+        'HOOK0_APIKEY': '',
     });
     idmap = env['HOOK0_TEST_EVENTS_MANAGEMENT_ENTID'];
     const live = 'TRUE' === env.HOOK0_TEST_LIVE;
     if (live) {
         client = new __1.Hook0SDK(merge([
+            // FIRST, so the generated fields below win: sdk-test-control.json's
+            // test.client.options adds to the live client, it does not redirect it.
+            (0, utility_1.liveClientOptions)(),
             {
                 apikey: env.HOOK0_APIKEY,
             },
-            extra
+            // 'extra || {}', not a bare 'extra': struct.merge returns UNDEFINED when the
+            // last entry is undefined, and basicSetup is normally called with no
+            // argument at all - so a bare 'extra' silently discarded the apikey
+            // and server values above and handed the SDK undefined. Harmless
+            // while there was nothing in that object; not harmless now.
+            extra || {}
         ]));
     }
     const setup = {

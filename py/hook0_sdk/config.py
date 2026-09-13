@@ -1,6 +1,14 @@
 # Hook0 SDK configuration
 
 
+# The sekreto plugin DEFINITIONS the model selected per feature, imported
+# above by name from the modules the catalogue's active `plugin.def`
+# entries declare. Handed to each feature (secrets builds its Sekreto
+# with them): a provider kind not listed here is unknown to that SDK.
+FEATURE_PLUGINS = {
+}
+
+
 _shared_config = None
 
 
@@ -79,6 +87,7 @@ def make_config():
       "application": {
         "fields": [
           {
+            "format": "uuid",
             "name": "application_id",
             "req": True,
             "short": "Unique identifier of the application.",
@@ -107,6 +116,7 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "uuid",
             "name": "organization_id",
             "req": True,
             "short": "UUID of the organization this application belongs to.",
@@ -119,6 +129,10 @@ def make_config():
             "type": "`$OBJECT`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "application",
         "op": {
           "create": {
@@ -130,16 +144,27 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/applications/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "applications",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "applications",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "applications",
+                ],
               },
             ],
           },
@@ -162,10 +187,16 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/applications/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "applications",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "applications",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -176,6 +207,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "applications",
+                ],
               },
             ],
           },
@@ -198,17 +234,25 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/applications/{application_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "applications",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "application_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "applications",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -218,6 +262,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "applications",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -240,17 +290,25 @@ def make_config():
                 "kind": "http",
                 "method": "DELETE",
                 "orig": "/api/v1/applications/{application_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "applications",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "application_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "applications",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -260,6 +318,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "applications",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -282,17 +346,25 @@ def make_config():
                 "kind": "http",
                 "method": "PUT",
                 "orig": "/api/v1/applications/{application_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "applications",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "application_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "applications",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -302,6 +374,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "applications",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -313,16 +391,19 @@ def make_config():
       "application_secret": {
         "fields": [
           {
+            "format": "uuid",
             "name": "application_id",
             "req": True,
             "type": "`$STRING`",
           },
           {
+            "format": "date-time",
             "name": "created_at",
             "req": True,
             "type": "`$STRING`",
           },
           {
+            "format": "date-time",
             "name": "deleted_at",
             "type": "`$STRING`",
           },
@@ -335,11 +416,16 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "format": "uuid",
             "name": "token",
             "req": True,
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "application_secret",
         "op": {
           "create": {
@@ -351,16 +437,27 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/application_secrets/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "application_secrets",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "application_secrets",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "application_secrets",
+                ],
               },
             ],
           },
@@ -383,10 +480,16 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/application_secrets/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "application_secrets",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "application_secrets",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -397,6 +500,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "application_secrets",
+                ],
               },
             ],
           },
@@ -419,17 +527,25 @@ def make_config():
                 "kind": "http",
                 "method": "PUT",
                 "orig": "/api/v1/application_secrets/{application_secret_token}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "application_secrets",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "application_secret_token": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "application_secrets",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -439,6 +555,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "application_secrets",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -479,11 +601,19 @@ def make_config():
                 "kind": "http",
                 "method": "DELETE",
                 "orig": "/api/v1/application_secrets/{application_secret_token}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "application_secrets",
-                  "{application_secret_token}",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "application_secrets",
+                  },
+                  {
+                    "var": "application_secret_token",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -495,6 +625,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "application_secrets",
+                  "{application_secret_token}",
+                ],
               },
             ],
           },
@@ -510,6 +646,13 @@ def make_config():
       "event": {
         "fields": [
           {
+            "format": "uuid",
+            "name": "application_id",
+            "req": True,
+            "type": "`$STRING`",
+          },
+          {
+            "format": "uuid",
             "name": "event_id",
             "req": True,
             "type": "`$STRING`",
@@ -538,6 +681,7 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "date-time",
             "name": "occurred_at",
             "req": True,
             "type": "`$STRING`",
@@ -553,13 +697,79 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "format": "date-time",
             "name": "received_at",
             "req": True,
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "event",
         "op": {
+          "create": {
+            "input": "data",
+            "name": "create",
+            "points": [
+              {
+                "args": {
+                  "params": [
+                    {
+                      "kind": "param",
+                      "name": "id",
+                      "orig": "event_id",
+                      "reqd": True,
+                      "type": "`$STRING`",
+                    },
+                  ],
+                },
+                "kind": "http",
+                "method": "POST",
+                "orig": "/api/v1/events/{event_id}/replay",
+                "rename": {
+                  "param": {
+                    "event_id": "id",
+                  },
+                },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "events",
+                  },
+                  {
+                    "var": "id",
+                  },
+                  {
+                    "lit": "replay",
+                  },
+                ],
+                "select": {
+                  "$action": "replay",
+                  "exist": [
+                    "id",
+                  ],
+                },
+                "transform": {
+                  "req": "`reqdata`",
+                  "res": "`body`",
+                },
+                "parts": [
+                  "api",
+                  "v1",
+                  "events",
+                  "{id}",
+                  "replay",
+                ],
+              },
+            ],
+          },
           "list": {
             "input": "data",
             "name": "list",
@@ -579,10 +789,16 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/events/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "events",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "events",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -593,6 +809,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "events",
+                ],
               },
             ],
           },
@@ -624,17 +845,25 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/events/{event_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "events",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "event_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "events",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "application_id",
@@ -645,6 +874,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "events",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -656,6 +891,7 @@ def make_config():
       "event_type": {
         "fields": [
           {
+            "format": "uuid",
             "name": "application_id",
             "req": True,
             "type": "`$STRING`",
@@ -700,6 +936,10 @@ def make_config():
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "event_type",
         "op": {
           "create": {
@@ -711,16 +951,27 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/event_types/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "event_types",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "event_types",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "event_types",
+                ],
               },
             ],
           },
@@ -743,10 +994,16 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/event_types/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "event_types",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "event_types",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -757,6 +1014,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "event_types",
+                ],
               },
             ],
           },
@@ -788,17 +1050,25 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/event_types/{event_type_name}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "event_types",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "event_type_name": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "event_types",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "application_id",
@@ -809,6 +1079,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "event_types",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -818,53 +1094,9 @@ def make_config():
         },
       },
       "events_management": {
-        "fields": [
-          {
-            "name": "application_id",
-            "req": True,
-            "type": "`$STRING`",
-          },
-        ],
+        "fields": [],
         "name": "events_management",
         "op": {
-          "create": {
-            "input": "data",
-            "name": "create",
-            "points": [
-              {
-                "args": {
-                  "params": [
-                    {
-                      "kind": "param",
-                      "name": "event_id",
-                      "orig": "event_id",
-                      "reqd": True,
-                      "type": "`$STRING`",
-                    },
-                  ],
-                },
-                "kind": "http",
-                "method": "POST",
-                "orig": "/api/v1/events/{event_id}/replay",
-                "parts": [
-                  "api",
-                  "v1",
-                  "events",
-                  "{event_id}",
-                  "replay",
-                ],
-                "select": {
-                  "exist": [
-                    "event_id",
-                  ],
-                },
-                "transform": {
-                  "req": "`reqdata`",
-                  "res": "`body`",
-                },
-              },
-            ],
-          },
           "list": {
             "input": "data",
             "name": "list",
@@ -874,16 +1106,27 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/payload_content_types/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "payload_content_types",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "payload_content_types",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "payload_content_types",
+                ],
               },
             ],
           },
@@ -915,11 +1158,19 @@ def make_config():
                 "kind": "http",
                 "method": "DELETE",
                 "orig": "/api/v1/event_types/{event_type_name}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "event_types",
-                  "{event_type_name}",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "event_types",
+                  },
+                  {
+                    "var": "event_type_name",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -931,6 +1182,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "event_types",
+                  "{event_type_name}",
+                ],
               },
             ],
           },
@@ -940,20 +1197,19 @@ def make_config():
             [
               "event_type",
             ],
-            [
-              "event",
-            ],
           ],
         },
       },
       "events_per_day_entry": {
         "fields": [
           {
+            "format": "int32",
             "name": "amount",
             "req": True,
             "type": "`$INTEGER`",
           },
           {
+            "format": "uuid",
             "name": "application_id",
             "req": True,
             "type": "`$STRING`",
@@ -964,6 +1220,7 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "format": "date",
             "name": "date",
             "req": True,
             "type": "`$STRING`",
@@ -1007,11 +1264,19 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/events_per_day/application",
-                "parts": [
-                  "api",
-                  "v1",
-                  "events_per_day",
-                  "application",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "events_per_day",
+                  },
+                  {
+                    "lit": "application",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -1024,6 +1289,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "events_per_day",
+                  "application",
+                ],
               },
               {
                 "args": {
@@ -1052,11 +1323,19 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/events_per_day/organization",
-                "parts": [
-                  "api",
-                  "v1",
-                  "events_per_day",
-                  "organization",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "events_per_day",
+                  },
+                  {
+                    "lit": "organization",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -1069,6 +1348,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "events_per_day",
+                  "organization",
+                ],
               },
             ],
           },
@@ -1085,6 +1370,7 @@ def make_config():
             "type": "`$BOOLEAN`",
           },
           {
+            "format": "int64",
             "name": "database_duration_ms",
             "req": True,
             "type": "`$INTEGER`",
@@ -1094,6 +1380,7 @@ def make_config():
             "type": "`$BOOLEAN`",
           },
           {
+            "format": "int64",
             "name": "object_storage_duration_ms",
             "type": "`$INTEGER`",
           },
@@ -1102,10 +1389,12 @@ def make_config():
             "type": "`$BOOLEAN`",
           },
           {
+            "format": "int64",
             "name": "pulsar_duration_ms",
             "type": "`$INTEGER`",
           },
           {
+            "format": "int64",
             "name": "total_duration_ms",
             "req": True,
             "type": "`$INTEGER`",
@@ -1131,10 +1420,16 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/health/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "health",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "health",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -1145,6 +1440,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "health",
+                ],
               },
             ],
           },
@@ -1199,16 +1499,27 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/environment_variables/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "environment_variables",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "environment_variables",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "environment_variables",
+                ],
               },
             ],
           },
@@ -1220,12 +1531,14 @@ def make_config():
       "ingested_event": {
         "fields": [
           {
+            "format": "uuid",
             "name": "application_id",
             "req": True,
             "short": "UUID of the application this event belongs to.",
             "type": "`$STRING`",
           },
           {
+            "format": "uuid",
             "name": "event_id",
             "short": "Optional unique identifier for this event (client-generated UUID).",
             "type": "`$STRING`",
@@ -1248,6 +1561,7 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "date-time",
             "name": "occurred_at",
             "req": True,
             "short": "Timestamp when the event occurred.",
@@ -1277,16 +1591,27 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/event/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "event",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "event",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "event",
+                ],
               },
             ],
           },
@@ -1327,6 +1652,7 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "int32",
             "name": "password_minimum_length",
             "req": True,
             "type": "`$INTEGER`",
@@ -1358,16 +1684,27 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/instance/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "instance",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "instance",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "instance",
+                ],
               },
             ],
           },
@@ -1400,34 +1737,62 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/auth/login",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "auth",
+                  },
+                  {
+                    "lit": "login",
+                  },
+                ],
+                "select": {},
+                "transform": {
+                  "req": "`reqdata`",
+                  "res": "`body`",
+                },
                 "parts": [
                   "api",
                   "v1",
                   "auth",
                   "login",
                 ],
-                "select": {},
-                "transform": {
-                  "req": "`reqdata`",
-                  "res": "`body`",
-                },
               },
               {
                 "args": {},
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/auth/refresh",
-                "parts": [
-                  "api",
-                  "v1",
-                  "auth",
-                  "refresh",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "auth",
+                  },
+                  {
+                    "lit": "refresh",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "auth",
+                  "refresh",
+                ],
               },
             ],
           },
@@ -1458,6 +1823,7 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "uuid",
             "name": "organization_id",
             "req": True,
             "type": "`$STRING`",
@@ -1483,6 +1849,10 @@ def make_config():
             "type": "`$ARRAY`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "organization",
         "op": {
           "create": {
@@ -1494,16 +1864,27 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/organizations/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "organizations",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "organizations",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "organizations",
+                ],
               },
             ],
           },
@@ -1516,16 +1897,27 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/organizations/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "organizations",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "organizations",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "organizations",
+                ],
               },
             ],
           },
@@ -1548,17 +1940,25 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/organizations/{organization_id}/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "organization_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "organizations",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -1568,6 +1968,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -1590,17 +1996,25 @@ def make_config():
                 "kind": "http",
                 "method": "DELETE",
                 "orig": "/api/v1/organizations/{organization_id}/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "organization_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "organizations",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -1610,6 +2024,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -1632,17 +2052,25 @@ def make_config():
                 "kind": "http",
                 "method": "PUT",
                 "orig": "/api/v1/organizations/{organization_id}/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "organization_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "organizations",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -1652,6 +2080,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -1672,11 +2106,16 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "format": "uuid",
             "name": "user_id",
             "req": True,
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "organization_edit_role",
         "op": {
           "update": {
@@ -1698,18 +2137,28 @@ def make_config():
                 "kind": "http",
                 "method": "PUT",
                 "orig": "/api/v1/organizations/{organization_id}/invite",
-                "parts": [
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{id}",
-                  "invite",
-                ],
                 "rename": {
                   "param": {
                     "organization_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "organizations",
+                  },
+                  {
+                    "var": "id",
+                  },
+                  {
+                    "lit": "invite",
+                  },
+                ],
                 "select": {
                   "$action": "invite",
                   "exist": [
@@ -1720,6 +2169,13 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{id}",
+                  "invite",
+                ],
               },
             ],
           },
@@ -1741,6 +2197,7 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "format": "int32",
             "name": "status",
             "req": True,
             "type": "`$INTEGER`",
@@ -1751,6 +2208,10 @@ def make_config():
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "problem",
         "op": {
           "list": {
@@ -1762,16 +2223,27 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/errors/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "errors",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "errors",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "errors",
+                ],
               },
             ],
           },
@@ -1783,31 +2255,37 @@ def make_config():
       "quota": {
         "fields": [
           {
+            "format": "int32",
             "name": "global_applications_per_organization_limit",
             "req": True,
             "type": "`$INTEGER`",
           },
           {
+            "format": "int32",
             "name": "global_days_of_events_retention_limit",
             "req": True,
             "type": "`$INTEGER`",
           },
           {
+            "format": "int32",
             "name": "global_event_types_per_application_limit",
             "req": True,
             "type": "`$INTEGER`",
           },
           {
+            "format": "int32",
             "name": "global_events_per_day_limit",
             "req": True,
             "type": "`$INTEGER`",
           },
           {
+            "format": "int32",
             "name": "global_members_per_organization_limit",
             "req": True,
             "type": "`$INTEGER`",
           },
           {
+            "format": "int32",
             "name": "global_subscriptions_per_application_limit",
             "req": True,
             "type": "`$INTEGER`",
@@ -1824,16 +2302,27 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/quotas/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "quotas",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "quotas",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body.limits`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "quotas",
+                ],
               },
             ],
           },
@@ -1885,16 +2374,27 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/register/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "register",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "register",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "register",
+                ],
               },
             ],
           },
@@ -1906,11 +2406,13 @@ def make_config():
       "request_attempt": {
         "fields": [
           {
+            "format": "date-time",
             "name": "created_at",
             "req": True,
             "type": "`$STRING`",
           },
           {
+            "format": "date-time",
             "name": "delay_until",
             "type": "`$STRING`",
           },
@@ -1920,15 +2422,18 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "uuid",
             "name": "event_id",
             "req": True,
             "type": "`$STRING`",
           },
           {
+            "format": "date-time",
             "name": "failed_at",
             "type": "`$STRING`",
           },
           {
+            "format": "int32",
             "name": "http_response_status",
             "type": "`$INTEGER`",
           },
@@ -1937,19 +2442,23 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "format": "date-time",
             "name": "picked_at",
             "type": "`$STRING`",
           },
           {
+            "format": "uuid",
             "name": "request_attempt_id",
             "req": True,
             "type": "`$STRING`",
           },
           {
+            "format": "uuid",
             "name": "response_id",
             "type": "`$STRING`",
           },
           {
+            "format": "int32",
             "name": "retry_count",
             "req": True,
             "type": "`$INTEGER`",
@@ -1966,10 +2475,15 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "date-time",
             "name": "succeeded_at",
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "request_attempt",
         "op": {
           "list": {
@@ -2027,10 +2541,16 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/request_attempts/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "request_attempts",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "request_attempts",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -2047,6 +2567,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "request_attempts",
+                ],
               },
             ],
           },
@@ -2078,17 +2603,25 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/request_attempts/{request_attempt_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "request_attempts",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "request_attempt_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "request_attempts",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "application_id",
@@ -2099,6 +2632,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "request_attempts",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -2114,6 +2653,10 @@ def make_config():
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "response",
         "op": {
           "load": {
@@ -2144,17 +2687,25 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/responses/{response_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "responses",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "response_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "responses",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "application_id",
@@ -2165,6 +2716,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body.headers`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "responses",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -2196,12 +2753,22 @@ def make_config():
                 "kind": "http",
                 "method": "DELETE",
                 "orig": "/api/v1/organizations/{organization_id}/invite",
-                "parts": [
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{organization_id}",
-                  "invite",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "organizations",
+                  },
+                  {
+                    "var": "organization_id",
+                  },
+                  {
+                    "lit": "invite",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -2212,6 +2779,13 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{organization_id}",
+                  "invite",
+                ],
               },
             ],
           },
@@ -2232,6 +2806,7 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "format": "date-time",
             "name": "created_at",
             "req": True,
             "type": "`$STRING`",
@@ -2246,16 +2821,22 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "format": "uuid",
             "name": "organization_id",
             "req": True,
             "type": "`$STRING`",
           },
           {
+            "format": "uuid",
             "name": "token_id",
             "req": True,
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "service_token",
         "op": {
           "create": {
@@ -2267,16 +2848,27 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/service_token/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "service_token",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "service_token",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "service_token",
+                ],
               },
             ],
           },
@@ -2299,10 +2891,16 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/service_token/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "service_token",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "service_token",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -2313,6 +2911,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "service_token",
+                ],
               },
             ],
           },
@@ -2344,17 +2947,25 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/service_token/{service_token_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "service_token",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "service_token_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "service_token",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -2365,6 +2976,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "service_token",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -2396,17 +3013,25 @@ def make_config():
                 "kind": "http",
                 "method": "DELETE",
                 "orig": "/api/v1/service_token/{service_token_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "service_token",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "service_token_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "service_token",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -2417,6 +3042,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "service_token",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -2439,17 +3070,25 @@ def make_config():
                 "kind": "http",
                 "method": "PUT",
                 "orig": "/api/v1/service_token/{service_token_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "service_token",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "service_token_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "service_token",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -2459,6 +3098,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "service_token",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -2470,11 +3115,13 @@ def make_config():
       "subscription": {
         "fields": [
           {
+            "format": "uuid",
             "name": "application_id",
             "req": True,
             "type": "`$STRING`",
           },
           {
+            "format": "date-time",
             "name": "created_at",
             "req": True,
             "type": "`$STRING`",
@@ -2565,11 +3212,13 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "uuid",
             "name": "secret",
             "req": True,
             "type": "`$STRING`",
           },
           {
+            "format": "uuid",
             "name": "subscription_id",
             "req": True,
             "type": "`$STRING`",
@@ -2580,11 +3229,16 @@ def make_config():
             "type": "`$OBJECT`",
           },
           {
+            "format": "date-time",
             "name": "updated_at",
             "req": True,
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "subscription",
         "op": {
           "create": {
@@ -2596,16 +3250,27 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/subscriptions/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "subscriptions",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "subscriptions",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "subscriptions",
+                ],
               },
             ],
           },
@@ -2628,10 +3293,16 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/subscriptions/",
-                "parts": [
-                  "api",
-                  "v1",
-                  "subscriptions",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "subscriptions",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -2642,6 +3313,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "subscriptions",
+                ],
               },
             ],
           },
@@ -2664,17 +3340,25 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/api/v1/subscriptions/{subscription_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "subscriptions",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "subscription_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "subscriptions",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -2684,6 +3368,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "subscriptions",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -2715,17 +3405,25 @@ def make_config():
                 "kind": "http",
                 "method": "DELETE",
                 "orig": "/api/v1/subscriptions/{subscription_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "subscriptions",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "subscription_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "subscriptions",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "application_id",
@@ -2736,6 +3434,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "subscriptions",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -2758,17 +3462,25 @@ def make_config():
                 "kind": "http",
                 "method": "PUT",
                 "orig": "/api/v1/subscriptions/{subscription_id}",
-                "parts": [
-                  "api",
-                  "v1",
-                  "subscriptions",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "subscription_id": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "subscriptions",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -2778,6 +3490,12 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "subscriptions",
+                  "{id}",
+                ],
               },
             ],
           },
@@ -2815,85 +3533,155 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/auth/begin-reset-password",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "auth",
+                  },
+                  {
+                    "lit": "begin-reset-password",
+                  },
+                ],
+                "select": {},
+                "transform": {
+                  "req": "`reqdata`",
+                  "res": "`body`",
+                },
                 "parts": [
                   "api",
                   "v1",
                   "auth",
                   "begin-reset-password",
                 ],
-                "select": {},
-                "transform": {
-                  "req": "`reqdata`",
-                  "res": "`body`",
-                },
               },
               {
                 "args": {},
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/auth/logout",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "auth",
+                  },
+                  {
+                    "lit": "logout",
+                  },
+                ],
+                "select": {},
+                "transform": {
+                  "req": "`reqdata`",
+                  "res": "`body`",
+                },
                 "parts": [
                   "api",
                   "v1",
                   "auth",
                   "logout",
                 ],
-                "select": {},
-                "transform": {
-                  "req": "`reqdata`",
-                  "res": "`body`",
-                },
               },
               {
                 "args": {},
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/auth/password",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "auth",
+                  },
+                  {
+                    "lit": "password",
+                  },
+                ],
+                "select": {},
+                "transform": {
+                  "req": "`reqdata`",
+                  "res": "`body`",
+                },
                 "parts": [
                   "api",
                   "v1",
                   "auth",
                   "password",
                 ],
-                "select": {},
-                "transform": {
-                  "req": "`reqdata`",
-                  "res": "`body`",
-                },
               },
               {
                 "args": {},
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/auth/reset-password",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "auth",
+                  },
+                  {
+                    "lit": "reset-password",
+                  },
+                ],
+                "select": {},
+                "transform": {
+                  "req": "`reqdata`",
+                  "res": "`body`",
+                },
                 "parts": [
                   "api",
                   "v1",
                   "auth",
                   "reset-password",
                 ],
-                "select": {},
-                "transform": {
-                  "req": "`reqdata`",
-                  "res": "`body`",
-                },
               },
               {
                 "args": {},
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/auth/verify-email",
-                "parts": [
-                  "api",
-                  "v1",
-                  "auth",
-                  "verify-email",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "auth",
+                  },
+                  {
+                    "lit": "verify-email",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "auth",
+                  "verify-email",
+                ],
               },
             ],
           },
@@ -2936,12 +3724,22 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/api/v1/organizations/{organization_id}/invite",
-                "parts": [
-                  "api",
-                  "v1",
-                  "organizations",
-                  "{organization_id}",
-                  "invite",
+                "segments": [
+                  {
+                    "lit": "api",
+                  },
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "organizations",
+                  },
+                  {
+                    "var": "organization_id",
+                  },
+                  {
+                    "lit": "invite",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -2952,6 +3750,13 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "api",
+                  "v1",
+                  "organizations",
+                  "{organization_id}",
+                  "invite",
+                ],
               },
             ],
           },

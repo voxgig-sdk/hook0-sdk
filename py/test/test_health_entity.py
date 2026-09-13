@@ -90,7 +90,7 @@ def _health_basic_setup(extra):
         "HOOK0_TEST_HEALTH_ENTID": idmap,
         "HOOK0_TEST_LIVE": "FALSE",
         "HOOK0_TEST_EXPLAIN": "FALSE",
-        "HOOK0_APIKEY": "NONE",
+        "HOOK0_APIKEY": "",
     })
 
     idmap_resolved = helpers.to_map(
@@ -100,6 +100,10 @@ def _health_basic_setup(extra):
 
     if env.get("HOOK0_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([
+            # FIRST, so the generated fields below win: sdk-test-control.json's
+            # test.client.options adds to the live client, it does not
+            # redirect it.
+            runner.live_client_options(),
             {
                 "apikey": env.get("HOOK0_APIKEY"),
             },

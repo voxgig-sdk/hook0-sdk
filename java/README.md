@@ -341,6 +341,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
+| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -352,9 +353,9 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | `payload_content_type` |  |
 | `received_at` |  |
 
-Operations: list, load.
+Operations: create, list, load.
 
-API path: `/api/v1/events/`
+API path: `/api/v1/events/{event_id}/replay`
 
 #### EventType
 
@@ -378,11 +379,10 @@ API path: `/api/v1/event_types/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 
-Operations: create, list, remove.
+Operations: list, remove.
 
-API path: `/api/v1/events/{event_id}/replay`
+API path: `/api/v1/payload_content_types/`
 
 #### EventsPerDayEntry
 
@@ -770,6 +770,7 @@ Create an instance: `SdkEntity event = client.event(null);`
 
 | Method | Description |
 | --- | --- |
+| `create(data, null)` | Create a new entity with the given data. |
 | `list(null, null)` | List entities, optionally matching the given criteria. |
 | `load(match, null)` | Load a single entity by match criteria. |
 
@@ -777,6 +778,7 @@ Create an instance: `SdkEntity event = client.event(null);`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `application_id` | `String` |  |
 | `event_id` | `String` |  |
 | `event_type_name` | `String` |  |
 | `id` | `String` |  |
@@ -791,13 +793,30 @@ Create an instance: `SdkEntity event = client.event(null);`
 #### Example: Load
 
 ```java
-Object event = client.event(null).load(Map.of("id", "event_id"), null);
+Object event = client.event(null).load(Map.of("id", "event_id", "application_id", "application_id"), null);
 ```
 
 #### Example: List
 
 ```java
 Object eventList = client.event(null).list(null, null);
+```
+
+#### Example: Create
+
+```java
+Object event = client.event(null).create(Map.of(
+    "id", "example_id",  // String
+    "application_id", "example_application_id",  // String
+    "event_id", "example_event_id",  // String
+    "event_type_name", "example_event_type_name",  // String
+    "ip", "example_ip",  // String
+    "labels", Map.of(),  // Map<String, Object>
+    "occurred_at", "example_occurred_at",  // String
+    "payload", "example_payload",  // String
+    "payload_content_type", "example_payload_content_type",  // String
+    "received_at", "example_received_at"  // String
+), null);
 ```
 
 
@@ -830,7 +849,7 @@ Create an instance: `SdkEntity eventType = client.eventType(null);`
 #### Example: Load
 
 ```java
-Object eventType = client.eventType(null).load(Map.of("id", "event_type_id"), null);
+Object eventType = client.eventType(null).load(Map.of("id", "event_type_id", "application_id", "application_id"), null);
 ```
 
 #### Example: List
@@ -863,29 +882,13 @@ Create an instance: `SdkEntity eventsManagement = client.eventsManagement(null);
 
 | Method | Description |
 | --- | --- |
-| `create(data, null)` | Create a new entity with the given data. |
 | `list(null, null)` | List entities, optionally matching the given criteria. |
 | `remove(match, null)` | Remove the matching entity. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `application_id` | `String` |  |
 
 #### Example: List
 
 ```java
 Object eventsManagementList = client.eventsManagement(null).list(null, null);
-```
-
-#### Example: Create
-
-```java
-Object eventsManagement = client.eventsManagement(null).create(Map.of(
-    "event_id", "example_event_id",  // String
-    "application_id", "example_application_id"  // String
-), null);
 ```
 
 
@@ -1265,7 +1268,7 @@ Create an instance: `SdkEntity requestAttempt = client.requestAttempt(null);`
 #### Example: Load
 
 ```java
-Object requestAttempt = client.requestAttempt(null).load(Map.of("id", "request_attempt_id"), null);
+Object requestAttempt = client.requestAttempt(null).load(Map.of("id", "request_attempt_id", "application_id", "application_id"), null);
 ```
 
 #### Example: List
@@ -1294,7 +1297,7 @@ Create an instance: `SdkEntity response = client.response(null);`
 #### Example: Load
 
 ```java
-Object response = client.response(null).load(Map.of("id", "response_id"), null);
+Object response = client.response(null).load(Map.of("id", "response_id", "application_id", "application_id"), null);
 ```
 
 
@@ -1337,7 +1340,7 @@ Create an instance: `SdkEntity serviceToken = client.serviceToken(null);`
 #### Example: Load
 
 ```java
-Object serviceToken = client.serviceToken(null).load(Map.of("id", "service_token_id"), null);
+Object serviceToken = client.serviceToken(null).load(Map.of("id", "service_token_id", "organization_id", "organization_id"), null);
 ```
 
 #### Example: List
@@ -1481,6 +1484,29 @@ Object userInvitation = client.userInvitation(null).create(Map.of(
     "role", "example_role"  // String
 ), null);
 ```
+
+## Features
+
+This SDK ships 1 optional features. Each is **inactive until you
+switch it on**, so an SDK you have not configured behaves exactly as if none of
+them existed — no retries, no cache, no logging, no measurable overhead.
+
+Activate a feature by name in the client options, alongside the options shown
+above:
+
+| Feature | What it does |
+|---|---|
+| [`test`](#test) | In-memory mock transport for testing without a live server |
+
+### test
+
+In-memory mock transport for testing without a live server.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Set `feature.test.active` to enable it, then override any of the options above.
 
 
 ## Advanced

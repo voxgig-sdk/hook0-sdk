@@ -6,12 +6,14 @@ main: kit: entity: ingested_event: {
 
   fields: [
     {
+      format: "uuid"
       name: "application_id"
       req: true
       short: "UUID of the application this event belongs to."
       type: "`$STRING`"
     }
     {
+      format: "uuid"
       name: "event_id"
       req: false
       short: "Optional unique identifier for this event (client-generated UUID)."
@@ -36,6 +38,7 @@ main: kit: entity: ingested_event: {
       type: "`$OBJECT`"
     }
     {
+      format: "date-time"
       name: "occurred_at"
       req: true
       short: "Timestamp when the event occurred."
@@ -63,10 +66,16 @@ main: kit: entity: ingested_event: {
         {
           method: "POST"
           orig: "/api/v1/event/"
-          parts: [
-            "api"
-            "v1"
-            "event"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event"
+            }
           ]
           transform: {
             req: "`reqdata`"

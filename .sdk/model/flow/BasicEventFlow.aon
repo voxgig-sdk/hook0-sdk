@@ -7,6 +7,18 @@ main: kit: flow: BasicEventFlow:
   name: "BasicEventFlow",
   step: [
     {
+      input: {
+        ref: "event_ref01"
+      }
+
+      match: {
+        event_id: "event01"
+      }
+
+      op: "create"
+    }
+
+    {
       op: "list",
       valid: [
         {

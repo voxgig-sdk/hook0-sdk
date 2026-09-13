@@ -123,15 +123,17 @@ function application_direct_setup($mockres)
     $env = Runner::env_override([
         "HOOK0_TEST_APPLICATION_ENTID" => [],
         "HOOK0_TEST_LIVE" => "FALSE",
-        "HOOK0_APIKEY" => "NONE",
+        "HOOK0_APIKEY" => "",
     ]);
 
     $live = $env["HOOK0_TEST_LIVE"] === "TRUE";
 
     if ($live) {
-        $merged_opts = [
+        // Merged so the generated fields win: sdk-test-control.json's
+        // test.client.options adds to the live client, it does not redirect it.
+        $merged_opts = array_merge(Runner::live_client_options(), [
             "apikey" => $env["HOOK0_APIKEY"],
-        ];
+        ]);
         $client = new Hook0SDK($merged_opts);
         return [
             "client" => $client,

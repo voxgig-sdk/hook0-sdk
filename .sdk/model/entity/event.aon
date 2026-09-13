@@ -6,6 +6,13 @@ main: kit: entity: event: {
 
   fields: [
     {
+      format: "uuid"
+      name: "application_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      format: "uuid"
       name: "event_id"
       req: true
       type: "`$STRING`"
@@ -36,6 +43,7 @@ main: kit: entity: event: {
       type: "`$OBJECT`"
     }
     {
+      format: "date-time"
       name: "occurred_at"
       req: true
       type: "`$STRING`"
@@ -51,6 +59,7 @@ main: kit: entity: event: {
       type: "`$STRING`"
     }
     {
+      format: "date-time"
       name: "received_at"
       req: true
       type: "`$STRING`"
@@ -64,6 +73,58 @@ main: kit: entity: event: {
 
   name: "event"
   op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "id"
+                orig: "event_id"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "POST"
+          orig: "/api/v1/events/{event_id}/replay"
+          rename: {
+            param: {
+              event_id: "id"
+            }
+          }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "events"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "replay"
+            }
+          ]
+          select: {
+            "$action": "replay"
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
     list: {
       name: "list"
       points: [
@@ -81,10 +142,16 @@ main: kit: entity: event: {
           }
           method: "GET"
           orig: "/api/v1/events/"
-          parts: [
-            "api"
-            "v1"
-            "events"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "events"
+            }
           ]
           select: {
             exist: [
@@ -124,17 +191,25 @@ main: kit: entity: event: {
           }
           method: "GET"
           orig: "/api/v1/events/{event_id}"
-          parts: [
-            "api"
-            "v1"
-            "events"
-            "{id}"
-          ]
           rename: {
             param: {
               event_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "events"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "application_id"

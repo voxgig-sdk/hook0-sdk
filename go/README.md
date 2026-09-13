@@ -361,6 +361,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
+| `"application_id"` |  |
 | `"event_id"` |  |
 | `"event_type_name"` |  |
 | `"id"` |  |
@@ -372,9 +373,9 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | `"payload_content_type"` |  |
 | `"received_at"` |  |
 
-Operations: List, Load.
+Operations: Create, List, Load.
 
-API path: `/api/v1/events/`
+API path: `/api/v1/events/{event_id}/replay`
 
 #### EventType
 
@@ -398,11 +399,10 @@ API path: `/api/v1/event_types/`
 
 | Field | Description |
 | --- | --- |
-| `"application_id"` |  |
 
-Operations: Create, List, Remove.
+Operations: List, Remove.
 
-API path: `/api/v1/events/{event_id}/replay`
+API path: `/api/v1/payload_content_types/`
 
 #### EventsPerDayEntry
 
@@ -812,11 +812,13 @@ Create an instance: `event := client.Event(nil)`
 | --- | --- |
 | `List(match, ctrl)` | List entities matching the criteria. |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `application_id` | `string` |  |
 | `event_id` | `string` |  |
 | `event_type_name` | `string` |  |
 | `id` | `string` |  |
@@ -831,7 +833,7 @@ Create an instance: `event := client.Event(nil)`
 #### Example: Load
 
 ```go
-event, err := client.Event(nil).Load(map[string]any{"id": "event_id"}, nil)
+event, err := client.Event(nil).Load(map[string]any{"id": "event_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -846,6 +848,27 @@ if err != nil {
     panic(err)
 }
 fmt.Println(events) // the array of records
+```
+
+#### Example: Create
+
+```go
+result, err := client.Event(nil).Create(map[string]any{
+    "id": "example_id",
+    "application_id": "example_application_id",
+    "event_id": "example_event_id",
+    "event_type_name": "example_event_type_name",
+    "ip": "example_ip",
+    "labels": map[string]any{},
+    "occurred_at": "example_occurred_at",
+    "payload": "example_payload",
+    "payload_content_type": "example_payload_content_type",
+    "received_at": "example_received_at",
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
 ```
 
 
@@ -878,7 +901,7 @@ Create an instance: `eventType := client.EventType(nil)`
 #### Example: Load
 
 ```go
-eventType, err := client.EventType(nil).Load(map[string]any{"id": "event_type_id"}, nil)
+eventType, err := client.EventType(nil).Load(map[string]any{"id": "event_type_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -924,14 +947,7 @@ Create an instance: `eventsManagement := client.EventsManagement(nil)`
 | Method | Description |
 | --- | --- |
 | `List(match, ctrl)` | List entities matching the criteria. |
-| `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Remove(match, ctrl)` | Remove the matching entity. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `application_id` | `string` |  |
 
 #### Example: List
 
@@ -941,19 +957,6 @@ if err != nil {
     panic(err)
 }
 fmt.Println(eventsManagements) // the array of records
-```
-
-#### Example: Create
-
-```go
-result, err := client.EventsManagement(nil).Create(map[string]any{
-    "event_id": "example_event_id",
-    "application_id": "example_application_id",
-}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result)
 ```
 
 
@@ -1381,7 +1384,7 @@ Create an instance: `requestAttempt := client.RequestAttempt(nil)`
 #### Example: Load
 
 ```go
-requestAttempt, err := client.RequestAttempt(nil).Load(map[string]any{"id": "request_attempt_id"}, nil)
+requestAttempt, err := client.RequestAttempt(nil).Load(map[string]any{"id": "request_attempt_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1418,7 +1421,7 @@ Create an instance: `response := client.Response(nil)`
 #### Example: Load
 
 ```go
-response, err := client.Response(nil).Load(map[string]any{"id": "response_id"}, nil)
+response, err := client.Response(nil).Load(map[string]any{"id": "response_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1465,7 +1468,7 @@ Create an instance: `serviceToken := client.ServiceToken(nil)`
 #### Example: Load
 
 ```go
-serviceToken, err := client.ServiceToken(nil).Load(map[string]any{"id": "service_token_id"}, nil)
+serviceToken, err := client.ServiceToken(nil).Load(map[string]any{"id": "service_token_id", "organization_id": "organization_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1641,6 +1644,29 @@ if err != nil {
 }
 fmt.Println(result)
 ```
+
+## Features
+
+This SDK ships 1 optional features. Each is **inactive until you
+switch it on**, so an SDK you have not configured behaves exactly as if none of
+them existed — no retries, no cache, no logging, no measurable overhead.
+
+Activate a feature by name in the client options, alongside the options shown
+above:
+
+| Feature | What it does |
+|---|---|
+| [`test`](#test) | In-memory mock transport for testing without a live server |
+
+### test
+
+In-memory mock transport for testing without a live server.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Set `feature.test.active` to enable it, then override any of the options above.
 
 
 ## Advanced

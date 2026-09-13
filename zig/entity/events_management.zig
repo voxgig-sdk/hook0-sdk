@@ -225,9 +225,9 @@ pub const EventsManagementEntity = struct {
         if (data == .array) {
             return data.array.data.items;
         } else if (!h.is_noval(data)) {
-            var out = std.ArrayList(Value).init(h.A());
-            out.append(data) catch {};
-            return out.toOwnedSlice() catch &.{};
+            var out: std.ArrayList(Value) = .empty;
+            out.append(h.A(), data) catch {};
+            return out.toOwnedSlice(h.A()) catch &.{};
         }
         return &.{};
     }
@@ -322,18 +322,18 @@ pub const EventsManagementEntity = struct {
         // `list` resolves to one ENTITY per record. make_result cannot build them
         // here — it works in Value, which has no slot for an entity — so the op
         // does, mirroring what the dynamic targets get from make_result.
-        var items = std.ArrayList(*EventsManagementEntity).init(h.A());
+        var items: std.ArrayList(*EventsManagementEntity) = .empty;
         if (out == .array) {
             for (out.array.data.items) |entry| {
                 const ent = EventsManagementEntity.new(self.client, h.clone(self.entopts));
                 if (entry == .object) {
                     _ = ent.data_impl(entry);
                 }
-                items.append(ent) catch {};
+                items.append(h.A(), ent) catch {};
             }
         }
     
-        return EntListResult{ .ok = items.toOwnedSlice() catch &[_]*EventsManagementEntity{} };
+        return EntListResult{ .ok = items.toOwnedSlice(h.A()) catch &[_]*EventsManagementEntity{} };
     }
     
     fn list_post_done(self: *EventsManagementEntity, ctx: *Context) void {
@@ -344,28 +344,11 @@ pub const EventsManagementEntity = struct {
     }
     
 
-
-    pub fn create(self: *EventsManagementEntity, reqdata: Value, ctrl: Value) EntResult {
-        const ctx = self.utility.make_context(CtxSpec{
-            .opname = "create",
-            .ctrl = ctrl,
-            .mtch = self.mtch,
-            .data = self.data,
-            .reqdata = reqdata,
-        }, self.ent_ctx());
-        return self.run_op_ent(ctx, create_post_done);
+    pub fn create(self: *EventsManagementEntity, _reqdata: Value, _ctrl: Value) EntResult {
+        _ = _reqdata;
+        _ = _ctrl;
+        return .{ .err = h.unsupported_op("create", self.name) };
     }
-    
-    fn create_post_done(self: *EventsManagementEntity, ctx: *Context) void {
-        if (ctx.result) |result| {
-            const resdata = result.resdata;
-            if (!h.is_noval(resdata)) {
-                const cm = h.to_map(h.clone(resdata));
-                self.data = if (cm == .object) cm else h.omap();
-            }
-        }
-    }
-    
 
     pub fn update(self: *EventsManagementEntity, _reqdata: Value, _ctrl: Value) EntResult {
         _ = _reqdata;

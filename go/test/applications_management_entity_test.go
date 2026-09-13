@@ -48,7 +48,7 @@ func TestApplicationsManagementEntity(t *testing.T) {
 			return
 		}
 		// Bootstrap entity data from existing test data (no create step in flow).
-		applicationsManagementRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath("existing.applications_management", setup.data)))
+		applicationsManagementRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.applications_management")))
 		var applicationsManagementRef01Data map[string]any
 		if len(applicationsManagementRef01DataRaw) > 0 {
 			applicationsManagementRef01Data = core.ToMapAny(applicationsManagementRef01DataRaw[0][1])
@@ -84,7 +84,7 @@ func applications_managementBasicSetup(extra map[string]any) *entityTestSetup {
 	client := sdk.TestSDK(options, extra)
 
 	// Generate idmap via transform, matching TS pattern.
-	idmap := vs.Transform(
+	idmap, _ := vs.Transform(
 		[]any{"applications_management01", "applications_management02", "applications_management03", "application_secret01", "application_secret02", "application_secret03"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
@@ -104,7 +104,7 @@ func applications_managementBasicSetup(extra map[string]any) *entityTestSetup {
 		"HOOK0_TEST_APPLICATIONS_MANAGEMENT_ENTID": idmap,
 		"HOOK0_TEST_LIVE":      "FALSE",
 		"HOOK0_TEST_EXPLAIN":   "FALSE",
-		"HOOK0_APIKEY":         "NONE",
+		"HOOK0_APIKEY":         "",
 	})
 
 	idmapResolved := core.ToMapAny(env["HOOK0_TEST_APPLICATIONS_MANAGEMENT_ENTID"])
@@ -113,11 +113,23 @@ func applications_managementBasicSetup(extra map[string]any) *entityTestSetup {
 	}
 
 	if env["HOOK0_TEST_LIVE"] == "TRUE" {
+		// An empty map, not a nil one: Merge returns nil when its last entry
+		// is nil, and BasicSetup is normally called with no extras - so a
+		// bare nil silently discarded the apikey and server values below.
+		extraOpts := extra
+		if extraOpts == nil {
+			extraOpts = map[string]any{}
+		}
+
 		mergedOpts := vs.Merge([]any{
+			// liveClientOptions() FIRST, so the generated fields below win:
+			// sdk-test-control.json's test.client.options adds to the live
+			// client, it does not redirect it.
+			liveClientOptions(),
 			map[string]any{
 				"apikey": env["HOOK0_APIKEY"],
 			},
-			extra,
+			extraOpts,
 		})
 		client = sdk.NewHook0SDK(core.ToMapAny(mergedOpts))
 	}

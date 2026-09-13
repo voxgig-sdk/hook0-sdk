@@ -61,7 +61,7 @@ class TestEventsManagementEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["create", "list", "remove"]:
+        for _op in ["list"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "events_management." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
@@ -73,27 +73,19 @@ class TestEventsManagementEntity:
                         "set HOOK0_TEST_EVENTS_MANAGEMENT_ENTID JSON to run live")
         client = setup["client"]
 
-        # CREATE
-        events_management_ref01_ent = client.EventsManagement(None)
-        events_management_ref01_data = helpers.to_map(vs.getprop(
-            vs.getpath(setup["data"], "new.events_management"), "events_management_ref01"))
-        events_management_ref01_data["event_id"] = setup["idmap"]["event01"]
-
-        events_management_ref01_data = helpers.to_map(runner.entity_data(events_management_ref01_ent.create(events_management_ref01_data, None)))
-        assert events_management_ref01_data is not None
+        # Bootstrap entity data from existing test data.
+        events_management_ref01_data_raw = vs.items(helpers.to_map(
+            vs.getpath(setup["data"], "existing.events_management")))
+        events_management_ref01_data = None
+        if len(events_management_ref01_data_raw) > 0:
+            events_management_ref01_data = helpers.to_map(events_management_ref01_data_raw[0][1])
 
         # LIST
+        events_management_ref01_ent = client.EventsManagement(None)
         events_management_ref01_match = {}
 
         events_management_ref01_list_result = events_management_ref01_ent.list(events_management_ref01_match, None)
         assert isinstance(events_management_ref01_list_result, list)
-
-
-        # LIST
-        events_management_ref01_match_rt0 = {}
-
-        events_management_ref01_list_rt0_result = events_management_ref01_ent.list(events_management_ref01_match_rt0, None)
-        assert isinstance(events_management_ref01_list_rt0_result, list)
 
 
 
@@ -113,7 +105,7 @@ def _events_management_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03", "event01", "event02", "event03"],
+        ["events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",
@@ -133,7 +125,7 @@ def _events_management_basic_setup(extra):
         "HOOK0_TEST_EVENTS_MANAGEMENT_ENTID": idmap,
         "HOOK0_TEST_LIVE": "FALSE",
         "HOOK0_TEST_EXPLAIN": "FALSE",
-        "HOOK0_APIKEY": "NONE",
+        "HOOK0_APIKEY": "",
     })
 
     idmap_resolved = helpers.to_map(
@@ -143,6 +135,10 @@ def _events_management_basic_setup(extra):
 
     if env.get("HOOK0_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([
+            # FIRST, so the generated fields below win: sdk-test-control.json's
+            # test.client.options adds to the live client, it does not
+            # redirect it.
+            runner.live_client_options(),
             {
                 "apikey": env.get("HOOK0_APIKEY"),
             },

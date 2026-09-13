@@ -61,6 +61,7 @@ pub fn make_config() Value {
             .{ "application", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("application_id") },
                         .{ "req", h.vbool(true) },
                         .{ "short", h.vstr("Unique identifier of the application.") },
@@ -89,6 +90,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("organization_id") },
                         .{ "req", h.vbool(true) },
                         .{ "short", h.vstr("UUID of the organization this application belongs to.") },
@@ -101,6 +103,10 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                 }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
+                }) },
                 .{ "name", h.vstr("application") },
                 .{ "op", h.jo(&.{
                     .{ "create", h.jo(&.{
@@ -112,15 +118,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/applications/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("applications"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("applications") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("applications"),
                                 }) },
                             }),
                         }) },
@@ -144,10 +161,16 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/applications/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("applications"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("applications") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -157,6 +180,11 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("applications"),
                                 }) },
                             }),
                         }) },
@@ -180,16 +208,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/applications/{application_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("applications"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "application_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("applications") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -199,6 +235,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("applications"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -222,16 +264,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("DELETE") },
                                 .{ "orig", h.vstr("/api/v1/applications/{application_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("applications"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "application_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("applications") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -241,6 +291,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("applications"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -264,16 +320,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("PUT") },
                                 .{ "orig", h.vstr("/api/v1/applications/{application_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("applications"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "application_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("applications") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -283,6 +347,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("applications"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -295,16 +365,19 @@ pub fn make_config() Value {
             .{ "application_secret", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("application_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("created_at") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("deleted_at") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
@@ -317,10 +390,15 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("token") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
+                }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
                 }) },
                 .{ "name", h.vstr("application_secret") },
                 .{ "op", h.jo(&.{
@@ -333,15 +411,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/application_secrets/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("application_secrets"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("application_secrets") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("application_secrets"),
                                 }) },
                             }),
                         }) },
@@ -365,10 +454,16 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/application_secrets/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("application_secrets"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("application_secrets") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -378,6 +473,11 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("application_secrets"),
                                 }) },
                             }),
                         }) },
@@ -401,16 +501,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("PUT") },
                                 .{ "orig", h.vstr("/api/v1/application_secrets/{application_secret_token}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("application_secrets"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "application_secret_token", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("application_secrets") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -420,6 +528,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("application_secrets"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -461,11 +575,19 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("DELETE") },
                                 .{ "orig", h.vstr("/api/v1/application_secrets/{application_secret_token}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("application_secrets"),
-                                    h.vstr("{application_secret_token}"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("application_secrets") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("application_secret_token") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -476,6 +598,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("application_secrets"),
+                                    h.vstr("{application_secret_token}"),
                                 }) },
                             }),
                         }) },
@@ -492,6 +620,13 @@ pub fn make_config() Value {
             .{ "event", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
+                        .{ "name", h.vstr("application_id") },
+                        .{ "req", h.vbool(true) },
+                        .{ "type", h.vstr("`$STRING`") },
+                    }),
+                    h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("event_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -520,6 +655,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("occurred_at") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -535,13 +671,79 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("received_at") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                 }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
+                }) },
                 .{ "name", h.vstr("event") },
                 .{ "op", h.jo(&.{
+                    .{ "create", h.jo(&.{
+                        .{ "input", h.vstr("data") },
+                        .{ "name", h.vstr("create") },
+                        .{ "points", h.ja(&.{
+                            h.jo(&.{
+                                .{ "args", h.jo(&.{
+                                    .{ "params", h.ja(&.{
+                                        h.jo(&.{
+                                            .{ "kind", h.vstr("param") },
+                                            .{ "name", h.vstr("id") },
+                                            .{ "orig", h.vstr("event_id") },
+                                            .{ "reqd", h.vbool(true) },
+                                            .{ "type", h.vstr("`$STRING`") },
+                                        }),
+                                    }) },
+                                }) },
+                                .{ "kind", h.vstr("http") },
+                                .{ "method", h.vstr("POST") },
+                                .{ "orig", h.vstr("/api/v1/events/{event_id}/replay") },
+                                .{ "rename", h.jo(&.{
+                                    .{ "param", h.jo(&.{
+                                        .{ "event_id", h.vstr("id") },
+                                    }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("events") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("replay") },
+                                    }),
+                                }) },
+                                .{ "select", h.jo(&.{
+                                    .{ "$action", h.vstr("replay") },
+                                    .{ "exist", h.ja(&.{
+                                        h.vstr("id"),
+                                    }) },
+                                }) },
+                                .{ "transform", h.jo(&.{
+                                    .{ "req", h.vstr("`reqdata`") },
+                                    .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("events"),
+                                    h.vstr("{id}"),
+                                    h.vstr("replay"),
+                                }) },
+                            }),
+                        }) },
+                    }) },
                     .{ "list", h.jo(&.{
                         .{ "input", h.vstr("data") },
                         .{ "name", h.vstr("list") },
@@ -561,10 +763,16 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/events/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("events"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("events") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -574,6 +782,11 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("events"),
                                 }) },
                             }),
                         }) },
@@ -606,16 +819,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/events/{event_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("events"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "event_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("events") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -626,6 +847,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("events"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -638,6 +865,7 @@ pub fn make_config() Value {
             .{ "event_type", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("application_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -682,6 +910,10 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                 }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
+                }) },
                 .{ "name", h.vstr("event_type") },
                 .{ "op", h.jo(&.{
                     .{ "create", h.jo(&.{
@@ -693,15 +925,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/event_types/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("event_types"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("event_types") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("event_types"),
                                 }) },
                             }),
                         }) },
@@ -725,10 +968,16 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/event_types/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("event_types"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("event_types") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -738,6 +987,11 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("event_types"),
                                 }) },
                             }),
                         }) },
@@ -770,16 +1024,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/event_types/{event_type_name}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("event_types"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "event_type_name", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("event_types") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -791,6 +1053,12 @@ pub fn make_config() Value {
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
                                 }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("event_types"),
+                                    h.vstr("{id}"),
+                                }) },
                             }),
                         }) },
                     }) },
@@ -800,53 +1068,9 @@ pub fn make_config() Value {
                 }) },
             }) },
             .{ "events_management", h.jo(&.{
-                .{ "fields", h.ja(&.{
-                    h.jo(&.{
-                        .{ "name", h.vstr("application_id") },
-                        .{ "req", h.vbool(true) },
-                        .{ "type", h.vstr("`$STRING`") },
-                    }),
-                }) },
+                .{ "fields", h.olist() },
                 .{ "name", h.vstr("events_management") },
                 .{ "op", h.jo(&.{
-                    .{ "create", h.jo(&.{
-                        .{ "input", h.vstr("data") },
-                        .{ "name", h.vstr("create") },
-                        .{ "points", h.ja(&.{
-                            h.jo(&.{
-                                .{ "args", h.jo(&.{
-                                    .{ "params", h.ja(&.{
-                                        h.jo(&.{
-                                            .{ "kind", h.vstr("param") },
-                                            .{ "name", h.vstr("event_id") },
-                                            .{ "orig", h.vstr("event_id") },
-                                            .{ "reqd", h.vbool(true) },
-                                            .{ "type", h.vstr("`$STRING`") },
-                                        }),
-                                    }) },
-                                }) },
-                                .{ "kind", h.vstr("http") },
-                                .{ "method", h.vstr("POST") },
-                                .{ "orig", h.vstr("/api/v1/events/{event_id}/replay") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("events"),
-                                    h.vstr("{event_id}"),
-                                    h.vstr("replay"),
-                                }) },
-                                .{ "select", h.jo(&.{
-                                    .{ "exist", h.ja(&.{
-                                        h.vstr("event_id"),
-                                    }) },
-                                }) },
-                                .{ "transform", h.jo(&.{
-                                    .{ "req", h.vstr("`reqdata`") },
-                                    .{ "res", h.vstr("`body`") },
-                                }) },
-                            }),
-                        }) },
-                    }) },
                     .{ "list", h.jo(&.{
                         .{ "input", h.vstr("data") },
                         .{ "name", h.vstr("list") },
@@ -856,15 +1080,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/payload_content_types/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("payload_content_types"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("payload_content_types") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("payload_content_types"),
                                 }) },
                             }),
                         }) },
@@ -897,11 +1132,19 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("DELETE") },
                                 .{ "orig", h.vstr("/api/v1/event_types/{event_type_name}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("event_types"),
-                                    h.vstr("{event_type_name}"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("event_types") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("event_type_name") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -913,6 +1156,12 @@ pub fn make_config() Value {
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
                                 }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("event_types"),
+                                    h.vstr("{event_type_name}"),
+                                }) },
                             }),
                         }) },
                     }) },
@@ -922,20 +1171,19 @@ pub fn make_config() Value {
                         h.ja(&.{
                             h.vstr("event_type"),
                         }),
-                        h.ja(&.{
-                            h.vstr("event"),
-                        }),
                     }) },
                 }) },
             }) },
             .{ "events_per_day_entry", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("amount") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("application_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -946,6 +1194,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date") },
                         .{ "name", h.vstr("date") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -989,11 +1238,19 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/events_per_day/application") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("events_per_day"),
-                                    h.vstr("application"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("events_per_day") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("application") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -1005,6 +1262,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("events_per_day"),
+                                    h.vstr("application"),
                                 }) },
                             }),
                             h.jo(&.{
@@ -1034,11 +1297,19 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/events_per_day/organization") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("events_per_day"),
-                                    h.vstr("organization"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("events_per_day") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organization") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -1050,6 +1321,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("events_per_day"),
+                                    h.vstr("organization"),
                                 }) },
                             }),
                         }) },
@@ -1067,6 +1344,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$BOOLEAN`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int64") },
                         .{ "name", h.vstr("database_duration_ms") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
@@ -1076,6 +1354,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$BOOLEAN`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int64") },
                         .{ "name", h.vstr("object_storage_duration_ms") },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
@@ -1084,10 +1363,12 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$BOOLEAN`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int64") },
                         .{ "name", h.vstr("pulsar_duration_ms") },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int64") },
                         .{ "name", h.vstr("total_duration_ms") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
@@ -1113,10 +1394,16 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/health/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("health"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("health") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -1126,6 +1413,11 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("health"),
                                 }) },
                             }),
                         }) },
@@ -1181,15 +1473,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/environment_variables/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("environment_variables"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("environment_variables") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("environment_variables"),
                                 }) },
                             }),
                         }) },
@@ -1202,12 +1505,14 @@ pub fn make_config() Value {
             .{ "ingested_event", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("application_id") },
                         .{ "req", h.vbool(true) },
                         .{ "short", h.vstr("UUID of the application this event belongs to.") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("event_id") },
                         .{ "short", h.vstr("Optional unique identifier for this event (client-generated UUID).") },
                         .{ "type", h.vstr("`$STRING`") },
@@ -1230,6 +1535,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("occurred_at") },
                         .{ "req", h.vbool(true) },
                         .{ "short", h.vstr("Timestamp when the event occurred.") },
@@ -1259,15 +1565,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/event/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("event"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("event") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("event"),
                                 }) },
                             }),
                         }) },
@@ -1309,6 +1626,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("password_minimum_length") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
@@ -1340,15 +1658,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/instance/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("instance"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("instance") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("instance"),
                                 }) },
                             }),
                         }) },
@@ -1382,16 +1711,30 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/auth/login") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("auth"),
-                                    h.vstr("login"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("login") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("login"),
                                 }) },
                             }),
                             h.jo(&.{
@@ -1399,16 +1742,30 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/auth/refresh") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("auth"),
-                                    h.vstr("refresh"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("refresh") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("refresh"),
                                 }) },
                             }),
                         }) },
@@ -1440,6 +1797,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("organization_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -1465,6 +1823,10 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$ARRAY`") },
                     }),
                 }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
+                }) },
                 .{ "name", h.vstr("organization") },
                 .{ "op", h.jo(&.{
                     .{ "create", h.jo(&.{
@@ -1476,15 +1838,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/organizations/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("organizations"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organizations") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("organizations"),
                                 }) },
                             }),
                         }) },
@@ -1498,15 +1871,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/organizations/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("organizations"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organizations") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("organizations"),
                                 }) },
                             }),
                         }) },
@@ -1530,16 +1914,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/organizations/{organization_id}/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("organizations"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "organization_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organizations") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -1549,6 +1941,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("organizations"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -1572,16 +1970,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("DELETE") },
                                 .{ "orig", h.vstr("/api/v1/organizations/{organization_id}/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("organizations"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "organization_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organizations") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -1591,6 +1997,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("organizations"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -1614,16 +2026,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("PUT") },
                                 .{ "orig", h.vstr("/api/v1/organizations/{organization_id}/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("organizations"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "organization_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organizations") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -1633,6 +2053,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("organizations"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -1654,10 +2080,15 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("user_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
+                }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
                 }) },
                 .{ "name", h.vstr("organization_edit_role") },
                 .{ "op", h.jo(&.{
@@ -1680,17 +2111,27 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("PUT") },
                                 .{ "orig", h.vstr("/api/v1/organizations/{organization_id}/invite") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("organizations"),
-                                    h.vstr("{id}"),
-                                    h.vstr("invite"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "organization_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organizations") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("invite") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "$action", h.vstr("invite") },
@@ -1701,6 +2142,13 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("organizations"),
+                                    h.vstr("{id}"),
+                                    h.vstr("invite"),
                                 }) },
                             }),
                         }) },
@@ -1723,6 +2171,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("status") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
@@ -1732,6 +2181,10 @@ pub fn make_config() Value {
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
+                }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
                 }) },
                 .{ "name", h.vstr("problem") },
                 .{ "op", h.jo(&.{
@@ -1744,15 +2197,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/errors/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("errors"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("errors") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("errors"),
                                 }) },
                             }),
                         }) },
@@ -1765,31 +2229,37 @@ pub fn make_config() Value {
             .{ "quota", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("global_applications_per_organization_limit") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("global_days_of_events_retention_limit") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("global_event_types_per_application_limit") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("global_events_per_day_limit") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("global_members_per_organization_limit") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("global_subscriptions_per_application_limit") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
@@ -1806,15 +2276,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/quotas/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("quotas"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("quotas") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body.limits`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("quotas"),
                                 }) },
                             }),
                         }) },
@@ -1867,15 +2348,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/register/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("register"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("register") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("register"),
                                 }) },
                             }),
                         }) },
@@ -1888,11 +2380,13 @@ pub fn make_config() Value {
             .{ "request_attempt", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("created_at") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("delay_until") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
@@ -1902,15 +2396,18 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("event_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("failed_at") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("http_response_status") },
                         .{ "type", h.vstr("`$INTEGER`") },
                     }),
@@ -1919,19 +2416,23 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("picked_at") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("request_attempt_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("response_id") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("int32") },
                         .{ "name", h.vstr("retry_count") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$INTEGER`") },
@@ -1948,9 +2449,14 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("succeeded_at") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
+                }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
                 }) },
                 .{ "name", h.vstr("request_attempt") },
                 .{ "op", h.jo(&.{
@@ -2009,10 +2515,16 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/request_attempts/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("request_attempts"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("request_attempts") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2028,6 +2540,11 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("request_attempts"),
                                 }) },
                             }),
                         }) },
@@ -2060,16 +2577,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/request_attempts/{request_attempt_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("request_attempts"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "request_attempt_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("request_attempts") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2080,6 +2605,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("request_attempts"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -2095,6 +2626,10 @@ pub fn make_config() Value {
                         .{ "name", h.vstr("id") },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
+                }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
                 }) },
                 .{ "name", h.vstr("response") },
                 .{ "op", h.jo(&.{
@@ -2126,16 +2661,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/responses/{response_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("responses"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "response_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("responses") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2146,6 +2689,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body.headers`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("responses"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -2178,12 +2727,22 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("DELETE") },
                                 .{ "orig", h.vstr("/api/v1/organizations/{organization_id}/invite") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("organizations"),
-                                    h.vstr("{organization_id}"),
-                                    h.vstr("invite"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organizations") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("organization_id") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("invite") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2193,6 +2752,13 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("organizations"),
+                                    h.vstr("{organization_id}"),
+                                    h.vstr("invite"),
                                 }) },
                             }),
                         }) },
@@ -2214,6 +2780,7 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("created_at") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -2228,15 +2795,21 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("organization_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("token_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
+                }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
                 }) },
                 .{ "name", h.vstr("service_token") },
                 .{ "op", h.jo(&.{
@@ -2249,15 +2822,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/service_token/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("service_token"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("service_token") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("service_token"),
                                 }) },
                             }),
                         }) },
@@ -2281,10 +2865,16 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/service_token/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("service_token"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("service_token") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2294,6 +2884,11 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("service_token"),
                                 }) },
                             }),
                         }) },
@@ -2326,16 +2921,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/service_token/{service_token_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("service_token"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "service_token_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("service_token") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2346,6 +2949,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("service_token"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -2378,16 +2987,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("DELETE") },
                                 .{ "orig", h.vstr("/api/v1/service_token/{service_token_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("service_token"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "service_token_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("service_token") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2398,6 +3015,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("service_token"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -2421,16 +3044,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("PUT") },
                                 .{ "orig", h.vstr("/api/v1/service_token/{service_token_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("service_token"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "service_token_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("service_token") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2440,6 +3071,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("service_token"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -2452,11 +3089,13 @@ pub fn make_config() Value {
             .{ "subscription", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("application_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("created_at") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -2547,11 +3186,13 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("secret") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("uuid") },
                         .{ "name", h.vstr("subscription_id") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
@@ -2562,10 +3203,15 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$OBJECT`") },
                     }),
                     h.jo(&.{
+                        .{ "format", h.vstr("date-time") },
                         .{ "name", h.vstr("updated_at") },
                         .{ "req", h.vbool(true) },
                         .{ "type", h.vstr("`$STRING`") },
                     }),
+                }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
                 }) },
                 .{ "name", h.vstr("subscription") },
                 .{ "op", h.jo(&.{
@@ -2578,15 +3224,26 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/subscriptions/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("subscriptions"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("subscriptions") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("subscriptions"),
                                 }) },
                             }),
                         }) },
@@ -2610,10 +3267,16 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/subscriptions/") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("subscriptions"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("subscriptions") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2623,6 +3286,11 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("subscriptions"),
                                 }) },
                             }),
                         }) },
@@ -2646,16 +3314,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("GET") },
                                 .{ "orig", h.vstr("/api/v1/subscriptions/{subscription_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("subscriptions"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "subscription_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("subscriptions") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2665,6 +3341,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("subscriptions"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -2697,16 +3379,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("DELETE") },
                                 .{ "orig", h.vstr("/api/v1/subscriptions/{subscription_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("subscriptions"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "subscription_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("subscriptions") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2717,6 +3407,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("subscriptions"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -2740,16 +3436,24 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("PUT") },
                                 .{ "orig", h.vstr("/api/v1/subscriptions/{subscription_id}") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("subscriptions"),
-                                    h.vstr("{id}"),
-                                }) },
                                 .{ "rename", h.jo(&.{
                                     .{ "param", h.jo(&.{
                                         .{ "subscription_id", h.vstr("id") },
                                     }) },
+                                }) },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("subscriptions") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2759,6 +3463,12 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("subscriptions"),
+                                    h.vstr("{id}"),
                                 }) },
                             }),
                         }) },
@@ -2797,16 +3507,30 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/auth/begin-reset-password") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("auth"),
-                                    h.vstr("begin-reset-password"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("begin-reset-password") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("begin-reset-password"),
                                 }) },
                             }),
                             h.jo(&.{
@@ -2814,16 +3538,30 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/auth/logout") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("auth"),
-                                    h.vstr("logout"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("logout") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("logout"),
                                 }) },
                             }),
                             h.jo(&.{
@@ -2831,16 +3569,30 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/auth/password") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("auth"),
-                                    h.vstr("password"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("password") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("password"),
                                 }) },
                             }),
                             h.jo(&.{
@@ -2848,16 +3600,30 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/auth/reset-password") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("auth"),
-                                    h.vstr("reset-password"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("reset-password") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("reset-password"),
                                 }) },
                             }),
                             h.jo(&.{
@@ -2865,16 +3631,30 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/auth/verify-email") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("auth"),
-                                    h.vstr("verify-email"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("verify-email") },
+                                    }),
                                 }) },
                                 .{ "select", h.omap() },
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("verify-email"),
                                 }) },
                             }),
                         }) },
@@ -2918,12 +3698,22 @@ pub fn make_config() Value {
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/organizations/{organization_id}/invite") },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("organizations"),
-                                    h.vstr("{organization_id}"),
-                                    h.vstr("invite"),
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("organizations") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("organization_id") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("invite") },
+                                    }),
                                 }) },
                                 .{ "select", h.jo(&.{
                                     .{ "exist", h.ja(&.{
@@ -2933,6 +3723,13 @@ pub fn make_config() Value {
                                 .{ "transform", h.jo(&.{
                                     .{ "req", h.vstr("`reqdata`") },
                                     .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("organizations"),
+                                    h.vstr("{organization_id}"),
+                                    h.vstr("invite"),
                                 }) },
                             }),
                         }) },
@@ -2976,6 +3773,7 @@ pub fn make_feature(name: []const u8) Feature {
     if (std.mem.eql(u8, name, "audit")) return @import("../feature/audit.zig").AuditFeature.make();
     if (std.mem.eql(u8, name, "cache")) return @import("../feature/cache.zig").CacheFeature.make();
     if (std.mem.eql(u8, name, "clienttrack")) return @import("../feature/clienttrack.zig").ClienttrackFeature.make();
+    if (std.mem.eql(u8, name, "cost")) return @import("../feature/cost.zig").CostFeature.make();
     if (std.mem.eql(u8, name, "debug")) return @import("../feature/debug.zig").DebugFeature.make();
     if (std.mem.eql(u8, name, "idempotency")) return @import("../feature/idempotency.zig").IdempotencyFeature.make();
     if (std.mem.eql(u8, name, "log")) return @import("../feature/log.zig").LogFeature.make();

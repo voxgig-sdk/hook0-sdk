@@ -16,6 +16,7 @@ main: kit: entity: problem: {
       type: "`$STRING`"
     }
     {
+      format: "int32"
       name: "status"
       req: true
       type: "`$INTEGER`"
@@ -40,10 +41,16 @@ main: kit: entity: problem: {
         {
           method: "GET"
           orig: "/api/v1/errors/"
-          parts: [
-            "api"
-            "v1"
-            "errors"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "errors"
+            }
           ]
           transform: {
             req: "`reqdata`"

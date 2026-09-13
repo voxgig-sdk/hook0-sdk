@@ -397,7 +397,7 @@ const applications_management = client.applications_management(h.vnull());
 Remove the entity matching the given criteria. `.err` on failure.
 
 ```zig
-switch (client.applications_management(h.vnull()).remove(h.jo(&.{.{ "application_secret_token", h.vstr("application_secret_token") }}), h.vnull())) {
+switch (client.applications_management(h.vnull()).remove(h.jo(&.{.{ "application_secret_token", h.vstr("application_secret_token") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
 }
@@ -434,6 +434,7 @@ const event = client.event(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `application_id` | `[]const u8` | Yes |  |
 | `event_id` | `[]const u8` | Yes |  |
 | `event_type_name` | `[]const u8` | Yes |  |
 | `id` | `[]const u8` | No |  |
@@ -446,6 +447,28 @@ const event = client.event(h.vnull());
 | `received_at` | `[]const u8` | Yes |  |
 
 ### Operations
+
+#### `create(reqdata: Value, ctrl: Value) OpResult`
+
+Create a new entity with the given data. `.ok` carries the created entity data.
+
+```zig
+switch (client.event(h.vnull()).create(h.jo(&.{
+    .{ "id", h.vstr("example_id") }, // []const u8
+    .{ "application_id", h.vstr("example_application_id") }, // []const u8
+    .{ "event_id", h.vstr("example_event_id") }, // []const u8
+    .{ "event_type_name", h.vstr("example_event_type_name") }, // []const u8
+    .{ "ip", h.vstr("example_ip") }, // []const u8
+    .{ "labels", h.omap() }, // Value (object)
+    .{ "occurred_at", h.vstr("example_occurred_at") }, // []const u8
+    .{ "payload", h.vstr("example_payload") }, // []const u8
+    .{ "payload_content_type", h.vstr("example_payload_content_type") }, // []const u8
+    .{ "received_at", h.vstr("example_received_at") }, // []const u8
+}), h.vnull())) {
+    .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
+    .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
+}
+```
 
 #### `list(reqmatch: Value, ctrl: Value) OpResult`
 
@@ -463,7 +486,7 @@ switch (client.event(h.vnull()).list(h.vnull(), h.vnull())) {
 Load a single entity matching the given criteria. `.ok` carries the entity data, `.err` the branded error.
 
 ```zig
-switch (client.event(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_id") }}), h.vnull())) {
+switch (client.event(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -548,7 +571,7 @@ switch (client.event_type(h.vnull()).list(h.vnull(), h.vnull())) {
 Load a single entity matching the given criteria. `.ok` carries the entity data, `.err` the branded error.
 
 ```zig
-switch (client.event_type(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_type_id") }}), h.vnull())) {
+switch (client.event_type(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_type_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -581,27 +604,7 @@ Return the entity name.
 const events_management = client.events_management(h.vnull());
 ```
 
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `application_id` | `[]const u8` | Yes |  |
-
 ### Operations
-
-#### `create(reqdata: Value, ctrl: Value) OpResult`
-
-Create a new entity with the given data. `.ok` carries the created entity data.
-
-```zig
-switch (client.events_management(h.vnull()).create(h.jo(&.{
-    .{ "event_id", h.vstr("example_event_id") }, // []const u8
-    .{ "application_id", h.vstr("example_application_id") }, // []const u8
-}), h.vnull())) {
-    .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
-    .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
-}
-```
 
 #### `list(reqmatch: Value, ctrl: Value) OpResult`
 
@@ -619,7 +622,7 @@ switch (client.events_management(h.vnull()).list(h.vnull(), h.vnull())) {
 Remove the entity matching the given criteria. `.err` on failure.
 
 ```zig
-switch (client.events_management(h.vnull()).remove(h.jo(&.{.{ "event_type_name", h.vstr("event_type_name") }}), h.vnull())) {
+switch (client.events_management(h.vnull()).remove(h.jo(&.{.{ "event_type_name", h.vstr("event_type_name") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
 }
@@ -1325,7 +1328,7 @@ switch (client.request_attempt(h.vnull()).list(h.vnull(), h.vnull())) {
 Load a single entity matching the given criteria. `.ok` carries the entity data, `.err` the branded error.
 
 ```zig
-switch (client.request_attempt(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("request_attempt_id") }}), h.vnull())) {
+switch (client.request_attempt(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("request_attempt_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -1371,7 +1374,7 @@ const response = client.response(h.vnull());
 Load a single entity matching the given criteria. `.ok` carries the entity data, `.err` the branded error.
 
 ```zig
-switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("response_id") }}), h.vnull())) {
+switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("response_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -1490,7 +1493,7 @@ switch (client.service_token(h.vnull()).list(h.vnull(), h.vnull())) {
 Load a single entity matching the given criteria. `.ok` carries the entity data, `.err` the branded error.
 
 ```zig
-switch (client.service_token(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("service_token_id") }}), h.vnull())) {
+switch (client.service_token(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("service_token_id") }, .{ "organization_id", h.vstr("organization_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -1501,7 +1504,7 @@ switch (client.service_token(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("service_to
 Remove the entity matching the given criteria. `.err` on failure.
 
 ```zig
-switch (client.service_token(h.vnull()).remove(h.jo(&.{.{ "id", h.vstr("service_token_id") }}), h.vnull())) {
+switch (client.service_token(h.vnull()).remove(h.jo(&.{.{ "id", h.vstr("service_token_id") }, .{ "organization_id", h.vstr("organization_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
 }
@@ -1642,7 +1645,7 @@ switch (client.subscription(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("subscriptio
 Remove the entity matching the given criteria. `.err` on failure.
 
 ```zig
-switch (client.subscription(h.vnull()).remove(h.jo(&.{.{ "id", h.vstr("subscription_id") }}), h.vnull())) {
+switch (client.subscription(h.vnull()).remove(h.jo(&.{.{ "id", h.vstr("subscription_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
 }
@@ -1802,4 +1805,42 @@ const client = sdk.Hook0SDK.new(h.jo(&.{
     }) },
 }));
 ```
+
+
+### Configuring features
+
+Each feature is inactive until switched on, and an SDK with no feature
+configured does no feature work at all. Every option below keeps its default
+unless you name it.
+
+The array form of \`feature\` is significant: several features wrap the
+transport, and the order you list them in is the order they nest.
+
+#### `test`
+
+In-memory mock transport for testing without a live server.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Options above are those the model carries a default for. A feature may
+also accept callback options — a `sink` to receive each record, for
+instance — which have no default and are covered in the full feature
+reference.
+
+**Usage**
+
+Set `feature.test.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Attaches to pipeline hooks, not the transport, so activation order does
+  not change what it observes.
+- Installs the BASE transport that the wrapping features wrap, so it must be
+  activated before them.
+- Inactive by default: leaving it out costs nothing at runtime.
 

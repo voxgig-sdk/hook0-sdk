@@ -86,7 +86,7 @@ public class EventsManagementDirectTest {
     Map<String, Object> envm = new LinkedHashMap<>();
     envm.put("HOOK0_TEST_EVENTS_MANAGEMENT_ENTID", new LinkedHashMap<>());
     envm.put("HOOK0_TEST_LIVE", "FALSE");
-    envm.put("HOOK0_APIKEY", "NONE");
+    envm.put("HOOK0_APIKEY", "");
     Map<String, Object> env = RunnerSupport.envOverride(envm);
 
     boolean live = "TRUE".equals(env.get("HOOK0_TEST_LIVE"));
@@ -95,7 +95,10 @@ public class EventsManagementDirectTest {
     setup.calls = calls;
 
     if (live) {
-      Map<String, Object> mergedOpts = new LinkedHashMap<>();
+      // sdk-test-control.json's test.client.options seeds the live
+      // client; the generated fields below overwrite anything they name.
+      Map<String, Object> mergedOpts =
+          new LinkedHashMap<>(RunnerSupport.liveClientOptions());
       mergedOpts.put("apikey", env.get("HOOK0_APIKEY"));
       setup.client = new Hook0SDK(mergedOpts);
       setup.live = true;

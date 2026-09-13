@@ -24,13 +24,7 @@
 
 /**
  * @typedef {Object} ApplicationListMatch
- * @property {string} [application_id]
- * @property {Object} [consumption]
- * @property {string} [id]
- * @property {string} [name]
- * @property {Object} [onboarding_steps]
- * @property {string} [organization_id]
- * @property {Object} [quotas]
+ * @property {string} organization_id
  */
 
 /**
@@ -72,12 +66,7 @@
 
 /**
  * @typedef {Object} ApplicationSecretListMatch
- * @property {string} [application_id]
- * @property {string} [created_at]
- * @property {string} [deleted_at]
- * @property {string} [id]
- * @property {string} [name]
- * @property {string} [token]
+ * @property {string} application_id
  */
 
 /**
@@ -107,10 +96,12 @@
 /**
  * @typedef {Object} ApplicationsManagementRemoveMatch
  * @property {string} application_secret_token
+ * @property {string} application_id
  */
 
 /**
  * @typedef {Object} Event
+ * @property {string} application_id
  * @property {string} event_id
  * @property {string} event_type_name
  * @property {string} [id]
@@ -126,20 +117,27 @@
 /**
  * @typedef {Object} EventLoadMatch
  * @property {string} id
+ * @property {string} application_id
  */
 
 /**
  * @typedef {Object} EventListMatch
- * @property {string} [event_id]
- * @property {string} [event_type_name]
- * @property {string} [id]
- * @property {string} [ip]
- * @property {Object} [labels]
+ * @property {string} application_id
+ */
+
+/**
+ * @typedef {Object} EventCreateData
+ * @property {string} id
+ * @property {string} application_id
+ * @property {string} event_id
+ * @property {string} event_type_name
+ * @property {string} ip
+ * @property {Object} labels
  * @property {Object} [metadata]
- * @property {string} [occurred_at]
- * @property {string} [payload]
- * @property {string} [payload_content_type]
- * @property {string} [received_at]
+ * @property {string} occurred_at
+ * @property {string} payload
+ * @property {string} payload_content_type
+ * @property {string} received_at
  */
 
 /**
@@ -158,19 +156,12 @@
 /**
  * @typedef {Object} EventTypeLoadMatch
  * @property {string} id
+ * @property {string} application_id
  */
 
 /**
  * @typedef {Object} EventTypeListMatch
- * @property {string} [application_id]
- * @property {string} [event_type_name]
- * @property {string} [id]
- * @property {string} [resource_type]
- * @property {string} [resource_type_name]
- * @property {string} [service]
- * @property {string} [service_name]
- * @property {string} [verb]
- * @property {string} [verb_name]
+ * @property {string} application_id
  */
 
 /**
@@ -188,23 +179,16 @@
 
 /**
  * @typedef {Object} EventsManagement
- * @property {string} application_id
  */
 
 /**
  * @typedef {Object} EventsManagementListMatch
- * @property {string} [application_id]
- */
-
-/**
- * @typedef {Object} EventsManagementCreateData
- * @property {string} event_id
- * @property {string} application_id
  */
 
 /**
  * @typedef {Object} EventsManagementRemoveMatch
  * @property {string} event_type_name
+ * @property {string} application_id
  */
 
 /**
@@ -218,11 +202,9 @@
 
 /**
  * @typedef {Object} EventsPerDayEntryListMatch
- * @property {number} [amount]
- * @property {string} [application_id]
- * @property {string} [application_name]
- * @property {string} [date]
- * @property {boolean} [is_provisional]
+ * @property {string} application_id
+ * @property {string} [from]
+ * @property {string} [to]
  */
 
 /**
@@ -238,13 +220,7 @@
 
 /**
  * @typedef {Object} HealthLoadMatch
- * @property {boolean} [database]
- * @property {number} [database_duration_ms]
- * @property {boolean} [object_storage]
- * @property {number} [object_storage_duration_ms]
- * @property {boolean} [pulsar]
- * @property {number} [pulsar_duration_ms]
- * @property {number} [total_duration_ms]
+ * @property {string} [key]
  */
 
 /**
@@ -486,24 +462,18 @@
 /**
  * @typedef {Object} RequestAttemptLoadMatch
  * @property {string} id
+ * @property {string} application_id
  */
 
 /**
  * @typedef {Object} RequestAttemptListMatch
- * @property {string} [created_at]
- * @property {string} [delay_until]
- * @property {Object} [event]
+ * @property {string} application_id
+ * @property {string} [event_event_type_name]
  * @property {string} [event_id]
- * @property {string} [failed_at]
- * @property {number} [http_response_status]
- * @property {string} [id]
- * @property {string} [picked_at]
- * @property {string} [request_attempt_id]
- * @property {string} [response_id]
- * @property {number} [retry_count]
- * @property {Object} [status]
- * @property {Object} [subscription]
- * @property {string} [succeeded_at]
+ * @property {string} [max_created_at]
+ * @property {string} [min_created_at]
+ * @property {string} [pagination_cursor]
+ * @property {string} [subscription_id]
  */
 
 /**
@@ -514,6 +484,7 @@
 /**
  * @typedef {Object} ResponseLoadMatch
  * @property {string} id
+ * @property {string} application_id
  */
 
 /**
@@ -538,16 +509,12 @@
 /**
  * @typedef {Object} ServiceTokenLoadMatch
  * @property {string} id
+ * @property {string} organization_id
  */
 
 /**
  * @typedef {Object} ServiceTokenListMatch
- * @property {string} [biscuit]
- * @property {string} [created_at]
- * @property {string} [id]
- * @property {string} [name]
- * @property {string} [organization_id]
- * @property {string} [token_id]
+ * @property {string} organization_id
  */
 
 /**
@@ -573,6 +540,7 @@
 /**
  * @typedef {Object} ServiceTokenRemoveMatch
  * @property {string} id
+ * @property {string} organization_id
  */
 
 /**
@@ -601,21 +569,7 @@
 
 /**
  * @typedef {Object} SubscriptionListMatch
- * @property {string} [application_id]
- * @property {string} [created_at]
- * @property {Array} [dedicated_workers]
- * @property {string} [description]
- * @property {Array} [event_types]
- * @property {string} [id]
- * @property {boolean} [is_enabled]
- * @property {string} [label_key]
- * @property {string} [label_value]
- * @property {Object} [labels]
- * @property {Object} [metadata]
- * @property {string} [secret]
- * @property {string} [subscription_id]
- * @property {Object} [target]
- * @property {string} [updated_at]
+ * @property {string} application_id
  */
 
 /**
@@ -659,6 +613,7 @@
 /**
  * @typedef {Object} SubscriptionRemoveMatch
  * @property {string} id
+ * @property {string} application_id
  */
 
 /**

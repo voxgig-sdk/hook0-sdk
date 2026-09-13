@@ -45,17 +45,25 @@ main: kit: entity: response: {
           }
           method: "GET"
           orig: "/api/v1/responses/{response_id}"
-          parts: [
-            "api"
-            "v1"
-            "responses"
-            "{id}"
-          ]
           rename: {
             param: {
               response_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "responses"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "application_id"

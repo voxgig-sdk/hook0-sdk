@@ -6,31 +6,37 @@ main: kit: entity: quota: {
 
   fields: [
     {
+      format: "int32"
       name: "global_applications_per_organization_limit"
       req: true
       type: "`$INTEGER`"
     }
     {
+      format: "int32"
       name: "global_days_of_events_retention_limit"
       req: true
       type: "`$INTEGER`"
     }
     {
+      format: "int32"
       name: "global_event_types_per_application_limit"
       req: true
       type: "`$INTEGER`"
     }
     {
+      format: "int32"
       name: "global_events_per_day_limit"
       req: true
       type: "`$INTEGER`"
     }
     {
+      format: "int32"
       name: "global_members_per_organization_limit"
       req: true
       type: "`$INTEGER`"
     }
     {
+      format: "int32"
       name: "global_subscriptions_per_application_limit"
       req: true
       type: "`$INTEGER`"
@@ -45,10 +51,16 @@ main: kit: entity: quota: {
         {
           method: "GET"
           orig: "/api/v1/quotas/"
-          parts: [
-            "api"
-            "v1"
-            "quotas"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "quotas"
+            }
           ]
           transform: {
             req: "`reqdata`"

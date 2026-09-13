@@ -6,11 +6,13 @@ main: kit: entity: request_attempt: {
 
   fields: [
     {
+      format: "date-time"
       name: "created_at"
       req: true
       type: "`$STRING`"
     }
     {
+      format: "date-time"
       name: "delay_until"
       req: false
       type: "`$STRING`"
@@ -21,16 +23,19 @@ main: kit: entity: request_attempt: {
       type: "`$OBJECT`"
     }
     {
+      format: "uuid"
       name: "event_id"
       req: true
       type: "`$STRING`"
     }
     {
+      format: "date-time"
       name: "failed_at"
       req: false
       type: "`$STRING`"
     }
     {
+      format: "int32"
       name: "http_response_status"
       req: false
       type: "`$INTEGER`"
@@ -41,21 +46,25 @@ main: kit: entity: request_attempt: {
       type: "`$STRING`"
     }
     {
+      format: "date-time"
       name: "picked_at"
       req: false
       type: "`$STRING`"
     }
     {
+      format: "uuid"
       name: "request_attempt_id"
       req: true
       type: "`$STRING`"
     }
     {
+      format: "uuid"
       name: "response_id"
       req: false
       type: "`$STRING`"
     }
     {
+      format: "int32"
       name: "retry_count"
       req: true
       type: "`$INTEGER`"
@@ -72,6 +81,7 @@ main: kit: entity: request_attempt: {
       type: "`$OBJECT`"
     }
     {
+      format: "date-time"
       name: "succeeded_at"
       req: false
       type: "`$STRING`"
@@ -144,10 +154,16 @@ main: kit: entity: request_attempt: {
           }
           method: "GET"
           orig: "/api/v1/request_attempts/"
-          parts: [
-            "api"
-            "v1"
-            "request_attempts"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "request_attempts"
+            }
           ]
           select: {
             exist: [
@@ -193,17 +209,25 @@ main: kit: entity: request_attempt: {
           }
           method: "GET"
           orig: "/api/v1/request_attempts/{request_attempt_id}"
-          parts: [
-            "api"
-            "v1"
-            "request_attempts"
-            "{id}"
-          ]
           rename: {
             param: {
               request_attempt_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "request_attempts"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "application_id"

@@ -20,13 +20,7 @@ export interface ApplicationLoadMatch {
 }
 
 export interface ApplicationListMatch {
-  application_id?: string
-  consumption?: Record<string, any>
-  id?: string
-  name?: string
-  onboarding_steps?: Record<string, any>
-  organization_id?: string
-  quotas?: Record<string, any>
+  organization_id: string
 }
 
 export interface ApplicationCreateData {
@@ -63,12 +57,7 @@ export interface ApplicationSecret {
 }
 
 export interface ApplicationSecretListMatch {
-  application_id?: string
-  created_at?: string
-  deleted_at?: string
-  id?: string
-  name?: string
-  token?: string
+  application_id: string
 }
 
 export interface ApplicationSecretCreateData {
@@ -94,9 +83,11 @@ export interface ApplicationsManagement {
 
 export interface ApplicationsManagementRemoveMatch {
   application_secret_token: string
+  application_id: string
 }
 
 export interface Event {
+  application_id: string
   event_id: string
   event_type_name: string
   id?: string
@@ -111,19 +102,31 @@ export interface Event {
 
 export interface EventLoadMatch {
   id: string
+  application_id: string
 }
 
 export interface EventListMatch {
-  event_id?: string
-  event_type_name?: string
-  id?: string
-  ip?: string
-  labels?: Record<string, any>
+  application_id: string
+}
+
+export interface EventCreateData {
+  id: string
+  application_id: string
+  event_id: string
+  event_type_name: string
+  ip: string
+  labels: Record<string, any>
   metadata?: Record<string, any>
-  occurred_at?: string
-  payload?: string
-  payload_content_type?: string
-  received_at?: string
+  occurred_at: string
+  payload: string
+  payload_content_type: string
+  received_at: string
+
+  // Selects a custom action instead of the plain create:
+  //   'replay'
+  // The remaining keys are that action's own payload.
+  $action?: string
+  [action: string]: any
 }
 
 export interface EventType {
@@ -140,18 +143,11 @@ export interface EventType {
 
 export interface EventTypeLoadMatch {
   id: string
+  application_id: string
 }
 
 export interface EventTypeListMatch {
-  application_id?: string
-  event_type_name?: string
-  id?: string
-  resource_type?: string
-  resource_type_name?: string
-  service?: string
-  service_name?: string
-  verb?: string
-  verb_name?: string
+  application_id: string
 }
 
 export interface EventTypeCreateData {
@@ -167,20 +163,14 @@ export interface EventTypeCreateData {
 }
 
 export interface EventsManagement {
-  application_id: string
 }
 
 export interface EventsManagementListMatch {
-  application_id?: string
-}
-
-export interface EventsManagementCreateData {
-  event_id: string
-  application_id: string
 }
 
 export interface EventsManagementRemoveMatch {
   event_type_name: string
+  application_id: string
 }
 
 export interface EventsPerDayEntry {
@@ -192,11 +182,9 @@ export interface EventsPerDayEntry {
 }
 
 export interface EventsPerDayEntryListMatch {
-  amount?: number
-  application_id?: string
-  application_name?: string
-  date?: string
-  is_provisional?: boolean
+  application_id: string
+  from?: string
+  to?: string
 }
 
 export interface Health {
@@ -210,13 +198,7 @@ export interface Health {
 }
 
 export interface HealthLoadMatch {
-  database?: boolean
-  database_duration_ms?: number
-  object_storage?: boolean
-  object_storage_duration_ms?: number
-  pulsar?: boolean
-  pulsar_duration_ms?: number
-  total_duration_ms?: number
+  key?: string
 }
 
 export interface Hook0 {
@@ -440,23 +422,17 @@ export interface RequestAttempt {
 
 export interface RequestAttemptLoadMatch {
   id: string
+  application_id: string
 }
 
 export interface RequestAttemptListMatch {
-  created_at?: string
-  delay_until?: string
-  event?: Record<string, any>
+  application_id: string
+  event_event_type_name?: string
   event_id?: string
-  failed_at?: string
-  http_response_status?: number
-  id?: string
-  picked_at?: string
-  request_attempt_id?: string
-  response_id?: string
-  retry_count?: number
-  status?: Record<string, any>
-  subscription?: Record<string, any>
-  succeeded_at?: string
+  max_created_at?: string
+  min_created_at?: string
+  pagination_cursor?: string
+  subscription_id?: string
 }
 
 export interface Response {
@@ -465,6 +441,7 @@ export interface Response {
 
 export interface ResponseLoadMatch {
   id: string
+  application_id: string
 }
 
 export interface Revoke {
@@ -485,15 +462,11 @@ export interface ServiceToken {
 
 export interface ServiceTokenLoadMatch {
   id: string
+  organization_id: string
 }
 
 export interface ServiceTokenListMatch {
-  biscuit?: string
-  created_at?: string
-  id?: string
-  name?: string
-  organization_id?: string
-  token_id?: string
+  organization_id: string
 }
 
 export interface ServiceTokenCreateData {
@@ -516,6 +489,7 @@ export interface ServiceTokenUpdateData {
 
 export interface ServiceTokenRemoveMatch {
   id: string
+  organization_id: string
 }
 
 export interface Subscription {
@@ -541,21 +515,7 @@ export interface SubscriptionLoadMatch {
 }
 
 export interface SubscriptionListMatch {
-  application_id?: string
-  created_at?: string
-  dedicated_workers?: any[]
-  description?: string
-  event_types?: any[]
-  id?: string
-  is_enabled?: boolean
-  label_key?: string
-  label_value?: string
-  labels?: Record<string, any>
-  metadata?: Record<string, any>
-  secret?: string
-  subscription_id?: string
-  target?: Record<string, any>
-  updated_at?: string
+  application_id: string
 }
 
 export interface SubscriptionCreateData {
@@ -596,6 +556,7 @@ export interface SubscriptionUpdateData {
 
 export interface SubscriptionRemoveMatch {
   id: string
+  application_id: string
 }
 
 export interface UserAuthentication {

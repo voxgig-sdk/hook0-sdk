@@ -346,6 +346,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
+| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -357,9 +358,9 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | `payload_content_type` |  |
 | `received_at` |  |
 
-Operations: List, Load.
+Operations: Create, List, Load.
 
-API path: `/api/v1/events/`
+API path: `/api/v1/events/{event_id}/replay`
 
 #### EventType
 
@@ -383,11 +384,10 @@ API path: `/api/v1/event_types/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 
-Operations: Create, List, Remove.
+Operations: List, Remove.
 
-API path: `/api/v1/events/{event_id}/replay`
+API path: `/api/v1/payload_content_types/`
 
 #### EventsPerDayEntry
 
@@ -778,6 +778,7 @@ Create an instance: `$event = $client->Event();`
 
 | Method | Description |
 | --- | --- |
+| `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 
@@ -785,6 +786,7 @@ Create an instance: `$event = $client->Event();`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `application_id` | `string` |  |
 | `event_id` | `string` |  |
 | `event_type_name` | `string` |  |
 | `id` | `string` |  |
@@ -800,7 +802,7 @@ Create an instance: `$event = $client->Event();`
 
 ```php
 // load() returns the ENTITY — call data_get() for the Event record (throws on error).
-$event = $client->Event()->load(["id" => "event_id"]);
+$event = $client->Event()->load(["id" => "event_id", "application_id" => "application_id"]);
 ```
 
 #### Example: List
@@ -808,6 +810,23 @@ $event = $client->Event()->load(["id" => "event_id"]);
 ```php
 // list() returns an array of Event records (throws on error).
 $events = $client->Event()->list();
+```
+
+#### Example: Create
+
+```php
+$event = $client->Event()->create([
+    "id" => null, // string
+    "application_id" => null, // string
+    "event_id" => null, // string
+    "event_type_name" => null, // string
+    "ip" => null, // string
+    "labels" => null, // array
+    "occurred_at" => null, // string
+    "payload" => null, // string
+    "payload_content_type" => null, // string
+    "received_at" => null, // string
+]);
 ```
 
 
@@ -841,7 +860,7 @@ Create an instance: `$event_type = $client->EventType();`
 
 ```php
 // load() returns the ENTITY — call data_get() for the EventType record (throws on error).
-$event_type = $client->EventType()->load(["id" => "event_type_id"]);
+$event_type = $client->EventType()->load(["id" => "event_type_id", "application_id" => "application_id"]);
 ```
 
 #### Example: List
@@ -875,30 +894,14 @@ Create an instance: `$events_management = $client->EventsManagement();`
 
 | Method | Description |
 | --- | --- |
-| `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
 | `remove(match)` | Remove the matching entity. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `application_id` | `string` |  |
 
 #### Example: List
 
 ```php
 // list() returns an array of EventsManagement records (throws on error).
 $events_managements = $client->EventsManagement()->list();
-```
-
-#### Example: Create
-
-```php
-$events_management = $client->EventsManagement()->create([
-    "event_id" => null, // string
-    "application_id" => null, // string
-]);
 ```
 
 
@@ -1287,7 +1290,7 @@ Create an instance: `$request_attempt = $client->RequestAttempt();`
 
 ```php
 // load() returns the ENTITY — call data_get() for the RequestAttempt record (throws on error).
-$request_attempt = $client->RequestAttempt()->load(["id" => "request_attempt_id"]);
+$request_attempt = $client->RequestAttempt()->load(["id" => "request_attempt_id", "application_id" => "application_id"]);
 ```
 
 #### Example: List
@@ -1318,7 +1321,7 @@ Create an instance: `$response = $client->Response();`
 
 ```php
 // load() returns the ENTITY — call data_get() for the Response record (throws on error).
-$response = $client->Response()->load(["id" => "response_id"]);
+$response = $client->Response()->load(["id" => "response_id", "application_id" => "application_id"]);
 ```
 
 
@@ -1362,7 +1365,7 @@ Create an instance: `$service_token = $client->ServiceToken();`
 
 ```php
 // load() returns the ENTITY — call data_get() for the ServiceToken record (throws on error).
-$service_token = $client->ServiceToken()->load(["id" => "service_token_id"]);
+$service_token = $client->ServiceToken()->load(["id" => "service_token_id", "organization_id" => "organization_id"]);
 ```
 
 #### Example: List
@@ -1509,6 +1512,29 @@ $user_invitation = $client->UserInvitation()->create([
     "role" => null, // string
 ]);
 ```
+
+## Features
+
+This SDK ships 1 optional features. Each is **inactive until you
+switch it on**, so an SDK you have not configured behaves exactly as if none of
+them existed — no retries, no cache, no logging, no measurable overhead.
+
+Activate a feature by name in the client options, alongside the options shown
+above:
+
+| Feature | What it does |
+|---|---|
+| [`test`](#test) | In-memory mock transport for testing without a live server |
+
+### test
+
+In-memory mock transport for testing without a live server.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Set `feature.test.active` to enable it, then override any of the options above.
 
 
 ## Advanced

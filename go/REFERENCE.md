@@ -396,7 +396,7 @@ fmt.Println(applicationsManagement.GetName()) // "applications_management"
 Remove the entity matching the given criteria.
 
 ```go
-result, err := client.ApplicationsManagement(nil).Remove(map[string]any{"application_secret_token": "application_secret_token"}, nil)
+result, err := client.ApplicationsManagement(nil).Remove(map[string]any{"application_secret_token": "application_secret_token", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -438,6 +438,7 @@ fmt.Println(event.GetName()) // "event"
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `application_id` | `string` | Yes |  |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
 | `id` | `string` | No |  |
@@ -468,7 +469,30 @@ fmt.Println(results)
 Load a single entity matching the given criteria.
 
 ```go
-result, err := client.Event(nil).Load(map[string]any{"id": "event_id"}, nil)
+result, err := client.Event(nil).Load(map[string]any{"id": "event_id", "application_id": "application_id"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+#### `Create(reqdata, ctrl map[string]any) (any, error)`
+
+Create a new entity with the given data.
+
+```go
+result, err := client.Event(nil).Create(map[string]any{
+    "id": "example_id",
+    "application_id": "example_application_id",
+    "event_id": "example_event_id",
+    "event_type_name": "example_event_type_name",
+    "ip": "example_ip",
+    "labels": map[string]any{},
+    "occurred_at": "example_occurred_at",
+    "payload": "example_payload",
+    "payload_content_type": "example_payload_content_type",
+    "received_at": "example_received_at",
+}, nil)
 if err != nil {
     panic(err)
 }
@@ -539,7 +563,7 @@ fmt.Println(results)
 Load a single entity matching the given criteria.
 
 ```go
-result, err := client.EventType(nil).Load(map[string]any{"id": "event_type_id"}, nil)
+result, err := client.EventType(nil).Load(map[string]any{"id": "event_type_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -598,12 +622,6 @@ eventsManagement := client.EventsManagement(nil)
 fmt.Println(eventsManagement.GetName()) // "events_management"
 ```
 
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-
 ### Operations
 
 #### `List(reqmatch, ctrl map[string]any) (any, error)`
@@ -618,27 +636,12 @@ if err != nil {
 fmt.Println(results)
 ```
 
-#### `Create(reqdata, ctrl map[string]any) (any, error)`
-
-Create a new entity with the given data.
-
-```go
-result, err := client.EventsManagement(nil).Create(map[string]any{
-    "event_id": "example_event_id",
-    "application_id": "example_application_id",
-}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result)
-```
-
 #### `Remove(reqmatch, ctrl map[string]any) (any, error)`
 
 Remove the entity matching the given criteria.
 
 ```go
-result, err := client.EventsManagement(nil).Remove(map[string]any{"event_type_name": "event_type_name"}, nil)
+result, err := client.EventsManagement(nil).Remove(map[string]any{"event_type_name": "event_type_name", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1409,7 +1412,7 @@ fmt.Println(results)
 Load a single entity matching the given criteria.
 
 ```go
-result, err := client.RequestAttempt(nil).Load(map[string]any{"id": "request_attempt_id"}, nil)
+result, err := client.RequestAttempt(nil).Load(map[string]any{"id": "request_attempt_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1460,7 +1463,7 @@ fmt.Println(response.GetName()) // "response"
 Load a single entity matching the given criteria.
 
 ```go
-result, err := client.Response(nil).Load(map[string]any{"id": "response_id"}, nil)
+result, err := client.Response(nil).Load(map[string]any{"id": "response_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1573,7 +1576,7 @@ fmt.Println(results)
 Load a single entity matching the given criteria.
 
 ```go
-result, err := client.ServiceToken(nil).Load(map[string]any{"id": "service_token_id"}, nil)
+result, err := client.ServiceToken(nil).Load(map[string]any{"id": "service_token_id", "organization_id": "organization_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1618,7 +1621,7 @@ fmt.Println(result)
 Remove the entity matching the given criteria.
 
 ```go
-result, err := client.ServiceToken(nil).Remove(map[string]any{"id": "service_token_id"}, nil)
+result, err := client.ServiceToken(nil).Remove(map[string]any{"id": "service_token_id", "organization_id": "organization_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1768,7 +1771,7 @@ fmt.Println(result)
 Remove the entity matching the given criteria.
 
 ```go
-result, err := client.Subscription(nil).Remove(map[string]any{"id": "subscription_id"}, nil)
+result, err := client.Subscription(nil).Remove(map[string]any{"id": "subscription_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1928,4 +1931,42 @@ client := sdk.NewHook0SDK(map[string]any{
     },
 })
 ```
+
+
+### Configuring features
+
+Each feature is inactive until switched on, and an SDK with no feature
+configured does no feature work at all. Every option below keeps its default
+unless you name it.
+
+The array form of \`feature\` is significant: several features wrap the
+transport, and the order you list them in is the order they nest.
+
+#### `test`
+
+In-memory mock transport for testing without a live server.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Options above are those the model carries a default for. A feature may
+also accept callback options — a `sink` to receive each record, for
+instance — which have no default and are covered in the full feature
+reference.
+
+**Usage**
+
+Set `feature.test.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Attaches to pipeline hooks, not the transport, so activation order does
+  not change what it observes.
+- Installs the BASE transport that the wrapping features wrap, so it must be
+  activated before them.
+- Inactive by default: leaving it out costs nothing at runtime.
 

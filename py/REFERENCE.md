@@ -210,7 +210,7 @@ result = client.Application().create({
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.Application().list()
+results = client.Application().list({"organization_id": "example"})
 for application in results:
     print(application)
 ```
@@ -307,7 +307,7 @@ result = client.ApplicationSecret().create({
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.ApplicationSecret().list()
+results = client.ApplicationSecret().list({"application_id": "example"})
 for application_secret in results:
     print(application_secret)
 ```
@@ -365,7 +365,7 @@ applications_management = client.ApplicationsManagement()
 Remove the entity matching the given criteria. Raises on error.
 
 ```python
-result = client.ApplicationsManagement().remove({"application_secret_token": "application_secret_token"})
+result = client.ApplicationsManagement().remove({"application_secret_token": "application_secret_token", "application_id": "application_id"})
 ```
 
 ### Common Methods
@@ -407,6 +407,7 @@ event = client.Event()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `application_id` | `str` | Yes |  |
 | `event_id` | `str` | Yes |  |
 | `event_type_name` | `str` | Yes |  |
 | `id` | `str` | No |  |
@@ -420,12 +421,31 @@ event = client.Event()
 
 ### Operations
 
+#### `create(reqdata, ctrl=None) -> dict`
+
+Create a new entity with the given data. Returns the created entity data and raises on error.
+
+```python
+result = client.Event().create({
+    "id": "example_id",  # str
+    "application_id": "example_application_id",  # str
+    "event_id": "example_event_id",  # str
+    "event_type_name": "example_event_type_name",  # str
+    "ip": "example_ip",  # str
+    "labels": {},  # dict
+    "occurred_at": "example_occurred_at",  # str
+    "payload": "example_payload",  # str
+    "payload_content_type": "example_payload_content_type",  # str
+    "received_at": "example_received_at",  # str
+})
+```
+
 #### `list(reqmatch=None, ctrl=None) -> list`
 
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.Event().list()
+results = client.Event().list({"application_id": "example"})
 for event in results:
     print(event)
 ```
@@ -435,7 +455,7 @@ for event in results:
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```python
-result = client.Event().load({"id": "event_id"})
+result = client.Event().load({"id": "event_id", "application_id": "application_id"})
 ```
 
 ### Common Methods
@@ -511,7 +531,7 @@ result = client.EventType().create({
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.EventType().list()
+results = client.EventType().list({"application_id": "example"})
 for event_type in results:
     print(event_type)
 ```
@@ -521,7 +541,7 @@ for event_type in results:
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```python
-result = client.EventType().load({"id": "event_type_id"})
+result = client.EventType().load({"id": "event_type_id", "application_id": "application_id"})
 ```
 
 ### Common Methods
@@ -559,24 +579,7 @@ Return the entity name.
 events_management = client.EventsManagement()
 ```
 
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `application_id` | `str` | Yes |  |
-
 ### Operations
-
-#### `create(reqdata, ctrl=None) -> dict`
-
-Create a new entity with the given data. Returns the created entity data and raises on error.
-
-```python
-result = client.EventsManagement().create({
-    "event_id": "example_event_id",  # str
-    "application_id": "example_application_id",  # str
-})
-```
 
 #### `list(reqmatch=None, ctrl=None) -> list`
 
@@ -593,7 +596,7 @@ for events_management in results:
 Remove the entity matching the given criteria. Raises on error.
 
 ```python
-result = client.EventsManagement().remove({"event_type_name": "event_type_name"})
+result = client.EventsManagement().remove({"event_type_name": "event_type_name", "application_id": "application_id"})
 ```
 
 ### Common Methods
@@ -648,7 +651,7 @@ events_per_day_entry = client.EventsPerDayEntry()
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.EventsPerDayEntry().list()
+results = client.EventsPerDayEntry().list({"application_id": "example"})
 for events_per_day_entry in results:
     print(events_per_day_entry)
 ```
@@ -1344,7 +1347,7 @@ request_attempt = client.RequestAttempt()
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.RequestAttempt().list()
+results = client.RequestAttempt().list({"application_id": "example"})
 for request_attempt in results:
     print(request_attempt)
 ```
@@ -1354,7 +1357,7 @@ for request_attempt in results:
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```python
-result = client.RequestAttempt().load({"id": "request_attempt_id"})
+result = client.RequestAttempt().load({"id": "request_attempt_id", "application_id": "application_id"})
 ```
 
 ### Common Methods
@@ -1405,7 +1408,7 @@ response = client.Response()
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```python
-result = client.Response().load({"id": "response_id"})
+result = client.Response().load({"id": "response_id", "application_id": "application_id"})
 ```
 
 ### Common Methods
@@ -1520,7 +1523,7 @@ result = client.ServiceToken().create({
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.ServiceToken().list()
+results = client.ServiceToken().list({"organization_id": "example"})
 for service_token in results:
     print(service_token)
 ```
@@ -1530,7 +1533,7 @@ for service_token in results:
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```python
-result = client.ServiceToken().load({"id": "service_token_id"})
+result = client.ServiceToken().load({"id": "service_token_id", "organization_id": "organization_id"})
 ```
 
 #### `remove(reqmatch, ctrl=None) -> dict`
@@ -1538,7 +1541,7 @@ result = client.ServiceToken().load({"id": "service_token_id"})
 Remove the entity matching the given criteria. Raises on error.
 
 ```python
-result = client.ServiceToken().remove({"id": "service_token_id"})
+result = client.ServiceToken().remove({"id": "service_token_id", "organization_id": "organization_id"})
 ```
 
 #### `update(reqdata, ctrl=None) -> dict`
@@ -1656,7 +1659,7 @@ result = client.Subscription().create({
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.Subscription().list()
+results = client.Subscription().list({"application_id": "example"})
 for subscription in results:
     print(subscription)
 ```
@@ -1674,7 +1677,7 @@ result = client.Subscription().load({"id": "subscription_id"})
 Remove the entity matching the given criteria. Raises on error.
 
 ```python
-result = client.Subscription().remove({"id": "subscription_id"})
+result = client.Subscription().remove({"id": "subscription_id", "application_id": "application_id"})
 ```
 
 #### `update(reqdata, ctrl=None) -> dict`
@@ -1846,4 +1849,42 @@ client = Hook0SDK({
     },
 })
 ```
+
+
+### Configuring features
+
+Each feature is inactive until switched on, and an SDK with no feature
+configured does no feature work at all. Every option below keeps its default
+unless you name it.
+
+The array form of \`feature\` is significant: several features wrap the
+transport, and the order you list them in is the order they nest.
+
+#### `test`
+
+In-memory mock transport for testing without a live server.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Options above are those the model carries a default for. A feature may
+also accept callback options — a `sink` to receive each record, for
+instance — which have no default and are covered in the full feature
+reference.
+
+**Usage**
+
+Set `feature.test.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Attaches to pipeline hooks, not the transport, so activation order does
+  not change what it observes.
+- Installs the BASE transport that the wrapping features wrap, so it must be
+  activated before them.
+- Inactive by default: leaving it out costs nothing at runtime.
 

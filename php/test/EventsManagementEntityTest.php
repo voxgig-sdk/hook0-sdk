@@ -62,7 +62,7 @@ class EventsManagementEntityTest extends TestCase
         $setup = events_management_basic_setup(null);
         // Per-op sdk-test-control.json skip.
         $_live = !empty($setup["live"]);
-        foreach (["create", "list", "remove"] as $_op) {
+        foreach (["list"] as $_op) {
             [$_shouldSkip, $_reason] = Runner::is_control_skipped("entityOp", "events_management." . $_op, $_live ? "live" : "unit");
             if ($_shouldSkip) {
                 $this->markTestSkipped($_reason ?? "skipped via sdk-test-control.json");
@@ -77,28 +77,20 @@ class EventsManagementEntityTest extends TestCase
         }
         $client = $setup["client"];
 
-        // CREATE
-        $events_management_ref01_ent = $client->EventsManagement(null);
-        $events_management_ref01_data = Helpers::to_map(Vs::getprop(
-            Vs::getpath($setup["data"], "new.events_management"), "events_management_ref01"));
-        $events_management_ref01_data["event_id"] = $setup["idmap"]["event01"];
-
-        $events_management_ref01_data_result = $events_management_ref01_ent->create($events_management_ref01_data, null);
-        $events_management_ref01_data = Helpers::to_map(is_object($events_management_ref01_data_result) && method_exists($events_management_ref01_data_result, 'data_get') ? $events_management_ref01_data_result->data_get() : $events_management_ref01_data_result);
-        $this->assertNotNull($events_management_ref01_data);
+        // Bootstrap entity data from existing test data.
+        $events_management_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.events_management")));
+        $events_management_ref01_data = null;
+        if (count($events_management_ref01_data_raw) > 0) {
+            $events_management_ref01_data = Helpers::to_map($events_management_ref01_data_raw[0][1]);
+        }
 
         // LIST
+        $events_management_ref01_ent = $client->EventsManagement(null);
         $events_management_ref01_match = [];
 
         $events_management_ref01_list_result = $events_management_ref01_ent->list($events_management_ref01_match, null);
         $this->assertIsArray($events_management_ref01_list_result);
-
-
-        // LIST
-        $events_management_ref01_match_rt0 = [];
-
-        $events_management_ref01_list_rt0_result = $events_management_ref01_ent->list($events_management_ref01_match_rt0, null);
-        $this->assertIsArray($events_management_ref01_list_rt0_result);
 
     }
 }
@@ -118,7 +110,7 @@ function events_management_basic_setup($extra)
 
     // Generate idmap.
     $idmap = [];
-    foreach (["events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03", "event01", "event02", "event03"] as $k) {
+    foreach (["events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03"] as $k) {
         $idmap[$k] = strtoupper($k);
     }
 
@@ -132,7 +124,7 @@ function events_management_basic_setup($extra)
         "HOOK0_TEST_EVENTS_MANAGEMENT_ENTID" => $idmap,
         "HOOK0_TEST_LIVE" => "FALSE",
         "HOOK0_TEST_EXPLAIN" => "FALSE",
-        "HOOK0_APIKEY" => "NONE",
+        "HOOK0_APIKEY" => "",
     ]);
 
     $idmap_resolved = Helpers::to_map(
@@ -143,12 +135,27 @@ function events_management_basic_setup($extra)
 
     if ($env["HOOK0_TEST_LIVE"] === "TRUE") {
         $merged_opts = Vs::merge([
+            // FIRST, so the generated fields below win: sdk-test-control.json's
+            // test.client.options adds to the live client, it does not redirect it.
+            Runner::live_client_options(),
             [
                 "apikey" => $env["HOOK0_APIKEY"],
             ],
-            $extra ?? [],
+            // ismap, not a plain "?? []" default: an empty PHP array is a
+            // LIST, and a non-map later entry REPLACES the accumulated map in
+            // merge - so the no-extras call discarded live_client_options()
+            // and the apikey/server map above it.
+            Vs::ismap($extra) ? $extra : new \stdClass(),
         ]);
-        $client = new Hook0SDK(Helpers::to_map($merged_opts));
+        // "?? []" because merge legitimately answers with a stdClass when every
+        // contributing entry is an EMPTY map - an SDK with no apikey and no
+        // server variables generates an empty middle entry, so that is the
+        // common case, not the edge one. to_map returns null for a non-array by
+        // design, and the constructor takes a non-nullable array, so without the
+        // fallback every such SDK died on "must be of type array, null given"
+        // the moment live mode was switched on. Offline mode never reaches this
+        // branch, which is why the offline suite stayed green.
+        $client = new Hook0SDK(Helpers::to_map($merged_opts) ?? []);
     }
 
     $live = $env["HOOK0_TEST_LIVE"] === "TRUE";

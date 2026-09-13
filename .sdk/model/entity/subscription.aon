@@ -6,11 +6,13 @@ main: kit: entity: subscription: {
 
   fields: [
     {
+      format: "uuid"
       name: "application_id"
       req: true
       type: "`$STRING`"
     }
     {
+      format: "date-time"
       name: "created_at"
       req: true
       type: "`$STRING`"
@@ -113,11 +115,13 @@ main: kit: entity: subscription: {
       type: "`$OBJECT`"
     }
     {
+      format: "uuid"
       name: "secret"
       req: true
       type: "`$STRING`"
     }
     {
+      format: "uuid"
       name: "subscription_id"
       req: true
       type: "`$STRING`"
@@ -128,6 +132,7 @@ main: kit: entity: subscription: {
       type: "`$OBJECT`"
     }
     {
+      format: "date-time"
       name: "updated_at"
       req: true
       type: "`$STRING`"
@@ -147,10 +152,16 @@ main: kit: entity: subscription: {
         {
           method: "POST"
           orig: "/api/v1/subscriptions/"
-          parts: [
-            "api"
-            "v1"
-            "subscriptions"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "subscriptions"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -176,10 +187,16 @@ main: kit: entity: subscription: {
           }
           method: "GET"
           orig: "/api/v1/subscriptions/"
-          parts: [
-            "api"
-            "v1"
-            "subscriptions"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "subscriptions"
+            }
           ]
           select: {
             exist: [
@@ -210,17 +227,25 @@ main: kit: entity: subscription: {
           }
           method: "GET"
           orig: "/api/v1/subscriptions/{subscription_id}"
-          parts: [
-            "api"
-            "v1"
-            "subscriptions"
-            "{id}"
-          ]
           rename: {
             param: {
               subscription_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "subscriptions"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"
@@ -259,17 +284,25 @@ main: kit: entity: subscription: {
           }
           method: "DELETE"
           orig: "/api/v1/subscriptions/{subscription_id}"
-          parts: [
-            "api"
-            "v1"
-            "subscriptions"
-            "{id}"
-          ]
           rename: {
             param: {
               subscription_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "subscriptions"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "application_id"
@@ -300,17 +333,25 @@ main: kit: entity: subscription: {
           }
           method: "PUT"
           orig: "/api/v1/subscriptions/{subscription_id}"
-          parts: [
-            "api"
-            "v1"
-            "subscriptions"
-            "{id}"
-          ]
           rename: {
             param: {
               subscription_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "subscriptions"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"

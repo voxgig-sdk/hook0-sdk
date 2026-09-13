@@ -61,7 +61,7 @@ class TestEventEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["list", "load"]:
+        for _op in ["create", "list", "load"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "event." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
@@ -73,19 +73,26 @@ class TestEventEntity:
                         "set HOOK0_TEST_EVENT_ENTID JSON to run live")
         client = setup["client"]
 
-        # Bootstrap entity data from existing test data.
-        event_ref01_data_raw = vs.items(helpers.to_map(
-            vs.getpath(setup["data"], "existing.event")))
-        event_ref01_data = None
-        if len(event_ref01_data_raw) > 0:
-            event_ref01_data = helpers.to_map(event_ref01_data_raw[0][1])
+        # CREATE
+        event_ref01_ent = client.Event(None)
+        event_ref01_data = helpers.to_map(vs.getprop(
+            vs.getpath(setup["data"], "new.event"), "event_ref01"))
+        event_ref01_data["event_id"] = setup["idmap"]["event01"]
+
+        event_ref01_data = helpers.to_map(runner.entity_data(event_ref01_ent.create(event_ref01_data, None)))
+        assert event_ref01_data is not None
+        assert event_ref01_data["id"] is not None
 
         # LIST
-        event_ref01_ent = client.Event(None)
         event_ref01_match = {}
 
         event_ref01_list_result = event_ref01_ent.list(event_ref01_match, None)
         assert isinstance(event_ref01_list_result, list)
+
+        found_item = vs.select(
+            runner.entity_list_to_data(event_ref01_list_result),
+            {"id": event_ref01_data["id"]})
+        assert not vs.isempty(found_item)
 
         # LOAD
         event_ref01_match_dt0 = {
@@ -134,7 +141,7 @@ def _event_basic_setup(extra):
         "HOOK0_TEST_EVENT_ENTID": idmap,
         "HOOK0_TEST_LIVE": "FALSE",
         "HOOK0_TEST_EXPLAIN": "FALSE",
-        "HOOK0_APIKEY": "NONE",
+        "HOOK0_APIKEY": "",
     })
 
     idmap_resolved = helpers.to_map(
@@ -144,6 +151,10 @@ def _event_basic_setup(extra):
 
     if env.get("HOOK0_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([
+            # FIRST, so the generated fields below win: sdk-test-control.json's
+            # test.client.options adds to the live client, it does not
+            # redirect it.
+            runner.live_client_options(),
             {
                 "apikey": env.get("HOOK0_APIKEY"),
             },

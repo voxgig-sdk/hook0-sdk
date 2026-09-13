@@ -60,7 +60,7 @@ describe("EventEntity", function()
     local setup = event_basic_setup(nil)
     -- Per-op sdk-test-control.json skip.
     local _live = setup.live or false
-    for _, _op in ipairs({"list", "load"}) do
+    for _, _op in ipairs({"create", "list", "load"}) do
       local _should_skip, _reason = runner.is_control_skipped("entityOp", "event." .. _op, _live and "live" or "unit")
       if _should_skip then
         pending(_reason or "skipped via sdk-test-control.json")
@@ -75,21 +75,29 @@ describe("EventEntity", function()
     end
     local client = setup.client
 
-    -- Bootstrap entity data from existing test data.
-    local event_ref01_data_raw = vs.items(helpers.to_map(
-      vs.getpath(setup.data, "existing.event")))
-    local event_ref01_data = nil
-    if #event_ref01_data_raw > 0 then
-      event_ref01_data = helpers.to_map(event_ref01_data_raw[1][2])
-    end
+    -- CREATE
+    local event_ref01_ent = client:Event(nil)
+    local event_ref01_data = helpers.to_map(vs.getprop(
+      vs.getpath(setup.data, "new.event"), "event_ref01"))
+    event_ref01_data["event_id"] = setup.idmap["event01"]
+
+    local event_ref01_data_result, err = event_ref01_ent:create(event_ref01_data, nil)
+    assert.is_nil(err)
+    event_ref01_data = helpers.to_map(type(event_ref01_data_result) == 'table' and event_ref01_data_result.data_get and event_ref01_data_result:data_get() or event_ref01_data_result)
+    assert.is_not_nil(event_ref01_data)
+    assert.is_not_nil(event_ref01_data["id"])
 
     -- LIST
-    local event_ref01_ent = client:Event(nil)
     local event_ref01_match = {}
 
     local event_ref01_list_result, err = event_ref01_ent:list(event_ref01_match, nil)
     assert.is_nil(err)
     assert.is_table(event_ref01_list_result)
+
+    local found_item = vs.select(
+      runner.entity_list_to_data(event_ref01_list_result),
+      { id = event_ref01_data["id"] })
+    assert.is_false(vs.isempty(found_item))
 
     -- LOAD
     local event_ref01_match_dt0 = {
@@ -143,7 +151,7 @@ function event_basic_setup(extra)
     ["HOOK0_TEST_EVENT_ENTID"] = idmap,
     ["HOOK0_TEST_LIVE"] = "FALSE",
     ["HOOK0_TEST_EXPLAIN"] = "FALSE",
-    ["HOOK0_APIKEY"] = "NONE",
+    ["HOOK0_APIKEY"] = "",
   })
 
   local idmap_resolved = helpers.to_map(
@@ -154,6 +162,9 @@ function event_basic_setup(extra)
 
   if env["HOOK0_TEST_LIVE"] == "TRUE" then
     local merged_opts = vs.merge({
+      -- FIRST, so the generated fields below win: sdk-test-control.json's
+      -- test.client.options adds to the live client, it does not redirect it.
+      runner.live_client_options(),
       {
         apikey = env["HOOK0_APIKEY"],
       },

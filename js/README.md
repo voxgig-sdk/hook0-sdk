@@ -43,7 +43,7 @@ console.log(application)
 ### List Application Records
 
 ```js
-const applications = await client.Application().list()
+const applications = await client.Application().list({ organization_id: "example" })
 for (const application of applications) {
   console.log(application)
 }
@@ -402,6 +402,7 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
+| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -413,9 +414,9 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 | `payload_content_type` |  |
 | `received_at` |  |
 
-Operations: list, load.
+Operations: create, list, load.
 
-API path: `/api/v1/events/`
+API path: `/api/v1/events/{event_id}/replay`
 
 #### EventType
 
@@ -439,11 +440,10 @@ API path: `/api/v1/event_types/`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 
-Operations: create, list, remove.
+Operations: list, remove.
 
-API path: `/api/v1/events/{event_id}/replay`
+API path: `/api/v1/payload_content_types/`
 
 #### EventsPerDayEntry
 
@@ -755,7 +755,7 @@ const application = await client.Application().load({ id: 'application_id' })
 #### Example: List
 
 ```ts
-const applications = await client.Application().list()
+const applications = await client.Application().list({ organization_id: "example" })
 ```
 
 #### Example: Create
@@ -798,7 +798,7 @@ Create an instance: `const application_secret = client.ApplicationSecret()`
 #### Example: List
 
 ```ts
-const application_secrets = await client.ApplicationSecret().list()
+const application_secrets = await client.ApplicationSecret().list({ application_id: "example" })
 ```
 
 #### Example: Create
@@ -831,6 +831,7 @@ Create an instance: `const event = client.Event()`
 
 | Method | Description |
 | --- | --- |
+| `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 
@@ -838,6 +839,7 @@ Create an instance: `const event = client.Event()`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `application_id` | `string` |  |
 | `event_id` | `string` |  |
 | `event_type_name` | `string` |  |
 | `id` | `string` |  |
@@ -852,13 +854,30 @@ Create an instance: `const event = client.Event()`
 #### Example: Load
 
 ```ts
-const event = await client.Event().load({ id: 'event_id' })
+const event = await client.Event().load({ id: 'event_id', application_id: 'application_id' })
 ```
 
 #### Example: List
 
 ```ts
-const events = await client.Event().list()
+const events = await client.Event().list({ application_id: "example" })
+```
+
+#### Example: Create
+
+```ts
+const event = await client.Event().create({
+  id: 'example_id',
+  application_id: 'example_application_id',
+  event_id: 'example_event_id',
+  event_type_name: 'example_event_type_name',
+  ip: 'example_ip',
+  labels: {},
+  occurred_at: 'example_occurred_at',
+  payload: 'example_payload',
+  payload_content_type: 'example_payload_content_type',
+  received_at: 'example_received_at',
+})
 ```
 
 
@@ -891,13 +910,13 @@ Create an instance: `const event_type = client.EventType()`
 #### Example: Load
 
 ```ts
-const event_type = await client.EventType().load({ id: 'event_type_id' })
+const event_type = await client.EventType().load({ id: 'event_type_id', application_id: 'application_id' })
 ```
 
 #### Example: List
 
 ```ts
-const event_types = await client.EventType().list()
+const event_types = await client.EventType().list({ application_id: "example" })
 ```
 
 #### Example: Create
@@ -924,29 +943,13 @@ Create an instance: `const events_management = client.EventsManagement()`
 
 | Method | Description |
 | --- | --- |
-| `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
 | `remove(match)` | Remove the matching entity. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `application_id` | `string` |  |
 
 #### Example: List
 
 ```ts
 const events_managements = await client.EventsManagement().list()
-```
-
-#### Example: Create
-
-```ts
-const events_management = await client.EventsManagement().create({
-  event_id: 'example_event_id',
-  application_id: 'example_application_id',
-})
 ```
 
 
@@ -973,7 +976,7 @@ Create an instance: `const events_per_day_entry = client.EventsPerDayEntry()`
 #### Example: List
 
 ```ts
-const events_per_day_entrys = await client.EventsPerDayEntry().list()
+const events_per_day_entrys = await client.EventsPerDayEntry().list({ application_id: "example" })
 ```
 
 
@@ -1326,13 +1329,13 @@ Create an instance: `const request_attempt = client.RequestAttempt()`
 #### Example: Load
 
 ```ts
-const request_attempt = await client.RequestAttempt().load({ id: 'request_attempt_id' })
+const request_attempt = await client.RequestAttempt().load({ id: 'request_attempt_id', application_id: 'application_id' })
 ```
 
 #### Example: List
 
 ```ts
-const request_attempts = await client.RequestAttempt().list()
+const request_attempts = await client.RequestAttempt().list({ application_id: "example" })
 ```
 
 
@@ -1355,7 +1358,7 @@ Create an instance: `const response = client.Response()`
 #### Example: Load
 
 ```ts
-const response = await client.Response().load({ id: 'response_id' })
+const response = await client.Response().load({ id: 'response_id', application_id: 'application_id' })
 ```
 
 
@@ -1398,13 +1401,13 @@ Create an instance: `const service_token = client.ServiceToken()`
 #### Example: Load
 
 ```ts
-const service_token = await client.ServiceToken().load({ id: 'service_token_id' })
+const service_token = await client.ServiceToken().load({ id: 'service_token_id', organization_id: 'organization_id' })
 ```
 
 #### Example: List
 
 ```ts
-const service_tokens = await client.ServiceToken().list()
+const service_tokens = await client.ServiceToken().list({ organization_id: "example" })
 ```
 
 #### Example: Create
@@ -1463,7 +1466,7 @@ const subscription = await client.Subscription().load({ id: 'subscription_id' })
 #### Example: List
 
 ```ts
-const subscriptions = await client.Subscription().list()
+const subscriptions = await client.Subscription().list({ application_id: "example" })
 ```
 
 #### Example: Create
@@ -1542,6 +1545,29 @@ const user_invitation = await client.UserInvitation().create({
   role: 'example_role',
 })
 ```
+
+## Features
+
+This SDK ships 1 optional features. Each is **inactive until you
+switch it on**, so an SDK you have not configured behaves exactly as if none of
+them existed — no retries, no cache, no logging, no measurable overhead.
+
+Activate a feature by name in the client options, alongside the options shown
+above:
+
+| Feature | What it does |
+|---|---|
+| [`test`](#test) | In-memory mock transport for testing without a live server |
+
+### test
+
+In-memory mock transport for testing without a live server.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Set `feature.test.active` to enable it, then override any of the options above.
 
 
 ## Advanced

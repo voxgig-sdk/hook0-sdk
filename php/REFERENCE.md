@@ -368,7 +368,7 @@ $applications_management = $client->ApplicationsManagement();
 Remove the entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->ApplicationsManagement()->remove(["application_secret_token" => "application_secret_token"]);
+$result = $client->ApplicationsManagement()->remove(["application_secret_token" => "application_secret_token", "application_id" => "application_id"]);
 ```
 
 ### Common Methods
@@ -411,6 +411,7 @@ $event = $client->Event();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `application_id` | `string` | Yes |  |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
 | `id` | `string` | No |  |
@@ -423,6 +424,25 @@ $event = $client->Event();
 | `received_at` | `string` | Yes |  |
 
 ### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->Event()->create([
+  "id" => null, // string
+  "application_id" => null, // string
+  "event_id" => null, // string
+  "event_type_name" => null, // string
+  "ip" => null, // string
+  "labels" => null, // array
+  "occurred_at" => null, // string
+  "payload" => null, // string
+  "payload_content_type" => null, // string
+  "received_at" => null, // string
+]);
+```
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
@@ -437,7 +457,7 @@ $results = $client->Event()->list();
 Load a single entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->Event()->load(["id" => "event_id"]);
+$result = $client->Event()->load(["id" => "event_id", "application_id" => "application_id"]);
 ```
 
 ### Common Methods
@@ -522,7 +542,7 @@ $results = $client->EventType()->list();
 Load a single entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->EventType()->load(["id" => "event_type_id"]);
+$result = $client->EventType()->load(["id" => "event_type_id", "application_id" => "application_id"]);
 ```
 
 ### Common Methods
@@ -561,24 +581,7 @@ Return the entity name.
 $events_management = $client->EventsManagement();
 ```
 
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
-
 ### Operations
-
-#### `create(array $reqdata, ?array $ctrl = null): mixed`
-
-Create a new entity with the given data. Throws on error.
-
-```php
-$result = $client->EventsManagement()->create([
-  "event_id" => null, // string
-  "application_id" => null, // string
-]);
-```
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
@@ -593,7 +596,7 @@ $results = $client->EventsManagement()->list();
 Remove the entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->EventsManagement()->remove(["event_type_name" => "event_type_name"]);
+$result = $client->EventsManagement()->remove(["event_type_name" => "event_type_name", "application_id" => "application_id"]);
 ```
 
 ### Common Methods
@@ -1356,7 +1359,7 @@ $results = $client->RequestAttempt()->list();
 Load a single entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->RequestAttempt()->load(["id" => "request_attempt_id"]);
+$result = $client->RequestAttempt()->load(["id" => "request_attempt_id", "application_id" => "application_id"]);
 ```
 
 ### Common Methods
@@ -1408,7 +1411,7 @@ $response = $client->Response();
 Load a single entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->Response()->load(["id" => "response_id"]);
+$result = $client->Response()->load(["id" => "response_id", "application_id" => "application_id"]);
 ```
 
 ### Common Methods
@@ -1533,7 +1536,7 @@ $results = $client->ServiceToken()->list();
 Load a single entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->ServiceToken()->load(["id" => "service_token_id"]);
+$result = $client->ServiceToken()->load(["id" => "service_token_id", "organization_id" => "organization_id"]);
 ```
 
 #### `remove(array $reqmatch, ?array $ctrl = null): mixed`
@@ -1541,7 +1544,7 @@ $result = $client->ServiceToken()->load(["id" => "service_token_id"]);
 Remove the entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->ServiceToken()->remove(["id" => "service_token_id"]);
+$result = $client->ServiceToken()->remove(["id" => "service_token_id", "organization_id" => "organization_id"]);
 ```
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
@@ -1676,7 +1679,7 @@ $result = $client->Subscription()->load(["id" => "subscription_id"]);
 Remove the entity matching the given criteria. Throws on error.
 
 ```php
-$result = $client->Subscription()->remove(["id" => "subscription_id"]);
+$result = $client->Subscription()->remove(["id" => "subscription_id", "application_id" => "application_id"]);
 ```
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
@@ -1851,4 +1854,42 @@ $client = new Hook0SDK([
   ],
 ]);
 ```
+
+
+### Configuring features
+
+Each feature is inactive until switched on, and an SDK with no feature
+configured does no feature work at all. Every option below keeps its default
+unless you name it.
+
+The array form of \`feature\` is significant: several features wrap the
+transport, and the order you list them in is the order they nest.
+
+#### `test`
+
+In-memory mock transport for testing without a live server.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Options above are those the model carries a default for. A feature may
+also accept callback options — a `sink` to receive each record, for
+instance — which have no default and are covered in the full feature
+reference.
+
+**Usage**
+
+Set `feature.test.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Attaches to pipeline hooks, not the transport, so activation order does
+  not change what it observes.
+- Installs the BASE transport that the wrapping features wrap, so it must be
+  activated before them.
+- Inactive by default: leaving it out costs nothing at runtime.
 

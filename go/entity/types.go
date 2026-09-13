@@ -30,13 +30,7 @@ type ApplicationLoadMatch struct {
 
 // ApplicationListMatch is the typed request payload for Application.ListTyped.
 type ApplicationListMatch struct {
-	ApplicationId *string `json:"application_id,omitempty"`
-	Consumption *map[string]any `json:"consumption,omitempty"`
-	Id *string `json:"id,omitempty"`
-	Name *string `json:"name,omitempty"`
-	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
-	OrganizationId *string `json:"organization_id,omitempty"`
-	Quotas *map[string]any `json:"quotas,omitempty"`
+	OrganizationId string `json:"organization_id"`
 }
 
 // ApplicationCreateData is the typed request payload for Application.CreateTyped.
@@ -78,12 +72,7 @@ type ApplicationSecret struct {
 
 // ApplicationSecretListMatch is the typed request payload for ApplicationSecret.ListTyped.
 type ApplicationSecretListMatch struct {
-	ApplicationId *string `json:"application_id,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	DeletedAt *string `json:"deleted_at,omitempty"`
-	Id *string `json:"id,omitempty"`
-	Name *string `json:"name,omitempty"`
-	Token *string `json:"token,omitempty"`
+	ApplicationId string `json:"application_id"`
 }
 
 // ApplicationSecretCreateData is the typed request payload for ApplicationSecret.CreateTyped.
@@ -113,10 +102,12 @@ type ApplicationsManagement struct {
 // ApplicationsManagementRemoveMatch is the typed request payload for ApplicationsManagement.RemoveTyped.
 type ApplicationsManagementRemoveMatch struct {
 	ApplicationSecretToken string `json:"application_secret_token"`
+	ApplicationId string `json:"application_id"`
 }
 
 // Event is the typed data model for the event entity.
 type Event struct {
+	ApplicationId string `json:"application_id"`
 	EventId string `json:"event_id"`
 	EventTypeName string `json:"event_type_name"`
 	Id *string `json:"id,omitempty"`
@@ -132,20 +123,27 @@ type Event struct {
 // EventLoadMatch is the typed request payload for Event.LoadTyped.
 type EventLoadMatch struct {
 	Id string `json:"id"`
+	ApplicationId string `json:"application_id"`
 }
 
 // EventListMatch is the typed request payload for Event.ListTyped.
 type EventListMatch struct {
-	EventId *string `json:"event_id,omitempty"`
-	EventTypeName *string `json:"event_type_name,omitempty"`
-	Id *string `json:"id,omitempty"`
-	Ip *string `json:"ip,omitempty"`
-	Labels *map[string]any `json:"labels,omitempty"`
+	ApplicationId string `json:"application_id"`
+}
+
+// EventCreateData is the typed request payload for Event.CreateTyped.
+type EventCreateData struct {
+	Id string `json:"id"`
+	ApplicationId string `json:"application_id"`
+	EventId string `json:"event_id"`
+	EventTypeName string `json:"event_type_name"`
+	Ip string `json:"ip"`
+	Labels map[string]any `json:"labels"`
 	Metadata *map[string]any `json:"metadata,omitempty"`
-	OccurredAt *string `json:"occurred_at,omitempty"`
-	Payload *string `json:"payload,omitempty"`
-	PayloadContentType *string `json:"payload_content_type,omitempty"`
-	ReceivedAt *string `json:"received_at,omitempty"`
+	OccurredAt string `json:"occurred_at"`
+	Payload string `json:"payload"`
+	PayloadContentType string `json:"payload_content_type"`
+	ReceivedAt string `json:"received_at"`
 }
 
 // EventType is the typed data model for the event_type entity.
@@ -164,19 +162,12 @@ type EventType struct {
 // EventTypeLoadMatch is the typed request payload for EventType.LoadTyped.
 type EventTypeLoadMatch struct {
 	Id string `json:"id"`
+	ApplicationId string `json:"application_id"`
 }
 
 // EventTypeListMatch is the typed request payload for EventType.ListTyped.
 type EventTypeListMatch struct {
-	ApplicationId *string `json:"application_id,omitempty"`
-	EventTypeName *string `json:"event_type_name,omitempty"`
-	Id *string `json:"id,omitempty"`
-	ResourceType *string `json:"resource_type,omitempty"`
-	ResourceTypeName *string `json:"resource_type_name,omitempty"`
-	Service *string `json:"service,omitempty"`
-	ServiceName *string `json:"service_name,omitempty"`
-	Verb *string `json:"verb,omitempty"`
-	VerbName *string `json:"verb_name,omitempty"`
+	ApplicationId string `json:"application_id"`
 }
 
 // EventTypeCreateData is the typed request payload for EventType.CreateTyped.
@@ -194,23 +185,16 @@ type EventTypeCreateData struct {
 
 // EventsManagement is the typed data model for the events_management entity.
 type EventsManagement struct {
-	ApplicationId string `json:"application_id"`
 }
 
 // EventsManagementListMatch is the typed request payload for EventsManagement.ListTyped.
 type EventsManagementListMatch struct {
-	ApplicationId *string `json:"application_id,omitempty"`
-}
-
-// EventsManagementCreateData is the typed request payload for EventsManagement.CreateTyped.
-type EventsManagementCreateData struct {
-	EventId string `json:"event_id"`
-	ApplicationId string `json:"application_id"`
 }
 
 // EventsManagementRemoveMatch is the typed request payload for EventsManagement.RemoveTyped.
 type EventsManagementRemoveMatch struct {
 	EventTypeName string `json:"event_type_name"`
+	ApplicationId string `json:"application_id"`
 }
 
 // EventsPerDayEntry is the typed data model for the events_per_day_entry entity.
@@ -224,11 +208,9 @@ type EventsPerDayEntry struct {
 
 // EventsPerDayEntryListMatch is the typed request payload for EventsPerDayEntry.ListTyped.
 type EventsPerDayEntryListMatch struct {
-	Amount *int `json:"amount,omitempty"`
-	ApplicationId *string `json:"application_id,omitempty"`
-	ApplicationName *string `json:"application_name,omitempty"`
-	Date *string `json:"date,omitempty"`
-	IsProvisional *bool `json:"is_provisional,omitempty"`
+	ApplicationId string `json:"application_id"`
+	From *string `json:"from,omitempty"`
+	To *string `json:"to,omitempty"`
 }
 
 // Health is the typed data model for the health entity.
@@ -244,13 +226,7 @@ type Health struct {
 
 // HealthLoadMatch is the typed request payload for Health.LoadTyped.
 type HealthLoadMatch struct {
-	Database *bool `json:"database,omitempty"`
-	DatabaseDurationMs *int `json:"database_duration_ms,omitempty"`
-	ObjectStorage *bool `json:"object_storage,omitempty"`
-	ObjectStorageDurationMs *int `json:"object_storage_duration_ms,omitempty"`
-	Pulsar *bool `json:"pulsar,omitempty"`
-	PulsarDurationMs *int `json:"pulsar_duration_ms,omitempty"`
-	TotalDurationMs *int `json:"total_duration_ms,omitempty"`
+	Key *string `json:"key,omitempty"`
 }
 
 // Hook0 is the typed data model for the hook0 entity.
@@ -492,24 +468,18 @@ type RequestAttempt struct {
 // RequestAttemptLoadMatch is the typed request payload for RequestAttempt.LoadTyped.
 type RequestAttemptLoadMatch struct {
 	Id string `json:"id"`
+	ApplicationId string `json:"application_id"`
 }
 
 // RequestAttemptListMatch is the typed request payload for RequestAttempt.ListTyped.
 type RequestAttemptListMatch struct {
-	CreatedAt *string `json:"created_at,omitempty"`
-	DelayUntil *string `json:"delay_until,omitempty"`
-	Event *map[string]any `json:"event,omitempty"`
+	ApplicationId string `json:"application_id"`
+	EventEventTypeName *string `json:"event_event_type_name,omitempty"`
 	EventId *string `json:"event_id,omitempty"`
-	FailedAt *string `json:"failed_at,omitempty"`
-	HttpResponseStatus *int `json:"http_response_status,omitempty"`
-	Id *string `json:"id,omitempty"`
-	PickedAt *string `json:"picked_at,omitempty"`
-	RequestAttemptId *string `json:"request_attempt_id,omitempty"`
-	ResponseId *string `json:"response_id,omitempty"`
-	RetryCount *int `json:"retry_count,omitempty"`
-	Status *map[string]any `json:"status,omitempty"`
-	Subscription *map[string]any `json:"subscription,omitempty"`
-	SucceededAt *string `json:"succeeded_at,omitempty"`
+	MaxCreatedAt *string `json:"max_created_at,omitempty"`
+	MinCreatedAt *string `json:"min_created_at,omitempty"`
+	PaginationCursor *string `json:"pagination_cursor,omitempty"`
+	SubscriptionId *string `json:"subscription_id,omitempty"`
 }
 
 // Response is the typed data model for the response entity.
@@ -520,6 +490,7 @@ type Response struct {
 // ResponseLoadMatch is the typed request payload for Response.LoadTyped.
 type ResponseLoadMatch struct {
 	Id string `json:"id"`
+	ApplicationId string `json:"application_id"`
 }
 
 // Revoke is the typed data model for the revoke entity.
@@ -544,16 +515,12 @@ type ServiceToken struct {
 // ServiceTokenLoadMatch is the typed request payload for ServiceToken.LoadTyped.
 type ServiceTokenLoadMatch struct {
 	Id string `json:"id"`
+	OrganizationId string `json:"organization_id"`
 }
 
 // ServiceTokenListMatch is the typed request payload for ServiceToken.ListTyped.
 type ServiceTokenListMatch struct {
-	Biscuit *string `json:"biscuit,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	Id *string `json:"id,omitempty"`
-	Name *string `json:"name,omitempty"`
-	OrganizationId *string `json:"organization_id,omitempty"`
-	TokenId *string `json:"token_id,omitempty"`
+	OrganizationId string `json:"organization_id"`
 }
 
 // ServiceTokenCreateData is the typed request payload for ServiceToken.CreateTyped.
@@ -579,6 +546,7 @@ type ServiceTokenUpdateData struct {
 // ServiceTokenRemoveMatch is the typed request payload for ServiceToken.RemoveTyped.
 type ServiceTokenRemoveMatch struct {
 	Id string `json:"id"`
+	OrganizationId string `json:"organization_id"`
 }
 
 // Subscription is the typed data model for the subscription entity.
@@ -607,21 +575,7 @@ type SubscriptionLoadMatch struct {
 
 // SubscriptionListMatch is the typed request payload for Subscription.ListTyped.
 type SubscriptionListMatch struct {
-	ApplicationId *string `json:"application_id,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	DedicatedWorkers *[]any `json:"dedicated_workers,omitempty"`
-	Description *string `json:"description,omitempty"`
-	EventTypes *[]any `json:"event_types,omitempty"`
-	Id *string `json:"id,omitempty"`
-	IsEnabled *bool `json:"is_enabled,omitempty"`
-	LabelKey *string `json:"label_key,omitempty"`
-	LabelValue *string `json:"label_value,omitempty"`
-	Labels *map[string]any `json:"labels,omitempty"`
-	Metadata *map[string]any `json:"metadata,omitempty"`
-	Secret *string `json:"secret,omitempty"`
-	SubscriptionId *string `json:"subscription_id,omitempty"`
-	Target *map[string]any `json:"target,omitempty"`
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	ApplicationId string `json:"application_id"`
 }
 
 // SubscriptionCreateData is the typed request payload for Subscription.CreateTyped.
@@ -665,6 +619,7 @@ type SubscriptionUpdateData struct {
 // SubscriptionRemoveMatch is the typed request payload for Subscription.RemoveTyped.
 type SubscriptionRemoveMatch struct {
 	Id string `json:"id"`
+	ApplicationId string `json:"application_id"`
 }
 
 // UserAuthentication is the typed data model for the user_authentication entity.

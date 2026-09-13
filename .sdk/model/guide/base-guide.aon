@@ -43,6 +43,11 @@ guide: {
       rename: param: "event_id": *"id"
       op: load: method: *GET
     }
+    path: "/api/v1/events/{event_id}/replay": {
+      action: "replay": {}
+      rename: param: "event_id": *"id"
+      op: create: method: *POST
+    }
   }
 
   entity: event_type: {
@@ -59,9 +64,6 @@ guide: {
   entity: events_management: {
     path: "/api/v1/event_types/{event_type_name}": {
       op: remove: method: *DELETE
-    }
-    path: "/api/v1/events/{event_id}/replay": {
-      op: create: method: *POST
     }
     path: "/api/v1/payload_content_types/": {
       op: list: method: *GET

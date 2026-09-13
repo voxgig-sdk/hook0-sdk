@@ -26,6 +26,7 @@ main: kit: entity: organization: {
       type: "`$OBJECT`"
     }
     {
+      format: "uuid"
       name: "organization_id"
       req: true
       type: "`$STRING`"
@@ -65,10 +66,16 @@ main: kit: entity: organization: {
         {
           method: "POST"
           orig: "/api/v1/organizations/"
-          parts: [
-            "api"
-            "v1"
-            "organizations"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "organizations"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -83,10 +90,16 @@ main: kit: entity: organization: {
         {
           method: "GET"
           orig: "/api/v1/organizations/"
-          parts: [
-            "api"
-            "v1"
-            "organizations"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "organizations"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -112,17 +125,25 @@ main: kit: entity: organization: {
           }
           method: "GET"
           orig: "/api/v1/organizations/{organization_id}/"
-          parts: [
-            "api"
-            "v1"
-            "organizations"
-            "{id}"
-          ]
           rename: {
             param: {
               organization_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "organizations"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"
@@ -152,17 +173,25 @@ main: kit: entity: organization: {
           }
           method: "DELETE"
           orig: "/api/v1/organizations/{organization_id}/"
-          parts: [
-            "api"
-            "v1"
-            "organizations"
-            "{id}"
-          ]
           rename: {
             param: {
               organization_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "organizations"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"
@@ -192,17 +221,25 @@ main: kit: entity: organization: {
           }
           method: "PUT"
           orig: "/api/v1/organizations/{organization_id}/"
-          parts: [
-            "api"
-            "v1"
-            "organizations"
-            "{id}"
-          ]
           rename: {
             param: {
               organization_id: "id"
             }
           }
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "organizations"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"

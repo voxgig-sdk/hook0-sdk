@@ -46,10 +46,16 @@ main: kit: entity: registration: {
         {
           method: "POST"
           orig: "/api/v1/register/"
-          parts: [
-            "api"
-            "v1"
-            "register"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "register"
+            }
           ]
           transform: {
             req: "`reqdata`"

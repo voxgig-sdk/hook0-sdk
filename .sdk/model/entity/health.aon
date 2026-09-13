@@ -11,6 +11,7 @@ main: kit: entity: health: {
       type: "`$BOOLEAN`"
     }
     {
+      format: "int64"
       name: "database_duration_ms"
       req: true
       type: "`$INTEGER`"
@@ -21,6 +22,7 @@ main: kit: entity: health: {
       type: "`$BOOLEAN`"
     }
     {
+      format: "int64"
       name: "object_storage_duration_ms"
       req: false
       type: "`$INTEGER`"
@@ -31,11 +33,13 @@ main: kit: entity: health: {
       type: "`$BOOLEAN`"
     }
     {
+      format: "int64"
       name: "pulsar_duration_ms"
       req: false
       type: "`$INTEGER`"
     }
     {
+      format: "int64"
       name: "total_duration_ms"
       req: true
       type: "`$INTEGER`"
@@ -61,10 +65,16 @@ main: kit: entity: health: {
           }
           method: "GET"
           orig: "/api/v1/health/"
-          parts: [
-            "api"
-            "v1"
-            "health"
+          segments: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "health"
+            }
           ]
           select: {
             exist: [
