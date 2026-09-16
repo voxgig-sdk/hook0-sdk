@@ -61,6 +61,12 @@ main: kit: entity: application: {
       name: "create"
       points: [
         {
+          contract: {
+            id: "POST /api/v1/applications/"
+            json: "{\"operationId\":\"applications.create\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Request body to create a new application.\",\"properties\":{\"name\":{\"description\":\"Name of the application. Length: 2-50 characters.\",\"type\":\"string\"},\"organization_id\":{\"description\":\"UUID of the organization this application belongs to.\",\"format\":\"uuid\",\"type\":\"string\"}},\"required\":[\"name\",\"organization_id\"],\"type\":\"object\"}}},\"required\":true},\"responses\":{\"201\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"A Hook0 application.\",\"properties\":{\"application_id\":{\"description\":\"Unique identifier of the application.\",\"format\":\"uuid\",\"type\":\"string\"},\"name\":{\"description\":\"Name of the application. Length: 2-50 characters.\",\"type\":\"string\"},\"organization_id\":{\"description\":\"UUID of the organization this application belongs to.\",\"format\":\"uuid\",\"type\":\"string\"}},\"required\":[\"application_id\",\"name\",\"organization_id\"],\"type\":\"object\"}}},\"description\":\"Created\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"security\":[{\"biscuit\":[]}],\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}"
+            source: "openapi3"
+            version: 1
+          }
           method: "POST"
           orig: "/api/v1/applications/"
           segments: [
@@ -95,6 +101,12 @@ main: kit: entity: application: {
                 type: "`$STRING`"
               }
             ]
+          }
+          contract: {
+            id: "GET /api/v1/applications/"
+            json: "{\"operationId\":\"applications.list\",\"parameters\":[{\"in\":\"query\",\"name\":\"organization_id\",\"required\":true,\"schema\":{\"format\":\"uuid\",\"type\":\"string\"},\"style\":\"form\"}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"items\":{\"description\":\"A Hook0 application.\",\"properties\":{\"application_id\":{\"description\":\"Unique identifier of the application.\",\"format\":\"uuid\",\"type\":\"string\"},\"name\":{\"description\":\"Name of the application. Length: 2-50 characters.\",\"type\":\"string\"},\"organization_id\":{\"description\":\"UUID of the organization this application belongs to.\",\"format\":\"uuid\",\"type\":\"string\"}},\"required\":[\"application_id\",\"name\",\"organization_id\"],\"type\":\"object\"},\"type\":\"array\"}}},\"description\":\"OK\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"security\":[{\"biscuit\":[]}],\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}"
+            source: "openapi3"
+            version: 1
           }
           method: "GET"
           orig: "/api/v1/applications/"
@@ -135,6 +147,12 @@ main: kit: entity: application: {
                 type: "`$STRING`"
               }
             ]
+          }
+          contract: {
+            id: "GET /api/v1/applications/{application_id}"
+            json: "{\"operationId\":\"applications.get\",\"parameters\":[{\"in\":\"path\",\"name\":\"application_id\",\"required\":true,\"schema\":{\"format\":\"uuid\",\"type\":\"string\"},\"style\":\"simple\"}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Detailed information about a Hook0 application.\",\"properties\":{\"application_id\":{\"description\":\"Unique identifier of the application.\",\"format\":\"uuid\",\"type\":\"string\"},\"consumption\":{\"description\":\"Current consumption metrics for this application.\",\"properties\":{\"events_per_day\":{\"format\":\"int32\",\"type\":\"integer\"}},\"type\":\"object\"},\"name\":{\"description\":\"Name of the application. Length: 2-50 characters.\",\"type\":\"string\"},\"onboarding_steps\":{\"description\":\"Onboarding completion status for this application.\",\"properties\":{\"event\":{\"enum\":[\"ToDo\",\"Done\"],\"type\":\"string\"},\"event_type\":{\"enum\":[\"ToDo\",\"Done\"],\"type\":\"string\"},\"subscription\":{\"enum\":[\"ToDo\",\"Done\"],\"type\":\"string\"}},\"required\":[\"event\",\"event_type\",\"subscription\"],\"type\":\"object\"},\"organization_id\":{\"description\":\"UUID of the organization this application belongs to.\",\"format\":\"uuid\",\"type\":\"string\"},\"quotas\":{\"description\":\"Quota limits for this application.\",\"properties\":{\"days_of_events_retention_limit\":{\"format\":\"int32\",\"type\":\"integer\"},\"events_per_day_limit\":{\"format\":\"int32\",\"type\":\"integer\"}},\"required\":[\"days_of_events_retention_limit\",\"events_per_day_limit\"],\"type\":\"object\"}},\"required\":[\"application_id\",\"consumption\",\"name\",\"onboarding_steps\",\"organization_id\",\"quotas\"],\"type\":\"object\"}}},\"description\":\"OK\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"security\":[{\"biscuit\":[]}],\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}"
+            source: "openapi3"
+            version: 1
           }
           method: "GET"
           orig: "/api/v1/applications/{application_id}"
@@ -184,6 +202,12 @@ main: kit: entity: application: {
               }
             ]
           }
+          contract: {
+            id: "DELETE /api/v1/applications/{application_id}"
+            json: "{\"operationId\":\"applications.delete\",\"parameters\":[{\"in\":\"path\",\"name\":\"application_id\",\"required\":true,\"schema\":{\"format\":\"uuid\",\"type\":\"string\"},\"style\":\"simple\"}],\"protocol\":\"http\",\"responses\":{\"204\":{\"description\":\"No Content\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"security\":[{\"biscuit\":[]}],\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}"
+            source: "openapi3"
+            version: 1
+          }
           method: "DELETE"
           orig: "/api/v1/applications/{application_id}"
           rename: {
@@ -231,6 +255,12 @@ main: kit: entity: application: {
                 type: "`$STRING`"
               }
             ]
+          }
+          contract: {
+            id: "PUT /api/v1/applications/{application_id}"
+            json: "{\"operationId\":\"applications.update\",\"parameters\":[{\"in\":\"path\",\"name\":\"application_id\",\"required\":true,\"schema\":{\"format\":\"uuid\",\"type\":\"string\"},\"style\":\"simple\"}],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Request body to create a new application.\",\"properties\":{\"name\":{\"description\":\"Name of the application. Length: 2-50 characters.\",\"type\":\"string\"},\"organization_id\":{\"description\":\"UUID of the organization this application belongs to.\",\"format\":\"uuid\",\"type\":\"string\"}},\"required\":[\"name\",\"organization_id\"],\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"A Hook0 application.\",\"properties\":{\"application_id\":{\"description\":\"Unique identifier of the application.\",\"format\":\"uuid\",\"type\":\"string\"},\"name\":{\"description\":\"Name of the application. Length: 2-50 characters.\",\"type\":\"string\"},\"organization_id\":{\"description\":\"UUID of the organization this application belongs to.\",\"format\":\"uuid\",\"type\":\"string\"}},\"required\":[\"application_id\",\"name\",\"organization_id\"],\"type\":\"object\"}}},\"description\":\"OK\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"security\":[{\"biscuit\":[]}],\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}"
+            source: "openapi3"
+            version: 1
           }
           method: "PUT"
           orig: "/api/v1/applications/{application_id}"

@@ -40,6 +40,8 @@ const node_path_1 = __importDefault(require("node:path"));
 const Fs = __importStar(require("node:fs"));
 const node_test_1 = require("node:test");
 const node_assert_1 = __importDefault(require("node:assert"));
+const live_runner_1 = require("../../live-runner");
+const live_entity_1 = require("../../live-entity");
 const __1 = require("../../..");
 const utility_1 = require("../../utility");
 // AFTER the imports on purpose: TypeScript hoists `import` above any
@@ -59,16 +61,12 @@ const utility_1 = require("../../utility");
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.HOOK0_TEST_LIVE;
         for (const op of ['load']) {
-            if ((0, utility_1.maybeSkipControl)(t, 'entityOp', 'quota.' + op, live))
+            if (!live && (0, utility_1.maybeSkipControl)(t, 'entityOp', 'quota.' + op, live))
                 return;
         }
         const setup = basicSetup();
-        // The basic flow consumes synthetic IDs and field values from the
-        // fixture (entity TestData.json). Those don't exist on the live API.
-        // Skip live runs unless the user provided a real ENTID env override.
-        if (setup.syntheticOnly) {
-            t.skip('live entity test uses synthetic IDs from fixture — set HOOK0_TEST_QUOTA_ENTID JSON to run live');
-            return;
+        if (setup.live) {
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": [{ "active": true, "format": "int32", "name": "global_applications_per_organization_limit", "req": true, "type": "`$INTEGER`", "index$": 0 }, { "active": true, "format": "int32", "name": "global_days_of_events_retention_limit", "req": true, "type": "`$INTEGER`", "index$": 1 }, { "active": true, "format": "int32", "name": "global_event_types_per_application_limit", "req": true, "type": "`$INTEGER`", "index$": 2 }, { "active": true, "format": "int32", "name": "global_events_per_day_limit", "req": true, "type": "`$INTEGER`", "index$": 3 }, { "active": true, "format": "int32", "name": "global_members_per_organization_limit", "req": true, "type": "`$INTEGER`", "index$": 4 }, { "active": true, "format": "int32", "name": "global_subscriptions_per_application_limit", "req": true, "type": "`$INTEGER`", "index$": 5 }], "name": "quota", "op": { "load": { "input": "data", "name": "load", "points": [{ "active": true, "args": {}, "contract": { "id": "GET /api/v1/quotas/", "json": "{\"operationId\":\"quotas.get\",\"parameters\":[],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"enabled\":{\"type\":\"boolean\"},\"limits\":{\"properties\":{\"global_applications_per_organization_limit\":{\"format\":\"int32\",\"type\":\"integer\"},\"global_days_of_events_retention_limit\":{\"format\":\"int32\",\"type\":\"integer\"},\"global_event_types_per_application_limit\":{\"format\":\"int32\",\"type\":\"integer\"},\"global_events_per_day_limit\":{\"format\":\"int32\",\"type\":\"integer\"},\"global_members_per_organization_limit\":{\"format\":\"int32\",\"type\":\"integer\"},\"global_subscriptions_per_application_limit\":{\"format\":\"int32\",\"type\":\"integer\"}},\"required\":[\"global_applications_per_organization_limit\",\"global_days_of_events_retention_limit\",\"global_event_types_per_application_limit\",\"global_events_per_day_limit\",\"global_members_per_organization_limit\",\"global_subscriptions_per_application_limit\"],\"type\":\"object\"}},\"required\":[\"enabled\",\"limits\"],\"type\":\"object\"}}},\"description\":\"OK\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"unspecified\"}", "source": "openapi3", "version": 1 }, "kind": "http", "method": "GET", "orig": "/api/v1/quotas/", "segments": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "quotas" }], "select": {}, "transform": { "req": "`reqdata`", "res": "`body.limits`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "quota", "name__orig": "quota", "Name": "Quota", "name_": "quota", "name-": "quota", "NAME": "QUOTA", "index$": 15 }, { "active": true, "entity": "quota", "key$": "BasicQuotaFlow", "kind": "basic", "name": "BasicQuotaFlow", "param": {}, "step": [{ "active": true, "data": {}, "input": { "ref": "quota_ref01", "srcdatavar": "quota_ref01_data", "suffix": "_dt0" }, "match": {}, "op": "load", "spec": [], "valid": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-quota_ref01" } }], "index$": 0 }] }, 'Quota');
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -102,12 +100,6 @@ function basicSetup(extra) {
                 '`$VAL`': ['`$FORMAT`', 'upper', '`$COPY`']
             }]
     });
-    // Detect whether the user provided a real ENTID JSON via env var. The
-    // basic flow consumes synthetic IDs from the fixture file; without an
-    // override those synthetic IDs reach the live API and 4xx. Surface this
-    // to the test so it can skip rather than fail.
-    const idmapEnvVal = process.env['HOOK0_TEST_QUOTA_ENTID'];
-    const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{');
     const env = (0, utility_1.envOverride)({
         'HOOK0_TEST_QUOTA_ENTID': idmap,
         'HOOK0_TEST_LIVE': 'FALSE',
@@ -116,7 +108,13 @@ function basicSetup(extra) {
     });
     idmap = env['HOOK0_TEST_QUOTA_ENTID'];
     const live = 'TRUE' === env.HOOK0_TEST_LIVE;
+    const transport = (0, live_runner_1.createLiveTransport)();
     if (live) {
+        const rawIds = process.env['HOOK0_TEST_QUOTA_ENTID'];
+        idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {};
+        if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+            throw new Error('Live ENTID must be a JSON object');
+        }
         client = new __1.Hook0SDK(merge([
             // FIRST, so the generated fields below win: sdk-test-control.json's
             // test.client.options adds to the live client, it does not redirect it.
@@ -129,7 +127,8 @@ function basicSetup(extra) {
             // argument at all - so a bare 'extra' silently discarded the apikey
             // and server values above and handed the SDK undefined. Harmless
             // while there was nothing in that object; not harmless now.
-            extra || {}
+            extra || {},
+            { system: { fetch: transport.fetch } }
         ]));
     }
     const setup = {
@@ -141,7 +140,7 @@ function basicSetup(extra) {
         data: entityData,
         explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
         live,
-        syntheticOnly: live && !idmapOverridden,
+        transport,
         now: Date.now(),
     };
     return setup;

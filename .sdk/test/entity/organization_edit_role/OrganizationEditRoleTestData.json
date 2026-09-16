@@ -25,5 +25,118 @@
         "user_id": "USER01"
       }
     }
+  },
+  "requests": {
+    "PUT /api/v1/organizations/{organization_id}/invite": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "organizations.edit_role",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "simple"
+          }
+        ],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "role": {
+                    "type": "string"
+                  },
+                  "user_id": {
+                    "format": "uuid",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "role",
+                  "user_id"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "role": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "role",
+                    "user_id"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    }
   }
 }

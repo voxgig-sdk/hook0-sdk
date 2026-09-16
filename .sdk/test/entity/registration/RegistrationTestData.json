@@ -41,5 +41,117 @@
         "turnstile_token": "sf5"
       }
     }
+  },
+  "requests": {
+    "POST /api/v1/register/": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "register",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "gclid": {
+                    "description": "Optional Google Ads click identifier captured during the user's\n journey from a Google Ad. When present and the API has Google Ads\n credentials configured, the signup is uploaded as a click conversion\n (server-side, no PII leaves Hook0). Bounded length to defend against\n abuse — real gclid values are ~50–60 chars.",
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "turnstile_token": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "first_name",
+                  "last_name",
+                  "password"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "organization_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "organization_id",
+                    "user_id"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "unspecified"
+      }
+    }
   }
 }

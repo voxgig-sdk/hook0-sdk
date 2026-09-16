@@ -5,6 +5,8 @@ import * as Fs from 'node:fs'
 
 import { test, describe, afterEach } from 'node:test'
 import assert from 'node:assert'
+import { createLiveTransport } from '../../live-runner'
+import { runLiveEntity } from '../../live-entity'
 
 
 import { Hook0SDK, BaseFeature, stdutil } from '../../..'
@@ -47,16 +49,13 @@ describe('EventsPerDayEntryEntity', async () => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
     for (const op of ['list']) {
-      if (maybeSkipControl(t, 'entityOp', 'events_per_day_entry.' + op, live)) return
+      if (!live && maybeSkipControl(t, 'entityOp', 'events_per_day_entry.' + op, live)) return
     }
 
+    
     const setup = basicSetup()
-    // The basic flow consumes synthetic IDs and field values from the
-    // fixture (entity TestData.json). Those don't exist on the live API.
-    // Skip live runs unless the user provided a real ENTID env override.
-    if (setup.syntheticOnly) {
-      t.skip('live entity test uses synthetic IDs from fixture — set HOOK0_TEST_EVENTS_PER_DAY_ENTRY_ENTID JSON to run live')
-      return
+    if (setup.live) {
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":[{"active":true,"format":"int32","name":"amount","req":true,"type":"`$INTEGER`","index$":0},{"active":true,"format":"uuid","name":"application_id","req":true,"type":"`$STRING`","index$":1},{"active":true,"name":"application_name","req":true,"type":"`$STRING`","index$":2},{"active":true,"format":"date","name":"date","req":true,"type":"`$STRING`","index$":3},{"active":true,"name":"is_provisional","req":true,"type":"`$BOOLEAN`","index$":4}],"name":"events_per_day_entry","op":{"list":{"input":"data","name":"list","points":[{"active":true,"args":{"query":[{"active":true,"kind":"query","name":"application_id","orig":"application_id","reqd":true,"type":"`$STRING`","index$":0},{"active":true,"kind":"query","name":"from","orig":"from","reqd":false,"type":"`$STRING`","index$":1},{"active":true,"kind":"query","name":"to","orig":"to","reqd":false,"type":"`$STRING`","index$":2}]},"contract":{"id":"GET /api/v1/events_per_day/application","json":"{\"operationId\":\"events_per_day.list_for_application\",\"parameters\":[{\"in\":\"query\",\"name\":\"application_id\",\"required\":true,\"schema\":{\"format\":\"uuid\",\"type\":\"string\"},\"style\":\"form\"},{\"description\":\"Start of date range (inclusive). Defaults to 30 days before `to`.\",\"in\":\"query\",\"name\":\"from\",\"schema\":{\"format\":\"date\",\"type\":\"string\"},\"style\":\"form\"},{\"description\":\"End of date range (inclusive). Defaults to today.\",\"in\":\"query\",\"name\":\"to\",\"schema\":{\"format\":\"date\",\"type\":\"string\"},\"style\":\"form\"}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"items\":{\"properties\":{\"amount\":{\"format\":\"int32\",\"type\":\"integer\"},\"application_id\":{\"format\":\"uuid\",\"type\":\"string\"},\"application_name\":{\"type\":\"string\"},\"date\":{\"format\":\"date\",\"type\":\"string\"},\"is_provisional\":{\"type\":\"boolean\"}},\"required\":[\"amount\",\"application_id\",\"application_name\",\"date\",\"is_provisional\"],\"type\":\"object\"},\"type\":\"array\"}}},\"description\":\"OK\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"security\":[{\"biscuit\":[]}],\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}","source":"openapi3","version":1},"kind":"http","method":"GET","orig":"/api/v1/events_per_day/application","segments":[{"lit":"api"},{"lit":"v1"},{"lit":"events_per_day"},{"lit":"application"}],"select":{"exist":["application_id","from","to"]},"transform":{"req":"`reqdata`","res":"`body`"},"index$":0},{"active":true,"args":{"query":[{"active":true,"kind":"query","name":"from","orig":"from","reqd":false,"type":"`$STRING`","index$":0},{"active":true,"kind":"query","name":"organization_id","orig":"organization_id","reqd":true,"type":"`$STRING`","index$":1},{"active":true,"kind":"query","name":"to","orig":"to","reqd":false,"type":"`$STRING`","index$":2}]},"contract":{"id":"GET /api/v1/events_per_day/organization","json":"{\"operationId\":\"events_per_day.list_for_organization\",\"parameters\":[{\"description\":\"Start of date range (inclusive). Defaults to 30 days before `to`.\",\"in\":\"query\",\"name\":\"from\",\"schema\":{\"format\":\"date\",\"type\":\"string\"},\"style\":\"form\"},{\"in\":\"query\",\"name\":\"organization_id\",\"required\":true,\"schema\":{\"format\":\"uuid\",\"type\":\"string\"},\"style\":\"form\"},{\"description\":\"End of date range (inclusive). Defaults to today.\",\"in\":\"query\",\"name\":\"to\",\"schema\":{\"format\":\"date\",\"type\":\"string\"},\"style\":\"form\"}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"items\":{\"properties\":{\"amount\":{\"format\":\"int32\",\"type\":\"integer\"},\"application_id\":{\"format\":\"uuid\",\"type\":\"string\"},\"application_name\":{\"type\":\"string\"},\"date\":{\"format\":\"date\",\"type\":\"string\"},\"is_provisional\":{\"type\":\"boolean\"}},\"required\":[\"amount\",\"application_id\",\"application_name\",\"date\",\"is_provisional\"],\"type\":\"object\"},\"type\":\"array\"}}},\"description\":\"OK\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"security\":[{\"biscuit\":[]}],\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}","source":"openapi3","version":1},"kind":"http","method":"GET","orig":"/api/v1/events_per_day/organization","segments":[{"lit":"api"},{"lit":"v1"},{"lit":"events_per_day"},{"lit":"organization"}],"select":{"exist":["from","organization_id","to"]},"transform":{"req":"`reqdata`","res":"`body`"},"index$":1}],"key$":"list"}},"relations":{"ancestors":[]},"key$":"events_per_day_entry","name__orig":"events_per_day_entry","Name":"EventsPerDayEntry","name_":"events_per_day_entry","name-":"events-per-day-entry","NAME":"EVENTS_PER_DAY_ENTRY","index$":6}, {"active":true,"entity":"events_per_day_entry","key$":"BasicEventsPerDayEntryFlow","kind":"basic","name":"BasicEventsPerDayEntryFlow","param":{},"step":[{"active":true,"data":{},"input":{},"match":{},"op":"list","spec":[],"valid":[{"apply":"ItemExists","def":{"ref":"events_per_day_entry_ref01"}}],"index$":0}]}, 'EventsPerDayEntry')
     }
     const client = setup.client
     const struct = setup.struct
@@ -109,13 +108,6 @@ function basicSetup(extra?: any) {
       }]
     })
 
-  // Detect whether the user provided a real ENTID JSON via env var. The
-  // basic flow consumes synthetic IDs from the fixture file; without an
-  // override those synthetic IDs reach the live API and 4xx. Surface this
-  // to the test so it can skip rather than fail.
-  const idmapEnvVal = process.env['HOOK0_TEST_EVENTS_PER_DAY_ENTRY_ENTID']
-  const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{')
-
   const env = envOverride({
     'HOOK0_TEST_EVENTS_PER_DAY_ENTRY_ENTID': idmap,
     'HOOK0_TEST_LIVE': 'FALSE',
@@ -127,7 +119,13 @@ function basicSetup(extra?: any) {
 
   const live = 'TRUE' === env.HOOK0_TEST_LIVE
 
+  const transport = createLiveTransport()
   if (live) {
+    const rawIds = process.env['HOOK0_TEST_EVENTS_PER_DAY_ENTRY_ENTID']
+    idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {}
+    if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+      throw new Error('Live ENTID must be a JSON object')
+    }
     client = new Hook0SDK(merge([
       // FIRST, so the generated fields below win: sdk-test-control.json's
       // test.client.options adds to the live client, it does not redirect it.
@@ -140,7 +138,8 @@ function basicSetup(extra?: any) {
       // argument at all - so a bare 'extra' silently discarded the apikey
       // and server values above and handed the SDK undefined. Harmless
       // while there was nothing in that object; not harmless now.
-      extra || {}
+      extra || {},
+      { system: { fetch: transport.fetch } }
     ]))
   }
 
@@ -153,7 +152,7 @@ function basicSetup(extra?: any) {
     data: entityData,
     explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
     live,
-    syntheticOnly: live && !idmapOverridden,
+    transport,
     now: Date.now(),
   }
 

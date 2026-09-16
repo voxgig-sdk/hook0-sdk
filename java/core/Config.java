@@ -38,8 +38,22 @@ public final class Config {
 
   public static Feature makeFeature(String name) {
     switch (name) {
+      case "debug":
+        return new voxgig.hook0sdk.feature.DebugFeature();
+      case "idempotency":
+        return new voxgig.hook0sdk.feature.IdempotencyFeature();
+      case "metrics":
+        return new voxgig.hook0sdk.feature.MetricsFeature();
+      case "paging":
+        return new voxgig.hook0sdk.feature.PagingFeature();
+      case "ratelimit":
+        return new voxgig.hook0sdk.feature.RatelimitFeature();
+      case "retry":
+        return new voxgig.hook0sdk.feature.RetryFeature();
       case "test":
         return new voxgig.hook0sdk.feature.TestFeature();
+      case "timeout":
+        return new voxgig.hook0sdk.feature.TimeoutFeature();
       default:
         return new voxgig.hook0sdk.feature.BaseFeature();
     }
@@ -67,11 +81,135 @@ public final class Config {
     b.append("  \"target\": \"java\"");
     b.append(" },");
     b.append(" \"feature\": {");
+    b.append("  \"debug\": {");
+    b.append("   \"options\": {");
+    b.append("    \"active\": false,");
+    b.append("    \"max\": 100,");
+    b.append("    \"redact\": [");
+    b.append("     \"authorization\",");
+    b.append("     \"cookie\",");
+    b.append("     \"set-cookie\",");
+    b.append("     \"api-key\",");
+    b.append("     \"apikey\",");
+    b.append("     \"x-api-key\",");
+    b.append("     \"idempotency-key\"");
+    b.append("    ]");
+    b.append("   },");
+    b.append("   \"optspec\": {");
+    b.append("    \"now\": \"`$FUNCTION`\",");
+    b.append("    \"onEntry\": \"`$FUNCTION`\"");
+    b.append("   },");
+    b.append("   \"strict\": false,");
+    b.append("   \"transport\": \"none\"");
+    b.append("  },");
+    b.append("  \"idempotency\": {");
+    b.append("   \"options\": {");
+    b.append("    \"active\": false,");
+    b.append("    \"header\": \"Idempotency-Key\",");
+    b.append("    \"methods\": [");
+    b.append("     \"POST\",");
+    b.append("     \"PUT\",");
+    b.append("     \"PATCH\",");
+    b.append("     \"DELETE\"");
+    b.append("    ],");
+    b.append("    \"ops\": [");
+    b.append("     \"create\",");
+    b.append("     \"update\",");
+    b.append("     \"remove\"");
+    b.append("    ]");
+    b.append("   },");
+    b.append("   \"optspec\": {");
+    b.append("    \"keygen\": \"`$FUNCTION`\"");
+    b.append("   },");
+    b.append("   \"strict\": false,");
+    b.append("   \"transport\": \"none\"");
+    b.append("  },");
+    b.append("  \"metrics\": {");
+    b.append("   \"options\": {");
+    b.append("    \"active\": false");
+    b.append("   },");
+    b.append("   \"optspec\": {");
+    b.append("    \"now\": \"`$FUNCTION`\"");
+    b.append("   },");
+    b.append("   \"strict\": false,");
+    b.append("   \"transport\": \"none\"");
+    b.append("  },");
+    b.append("  \"paging\": {");
+    b.append("   \"options\": {");
+    b.append("    \"active\": false,");
+    b.append("    \"afterVar\": \"after\",");
+    b.append("    \"cursorParam\": \"cursor\",");
+    b.append("    \"firstVar\": \"first\",");
+    b.append("    \"limitParam\": \"limit\",");
+    b.append("    \"pageParam\": \"page\",");
+    b.append("    \"startPage\": 1");
+    b.append("   },");
+    b.append("   \"optspec\": {");
+    b.append("    \"limit\": \"`$NUMBER`\",");
+    b.append("    \"ops\": \"`$LIST`\"");
+    b.append("   },");
+    b.append("   \"strict\": false,");
+    b.append("   \"transport\": \"none\"");
+    b.append("  },");
+    b.append("  \"ratelimit\": {");
+    b.append("   \"options\": {");
+    b.append("    \"active\": false,");
+    b.append("    \"burst\": 5,");
+    b.append("    \"rate\": 5");
+    b.append("   },");
+    b.append("   \"optspec\": {");
+    b.append("    \"now\": \"`$FUNCTION`\",");
+    b.append("    \"sleep\": \"`$FUNCTION`\"");
+    b.append("   },");
+    b.append("   \"strict\": false,");
+    b.append("   \"transport\": \"wrap\"");
+    b.append("  },");
+    b.append("  \"retry\": {");
+    b.append("   \"options\": {");
+    b.append("    \"active\": false,");
+    b.append("    \"factor\": 2,");
+    b.append("    \"maxDelay\": 2000,");
+    b.append("    \"minDelay\": 50,");
+    b.append("    \"retries\": 2,");
+    b.append("    \"statuses\": [");
+    b.append("     408,");
+    b.append("     425,");
+    b.append("     429,");
+    b.append("     500,");
+    b.append("     502,");
+    b.append("     503,");
+    b.append("     504");
+    b.append("    ]");
+    b.append("   },");
+    b.append("   \"optspec\": {");
+    b.append("    \"jitter\": \"`$BOOLEAN`\",");
+    b.append("    \"sleep\": \"`$FUNCTION`\"");
+    b.append("   },");
+    b.append("   \"strict\": false,");
+    b.append("   \"transport\": \"wrap\"");
+    b.append("  },");
     b.append("  \"test\": {");
     b.append("   \"options\": {");
     b.append("    \"active\": false");
     b.append("   },");
+    b.append("   \"optspec\": {");
+    b.append("    \"entity\": \"`$MAP`\",");
+    b.append("    \"net\": \"`$MAP`\"");
+    b.append("   },");
+    b.append("   \"strict\": false,");
     b.append("   \"transport\": \"base\"");
+    b.append("  },");
+    b.append("  \"timeout\": {");
+    b.append("   \"options\": {");
+    b.append("    \"active\": false,");
+    b.append("    \"ms\": 30000");
+    b.append("   },");
+    b.append("   \"optspec\": {");
+    b.append("    \"clearTimer\": \"`$FUNCTION`\",");
+    b.append("    \"setTimer\": \"`$FUNCTION`\"");
+    b.append("   },");
+    b.append("   \"strict\": false,");
+    b.append("   \"transport\": \"wrap\"");
     b.append("  }");
     b.append(" },");
     b.append(" \"options\": {");

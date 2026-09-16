@@ -42,7 +42,14 @@ the runtime under `.sdk/tm/zig/feature/` and regenerate.
 
 | Feature | Runtime file | Active hooks |
 | --- | --- | --- |
+| **debug** — Request/response capture ring buffer for debugging | `feature/debug_feature.zig` | `PreDone`, `PreRequest`, `PreResponse`, `PreUnexpected` |
+| **idempotency** — Idempotency keys for safe retries of mutating operations | `feature/idempotency_feature.zig` | `PreRequest` |
+| **metrics** — Statistics capture: per-operation counters and latency | `feature/metrics_feature.zig` | `PreDone`, `PrePoint`, `PreUnexpected` |
+| **paging** — Pagination signals for list operations | `feature/paging_feature.zig` | `PreRequest`, `PreResult` |
+| **ratelimit** — Client-side rate limiting via a token bucket | `feature/ratelimit_feature.zig` | — |
+| **retry** — Automatic retry of transient failures with exponential backoff | `feature/retry_feature.zig` | — |
 | **test** — In-memory mock transport for testing without a live server | `feature/test_feature.zig` | `GetData`, `GetMatch`, `PostConstruct`, `PostConstructEntity`, `PrePoint`, `PreRequest`, `PreResponse`, `PreResult`, `PreSpec`, `SetData`, `SetMatch` |
+| **timeout** — Per-request timeout with transport abort | `feature/timeout_feature.zig` | — |
 
 ---
 

@@ -7,12 +7,12 @@
         "event": {},
         "event_id": "EVENT01",
         "failed_at": "s90",
-        "http_response_status": "s91",
+        "http_response_status": 145,
         "id": "REQUEST_ATTEMPT00",
         "picked_at": "s93",
         "request_attempt_id": "REQUEST_ATTEMPT01",
         "response_id": "RESPONSE01",
-        "retry_count": "s96",
+        "retry_count": 150,
         "status": {},
         "subscription": {},
         "succeeded_at": "s99"
@@ -23,12 +23,12 @@
         "event": {},
         "event_id": "EVENT01",
         "failed_at": "s11c",
-        "http_response_status": "s11d",
+        "http_response_status": 285,
         "id": "REQUEST_ATTEMPT01",
         "picked_at": "s11f",
         "request_attempt_id": "REQUEST_ATTEMPT01",
         "response_id": "RESPONSE01",
-        "retry_count": "s122",
+        "retry_count": 290,
         "status": {},
         "subscription": {},
         "succeeded_at": "s125"
@@ -39,12 +39,12 @@
         "event": {},
         "event_id": "EVENT01",
         "failed_at": "s1a8",
-        "http_response_status": "s1a9",
+        "http_response_status": 425,
         "id": "REQUEST_ATTEMPT02",
         "picked_at": "s1ab",
         "request_attempt_id": "REQUEST_ATTEMPT01",
         "response_id": "RESPONSE01",
-        "retry_count": "s1ae",
+        "retry_count": 430,
         "status": {},
         "subscription": {},
         "succeeded_at": "s1b1"
@@ -59,14 +59,476 @@
         "event": {},
         "event_id": "EVENT01",
         "failed_at": "s234",
-        "http_response_status": "s235",
+        "http_response_status": 565,
         "picked_at": "s237",
         "request_attempt_id": "REQUEST_ATTEMPT01",
         "response_id": "RESPONSE01",
-        "retry_count": "s23a",
+        "retry_count": 570,
         "status": {},
         "subscription": {},
         "succeeded_at": "s23d"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/request_attempts/": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "requestAttempts.read",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "application_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Comma-separated event types",
+            "in": "query",
+            "name": "event.event_type_names",
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "event_id",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "max_created_at",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "min_created_at",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "pagination_cursor",
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "subscription_id",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "created_at": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "delay_until": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "event": {
+                        "properties": {
+                          "event_id": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "event_type_name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "event_id",
+                          "event_type_name"
+                        ],
+                        "type": "object"
+                      },
+                      "event_id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "failed_at": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "http_response_status": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "picked_at": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "request_attempt_id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "response_id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "retry_count": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "status": {
+                        "description": "Status of a request attempt. The 'type' field indicates the status variant. - waiting: {type, since, until} - Scheduled for future delivery - pending: {type, since} - Ready to be processed - in_progress: {type, since} - Currently being delivered - successful: {type, at, full_processing_ms} - Delivered successfully - failed: {type, at, full_processing_ms} - Delivery failed",
+                        "properties": {
+                          "at": {
+                            "description": "Timestamp when completed (present in successful, failed)",
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "full_processing_ms": {
+                            "description": "Total processing time in milliseconds (present in successful, failed)",
+                            "format": "int64",
+                            "type": "integer"
+                          },
+                          "since": {
+                            "description": "Timestamp when the status started (present in waiting, pending, in_progress)",
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "type": {
+                            "description": "Status type discriminator. One of: waiting, pending, in_progress, successful, failed",
+                            "enum": [
+                              "waiting",
+                              "pending",
+                              "in_progress",
+                              "successful",
+                              "failed"
+                            ],
+                            "type": "string"
+                          },
+                          "until": {
+                            "description": "Timestamp until which waiting (only present in waiting status)",
+                            "format": "date-time",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ],
+                        "type": "object"
+                      },
+                      "subscription": {
+                        "properties": {
+                          "description": {
+                            "type": "string"
+                          },
+                          "subscription_id": {
+                            "format": "uuid",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "subscription_id"
+                        ],
+                        "type": "object"
+                      },
+                      "succeeded_at": {
+                        "format": "date-time",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "created_at",
+                      "event",
+                      "event_id",
+                      "request_attempt_id",
+                      "retry_count",
+                      "status",
+                      "subscription"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    },
+    "GET /api/v1/request_attempts/{request_attempt_id}": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "requestAttempts.get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "application_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "path",
+            "name": "request_attempt_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "simple"
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "created_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "delay_until": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "event": {
+                      "properties": {
+                        "event_id": {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "event_type_name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "event_id",
+                        "event_type_name"
+                      ],
+                      "type": "object"
+                    },
+                    "event_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "failed_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "http_response_status": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "picked_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "request_attempt_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "response_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "retry_count": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "status": {
+                      "description": "Status of a request attempt. The 'type' field indicates the status variant. - waiting: {type, since, until} - Scheduled for future delivery - pending: {type, since} - Ready to be processed - in_progress: {type, since} - Currently being delivered - successful: {type, at, full_processing_ms} - Delivered successfully - failed: {type, at, full_processing_ms} - Delivery failed",
+                      "properties": {
+                        "at": {
+                          "description": "Timestamp when completed (present in successful, failed)",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "full_processing_ms": {
+                          "description": "Total processing time in milliseconds (present in successful, failed)",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "since": {
+                          "description": "Timestamp when the status started (present in waiting, pending, in_progress)",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "Status type discriminator. One of: waiting, pending, in_progress, successful, failed",
+                          "enum": [
+                            "waiting",
+                            "pending",
+                            "in_progress",
+                            "successful",
+                            "failed"
+                          ],
+                          "type": "string"
+                        },
+                        "until": {
+                          "description": "Timestamp until which waiting (only present in waiting status)",
+                          "format": "date-time",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    "subscription": {
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        },
+                        "subscription_id": {
+                          "format": "uuid",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "subscription_id"
+                      ],
+                      "type": "object"
+                    },
+                    "succeeded_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "created_at",
+                    "event",
+                    "event_id",
+                    "request_attempt_id",
+                    "retry_count",
+                    "status",
+                    "subscription"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
       }
     }
   }

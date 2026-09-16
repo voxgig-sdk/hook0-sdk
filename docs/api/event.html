@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Event | Hook0 API</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header class="site-header"><a class="site-title" href="../index.html">Hook0 API<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/hook0-sdk">voxgig-sdk/hook0-sdk</a></div></header>
+<div class="site-notice" role="note"></div>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Hook0 API</a></details>
+<details open><summary>API</summary><a href="../api/index.html">API overview</a>
+<a href="../api/application.html">Application</a>
+<a href="../api/application_secret.html">ApplicationSecret</a>
+<a href="../api/applications_management.html">ApplicationsManagement</a>
+<a aria-current="page" href="../api/event.html">Event</a><div class="nav-sections"><a class="nav-section" href="#post-apiv1eventsevent_idreplay">POST /api/v1/events/{event_id}/replay</a>
+<a class="nav-section" href="#get-apiv1events">GET /api/v1/events/</a>
+<a class="nav-section" href="#get-apiv1eventsevent_id">GET /api/v1/events/{event_id}</a></div>
+<a href="../api/event_type.html">EventType</a>
+<a href="../api/events_management.html">EventsManagement</a>
+<a href="../api/events_per_day_entry.html">EventsPerDayEntry</a>
+<a href="../api/health.html">Health</a>
+<a href="../api/hook0.html">Hook0</a>
+<a href="../api/ingested_event.html">IngestedEvent</a>
+<a href="../api/instance.html">Instance</a>
+<a href="../api/login.html">Login</a>
+<a href="../api/organization.html">Organization</a>
+<a href="../api/organization_edit_role.html">OrganizationEditRole</a>
+<a href="../api/problem.html">Problem</a>
+<a href="../api/quota.html">Quota</a>
+<a href="../api/registration.html">Registration</a>
+<a href="../api/request_attempt.html">RequestAttempt</a>
+<a href="../api/response.html">Response</a>
+<a href="../api/revoke.html">Revoke</a>
+<a href="../api/service_token.html">ServiceToken</a>
+<a href="../api/subscription.html">Subscription</a>
+<a href="../api/user_authentication.html">UserAuthentication</a>
+<a href="../api/user_invitation.html">UserInvitation</a></details>
+<details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
+<a href="../guides/first-call.html">Make your first API call</a>
+<a href="../guides/errors.html">Handle errors</a>
+<a href="../guides/concepts.html">Entities, SDKs, and tools</a></details>
+<details><summary>SDKs</summary><a href="../sdks/go.html">Golang</a>
+<a href="../sdks/java.html">Java</a>
+<a href="../sdks/js.html">JavaScript</a>
+<a href="../sdks/lua.html">Lua</a>
+<a href="../sdks/php.html">PHP</a>
+<a href="../sdks/py.html">Python</a>
+<a href="../sdks/ts.html">TypeScript</a>
+<a href="../sdks/zig.html">Zig</a></details>
+<details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
+<a href="../tools/go-mcp.html">Go MCP server</a></details>
+<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
+<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
+<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
+<a href="../features/paging.html">Pagination signals for list operations</a>
+<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
+<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
+<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
+<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="event">Event</h1>
+<h2 id="operations">Operations</h2>
+<p>Every route this entity exposes. Each route links to its own reference on this page.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>SDK operation</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><a href="#post-apiv1eventsevent_idreplay"><code>/api/v1/events/{event_id}/replay</code></a></td>
+<td><code>create</code></td>
+<td>No Content</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-apiv1events"><code>/api/v1/events/</code></a></td>
+<td><code>list</code></td>
+<td>OK</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-apiv1eventsevent_id"><code>/api/v1/events/{event_id}</code></a></td>
+<td><code>load</code></td>
+<td>OK</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fields">Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>event_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>event_type_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>occurred_at</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payload_content_type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>received_at</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="create">create</h2>
+<h3 id="post-apiv1eventsevent_idreplay" class="operation" data-method="post"><code>POST</code> /api/v1/events/{event_id}/replay</h3>
+<p>Operation ID: <code>events.replay</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>event_id</code> | <code>path</code> | <code>string (uuid)</code> | Yes |  |</p>
+<h4 id="request-body">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses">Responses</h4>
+<h5 id="204-no-content" class="status" data-status="2xx">204: No Content</h5>
+<h5 id="400-bad-request" class="status" data-status="4xx">400: Bad Request</h5>
+<h5 id="403-forbidden" class="status" data-status="4xx">403: Forbidden</h5>
+<h5 id="404-not-found" class="status" data-status="4xx">404: Not Found</h5>
+<h5 id="409-conflict" class="status" data-status="4xx">409: Conflict</h5>
+<h5 id="500-internal-server-error" class="status" data-status="5xx">500: Internal Server Error</h5>
+<h5 id="503-service-unavailable" class="status" data-status="5xx">503: Service Unavailable</h5>
+<h2 id="list">list</h2>
+<h3 id="get-apiv1events" class="operation" data-method="get"><code>GET</code> /api/v1/events/</h3>
+<p>Operation ID: <code>events.list</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters-1">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>application_id</code> | <code>query</code> | <code>string (uuid)</code> | Yes |  |</p>
+<h4 id="responses-1">Responses</h4>
+<h5 id="200-ok" class="status" data-status="2xx">200: OK</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[].event_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].event_type_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].ip</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].labels</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].metadata</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].occurred_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].payload_content_type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].received_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-1" class="status" data-status="4xx">400: Bad Request</h5>
+<h5 id="403-forbidden-1" class="status" data-status="4xx">403: Forbidden</h5>
+<h5 id="404-not-found-1" class="status" data-status="4xx">404: Not Found</h5>
+<h5 id="409-conflict-1" class="status" data-status="4xx">409: Conflict</h5>
+<h5 id="500-internal-server-error-1" class="status" data-status="5xx">500: Internal Server Error</h5>
+<h5 id="503-service-unavailable-1" class="status" data-status="5xx">503: Service Unavailable</h5>
+<h2 id="load">load</h2>
+<h3 id="get-apiv1eventsevent_id" class="operation" data-method="get"><code>GET</code> /api/v1/events/{event_id}</h3>
+<p>Operation ID: <code>events.get</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters-2">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>event_id</code> | <code>path</code> | <code>string (uuid)</code> | Yes |  |
+| <code>application_id</code> | <code>query</code> | <code>string (uuid)</code> | Yes |  |</p>
+<h4 id="responses-2">Responses</h4>
+<h5 id="200-ok-1" class="status" data-status="2xx">200: OK</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>event_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>event_type_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>occurred_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payload_content_type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>received_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-2" class="status" data-status="4xx">400: Bad Request</h5>
+<h5 id="403-forbidden-2" class="status" data-status="4xx">403: Forbidden</h5>
+<h5 id="404-not-found-2" class="status" data-status="4xx">404: Not Found</h5>
+<h5 id="409-conflict-2" class="status" data-status="4xx">409: Conflict</h5>
+<h5 id="500-internal-server-error-2" class="status" data-status="5xx">500: Internal Server Error</h5>
+<h5 id="503-service-unavailable-2" class="status" data-status="5xx">503: Service Unavailable</h5>
+</main></div>
+<script src="../assets/search.js" defer></script></body></html>

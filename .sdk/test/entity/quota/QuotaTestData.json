@@ -2,30 +2,30 @@
   "existing": {
     "quota": {
       "QUOTA00": {
-        "global_applications_per_organization_limit": "s3c",
-        "global_days_of_events_retention_limit": "s3d",
-        "global_event_types_per_application_limit": "s3e",
-        "global_events_per_day_limit": "s3f",
-        "global_members_per_organization_limit": "s40",
-        "global_subscriptions_per_application_limit": "s41",
+        "global_applications_per_organization_limit": 60,
+        "global_days_of_events_retention_limit": 61,
+        "global_event_types_per_application_limit": 62,
+        "global_events_per_day_limit": 63,
+        "global_members_per_organization_limit": 64,
+        "global_subscriptions_per_application_limit": 65,
         "id": "QUOTA00"
       },
       "QUOTA01": {
-        "global_applications_per_organization_limit": "s78",
-        "global_days_of_events_retention_limit": "s79",
-        "global_event_types_per_application_limit": "s7a",
-        "global_events_per_day_limit": "s7b",
-        "global_members_per_organization_limit": "s7c",
-        "global_subscriptions_per_application_limit": "s7d",
+        "global_applications_per_organization_limit": 120,
+        "global_days_of_events_retention_limit": 121,
+        "global_event_types_per_application_limit": 122,
+        "global_events_per_day_limit": 123,
+        "global_members_per_organization_limit": 124,
+        "global_subscriptions_per_application_limit": 125,
         "id": "QUOTA01"
       },
       "QUOTA02": {
-        "global_applications_per_organization_limit": "sb4",
-        "global_days_of_events_retention_limit": "sb5",
-        "global_event_types_per_application_limit": "sb6",
-        "global_events_per_day_limit": "sb7",
-        "global_members_per_organization_limit": "sb8",
-        "global_subscriptions_per_application_limit": "sb9",
+        "global_applications_per_organization_limit": 180,
+        "global_days_of_events_retention_limit": 181,
+        "global_event_types_per_application_limit": 182,
+        "global_events_per_day_limit": 183,
+        "global_members_per_organization_limit": 184,
+        "global_subscriptions_per_application_limit": 185,
         "id": "QUOTA02"
       }
     }
@@ -33,12 +33,119 @@
   "new": {
     "quota": {
       "quota_ref01": {
-        "global_applications_per_organization_limit": "sf0",
-        "global_days_of_events_retention_limit": "sf1",
-        "global_event_types_per_application_limit": "sf2",
-        "global_events_per_day_limit": "sf3",
-        "global_members_per_organization_limit": "sf4",
-        "global_subscriptions_per_application_limit": "sf5"
+        "global_applications_per_organization_limit": 240,
+        "global_days_of_events_retention_limit": 241,
+        "global_event_types_per_application_limit": 242,
+        "global_events_per_day_limit": 243,
+        "global_members_per_organization_limit": 244,
+        "global_subscriptions_per_application_limit": 245
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/quotas/": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "quotas.get",
+        "parameters": [],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "limits": {
+                      "properties": {
+                        "global_applications_per_organization_limit": {
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "global_days_of_events_retention_limit": {
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "global_event_types_per_application_limit": {
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "global_events_per_day_limit": {
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "global_members_per_organization_limit": {
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "global_subscriptions_per_application_limit": {
+                          "format": "int32",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "global_applications_per_organization_limit",
+                        "global_days_of_events_retention_limit",
+                        "global_event_types_per_application_limit",
+                        "global_events_per_day_limit",
+                        "global_members_per_organization_limit",
+                        "global_subscriptions_per_application_limit"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "enabled",
+                    "limits"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "unspecified"
       }
     }
   }

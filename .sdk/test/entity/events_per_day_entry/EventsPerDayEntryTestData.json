@@ -2,21 +2,21 @@
   "existing": {
     "events_per_day_entry": {
       "EVENTS_PER_DAY_ENTRY00": {
-        "amount": "s32",
+        "amount": 50,
         "application_id": "APPLICATION01",
         "application_name": "s34",
         "date": "s35",
         "is_provisional": true
       },
       "EVENTS_PER_DAY_ENTRY01": {
-        "amount": "s64",
+        "amount": 100,
         "application_id": "APPLICATION01",
         "application_name": "s66",
         "date": "s67",
         "is_provisional": true
       },
       "EVENTS_PER_DAY_ENTRY02": {
-        "amount": "s96",
+        "amount": 150,
         "application_id": "APPLICATION01",
         "application_name": "s98",
         "date": "s99",
@@ -27,11 +27,263 @@
   "new": {
     "events_per_day_entry": {
       "events_per_day_entry_ref01": {
-        "amount": "sc8",
+        "amount": 200,
         "application_id": "APPLICATION01",
         "application_name": "sca",
         "date": "scb",
         "is_provisional": true
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/events_per_day/application": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "events_per_day.list_for_application",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "application_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Start of date range (inclusive). Defaults to 30 days before `to`.",
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "format": "date",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "End of date range (inclusive). Defaults to today.",
+            "in": "query",
+            "name": "to",
+            "schema": {
+              "format": "date",
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "amount": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "application_id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "application_name": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      "is_provisional": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "amount",
+                      "application_id",
+                      "application_name",
+                      "date",
+                      "is_provisional"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    },
+    "GET /api/v1/events_per_day/organization": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "events_per_day.list_for_organization",
+        "parameters": [
+          {
+            "description": "Start of date range (inclusive). Defaults to 30 days before `to`.",
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "format": "date",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "organization_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "End of date range (inclusive). Defaults to today.",
+            "in": "query",
+            "name": "to",
+            "schema": {
+              "format": "date",
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "amount": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "application_id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "application_name": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      "is_provisional": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "amount",
+                      "application_id",
+                      "application_name",
+                      "date",
+                      "is_provisional"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
       }
     }
   }

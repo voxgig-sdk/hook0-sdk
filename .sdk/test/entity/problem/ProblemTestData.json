@@ -4,19 +4,19 @@
       "PROBLEM00": {
         "detail": "s28",
         "id": "PROBLEM00",
-        "status": "s2a",
+        "status": 42,
         "title": "s2b"
       },
       "PROBLEM01": {
         "detail": "s50",
         "id": "PROBLEM01",
-        "status": "s52",
+        "status": 82,
         "title": "s53"
       },
       "PROBLEM02": {
         "detail": "s78",
         "id": "PROBLEM02",
-        "status": "s7a",
+        "status": 122,
         "title": "s7b"
       }
     }
@@ -25,8 +25,93 @@
     "problem": {
       "problem_ref01": {
         "detail": "sa0",
-        "status": "sa2",
+        "status": 162,
         "title": "sa3"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/errors/": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "errors.list",
+        "parameters": [],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "detail": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "detail",
+                      "id",
+                      "status",
+                      "title"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "unspecified"
       }
     }
   }

@@ -63,6 +63,12 @@ main: kit: entity: health: {
               }
             ]
           }
+          contract: {
+            id: "GET /api/v1/health/"
+            json: "{\"operationId\":\"instance.health\",\"parameters\":[{\"in\":\"query\",\"name\":\"key\",\"schema\":{\"type\":\"string\"},\"style\":\"form\"}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"database\":{\"type\":\"boolean\"},\"database_duration_ms\":{\"format\":\"int64\",\"type\":\"integer\"},\"object_storage\":{\"type\":\"boolean\"},\"object_storage_duration_ms\":{\"format\":\"int64\",\"type\":\"integer\"},\"pulsar\":{\"type\":\"boolean\"},\"pulsar_duration_ms\":{\"format\":\"int64\",\"type\":\"integer\"},\"total_duration_ms\":{\"format\":\"int64\",\"type\":\"integer\"}},\"required\":[\"database\",\"database_duration_ms\",\"total_duration_ms\"],\"type\":\"object\"}}},\"description\":\"\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"unspecified\"}"
+            source: "openapi3"
+            version: 1
+          }
           method: "GET"
           orig: "/api/v1/health/"
           segments: [

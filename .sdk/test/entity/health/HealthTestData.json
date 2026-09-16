@@ -3,32 +3,32 @@
     "health": {
       "HEALTH00": {
         "database": true,
-        "database_duration_ms": "s47",
+        "database_duration_ms": 71,
         "object_storage": true,
-        "object_storage_duration_ms": "s49",
+        "object_storage_duration_ms": 73,
         "pulsar": true,
-        "pulsar_duration_ms": "s4b",
-        "total_duration_ms": "s4c",
+        "pulsar_duration_ms": 75,
+        "total_duration_ms": 76,
         "id": "HEALTH00"
       },
       "HEALTH01": {
         "database": true,
-        "database_duration_ms": "s8d",
+        "database_duration_ms": 141,
         "object_storage": true,
-        "object_storage_duration_ms": "s8f",
+        "object_storage_duration_ms": 143,
         "pulsar": true,
-        "pulsar_duration_ms": "s91",
-        "total_duration_ms": "s92",
+        "pulsar_duration_ms": 145,
+        "total_duration_ms": 146,
         "id": "HEALTH01"
       },
       "HEALTH02": {
         "database": true,
-        "database_duration_ms": "sd3",
+        "database_duration_ms": 211,
         "object_storage": true,
-        "object_storage_duration_ms": "sd5",
+        "object_storage_duration_ms": 213,
         "pulsar": true,
-        "pulsar_duration_ms": "sd7",
-        "total_duration_ms": "sd8",
+        "pulsar_duration_ms": 215,
+        "total_duration_ms": 216,
         "id": "HEALTH02"
       }
     }
@@ -37,12 +37,114 @@
     "health": {
       "health_ref01": {
         "database": true,
-        "database_duration_ms": "s119",
+        "database_duration_ms": 281,
         "object_storage": true,
-        "object_storage_duration_ms": "s11b",
+        "object_storage_duration_ms": 283,
         "pulsar": true,
-        "pulsar_duration_ms": "s11d",
-        "total_duration_ms": "s11e"
+        "pulsar_duration_ms": 285,
+        "total_duration_ms": 286
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/health/": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "instance.health",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "key",
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "database": {
+                      "type": "boolean"
+                    },
+                    "database_duration_ms": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "object_storage": {
+                      "type": "boolean"
+                    },
+                    "object_storage_duration_ms": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "pulsar": {
+                      "type": "boolean"
+                    },
+                    "pulsar_duration_ms": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "total_duration_ms": {
+                      "format": "int64",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "database",
+                    "database_duration_ms",
+                    "total_duration_ms"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "unspecified"
       }
     }
   }

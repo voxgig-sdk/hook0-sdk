@@ -1,12 +1,14 @@
 
 const envlocal = __dirname + '/../../../.env.local'
-require('dotenv').config({ quiet: true, path: [envlocal] })
+require('../../utility').loadEnvLocal(envlocal)
 
 const Path = require('node:path')
 const Fs = require('node:fs')
 
 const { test, describe, afterEach } = require('node:test')
 const assert = require('node:assert')
+const { createLiveTransport } = require('../../live-runner')
+const { runLiveEntity } = require('../../live-entity')
 
 
 const { Hook0SDK, BaseFeature, stdutil, config } = require('../../..')
@@ -36,9 +38,13 @@ describe('RegistrationEntity', async () => {
   })
 
 
-  test('basic', async () => {
+  test('basic', async (t) => {
 
+    
     const setup = basicSetup()
+    if (setup.live) {
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":[{"active":true,"name":"email","req":true,"type":"`$STRING`","index$":0},{"active":true,"name":"first_name","req":true,"type":"`$STRING`","index$":1},{"active":true,"name":"gclid","req":false,"short":"Optional Google Ads click identifier captured during the user's journey from a Google Ad.","type":"`$STRING`","index$":2},{"active":true,"name":"last_name","req":true,"type":"`$STRING`","index$":3},{"active":true,"name":"password","req":true,"type":"`$STRING`","index$":4},{"active":true,"name":"turnstile_token","req":false,"type":"`$STRING`","index$":5}],"name":"registration","op":{"create":{"input":"data","name":"create","points":[{"active":true,"args":{},"contract":{"id":"POST /api/v1/register/","json":"{\"operationId\":\"register\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"email\":{\"type\":\"string\"},\"first_name\":{\"type\":\"string\"},\"gclid\":{\"description\":\"Optional Google Ads click identifier captured during the user's\\n journey from a Google Ad. When present and the API has Google Ads\\n credentials configured, the signup is uploaded as a click conversion\\n (server-side, no PII leaves Hook0). Bounded length to defend against\\n abuse — real gclid values are ~50–60 chars.\",\"type\":\"string\"},\"last_name\":{\"type\":\"string\"},\"password\":{\"type\":\"string\"},\"turnstile_token\":{\"type\":\"string\"}},\"required\":[\"email\",\"first_name\",\"last_name\",\"password\"],\"type\":\"object\"}}},\"required\":true},\"responses\":{\"201\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"organization_id\":{\"format\":\"uuid\",\"type\":\"string\"},\"user_id\":{\"format\":\"uuid\",\"type\":\"string\"}},\"required\":[\"organization_id\",\"user_id\"],\"type\":\"object\"}}},\"description\":\"Created\"},\"400\":{\"description\":\"Bad Request\"},\"403\":{\"description\":\"Forbidden\"},\"404\":{\"description\":\"Not Found\"},\"409\":{\"description\":\"Conflict\"},\"500\":{\"description\":\"Internal Server Error\"},\"503\":{\"description\":\"Service Unavailable\"}},\"securitySchemes\":{\"biscuit\":{\"description\":\"Authentication using a Biscuit token (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_refresh\":{\"description\":\"Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"},\"biscuit_user_access\":{\"description\":\"Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)\",\"in\":\"header\",\"name\":\"Authorization\",\"type\":\"apiKey\"}},\"securitySource\":\"unspecified\"}","source":"openapi3","version":1},"kind":"http","method":"POST","orig":"/api/v1/register/","segments":[{"lit":"api"},{"lit":"v1"},{"lit":"register"}],"select":{},"transform":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"create"}},"relations":{"ancestors":[]},"key$":"registration","name__orig":"registration","Name":"Registration","name_":"registration","name-":"registration","NAME":"REGISTRATION","index$":16}, {"active":true,"entity":"registration","key$":"BasicRegistrationFlow","kind":"basic","name":"BasicRegistrationFlow","param":{},"step":[{"active":true,"data":{},"input":{"ref":"registration_ref01"},"match":{},"op":"create","spec":[],"valid":[],"index$":0}]}, 'Registration')
+    }
     const client = setup.client
     const struct = setup.struct
 
@@ -99,7 +105,14 @@ function basicSetup(extra) {
 
   idmap = env['HOOK0_TEST_REGISTRATION_ENTID']
 
-  if ('TRUE' === env.HOOK0_TEST_LIVE) {
+  const live = 'TRUE' === env.HOOK0_TEST_LIVE
+  const transport = createLiveTransport()
+  if (live) {
+    const rawIds = process.env['HOOK0_TEST_REGISTRATION_ENTID']
+    idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {}
+    if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+      throw new Error('Live ENTID must be a JSON object')
+    }
     client = new Hook0SDK(merge([
       // FIRST, so the generated fields below win: sdk-test-control.json's
       // test.client.options adds to the live client, it does not redirect it.
@@ -111,7 +124,8 @@ function basicSetup(extra) {
       // the last entry is undefined, and basicSetup is normally called with no
       // argument at all - so a bare 'extra' silently discarded the apikey and
       // server values above and handed the SDK undefined.
-      extra || {}
+      extra || {},
+      { system: { fetch: transport.fetch } }
     ]))
   }
 
@@ -123,6 +137,8 @@ function basicSetup(extra) {
     struct,
     data: entityData,
     explain: 'TRUE' === env.HOOK0_TEST_EXPLAIN,
+    live,
+    transport,
     now: Date.now(),
   }
 

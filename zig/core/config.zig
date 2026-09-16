@@ -15,11 +15,135 @@ pub fn make_config() Value {
             .{ "target", h.vstr("zig") },
         }) },
         .{ "feature", h.jo(&.{
+            .{ "debug", h.jo(&.{
+                .{ "options", h.jo(&.{
+                    .{ "active", h.vbool(false) },
+                    .{ "max", h.vnum(100) },
+                    .{ "redact", h.ja(&.{
+                        h.vstr("authorization"),
+                        h.vstr("cookie"),
+                        h.vstr("set-cookie"),
+                        h.vstr("api-key"),
+                        h.vstr("apikey"),
+                        h.vstr("x-api-key"),
+                        h.vstr("idempotency-key"),
+                    }) },
+                }) },
+                .{ "optspec", h.jo(&.{
+                    .{ "now", h.vstr("`$FUNCTION`") },
+                    .{ "onEntry", h.vstr("`$FUNCTION`") },
+                }) },
+                .{ "strict", h.vbool(false) },
+                .{ "transport", h.vstr("none") },
+            }) },
+            .{ "idempotency", h.jo(&.{
+                .{ "options", h.jo(&.{
+                    .{ "active", h.vbool(false) },
+                    .{ "header", h.vstr("Idempotency-Key") },
+                    .{ "methods", h.ja(&.{
+                        h.vstr("POST"),
+                        h.vstr("PUT"),
+                        h.vstr("PATCH"),
+                        h.vstr("DELETE"),
+                    }) },
+                    .{ "ops", h.ja(&.{
+                        h.vstr("create"),
+                        h.vstr("update"),
+                        h.vstr("remove"),
+                    }) },
+                }) },
+                .{ "optspec", h.jo(&.{
+                    .{ "keygen", h.vstr("`$FUNCTION`") },
+                }) },
+                .{ "strict", h.vbool(false) },
+                .{ "transport", h.vstr("none") },
+            }) },
+            .{ "metrics", h.jo(&.{
+                .{ "options", h.jo(&.{
+                    .{ "active", h.vbool(false) },
+                }) },
+                .{ "optspec", h.jo(&.{
+                    .{ "now", h.vstr("`$FUNCTION`") },
+                }) },
+                .{ "strict", h.vbool(false) },
+                .{ "transport", h.vstr("none") },
+            }) },
+            .{ "paging", h.jo(&.{
+                .{ "options", h.jo(&.{
+                    .{ "active", h.vbool(false) },
+                    .{ "afterVar", h.vstr("after") },
+                    .{ "cursorParam", h.vstr("cursor") },
+                    .{ "firstVar", h.vstr("first") },
+                    .{ "limitParam", h.vstr("limit") },
+                    .{ "pageParam", h.vstr("page") },
+                    .{ "startPage", h.vnum(1) },
+                }) },
+                .{ "optspec", h.jo(&.{
+                    .{ "limit", h.vstr("`$NUMBER`") },
+                    .{ "ops", h.vstr("`$LIST`") },
+                }) },
+                .{ "strict", h.vbool(false) },
+                .{ "transport", h.vstr("none") },
+            }) },
+            .{ "ratelimit", h.jo(&.{
+                .{ "options", h.jo(&.{
+                    .{ "active", h.vbool(false) },
+                    .{ "burst", h.vnum(5) },
+                    .{ "rate", h.vnum(5) },
+                }) },
+                .{ "optspec", h.jo(&.{
+                    .{ "now", h.vstr("`$FUNCTION`") },
+                    .{ "sleep", h.vstr("`$FUNCTION`") },
+                }) },
+                .{ "strict", h.vbool(false) },
+                .{ "transport", h.vstr("wrap") },
+            }) },
+            .{ "retry", h.jo(&.{
+                .{ "options", h.jo(&.{
+                    .{ "active", h.vbool(false) },
+                    .{ "factor", h.vnum(2) },
+                    .{ "maxDelay", h.vnum(2000) },
+                    .{ "minDelay", h.vnum(50) },
+                    .{ "retries", h.vnum(2) },
+                    .{ "statuses", h.ja(&.{
+                        h.vnum(408),
+                        h.vnum(425),
+                        h.vnum(429),
+                        h.vnum(500),
+                        h.vnum(502),
+                        h.vnum(503),
+                        h.vnum(504),
+                    }) },
+                }) },
+                .{ "optspec", h.jo(&.{
+                    .{ "jitter", h.vstr("`$BOOLEAN`") },
+                    .{ "sleep", h.vstr("`$FUNCTION`") },
+                }) },
+                .{ "strict", h.vbool(false) },
+                .{ "transport", h.vstr("wrap") },
+            }) },
             .{ "test", h.jo(&.{
                 .{ "options", h.jo(&.{
                     .{ "active", h.vbool(false) },
                 }) },
+                .{ "optspec", h.jo(&.{
+                    .{ "entity", h.vstr("`$MAP`") },
+                    .{ "net", h.vstr("`$MAP`") },
+                }) },
+                .{ "strict", h.vbool(false) },
                 .{ "transport", h.vstr("base") },
+            }) },
+            .{ "timeout", h.jo(&.{
+                .{ "options", h.jo(&.{
+                    .{ "active", h.vbool(false) },
+                    .{ "ms", h.vnum(30000) },
+                }) },
+                .{ "optspec", h.jo(&.{
+                    .{ "clearTimer", h.vstr("`$FUNCTION`") },
+                    .{ "setTimer", h.vstr("`$FUNCTION`") },
+                }) },
+                .{ "strict", h.vbool(false) },
+                .{ "transport", h.vstr("wrap") },
             }) },
         }) },
         .{ "options", h.jo(&.{

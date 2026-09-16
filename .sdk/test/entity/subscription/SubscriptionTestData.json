@@ -73,5 +73,947 @@
         "updated_at": "s266"
       }
     }
+  },
+  "requests": {
+    "POST /api/v1/subscriptions/": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "subscriptions.create",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "application_id": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "dedicated_workers": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "event_types": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "is_enabled": {
+                    "type": "boolean"
+                  },
+                  "label_key": {
+                    "description": "_Kept for backward compatibility, you should use `labels`_",
+                    "type": "string"
+                  },
+                  "label_value": {
+                    "description": "_Kept for backward compatibility, you should use `labels`_",
+                    "type": "string"
+                  },
+                  "labels": {
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  "metadata": {
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  "target": {
+                    "properties": {
+                      "headers": {
+                        "type": "object"
+                      },
+                      "method": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "example": "http",
+                        "type": "string"
+                      },
+                      "url": {
+                        "format": "url",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "headers",
+                      "method",
+                      "type",
+                      "url"
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "application_id",
+                  "event_types",
+                  "is_enabled",
+                  "target"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "application_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "dedicated_workers": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "event_types": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "is_enabled": {
+                      "type": "boolean"
+                    },
+                    "label_key": {
+                      "description": "_Kept for backward compatibility, you should use `labels`_",
+                      "type": "string"
+                    },
+                    "label_value": {
+                      "description": "_Kept for backward compatibility, you should use `labels`_",
+                      "type": "string"
+                    },
+                    "labels": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "metadata": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "secret": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "subscription_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "target": {
+                      "properties": {
+                        "headers": {
+                          "type": "object"
+                        },
+                        "method": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "example": "http",
+                          "type": "string"
+                        },
+                        "url": {
+                          "format": "url",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "headers",
+                        "method",
+                        "type",
+                        "url"
+                      ],
+                      "type": "object"
+                    },
+                    "updated_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "application_id",
+                    "created_at",
+                    "dedicated_workers",
+                    "event_types",
+                    "is_enabled",
+                    "label_key",
+                    "label_value",
+                    "labels",
+                    "metadata",
+                    "secret",
+                    "subscription_id",
+                    "target",
+                    "updated_at"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    },
+    "GET /api/v1/subscriptions/": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "subscriptions.list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "application_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "application_id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "dedicated_workers": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "event_types": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "is_enabled": {
+                        "type": "boolean"
+                      },
+                      "label_key": {
+                        "description": "_Kept for backward compatibility, you should use `labels`_",
+                        "type": "string"
+                      },
+                      "label_value": {
+                        "description": "_Kept for backward compatibility, you should use `labels`_",
+                        "type": "string"
+                      },
+                      "labels": {
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "type": "object"
+                      },
+                      "metadata": {
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "type": "object"
+                      },
+                      "secret": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "subscription_id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "target": {
+                        "properties": {
+                          "headers": {
+                            "type": "object"
+                          },
+                          "method": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "example": "http",
+                            "type": "string"
+                          },
+                          "url": {
+                            "format": "url",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "headers",
+                          "method",
+                          "type",
+                          "url"
+                        ],
+                        "type": "object"
+                      },
+                      "updated_at": {
+                        "format": "date-time",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "application_id",
+                      "created_at",
+                      "dedicated_workers",
+                      "event_types",
+                      "is_enabled",
+                      "label_key",
+                      "label_value",
+                      "labels",
+                      "metadata",
+                      "secret",
+                      "subscription_id",
+                      "target",
+                      "updated_at"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    },
+    "GET /api/v1/subscriptions/{subscription_id}": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "subscriptions.get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "simple"
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "application_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "dedicated_workers": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "event_types": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "is_enabled": {
+                      "type": "boolean"
+                    },
+                    "label_key": {
+                      "description": "_Kept for backward compatibility, you should use `labels`_",
+                      "type": "string"
+                    },
+                    "label_value": {
+                      "description": "_Kept for backward compatibility, you should use `labels`_",
+                      "type": "string"
+                    },
+                    "labels": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "metadata": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "secret": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "subscription_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "target": {
+                      "properties": {
+                        "headers": {
+                          "type": "object"
+                        },
+                        "method": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "example": "http",
+                          "type": "string"
+                        },
+                        "url": {
+                          "format": "url",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "headers",
+                        "method",
+                        "type",
+                        "url"
+                      ],
+                      "type": "object"
+                    },
+                    "updated_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "application_id",
+                    "created_at",
+                    "dedicated_workers",
+                    "event_types",
+                    "is_enabled",
+                    "label_key",
+                    "label_value",
+                    "labels",
+                    "metadata",
+                    "secret",
+                    "subscription_id",
+                    "target",
+                    "updated_at"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    },
+    "DELETE /api/v1/subscriptions/{subscription_id}": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "subscriptions.delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "query",
+            "name": "application_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    },
+    "PUT /api/v1/subscriptions/{subscription_id}": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "subscriptions.update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "style": "simple"
+          }
+        ],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "application_id": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "dedicated_workers": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "event_types": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "is_enabled": {
+                    "type": "boolean"
+                  },
+                  "label_key": {
+                    "description": "_Kept for backward compatibility, you should use `labels`_",
+                    "type": "string"
+                  },
+                  "label_value": {
+                    "description": "_Kept for backward compatibility, you should use `labels`_",
+                    "type": "string"
+                  },
+                  "labels": {
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  "metadata": {
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  "target": {
+                    "properties": {
+                      "headers": {
+                        "type": "object"
+                      },
+                      "method": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "example": "http",
+                        "type": "string"
+                      },
+                      "url": {
+                        "format": "url",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "headers",
+                      "method",
+                      "type",
+                      "url"
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "application_id",
+                  "event_types",
+                  "is_enabled",
+                  "target"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "application_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "dedicated_workers": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "event_types": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "is_enabled": {
+                      "type": "boolean"
+                    },
+                    "label_key": {
+                      "description": "_Kept for backward compatibility, you should use `labels`_",
+                      "type": "string"
+                    },
+                    "label_value": {
+                      "description": "_Kept for backward compatibility, you should use `labels`_",
+                      "type": "string"
+                    },
+                    "labels": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "metadata": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "secret": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "subscription_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "target": {
+                      "properties": {
+                        "headers": {
+                          "type": "object"
+                        },
+                        "method": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "example": "http",
+                          "type": "string"
+                        },
+                        "url": {
+                          "format": "url",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "headers",
+                        "method",
+                        "type",
+                        "url"
+                      ],
+                      "type": "object"
+                    },
+                    "updated_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "application_id",
+                    "created_at",
+                    "dedicated_workers",
+                    "event_types",
+                    "is_enabled",
+                    "label_key",
+                    "label_value",
+                    "labels",
+                    "metadata",
+                    "secret",
+                    "subscription_id",
+                    "target",
+                    "updated_at"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "biscuit": []
+          }
+        ],
+        "securitySchemes": {
+          "biscuit": {
+            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_refresh": {
+            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          },
+          "biscuit_user_access": {
+            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
+            "in": "header",
+            "name": "Authorization",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    }
   }
 }
