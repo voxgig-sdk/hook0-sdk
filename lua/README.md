@@ -45,7 +45,7 @@ local applications, err = client:Application():list()
 if err then error(err) end
 
 for _, item in ipairs(applications) do
-  print(item["id"], item["application_id"])
+  print(item["id"])
 end
 ```
 
@@ -61,11 +61,11 @@ print(application)
 
 ```lua
 -- Create
-local created, err = client:Application():create({ application_id = "example_application_id", consumption = {}, name = "example_name", onboarding_steps = {}, organization_id = "example_organization_id", quotas = {} })
+local created, err = client:Application():create({ amount = 1, application_id = "example_application_id", application_name = "example_application_name", consumption = {}, date = "example_date", is_provisional = true, name = "example_name", onboarding_steps = {}, organization_id = "example_organization_id", quotas = {} })
 if err then error(err) end
 
 -- Update
-client:Application():update({ id = created:data_get()["id"], application_id = "example_application_id", consumption = {} })
+client:Application():update({ id = created:data_get()["id"], amount = 1, application_id = "example_application_id" })
 
 -- Remove
 client:Application():remove({ id = created:data_get()["id"] })
@@ -78,7 +78,7 @@ Entity operations return `(value, err)`. Check `err` before using
 the value:
 
 ```lua
-local applications, err = client:Application():list()
+local eventtypes, err = client:EventType():list()
 if err then error(err) end
 ```
 
@@ -136,7 +136,7 @@ Create a mock client for unit testing — no server required:
 ```lua
 local client = sdk.test()
 
-local result, err = client:Application():list()
+local result, err = client:EventType():list()
 -- result is the returned data; err is set on failure
 ```
 
@@ -223,7 +223,6 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
 | `EventType` | `(data) -> EventTypeEntity` | Create an EventType entity instance. |
 | `EventsManagement` | `(data) -> EventsManagementEntity` | Create an EventsManagement entity instance. |
-| `EventsPerDayEntry` | `(data) -> EventsPerDayEntryEntity` | Create an EventsPerDayEntry entity instance. |
 | `Health` | `(data) -> HealthEntity` | Create a Health entity instance. |
 | `Hook0` | `(data) -> Hook0Entity` | Create a Hook0 entity instance. |
 | `IngestedEvent` | `(data) -> IngestedEventEntity` | Create an IngestedEvent entity instance. |
@@ -285,9 +284,13 @@ Only `direct()` returns a response envelope — a `table` with `ok`,
 
 | Field | Description |
 | --- | --- |
+| `amount` |  |
 | `application_id` | Unique identifier of the application. |
+| `application_name` |  |
 | `consumption` | Current consumption metrics for this application. |
+| `date` |  |
 | `id` |  |
+| `is_provisional` |  |
 | `name` | Name of the application. |
 | `onboarding_steps` | Onboarding completion status for this application. |
 | `organization_id` | UUID of the organization this application belongs to. |
@@ -325,7 +328,6 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -367,20 +369,6 @@ API path: `/api/v1/event_types/`
 Operations: List, Remove.
 
 API path: `/api/v1/payload_content_types/`
-
-#### EventsPerDayEntry
-
-| Field | Description |
-| --- | --- |
-| `amount` |  |
-| `application_id` |  |
-| `application_name` |  |
-| `date` |  |
-| `is_provisional` |  |
-
-Operations: List.
-
-API path: `/api/v1/events_per_day/application`
 
 #### Health
 
@@ -465,8 +453,13 @@ API path: `/api/v1/auth/login`
 
 | Field | Description |
 | --- | --- |
+| `amount` |  |
+| `application_id` |  |
+| `application_name` |  |
 | `consumption` |  |
+| `date` |  |
 | `id` |  |
+| `is_provisional` |  |
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
@@ -661,9 +654,13 @@ Create an instance: `local application = client:Application(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `number` |  |
 | `application_id` | `string` | Unique identifier of the application. |
+| `application_name` | `string` |  |
 | `consumption` | `table` | Current consumption metrics for this application. |
+| `date` | `string` |  |
 | `id` | `string` |  |
+| `is_provisional` | `boolean` |  |
 | `name` | `string` | Name of the application. |
 | `onboarding_steps` | `table` | Onboarding completion status for this application. |
 | `organization_id` | `string` | UUID of the organization this application belongs to. |
@@ -685,8 +682,12 @@ local applications, err = client:Application():list()
 
 ```lua
 local application, err = client:Application():create({
+  amount = 1, -- number
   application_id = "example_application_id", -- string
+  application_name = "example_application_name", -- string
   consumption = {}, -- table
+  date = "example_date", -- string
+  is_provisional = true, -- boolean
   name = "example_name", -- string
   onboarding_steps = {}, -- table
   organization_id = "example_organization_id", -- string
@@ -762,7 +763,6 @@ Create an instance: `local event = client:Event(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `string` |  |
 | `event_id` | `string` |  |
 | `event_type_name` | `string` |  |
 | `id` | `string` |  |
@@ -791,7 +791,6 @@ local events, err = client:Event():list()
 ```lua
 local event, err = client:Event():create({
   id = "example_id", -- string
-  application_id = "example_application_id", -- string
   event_id = "example_event_id", -- string
   event_type_name = "example_event_type_name", -- string
   ip = "example_ip", -- string
@@ -873,33 +872,6 @@ Create an instance: `local events_management = client:EventsManagement(nil)`
 
 ```lua
 local events_managements, err = client:EventsManagement():list()
-```
-
-
-### EventsPerDayEntry
-
-Create an instance: `local events_per_day_entry = client:EventsPerDayEntry(nil)`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(match)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `amount` | `number` |  |
-| `application_id` | `string` |  |
-| `application_name` | `string` |  |
-| `date` | `string` |  |
-| `is_provisional` | `boolean` |  |
-
-#### Example: List
-
-```lua
-local events_per_day_entrys, err = client:EventsPerDayEntry():list()
 ```
 
 
@@ -1075,8 +1047,13 @@ Create an instance: `local organization = client:Organization(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `number` |  |
+| `application_id` | `string` |  |
+| `application_name` | `string` |  |
 | `consumption` | `table` |  |
+| `date` | `string` |  |
 | `id` | `string` |  |
+| `is_provisional` | `boolean` |  |
 | `name` | `string` |  |
 | `onboarding_steps` | `table` |  |
 | `organization_id` | `string` |  |
@@ -1101,7 +1078,12 @@ local organizations, err = client:Organization():list()
 
 ```lua
 local organization, err = client:Organization():create({
+  amount = 1, -- number
+  application_id = "example_application_id", -- string
+  application_name = "example_application_name", -- string
   consumption = {}, -- table
+  date = "example_date", -- string
+  is_provisional = true, -- boolean
   name = "example_name", -- string
   onboarding_steps = {}, -- table
   organization_id = "example_organization_id", -- string
@@ -1480,14 +1462,14 @@ above:
 
 | Feature | What it does |
 |---|---|
-| [`debug`](#debug) | Request/response capture ring buffer for debugging |
-| [`idempotency`](#idempotency) | Idempotency keys for safe retries of mutating operations |
-| [`metrics`](#metrics) | Statistics capture: per-operation counters and latency |
-| [`paging`](#paging) | Pagination signals for list operations |
-| [`ratelimit`](#ratelimit) | Client-side rate limiting via a token bucket |
-| [`retry`](#retry) | Automatic retry of transient failures with exponential backoff |
-| [`test`](#test) | In-memory mock transport for testing without a live server |
-| [`timeout`](#timeout) | Per-request timeout with transport abort |
+| [`debug`](#debug) | Debug capture |
+| [`idempotency`](#idempotency) | Idempotency |
+| [`metrics`](#metrics) | Metrics |
+| [`paging`](#paging) | Paging |
+| [`ratelimit`](#ratelimit) | Rate limiting |
+| [`retry`](#retry) | Retry |
+| [`test`](#test) | Test transport |
+| [`timeout`](#timeout) | Timeout |
 
 > **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
@@ -1496,7 +1478,7 @@ above:
 
 ### debug
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 | Option | Default |
 |---|---|
@@ -1508,7 +1490,7 @@ Set `feature.debug.active` to enable it, then override any of the options above.
 
 ### idempotency
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 | Option | Default |
 |---|---|
@@ -1521,7 +1503,7 @@ Set `feature.idempotency.active` to enable it, then override any of the options 
 
 ### metrics
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 | Option | Default |
 |---|---|
@@ -1531,7 +1513,7 @@ Set `feature.metrics.active` to enable it, then override any of the options abov
 
 ### paging
 
-Pagination signals for list operations.
+Paging.
 
 | Option | Default |
 |---|---|
@@ -1547,7 +1529,7 @@ Set `feature.paging.active` to enable it, then override any of the options above
 
 ### ratelimit
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 | Option | Default |
 |---|---|
@@ -1563,7 +1545,7 @@ activated earlier.
 
 ### retry
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 | Option | Default |
 |---|---|
@@ -1582,7 +1564,7 @@ activated earlier.
 
 ### test
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 | Option | Default |
 |---|---|
@@ -1592,7 +1574,7 @@ Set `feature.test.active` to enable it, then override any of the options above.
 
 ### timeout
 
-Per-request timeout with transport abort.
+Timeout.
 
 | Option | Default |
 |---|---|
@@ -1644,14 +1626,14 @@ with hook methods named after pipeline stages (e.g. `PrePoint`,
 
 The SDK ships with built-in features:
 
-- **DebugFeature**: Request/response capture ring buffer for debugging
-- **IdempotencyFeature**: Idempotency keys for safe retries of mutating operations
-- **MetricsFeature**: Statistics capture: per-operation counters and latency
-- **PagingFeature**: Pagination signals for list operations
-- **RatelimitFeature**: Client-side rate limiting via a token bucket
-- **RetryFeature**: Automatic retry of transient failures with exponential backoff
-- **TestFeature**: In-memory mock transport for testing without a live server
-- **TimeoutFeature**: Per-request timeout with transport abort
+- **DebugFeature**: Debug capture
+- **IdempotencyFeature**: Idempotency
+- **MetricsFeature**: Metrics
+- **PagingFeature**: Paging
+- **RatelimitFeature**: Rate limiting
+- **RetryFeature**: Retry
+- **TestFeature**: Test transport
+- **TimeoutFeature**: Timeout
 
 Features are initialized in order. Hooks fire in the order features
 were added, so later features can override earlier ones.
@@ -1671,6 +1653,7 @@ Use `helpers.to_map()` to safely validate that a value is a table.
 lua/
 ├── hook0_sdk.lua    -- Main SDK module
 ├── config.lua               -- Configuration
+├── schema.lua               -- Generated option + entity specs
 ├── features.lua             -- Feature factory
 ├── core/                    -- Core types and context
 ├── entity/                  -- Entity implementations
@@ -1689,11 +1672,11 @@ Entity instances are stateful. After a successful `list`, the entity
 stores the returned data and match criteria internally.
 
 ```lua
-local application = client:Application()
-application:list()
+local eventtype = client:EventType()
+eventtype:list()
 
--- application:data_get() now returns the application data from the last list
--- application:match_get() returns the last match criteria
+-- eventtype:data_get() now returns the eventtype data from the last list
+-- eventtype:match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

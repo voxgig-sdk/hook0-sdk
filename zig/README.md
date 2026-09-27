@@ -79,13 +79,13 @@ switch (client.application(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("example_id")
 
 ```zig
 // Create — .ok carries the created record
-switch (client.application(h.vnull()).create(h.jo(&.{.{ "application_id", h.vstr("example_application_id") }, .{ "consumption", h.omap() }, .{ "name", h.vstr("example_name") }, .{ "onboarding_steps", h.omap() }, .{ "organization_id", h.vstr("example_organization_id") }, .{ "quotas", h.omap() }}), h.vnull())) {
+switch (client.application(h.vnull()).create(h.jo(&.{.{ "amount", h.vnum(1) }, .{ "application_id", h.vstr("example_application_id") }, .{ "application_name", h.vstr("example_application_name") }, .{ "consumption", h.omap() }, .{ "date", h.vstr("example_date") }, .{ "is_provisional", h.vbool(true) }, .{ "name", h.vstr("example_name") }, .{ "onboarding_steps", h.omap() }, .{ "organization_id", h.vstr("example_organization_id") }, .{ "quotas", h.omap() }}), h.vnull())) {
     .ok => |created| std.debug.print("{s}\n", .{h.stringify(created)}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 
 // Update
-switch (client.application(h.vnull()).update(h.jo(&.{.{ "id", h.vstr("example_id") }, .{ "application_id", h.vstr("example_application_id") }, .{ "consumption", h.omap() }}), h.vnull())) {
+switch (client.application(h.vnull()).update(h.jo(&.{.{ "id", h.vstr("example_id") }, .{ "amount", h.vnum(1) }, .{ "application_id", h.vstr("example_application_id") }}), h.vnull())) {
     .ok => |updated| std.debug.print("{s}\n", .{h.stringify(updated)}),
     .err => |e| std.debug.print("update failed: {s}\n", .{e.msg}),
 }
@@ -104,8 +104,8 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const applications = await client.Application().list()
-  console.log(applications)
+  const eventtypes = await client.EventType().list()
+  console.log(eventtypes)
 } catch (err) {
   console.error('list failed:', err)
 }
@@ -173,8 +173,8 @@ Create a mock client for unit testing — no server required:
 const client = sdk.test_sdk(h.vnull(), h.vnull());
 
 // Entity ops return an OpResult — .ok carries the record, .err the error.
-switch (client.application(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application)}), // the mock record
+switch (client.event_type(h.vnull()).list(h.vnull(), h.vnull())) {
+    .ok => |event_type| std.debug.print("{s}\n", .{h.stringify(event_type)}), // the mock record
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -251,7 +251,6 @@ Creates a test-mode client with mock transport. Both arguments may be
 | `event` | `(entopts: Value) *EventEntity` | Create an Event entity instance. |
 | `event_type` | `(entopts: Value) *EventTypeEntity` | Create an EventType entity instance. |
 | `events_management` | `(entopts: Value) *EventsManagementEntity` | Create an EventsManagement entity instance. |
-| `events_per_day_entry` | `(entopts: Value) *EventsPerDayEntryEntity` | Create an EventsPerDayEntry entity instance. |
 | `health` | `(entopts: Value) *HealthEntity` | Create a Health entity instance. |
 | `hook0` | `(entopts: Value) *Hook0Entity` | Create a Hook0 entity instance. |
 | `ingested_event` | `(entopts: Value) *IngestedEventEntity` | Create an IngestedEvent entity instance. |
@@ -311,9 +310,13 @@ On error, `ok` is `false` and `err` carries the error message.
 
 | Field | Description |
 | --- | --- |
+| `amount` |  |
 | `application_id` | Unique identifier of the application. |
+| `application_name` |  |
 | `consumption` | Current consumption metrics for this application. |
+| `date` |  |
 | `id` |  |
+| `is_provisional` |  |
 | `name` | Name of the application. |
 | `onboarding_steps` | Onboarding completion status for this application. |
 | `organization_id` | UUID of the organization this application belongs to. |
@@ -351,7 +354,6 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -393,20 +395,6 @@ API path: `/api/v1/event_types/`
 Operations: List, Remove.
 
 API path: `/api/v1/payload_content_types/`
-
-#### EventsPerDayEntry
-
-| Field | Description |
-| --- | --- |
-| `amount` |  |
-| `application_id` |  |
-| `application_name` |  |
-| `date` |  |
-| `is_provisional` |  |
-
-Operations: List.
-
-API path: `/api/v1/events_per_day/application`
 
 #### Health
 
@@ -491,8 +479,13 @@ API path: `/api/v1/auth/login`
 
 | Field | Description |
 | --- | --- |
+| `amount` |  |
+| `application_id` |  |
+| `application_name` |  |
 | `consumption` |  |
+| `date` |  |
 | `id` |  |
+| `is_provisional` |  |
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
@@ -690,9 +683,13 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `i64` |  |
 | `application_id` | `[]const u8` | Unique identifier of the application. |
+| `application_name` | `[]const u8` |  |
 | `consumption` | `Value (object)` | Current consumption metrics for this application. |
+| `date` | `[]const u8` |  |
 | `id` | `[]const u8` |  |
+| `is_provisional` | `bool` |  |
 | `name` | `[]const u8` | Name of the application. |
 | `onboarding_steps` | `Value (object)` | Onboarding completion status for this application. |
 | `organization_id` | `[]const u8` | UUID of the organization this application belongs to. |
@@ -720,8 +717,12 @@ switch (client.application(h.vnull()).list(h.vnull(), h.vnull())) {
 
 ```zig
 switch (client.application(h.vnull()).create(h.jo(&.{
+    .{ "amount", h.vnum(1) }, // i64
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
+    .{ "application_name", h.vstr("example_application_name") }, // []const u8
     .{ "consumption", h.omap() }, // Value (object)
+    .{ "date", h.vstr("example_date") }, // []const u8
+    .{ "is_provisional", h.vbool(true) }, // bool
     .{ "name", h.vstr("example_name") }, // []const u8
     .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
@@ -815,7 +816,6 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `[]const u8` |  |
 | `event_id` | `[]const u8` |  |
 | `event_type_name` | `[]const u8` |  |
 | `id` | `[]const u8` |  |
@@ -850,7 +850,6 @@ switch (client.event(h.vnull()).list(h.vnull(), h.vnull())) {
 ```zig
 switch (client.event(h.vnull()).create(h.jo(&.{
     .{ "id", h.vstr("example_id") }, // []const u8
-    .{ "application_id", h.vstr("example_application_id") }, // []const u8
     .{ "event_id", h.vstr("example_event_id") }, // []const u8
     .{ "event_type_name", h.vstr("example_event_type_name") }, // []const u8
     .{ "ip", h.vstr("example_ip") }, // []const u8
@@ -951,39 +950,6 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 ```zig
 switch (client.events_management(h.vnull()).list(h.vnull(), h.vnull())) {
     .ok => |events_managements| std.debug.print("{s}\n", .{h.stringify(events_managements)}),
-    .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
-}
-```
-
-
-### EventsPerDayEntry
-
-Create an instance: `const events_per_day_entry = client.events_per_day_entry(h.vnull());`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
-
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `amount` | `i64` |  |
-| `application_id` | `[]const u8` |  |
-| `application_name` | `[]const u8` |  |
-| `date` | `[]const u8` |  |
-| `is_provisional` | `bool` |  |
-
-#### Example: List
-
-```zig
-switch (client.events_per_day_entry(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |events_per_day_entrys| std.debug.print("{s}\n", .{h.stringify(events_per_day_entrys)}),
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1194,8 +1160,13 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `i64` |  |
+| `application_id` | `[]const u8` |  |
+| `application_name` | `[]const u8` |  |
 | `consumption` | `Value (object)` |  |
+| `date` | `[]const u8` |  |
 | `id` | `[]const u8` |  |
+| `is_provisional` | `bool` |  |
 | `name` | `[]const u8` |  |
 | `onboarding_steps` | `Value (object)` |  |
 | `organization_id` | `[]const u8` |  |
@@ -1226,7 +1197,12 @@ switch (client.organization(h.vnull()).list(h.vnull(), h.vnull())) {
 
 ```zig
 switch (client.organization(h.vnull()).create(h.jo(&.{
+    .{ "amount", h.vnum(1) }, // i64
+    .{ "application_id", h.vstr("example_application_id") }, // []const u8
+    .{ "application_name", h.vstr("example_application_name") }, // []const u8
     .{ "consumption", h.omap() }, // Value (object)
+    .{ "date", h.vstr("example_date") }, // []const u8
+    .{ "is_provisional", h.vbool(true) }, // bool
     .{ "name", h.vstr("example_name") }, // []const u8
     .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
@@ -1683,14 +1659,14 @@ above:
 
 | Feature | What it does |
 |---|---|
-| [`debug`](#debug) | Request/response capture ring buffer for debugging |
-| [`idempotency`](#idempotency) | Idempotency keys for safe retries of mutating operations |
-| [`metrics`](#metrics) | Statistics capture: per-operation counters and latency |
-| [`paging`](#paging) | Pagination signals for list operations |
-| [`ratelimit`](#ratelimit) | Client-side rate limiting via a token bucket |
-| [`retry`](#retry) | Automatic retry of transient failures with exponential backoff |
-| [`test`](#test) | In-memory mock transport for testing without a live server |
-| [`timeout`](#timeout) | Per-request timeout with transport abort |
+| [`debug`](#debug) | Debug capture |
+| [`idempotency`](#idempotency) | Idempotency |
+| [`metrics`](#metrics) | Metrics |
+| [`paging`](#paging) | Paging |
+| [`ratelimit`](#ratelimit) | Rate limiting |
+| [`retry`](#retry) | Retry |
+| [`test`](#test) | Test transport |
+| [`timeout`](#timeout) | Timeout |
 
 > **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
@@ -1699,7 +1675,7 @@ above:
 
 ### debug
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 | Option | Default |
 |---|---|
@@ -1711,7 +1687,7 @@ Set `feature.debug.active` to enable it, then override any of the options above.
 
 ### idempotency
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 | Option | Default |
 |---|---|
@@ -1724,7 +1700,7 @@ Set `feature.idempotency.active` to enable it, then override any of the options 
 
 ### metrics
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 | Option | Default |
 |---|---|
@@ -1734,7 +1710,7 @@ Set `feature.metrics.active` to enable it, then override any of the options abov
 
 ### paging
 
-Pagination signals for list operations.
+Paging.
 
 | Option | Default |
 |---|---|
@@ -1750,7 +1726,7 @@ Set `feature.paging.active` to enable it, then override any of the options above
 
 ### ratelimit
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 | Option | Default |
 |---|---|
@@ -1766,7 +1742,7 @@ activated earlier.
 
 ### retry
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 | Option | Default |
 |---|---|
@@ -1785,7 +1761,7 @@ activated earlier.
 
 ### test
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 | Option | Default |
 |---|---|
@@ -1795,7 +1771,7 @@ Set `feature.test.active` to enable it, then override any of the options above.
 
 ### timeout
 
-Per-request timeout with transport abort.
+Timeout.
 
 | Option | Default |
 |---|---|
@@ -1847,14 +1823,14 @@ a function that receives the context.
 
 The SDK ships with built-in features:
 
-- **DebugFeature**: Request/response capture ring buffer for debugging
-- **IdempotencyFeature**: Idempotency keys for safe retries of mutating operations
-- **MetricsFeature**: Statistics capture: per-operation counters and latency
-- **PagingFeature**: Pagination signals for list operations
-- **RatelimitFeature**: Client-side rate limiting via a token bucket
-- **RetryFeature**: Automatic retry of transient failures with exponential backoff
-- **TestFeature**: In-memory mock transport for testing without a live server
-- **TimeoutFeature**: Per-request timeout with transport abort
+- **DebugFeature**: Debug capture
+- **IdempotencyFeature**: Idempotency
+- **MetricsFeature**: Metrics
+- **PagingFeature**: Paging
+- **RatelimitFeature**: Rate limiting
+- **RetryFeature**: Retry
+- **TestFeature**: Test transport
+- **TimeoutFeature**: Timeout
 
 Features are initialized in order. Hooks fire in the order features
 were added, so later features can override earlier ones.
@@ -1896,11 +1872,11 @@ stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const application = client.Application()
-await application.list()
+const eventtype = client.EventType()
+await eventtype.list()
 
-// application.data() now returns the application data from the last `list`
-// application.match() returns the last match criteria
+// eventtype.data() now returns the eventtype data from the last `list`
+// eventtype.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

@@ -384,66 +384,6 @@ test "events_management_prepare_smoke" {
     try std.testing.expect(std.mem.eql(u8, h.get_str(fetchdef, "method") orelse "", "GET"));
 }
 
-test "events_per_day_entry_list_smoke" {
-    const fixture = h.jo(&.{.{ "events_per_day_entry", h.jo(&.{.{ "t01", h.jo(&.{.{ "id", h.vstr("t01") }}) }}) }});
-    const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());
-    const e = testsdk.events_per_day_entry(vnull());
-    const res = e.list(vnull(), vnull());
-    try std.testing.expect(res == .ok);
-}
-
-test "events_per_day_entry_stream_smoke" {
-    // stream() runs the list op through the full pipeline and returns the
-    // result items. Seed two entities via test mode; with the streaming
-    // feature active it yields the feature's incremental items, else it falls
-    // back to the materialised items — either way every item is yielded.
-    const fixture = h.jo(&.{.{ "events_per_day_entry", h.jo(&.{
-        .{ "strm01", h.jo(&.{.{ "id", h.vstr("strm01") }}) },
-        .{ "strm02", h.jo(&.{.{ "id", h.vstr("strm02") }}) },
-    }) }});
-    const sdkopts = h.jo(&.{.{ "feature", h.jo(&.{.{ "streaming", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
-    const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), sdkopts);
-    const e = testsdk.events_per_day_entry(vnull());
-    const items = e.stream("list", vnull(), vnull());
-    try std.testing.expect(items.len == 2);
-
-    // Fallback: streaming inactive still yields both materialised items.
-    const plainsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());
-    const pe = plainsdk.events_per_day_entry(vnull());
-    const pitems = pe.stream("list", vnull(), vnull());
-    try std.testing.expect(pitems.len == 2);
-}
-
-test "events_per_day_entry_direct_smoke" {
-    // direct() drives prepare -> transport and always returns a result map
-    // carrying an `ok` flag (never an error union), even on a non-2xx or a
-    // prepare failure.
-    const testsdk = sdk.test_sdk(vnull(), vnull());
-    const result = testsdk.direct(h.jo(&.{
-        .{ "path", h.vstr("/events_per_day_entry/{id}") },
-        .{ "method", h.vstr("GET") },
-        .{ "params", h.jo(&.{.{ "id", h.vstr("direct01") }}) },
-    }));
-    try std.testing.expect(result == .object);
-    try std.testing.expect(h.get_bool(result, "ok") != null);
-}
-
-test "events_per_day_entry_prepare_smoke" {
-    // prepare() returns the fetch definition (an error union). The generated
-    // fetchdef always carries a url + method.
-    const testsdk = sdk.test_sdk(vnull(), vnull());
-    const fetchdef = testsdk.prepare(h.jo(&.{
-        .{ "path", h.vstr("/events_per_day_entry/{id}") },
-        .{ "method", h.vstr("GET") },
-        .{ "params", h.jo(&.{.{ "id", h.vstr("direct01") }}) },
-    })) catch {
-        // A prepare error is acceptable here (base may be unset); the surface
-        // exists and is exercised.
-        return;
-    };
-    try std.testing.expect(std.mem.eql(u8, h.get_str(fetchdef, "method") orelse "", "GET"));
-}
-
 test "health_load_smoke" {
     const fixture = h.jo(&.{.{ "health", h.jo(&.{.{ "t01", h.jo(&.{.{ "id", h.vstr("t01") }}) }}) }});
     const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());

@@ -19,7 +19,6 @@ import type {
   Hook0ListMatch,
 } from '../Hook0Types'
 
-// TODO: needs Entity superclass
 class Hook0Entity extends Hook0EntityBase<Hook0> {
 
   constructor(client: Hook0SDK, entopts: any) {

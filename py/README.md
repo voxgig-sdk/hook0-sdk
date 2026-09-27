@@ -69,10 +69,10 @@ except Exception as err:
 
 ```python
 # Create — returns the ENTITY (call data_get() for the record)
-created = client.Application().create({"application_id": "example_application_id", "consumption": {}, "name": "example_name", "onboarding_steps": {}, "organization_id": "example_organization_id", "quotas": {}})
+created = client.Application().create({"amount": 1, "application_id": "example_application_id", "application_name": "example_application_name", "consumption": {}, "date": "example_date", "is_provisional": True, "name": "example_name", "onboarding_steps": {}, "organization_id": "example_organization_id", "quotas": {}})
 
 # Update — the created record's id is a plain dict key
-client.Application().update({"id": created.data_get()["id"], "application_id": "example_application_id", "consumption": {}})
+client.Application().update({"id": created.data_get()["id"], "amount": 1, "application_id": "example_application_id"})
 
 # Remove
 client.Application().remove({"id": created.data_get()["id"]})
@@ -85,8 +85,8 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    applications = client.Application().list()
-    print(applications)
+    eventtypes = client.EventType().list()
+    print(eventtypes)
 except Exception as err:
     print(f"list failed: {err}")
 ```
@@ -154,8 +154,8 @@ client = Hook0SDK.test()
 
 # Entity ops return the ENTITY and raises on error;
 # call data_get() for the record.
-application = client.Application().list()
-# application contains the mock response record
+eventtype = client.EventType().list()
+# eventtype contains the mock response record
 ```
 
 ### Use a custom fetch function
@@ -239,7 +239,6 @@ Creates a test-mode client with mock transport. Both arguments may be `None`.
 | `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
 | `EventType` | `(data) -> EventTypeEntity` | Create an EventType entity instance. |
 | `EventsManagement` | `(data) -> EventsManagementEntity` | Create an EventsManagement entity instance. |
-| `EventsPerDayEntry` | `(data) -> EventsPerDayEntryEntity` | Create an EventsPerDayEntry entity instance. |
 | `Health` | `(data) -> HealthEntity` | Create a Health entity instance. |
 | `Hook0` | `(data) -> Hook0Entity` | Create a Hook0 entity instance. |
 | `IngestedEvent` | `(data) -> IngestedEventEntity` | Create an IngestedEvent entity instance. |
@@ -300,9 +299,13 @@ On error, `ok` is `False` and `err` contains the error value.
 
 | Field | Description |
 | --- | --- |
+| `amount` |  |
 | `application_id` | Unique identifier of the application. |
+| `application_name` |  |
 | `consumption` | Current consumption metrics for this application. |
+| `date` |  |
 | `id` |  |
+| `is_provisional` |  |
 | `name` | Name of the application. |
 | `onboarding_steps` | Onboarding completion status for this application. |
 | `organization_id` | UUID of the organization this application belongs to. |
@@ -340,7 +343,6 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -382,20 +384,6 @@ API path: `/api/v1/event_types/`
 Operations: List, Remove.
 
 API path: `/api/v1/payload_content_types/`
-
-#### EventsPerDayEntry
-
-| Field | Description |
-| --- | --- |
-| `amount` |  |
-| `application_id` |  |
-| `application_name` |  |
-| `date` |  |
-| `is_provisional` |  |
-
-Operations: List.
-
-API path: `/api/v1/events_per_day/application`
 
 #### Health
 
@@ -480,8 +468,13 @@ API path: `/api/v1/auth/login`
 
 | Field | Description |
 | --- | --- |
+| `amount` |  |
+| `application_id` |  |
+| `application_name` |  |
 | `consumption` |  |
+| `date` |  |
 | `id` |  |
+| `is_provisional` |  |
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
@@ -676,9 +669,13 @@ Create an instance: `application = client.Application()`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `int` |  |
 | `application_id` | `str` | Unique identifier of the application. |
+| `application_name` | `str` |  |
 | `consumption` | `dict` | Current consumption metrics for this application. |
+| `date` | `str` |  |
 | `id` | `str` |  |
+| `is_provisional` | `bool` |  |
 | `name` | `str` | Name of the application. |
 | `onboarding_steps` | `dict` | Onboarding completion status for this application. |
 | `organization_id` | `str` | UUID of the organization this application belongs to. |
@@ -700,8 +697,12 @@ applications = client.Application().list({"organization_id": "example"})
 
 ```python
 application = client.Application().create({
+    "amount": 1,  # int
     "application_id": "example_application_id",  # str
+    "application_name": "example_application_name",  # str
     "consumption": {},  # dict
+    "date": "example_date",  # str
+    "is_provisional": True,  # bool
     "name": "example_name",  # str
     "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
@@ -777,7 +778,6 @@ Create an instance: `event = client.Event()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `str` |  |
 | `event_id` | `str` |  |
 | `event_type_name` | `str` |  |
 | `id` | `str` |  |
@@ -806,7 +806,6 @@ events = client.Event().list({"application_id": "example"})
 ```python
 event = client.Event().create({
     "id": "example_id",  # str
-    "application_id": "example_application_id",  # str
     "event_id": "example_event_id",  # str
     "event_type_name": "example_event_type_name",  # str
     "ip": "example_ip",  # str
@@ -888,33 +887,6 @@ Create an instance: `events_management = client.EventsManagement()`
 
 ```python
 events_managements = client.EventsManagement().list()
-```
-
-
-### EventsPerDayEntry
-
-Create an instance: `events_per_day_entry = client.EventsPerDayEntry()`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list()` | List entities, optionally matching the given criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `amount` | `int` |  |
-| `application_id` | `str` |  |
-| `application_name` | `str` |  |
-| `date` | `str` |  |
-| `is_provisional` | `bool` |  |
-
-#### Example: List
-
-```python
-events_per_day_entrys = client.EventsPerDayEntry().list({"application_id": "example"})
 ```
 
 
@@ -1090,8 +1062,13 @@ Create an instance: `organization = client.Organization()`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `int` |  |
+| `application_id` | `str` |  |
+| `application_name` | `str` |  |
 | `consumption` | `dict` |  |
+| `date` | `str` |  |
 | `id` | `str` |  |
+| `is_provisional` | `bool` |  |
 | `name` | `str` |  |
 | `onboarding_steps` | `dict` |  |
 | `organization_id` | `str` |  |
@@ -1116,7 +1093,12 @@ organizations = client.Organization().list()
 
 ```python
 organization = client.Organization().create({
+    "amount": 1,  # int
+    "application_id": "example_application_id",  # str
+    "application_name": "example_application_name",  # str
     "consumption": {},  # dict
+    "date": "example_date",  # str
+    "is_provisional": True,  # bool
     "name": "example_name",  # str
     "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
@@ -1495,14 +1477,14 @@ above:
 
 | Feature | What it does |
 |---|---|
-| [`debug`](#debug) | Request/response capture ring buffer for debugging |
-| [`idempotency`](#idempotency) | Idempotency keys for safe retries of mutating operations |
-| [`metrics`](#metrics) | Statistics capture: per-operation counters and latency |
-| [`paging`](#paging) | Pagination signals for list operations |
-| [`ratelimit`](#ratelimit) | Client-side rate limiting via a token bucket |
-| [`retry`](#retry) | Automatic retry of transient failures with exponential backoff |
-| [`test`](#test) | In-memory mock transport for testing without a live server |
-| [`timeout`](#timeout) | Per-request timeout with transport abort |
+| [`debug`](#debug) | Debug capture |
+| [`idempotency`](#idempotency) | Idempotency |
+| [`metrics`](#metrics) | Metrics |
+| [`paging`](#paging) | Paging |
+| [`ratelimit`](#ratelimit) | Rate limiting |
+| [`retry`](#retry) | Retry |
+| [`test`](#test) | Test transport |
+| [`timeout`](#timeout) | Timeout |
 
 > **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
@@ -1511,7 +1493,7 @@ above:
 
 ### debug
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 | Option | Default |
 |---|---|
@@ -1523,7 +1505,7 @@ Set `feature.debug.active` to enable it, then override any of the options above.
 
 ### idempotency
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 | Option | Default |
 |---|---|
@@ -1536,7 +1518,7 @@ Set `feature.idempotency.active` to enable it, then override any of the options 
 
 ### metrics
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 | Option | Default |
 |---|---|
@@ -1546,7 +1528,7 @@ Set `feature.metrics.active` to enable it, then override any of the options abov
 
 ### paging
 
-Pagination signals for list operations.
+Paging.
 
 | Option | Default |
 |---|---|
@@ -1562,7 +1544,7 @@ Set `feature.paging.active` to enable it, then override any of the options above
 
 ### ratelimit
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 | Option | Default |
 |---|---|
@@ -1578,7 +1560,7 @@ activated earlier.
 
 ### retry
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 | Option | Default |
 |---|---|
@@ -1597,7 +1579,7 @@ activated earlier.
 
 ### test
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 | Option | Default |
 |---|---|
@@ -1607,7 +1589,7 @@ Set `feature.test.active` to enable it, then override any of the options above.
 
 ### timeout
 
-Per-request timeout with transport abort.
+Timeout.
 
 | Option | Default |
 |---|---|
@@ -1659,14 +1641,14 @@ with hook methods named after pipeline stages (e.g. `PrePoint`,
 
 The SDK ships with built-in features:
 
-- **DebugFeature**: Request/response capture ring buffer for debugging
-- **IdempotencyFeature**: Idempotency keys for safe retries of mutating operations
-- **MetricsFeature**: Statistics capture: per-operation counters and latency
-- **PagingFeature**: Pagination signals for list operations
-- **RatelimitFeature**: Client-side rate limiting via a token bucket
-- **RetryFeature**: Automatic retry of transient failures with exponential backoff
-- **TestFeature**: In-memory mock transport for testing without a live server
-- **TimeoutFeature**: Per-request timeout with transport abort
+- **DebugFeature**: Debug capture
+- **IdempotencyFeature**: Idempotency
+- **MetricsFeature**: Metrics
+- **PagingFeature**: Paging
+- **RatelimitFeature**: Rate limiting
+- **RetryFeature**: Retry
+- **TestFeature**: Test transport
+- **TimeoutFeature**: Timeout
 
 Features are initialized in order. Hooks fire in the order features
 were added, so later features can override earlier ones.
@@ -1686,6 +1668,7 @@ Use `helpers.to_map()` to safely validate that a value is a dict.
 py/
 ├── hook0_sdk.py         -- Main SDK module
 ├── config.py                    -- Configuration
+├── schema.py                    -- Generated option + entity specs
 ├── features.py                  -- Feature factory
 ├── core/                        -- Core types and context
 ├── entity/                      -- Entity implementations
@@ -1703,11 +1686,11 @@ Entity instances are stateful. After a successful `list`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-application = client.Application()
-application.list()
+eventtype = client.EventType()
+eventtype.list()
 
-# application.data_get() now returns the application data from the last list
-# application.match_get() returns the last match criteria
+# eventtype.data_get() now returns the eventtype data from the last list
+# eventtype.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

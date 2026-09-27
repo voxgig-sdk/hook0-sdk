@@ -449,24 +449,6 @@ class Hook0SDK
     }
 
 
-    private $_events_per_day_entry = null;
-
-    // Canonical facade: $client->EventsPerDayEntry()->list() / ->load(["id" => ...]).
-    // PHP method names are case-insensitive, so lowercase $client->events_per_day_entry()
-    // resolves here too.
-    public function EventsPerDayEntry($data = null)
-    {
-        require_once __DIR__ . '/entity/events_per_day_entry_entity.php';
-        if ($data === null) {
-            if ($this->_events_per_day_entry === null) {
-                $this->_events_per_day_entry = new EventsPerDayEntryEntity($this, null);
-            }
-            return $this->_events_per_day_entry;
-        }
-        return new EventsPerDayEntryEntity($this, $data);
-    }
-
-
     private $_health = null;
 
     // Canonical facade: $client->Health()->list() / ->load(["id" => ...]).

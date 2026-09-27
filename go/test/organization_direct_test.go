@@ -31,7 +31,7 @@ func TestOrganizationDirect(t *testing.T) {
 
 
 		result, err := client.Direct(map[string]any{
-			"path":   "api/v1/organizations",
+			"path":   "api/v1/events_per_day/organization",
 			"method": "GET",
 			"params": map[string]any{},
 		})
@@ -97,7 +97,7 @@ func TestOrganizationDirect(t *testing.T) {
 		if setup.live {
 			listParams := map[string]any{}
 			listResult, listErr := client.Direct(map[string]any{
-				"path":   "api/v1/organizations",
+				"path":   "api/v1/events_per_day/organization",
 				"method": "GET",
 				"params": listParams,
 			})

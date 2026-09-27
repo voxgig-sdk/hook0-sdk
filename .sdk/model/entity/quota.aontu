@@ -1,0 +1,87 @@
+# Entity: quota
+
+main: kit: entity: quota: {
+
+  alias: field: {}
+
+  fields: {
+    global_applications_per_organization_limit: {
+      fo: "int32"
+      h: "Global Applications Per Organization Limit"
+      n: "global_applications_per_organization_limit"
+      r: true
+      t: "`$INTEGER`"
+    }
+    global_days_of_events_retention_limit: {
+      fo: "int32"
+      h: "Global Days Of Events Retention Limit"
+      n: "global_days_of_events_retention_limit"
+      r: true
+      t: "`$INTEGER`"
+    }
+    global_event_types_per_application_limit: {
+      fo: "int32"
+      h: "Global Event Types Per Application Limit"
+      n: "global_event_types_per_application_limit"
+      r: true
+      t: "`$INTEGER`"
+    }
+    global_events_per_day_limit: {
+      fo: "int32"
+      h: "Global Events Per Day Limit"
+      n: "global_events_per_day_limit"
+      r: true
+      t: "`$INTEGER`"
+    }
+    global_members_per_organization_limit: {
+      fo: "int32"
+      h: "Global Members Per Organization Limit"
+      n: "global_members_per_organization_limit"
+      r: true
+      t: "`$INTEGER`"
+    }
+    global_subscriptions_per_application_limit: {
+      fo: "int32"
+      h: "Global Subscriptions Per Application Limit"
+      n: "global_subscriptions_per_application_limit"
+      r: true
+      t: "`$INTEGER`"
+    }
+  }
+
+  name: "quota"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/quotas/"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/api/v1/quotas/"
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "quotas"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.limits`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

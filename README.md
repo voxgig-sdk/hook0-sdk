@@ -12,13 +12,13 @@ Learn more about Voxgig SDKs at [voxgig.com/sdk](https://voxgig.com/sdk/).
 
 > TypeScript, Python, PHP, Golang, Lua, Java, JavaScript, Zig SDKs, a CLI with an interactive REPL, and an MCP server for AI agents — all generated from one OpenAPI spec by [@voxgig/sdkgen](https://github.com/voxgig/sdkgen).
 
-> **Features:** `debug`, `idempotency`, `metrics`, `paging`, `ratelimit`, `retry`, `test`, `timeout` — opt-in,
+> **Features:** `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined` — opt-in,
 > inactive until switched on, and configured per client. See the Features
 > section of any SDK README below for what each one does.
 
 ## Entities, not endpoints
 
-This SDK exposes the API as **24 semantic entities** that you
+This SDK exposes the API as **23 semantic entities** that you
 call directly, instead of assembling URL paths and query strings. See the [Entities](#entities) table below for the full list. Entities are
 **Capitalised** to mark them as the primary surface, each with the operations they
 support (`list`, `load`, `create`, `update`, `remove`):
@@ -44,23 +44,23 @@ network, and no credentials:
 // Shape: { entity: { <entity-name>: { <id>: <record> } } }
 const client = Hook0SDK.test({
   entity: {
-    application: {
-      test01: { id: 'test01', application_id: 'example_application_id', consumption: {}, name: 'example_name' },
+    event_type: {
+      test01: { id: 'test01', application_id: 'example_application_id', event_type_name: 'example_event_type_name', resource_type: 'example_resource_type' },
     },
   },
 })
-const applications = await client.Application().list()
-// applications is an array of Application entities, populated with mock data
-// — call applications[0].data() for the record itself
-console.log(applications)
+const eventtypes = await client.EventType().list()
+// eventtypes is an array of EventType entities, populated with mock data
+// — call eventtypes[0].data() for the record itself
+console.log(eventtypes)
 ```
 
 ### Python
 
 ```python
 client = Hook0SDK.test()
-applications = client.Application().list()
-print(applications)
+eventtypes = client.EventType().list()
+print(eventtypes)
 ```
 
 ### PHP
@@ -68,16 +68,16 @@ print(applications)
 ```php
 // Seed fixture data so offline calls resolve without a live server.
 $client = Hook0SDK::test([
-    "entity" => ["application" => ["test01" => ["id" => "test01"]]],
+    "entity" => ["eventtype" => ["test01" => ["id" => "test01"]]],
 ]);
-$applications = $client->Application()->list();
+$eventtypes = $client->EventType()->list();
 ```
 
 ### Golang
 
 ```go
 client := sdk.Test()
-result, err := client.Application(nil).List(
+result, err := client.EventType(nil).List(
     nil, nil,
 )
 ```
@@ -86,25 +86,25 @@ result, err := client.Application(nil).List(
 
 ```lua
 local client = sdk.test()
-local results, err = client:Application():list()
+local results, err = client:EventType():list()
 ```
 
 ### Java
 
 ```java
 Hook0SDK client = Hook0SDK.testSDK(null, null);
-Object applicationList = client.application(null).list(null, null);
-System.out.println(applicationList);
+Object eventTypeList = client.eventType(null).list(null, null);
+System.out.println(eventTypeList);
 ```
 
 ### JavaScript
 
 ```js
 const client = Hook0SDK.test()
-const applications = await client.Application().list()
-// applications is an array of entities, populated with mock data
-// — call applications[0].data() for the record itself
-console.log(applications)
+const eventtypes = await client.EventType().list()
+// eventtypes is an array of entities, populated with mock data
+// — call eventtypes[0].data() for the record itself
+console.log(eventtypes)
 ```
 
 ### Zig
@@ -115,8 +115,8 @@ const sdk = @import("sdk");
 const h = sdk.h;
 
 const client = sdk.test_sdk(h.vnull(), h.vnull());
-switch (client.application(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |applications| std.debug.print("{s}\n", .{h.stringify(applications)}),
+switch (client.event_type(h.vnull()).list(h.vnull(), h.vnull())) {
+    .ok => |event_types| std.debug.print("{s}\n", .{h.stringify(event_types)}),
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -125,14 +125,14 @@ switch (client.application(h.vnull()).list(h.vnull(), h.vnull())) {
 
 | Language | Package | Install |
 | --- | --- | --- |
-| TypeScript | `@voxgig-sdk/hook0` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/releases) |
-| Python | `voxgig-sdk-hook0` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/releases) |
-| PHP | `voxgig-sdk/hook0` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/releases) |
+| TypeScript | `@voxgig-sdk/hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
+| Python | `voxgig-sdk-hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
+| PHP | `voxgig-sdk/hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
 | Golang | `github.com/voxgig-sdk/hook0-sdk/go` | `go get github.com/voxgig-sdk/hook0-sdk/go@latest` |
-| Lua | `voxgig-sdk-hook0` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/releases) |
-| Java | `voxgig-sdk-hook0` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/releases) |
-| JavaScript | `@voxgig-sdk/hook0-js` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/releases) |
-| Zig | `voxgig-sdk-hook0` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/releases) |
+| Lua | `voxgig-sdk-hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
+| Java | `voxgig-sdk-hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
+| JavaScript | `@voxgig-sdk/hook0-sdk-js` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
+| Zig | `voxgig-sdk-hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
 | Go CLI | `github.com/voxgig-sdk/hook0-sdk/go-cli` | `go install github.com/voxgig-sdk/hook0-sdk/go-cli/cmd/hook0@latest` |
 | Go MCP server | `github.com/voxgig-sdk/hook0-sdk/go-mcp` | `go get github.com/voxgig-sdk/hook0-sdk/go-mcp@latest` |
 
@@ -141,7 +141,7 @@ switch (client.application(h.vnull()).list(h.vnull(), h.vnull())) {
 ### TypeScript
 
 ```ts
-import { Hook0SDK } from '@voxgig-sdk/hook0'
+import { Hook0SDK } from '@voxgig-sdk/hook0-sdk'
 
 const client = new Hook0SDK({
   apikey: process.env.HOOK0_APIKEY,
@@ -188,23 +188,22 @@ Then add it to your agent's MCP config (Claude Desktop, Cursor, etc.):
 
 ## Entities
 
-The API exposes 24 entities:
+The API exposes 23 entities:
 
 | Entity | Description | API path |
 | --- | --- | --- |
-| **Application** | The Application entity (create, list, load, remove, update). | `/api/v1/applications/` |
+| **Application** | The Application entity (create, list, load, remove, update). | `/api/v1/events_per_day/application` |
 | **ApplicationSecret** | The ApplicationSecret entity (create, list, update). | `/api/v1/application_secrets/` |
 | **ApplicationsManagement** | The ApplicationsManagement entity (remove). | `/api/v1/application_secrets/{application_secret_token}` |
 | **Event** | The Event entity (create, list, load). | `/api/v1/events/` |
 | **EventType** | The EventType entity (create, list, load). | `/api/v1/event_types/` |
 | **EventsManagement** | The EventsManagement entity (list, remove). | `/api/v1/payload_content_types/` |
-| **EventsPerDayEntry** | The EventsPerDayEntry entity (list). | `/api/v1/events_per_day/application` |
 | **Health** | The Health entity (load). | `/api/v1/health/` |
 | **Hook0** | The Hook0 entity (list). | `/api/v1/environment_variables/` |
 | **IngestedEvent** | The IngestedEvent entity (create). | `/api/v1/event/` |
 | **Instance** | The Instance entity (load). | `/api/v1/instance/` |
 | **Login** | The Login entity (create). | `/api/v1/auth/login` |
-| **Organization** | The Organization entity (create, list, load, remove, update). | `/api/v1/organizations/` |
+| **Organization** | The Organization entity (create, list, load, remove, update). | `/api/v1/events_per_day/organization` |
 | **OrganizationEditRole** | The OrganizationEditRole entity (update). | `/api/v1/organizations/{organization_id}/invite` |
 | **Problem** | The Problem entity (list). | `/api/v1/errors/` |
 | **Quota** | The Quota entity (load). | `/api/v1/quotas/` |
@@ -317,7 +316,7 @@ System.out.println(application);
 ### JavaScript
 
 ```js
-const { Hook0SDK } = require('@voxgig-sdk/hook0-js')
+const { Hook0SDK } = require('@voxgig-sdk/hook0-sdk-js')
 
 const client = new Hook0SDK({
   apikey: process.env.HOOK0_APIKEY,
@@ -474,14 +473,14 @@ forking the SDK.
 
 | Feature | Purpose |
 | --- | --- |
-| **DebugFeature** | Request/response capture ring buffer for debugging |
-| **IdempotencyFeature** | Idempotency keys for safe retries of mutating operations |
-| **MetricsFeature** | Statistics capture: per-operation counters and latency |
-| **PagingFeature** | Pagination signals for list operations |
-| **RatelimitFeature** | Client-side rate limiting via a token bucket |
-| **RetryFeature** | Automatic retry of transient failures with exponential backoff |
-| **TestFeature** | In-memory mock transport for testing without a live server |
-| **TimeoutFeature** | Per-request timeout with transport abort |
+| **DebugFeature** | Debug capture |
+| **IdempotencyFeature** | Idempotency |
+| **MetricsFeature** | Metrics |
+| **PagingFeature** | Paging |
+| **RatelimitFeature** | Rate limiting |
+| **RetryFeature** | Retry |
+| **TestFeature** | Test transport |
+| **TimeoutFeature** | Timeout |
 
 Pass custom features via the `extend` option at construction time.
 

@@ -121,18 +121,6 @@ Create a new `EventsManagement` entity instance.
 
 **Returns:** `EventsManagementEntity` instance.
 
-#### `EventsPerDayEntry(data?: object)`
-
-Create a new `EventsPerDayEntry` entity instance.
-
-**Parameters:**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| `data` | `object` | Initial entity data. |
-
-**Returns:** `EventsPerDayEntryEntity` instance.
-
 #### `Health(data?: object)`
 
 Create a new `Health` entity instance.
@@ -393,9 +381,13 @@ const application = client.Application()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `number` | Yes |  |
 | `application_id` | `string` | Yes | Unique identifier of the application. |
+| `application_name` | `string` | Yes |  |
 | `consumption` | `Record<string, any>` | Yes | Current consumption metrics for this application. |
+| `date` | `string` | Yes |  |
 | `id` | `string` | No |  |
+| `is_provisional` | `boolean` | Yes |  |
 | `name` | `string` | Yes | Name of the application. |
 | `onboarding_steps` | `Record<string, any>` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
@@ -409,8 +401,12 @@ Create a new entity with the given data.
 
 ```ts
 const result = await client.Application().create({
+  amount: 1,
   application_id: 'example_application_id',
+  application_name: 'example_application_name',
   consumption: {},
+  date: 'example_date',
+  is_provisional: true,
   name: 'example_name',
   onboarding_steps: {},
   organization_id: 'example_organization_id',
@@ -613,7 +609,6 @@ const event = client.Event()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
 | `id` | `string` | No |  |
@@ -654,7 +649,6 @@ Create a new entity with the given data.
 ```ts
 const result = await client.Event().create({
   id: 'example_id',
-  application_id: 'example_application_id',
   event_id: 'example_event_id',
   event_type_name: 'example_event_type_name',
   ip: 'example_ip',
@@ -832,60 +826,6 @@ Get or set the entity match criteria. Works the same as `data()`.
 #### `make()`
 
 Create a new `EventsManagementEntity` instance with the same client and
-options.
-
-#### `client()`
-
-Return the parent `Hook0SDK` instance.
-
-#### `entopts()`
-
-Return a copy of the entity options.
-
-
----
-
-## EventsPerDayEntryEntity
-
-```ts
-const events_per_day_entry = client.EventsPerDayEntry()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `amount` | `number` | Yes |  |
-| `application_id` | `string` | Yes |  |
-| `application_name` | `string` | Yes |  |
-| `date` | `string` | Yes |  |
-| `is_provisional` | `boolean` | Yes |  |
-
-### Operations
-
-#### `list(match: object, ctrl?: object)`
-
-List entities matching the given criteria. Returns an array.
-
-```ts
-const results = await client.EventsPerDayEntry().list({ application_id: "example" })
-```
-
-### Common Methods
-
-#### `data(data?: object)`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `match(match?: object)`
-
-Get or set the entity match criteria. Works the same as `data()`.
-
-#### `make()`
-
-Create a new `EventsPerDayEntryEntity` instance with the same client and
 options.
 
 #### `client()`
@@ -1198,8 +1138,13 @@ const organization = client.Organization()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `number` | Yes |  |
+| `application_id` | `string` | Yes |  |
+| `application_name` | `string` | Yes |  |
 | `consumption` | `Record<string, any>` | Yes |  |
+| `date` | `string` | Yes |  |
 | `id` | `string` | No |  |
+| `is_provisional` | `boolean` | Yes |  |
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `Record<string, any>` | Yes |  |
 | `organization_id` | `string` | Yes |  |
@@ -1216,7 +1161,12 @@ Create a new entity with the given data.
 
 ```ts
 const result = await client.Organization().create({
+  amount: 1,
+  application_id: 'example_application_id',
+  application_name: 'example_application_name',
   consumption: {},
+  date: 'example_date',
+  is_provisional: true,
   name: 'example_name',
   onboarding_steps: {},
   organization_id: 'example_organization_id',
@@ -2042,14 +1992,14 @@ Return a copy of the entity options.
 
 | Feature | Version | Description |
 | --- | --- | --- |
-| `debug` | 0.0.1 | Request/response capture ring buffer for debugging |
-| `idempotency` | 0.0.1 | Idempotency keys for safe retries of mutating operations |
-| `metrics` | 0.0.1 | Statistics capture: per-operation counters and latency |
-| `paging` | 0.0.1 | Pagination signals for list operations |
-| `ratelimit` | 0.0.1 | Client-side rate limiting via a token bucket |
-| `retry` | 0.0.1 | Automatic retry of transient failures with exponential backoff |
-| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
-| `timeout` | 0.0.1 | Per-request timeout with transport abort |
+| `debug` | 0.0.1 | Debug capture |
+| `idempotency` | 0.0.1 | Idempotency |
+| `metrics` | 0.0.1 | Metrics |
+| `paging` | 0.0.1 | Paging |
+| `ratelimit` | 0.0.1 | Rate limiting |
+| `retry` | 0.0.1 | Retry |
+| `test` | 0.0.1 | Test transport |
+| `timeout` | 0.0.1 | Timeout |
 
 
 Features are activated via the `feature` option:
@@ -2095,7 +2045,7 @@ rather than the transport, so their order does not affect what they observe.
 
 #### `debug`
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 **Configuration**
 
@@ -2126,7 +2076,7 @@ its default unless you name it.
 
 #### `idempotency`
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 **Configuration**
 
@@ -2157,7 +2107,7 @@ its default unless you name it.
 
 #### `metrics`
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 **Configuration**
 
@@ -2185,7 +2135,7 @@ its default unless you name it.
 
 #### `paging`
 
-Pagination signals for list operations.
+Paging.
 
 **Configuration**
 
@@ -2220,7 +2170,7 @@ its default unless you name it.
 
 #### `ratelimit`
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 **Configuration**
 
@@ -2251,7 +2201,7 @@ its default unless you name it.
 
 #### `retry`
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 **Configuration**
 
@@ -2285,7 +2235,7 @@ its default unless you name it.
 
 #### `test`
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 **Configuration**
 
@@ -2316,7 +2266,7 @@ its default unless you name it.
 
 #### `timeout`
 
-Per-request timeout with transport abort.
+Timeout.
 
 **Configuration**
 

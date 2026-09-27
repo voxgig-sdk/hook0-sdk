@@ -74,11 +74,6 @@ initial options.
 Create a new `EventsManagementEntity` instance. Pass `h.vnull()` for no
 initial options.
 
-#### `events_per_day_entry(entopts: Value) *EventsPerDayEntryEntity`
-
-Create a new `EventsPerDayEntryEntity` instance. Pass `h.vnull()` for no
-initial options.
-
 #### `health(entopts: Value) *HealthEntity`
 
 Create a new `HealthEntity` instance. Pass `h.vnull()` for no
@@ -208,9 +203,13 @@ const application = client.application(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `i64` | Yes |  |
 | `application_id` | `[]const u8` | Yes | Unique identifier of the application. |
+| `application_name` | `[]const u8` | Yes |  |
 | `consumption` | `Value (object)` | Yes | Current consumption metrics for this application. |
+| `date` | `[]const u8` | Yes |  |
 | `id` | `[]const u8` | No |  |
+| `is_provisional` | `bool` | Yes |  |
 | `name` | `[]const u8` | Yes | Name of the application. |
 | `onboarding_steps` | `Value (object)` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `[]const u8` | Yes | UUID of the organization this application belongs to. |
@@ -224,8 +223,12 @@ Create a new entity with the given data. `.ok` carries the created entity data.
 
 ```zig
 switch (client.application(h.vnull()).create(h.jo(&.{
+    .{ "amount", h.vnum(1) }, // i64
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
+    .{ "application_name", h.vstr("example_application_name") }, // []const u8
     .{ "consumption", h.omap() }, // Value (object)
+    .{ "date", h.vstr("example_date") }, // []const u8
+    .{ "is_provisional", h.vbool(true) }, // bool
     .{ "name", h.vstr("example_name") }, // []const u8
     .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
@@ -434,7 +437,6 @@ const event = client.event(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `[]const u8` | Yes |  |
 | `event_id` | `[]const u8` | Yes |  |
 | `event_type_name` | `[]const u8` | Yes |  |
 | `id` | `[]const u8` | No |  |
@@ -455,7 +457,6 @@ Create a new entity with the given data. `.ok` carries the created entity data.
 ```zig
 switch (client.event(h.vnull()).create(h.jo(&.{
     .{ "id", h.vstr("example_id") }, // []const u8
-    .{ "application_id", h.vstr("example_application_id") }, // []const u8
     .{ "event_id", h.vstr("example_event_id") }, // []const u8
     .{ "event_type_name", h.vstr("example_event_type_name") }, // []const u8
     .{ "ip", h.vstr("example_ip") }, // []const u8
@@ -625,56 +626,6 @@ Remove the entity matching the given criteria. `.err` on failure.
 switch (client.events_management(h.vnull()).remove(h.jo(&.{.{ "event_type_name", h.vstr("event_type_name") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result)}),
     .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
-}
-```
-
-### Common Methods
-
-#### `data(args: ?Value) Value`
-
-Get the entity data. Pass a map to set it.
-
-#### `matchv(args: ?Value) Value`
-
-Get the entity match criteria. Pass a map to set it.
-
-#### `stream(action: []const u8, args: Value, callopts: Value) []Value`
-
-Run an operation through the pipeline and materialise its result items.
-
-#### `get_name() []const u8`
-
-Return the entity name.
-
-
----
-
-## EventsPerDayEntryEntity
-
-```zig
-const events_per_day_entry = client.events_per_day_entry(h.vnull());
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `amount` | `i64` | Yes |  |
-| `application_id` | `[]const u8` | Yes |  |
-| `application_name` | `[]const u8` | Yes |  |
-| `date` | `[]const u8` | Yes |  |
-| `is_provisional` | `bool` | Yes |  |
-
-### Operations
-
-#### `list(reqmatch: Value, ctrl: Value) OpResult`
-
-List entities matching the given criteria. The match is optional — pass `h.vnull()` to list all records. `.ok` is a `Value` array.
-
-```zig
-switch (client.events_per_day_entry(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |results| std.debug.print("{s}\n", .{h.stringify(results)}),
-    .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -978,8 +929,13 @@ const organization = client.organization(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `i64` | Yes |  |
+| `application_id` | `[]const u8` | Yes |  |
+| `application_name` | `[]const u8` | Yes |  |
 | `consumption` | `Value (object)` | Yes |  |
+| `date` | `[]const u8` | Yes |  |
 | `id` | `[]const u8` | No |  |
+| `is_provisional` | `bool` | Yes |  |
 | `name` | `[]const u8` | Yes |  |
 | `onboarding_steps` | `Value (object)` | Yes |  |
 | `organization_id` | `[]const u8` | Yes |  |
@@ -996,7 +952,12 @@ Create a new entity with the given data. `.ok` carries the created entity data.
 
 ```zig
 switch (client.organization(h.vnull()).create(h.jo(&.{
+    .{ "amount", h.vnum(1) }, // i64
+    .{ "application_id", h.vstr("example_application_id") }, // []const u8
+    .{ "application_name", h.vstr("example_application_name") }, // []const u8
     .{ "consumption", h.omap() }, // Value (object)
+    .{ "date", h.vstr("example_date") }, // []const u8
+    .{ "is_provisional", h.vbool(true) }, // bool
     .{ "name", h.vstr("example_name") }, // []const u8
     .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
@@ -1793,14 +1754,14 @@ Return the entity name.
 
 | Feature | Version | Description |
 | --- | --- | --- |
-| `debug` | 0.0.1 | Request/response capture ring buffer for debugging |
-| `idempotency` | 0.0.1 | Idempotency keys for safe retries of mutating operations |
-| `metrics` | 0.0.1 | Statistics capture: per-operation counters and latency |
-| `paging` | 0.0.1 | Pagination signals for list operations |
-| `ratelimit` | 0.0.1 | Client-side rate limiting via a token bucket |
-| `retry` | 0.0.1 | Automatic retry of transient failures with exponential backoff |
-| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
-| `timeout` | 0.0.1 | Per-request timeout with transport abort |
+| `debug` | 0.0.1 | Debug capture |
+| `idempotency` | 0.0.1 | Idempotency |
+| `metrics` | 0.0.1 | Metrics |
+| `paging` | 0.0.1 | Paging |
+| `ratelimit` | 0.0.1 | Rate limiting |
+| `retry` | 0.0.1 | Retry |
+| `test` | 0.0.1 | Test transport |
+| `timeout` | 0.0.1 | Timeout |
 
 
 Features are activated via the `feature` option:
@@ -1846,7 +1807,7 @@ rather than the transport, so their order does not affect what they observe.
 
 #### `debug`
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 **Configuration**
 
@@ -1877,7 +1838,7 @@ its default unless you name it.
 
 #### `idempotency`
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 **Configuration**
 
@@ -1908,7 +1869,7 @@ its default unless you name it.
 
 #### `metrics`
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 **Configuration**
 
@@ -1936,7 +1897,7 @@ its default unless you name it.
 
 #### `paging`
 
-Pagination signals for list operations.
+Paging.
 
 **Configuration**
 
@@ -1971,7 +1932,7 @@ its default unless you name it.
 
 #### `ratelimit`
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 **Configuration**
 
@@ -2002,7 +1963,7 @@ its default unless you name it.
 
 #### `retry`
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 **Configuration**
 
@@ -2036,7 +1997,7 @@ its default unless you name it.
 
 #### `test`
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 **Configuration**
 
@@ -2067,7 +2028,7 @@ its default unless you name it.
 
 #### `timeout`
 
-Per-request timeout with transport abort.
+Timeout.
 
 **Configuration**
 

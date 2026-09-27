@@ -71,9 +71,6 @@ func init() {
 	core.NewEventsManagementEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
 		return entity.NewEventsManagementEntity(client, entopts)
 	}
-	core.NewEventsPerDayEntryEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
-		return entity.NewEventsPerDayEntryEntity(client, entopts)
-	}
 	core.NewHealthEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
 		return entity.NewHealthEntity(client, entopts)
 	}

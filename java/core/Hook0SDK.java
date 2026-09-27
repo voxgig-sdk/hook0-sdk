@@ -73,15 +73,6 @@ public class Hook0SDK extends SdkClient {
   }
 
   /**
-   * Returns a events_per_day_entry entity bound to this client.
-   * Idiomatic usage: client.eventsPerDayEntry(null).list(null, null) or
-   * client.eventsPerDayEntry(null).load(Map.of("id", ...), null).
-   */
-  public SdkEntity eventsPerDayEntry(Map<String, Object> entopts) {
-    return new voxgig.hook0sdk.entity.EventsPerDayEntryEntity(this, entopts);
-  }
-
-  /**
    * Returns a health entity bound to this client.
    * Idiomatic usage: client.health(null).list(null, null) or
    * client.health(null).load(Map.of("id", ...), null).

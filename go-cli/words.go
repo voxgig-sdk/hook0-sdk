@@ -9,18 +9,6 @@ import (
 	sdk "github.com/voxgig-sdk/hook0-sdk/go"
 )
 
-// registerSDKWords installs three native boru words bound to the SDK:
-// list / load / update. Each is declared with two overloads matching
-// the signature  [query?:(Node or Scalar) entity:atom]:
-//
-//   [entity:Atom]            — no query (e.g. `list book`)
-//   [query:Any entity:Atom]  — query is any Node or Scalar (e.g.
-//                              `load {id:1} book`, `load 1 book`)
-//
-// The entity slot is /q-quoted so a bareword `book` parses as the
-// Atom "book" rather than dispatching as an undefined word. Both
-// overloads are all-forward (BarrierAllForward), so args are collected
-// from the tokens following the word.
 func registerSDKWords(r *eng.Registry, client *sdk.Hook0SDK) {
 	for _, op := range []string{"list", "load", "update"} {
 		op := op
@@ -101,8 +89,6 @@ func entityFor(client *sdk.Hook0SDK, name string) (sdk.Hook0Entity, error) {
 		return client.EventType(nil), nil
 	case "events_management":
 		return client.EventsManagement(nil), nil
-	case "events_per_day_entry":
-		return client.EventsPerDayEntry(nil), nil
 	case "health":
 		return client.Health(nil), nil
 	case "hook0":

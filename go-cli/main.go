@@ -20,7 +20,7 @@ import (
 const prompt = "hook0"
 
 // entitiesHelp is the space-separated entity list shown by /help.
-const entitiesHelp = "application application_secret applications_management event event_type events_management events_per_day_entry health hook0 ingested_event instance login organization organization_edit_role problem quota registration request_attempt response revoke service_token subscription user_authentication user_invitation"
+const entitiesHelp = "application application_secret applications_management event event_type events_management health hook0 ingested_event instance login organization organization_edit_role problem quota registration request_attempt response revoke service_token subscription user_authentication user_invitation"
 
 func main() {
 	os.Exit(run(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))

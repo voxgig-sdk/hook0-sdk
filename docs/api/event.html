@@ -14,7 +14,6 @@
 <a class="nav-section" href="#get-apiv1eventsevent_id">GET /api/v1/events/{event_id}</a></div>
 <a href="../api/event_type.html">EventType</a>
 <a href="../api/events_management.html">EventsManagement</a>
-<a href="../api/events_per_day_entry.html">EventsPerDayEntry</a>
 <a href="../api/health.html">Health</a>
 <a href="../api/hook0.html">Hook0</a>
 <a href="../api/ingested_event.html">IngestedEvent</a>
@@ -46,14 +45,14 @@
 <a href="../sdks/zig.html">Zig</a></details>
 <details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
 <a href="../tools/go-mcp.html">Go MCP server</a></details>
-<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
-<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
-<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
-<a href="../features/paging.html">Pagination signals for list operations</a>
-<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
-<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
-<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
-<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="event">Event</h1>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="event">Event</h1>
 <h2 id="operations">Operations</h2>
 <p>Every route this entity exposes. Each route links to its own reference on this page.</p>
 <table>
@@ -86,6 +85,56 @@
 </tr>
 </tbody>
 </table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">events, err := client.Event(nil).List(map[string]any{&quot;application_id&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(events)
+event, err := client.Event(nil).Load(map[string]any{&quot;id&quot;: &quot;example_id&quot;, &quot;application_id&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(event)
+created, err := client.Event(nil).Create(map[string]any{&quot;id&quot;: &quot;example&quot;, &quot;event_id&quot;: &quot;example&quot;, &quot;event_type_name&quot;: &quot;example&quot;, &quot;ip&quot;: &quot;example&quot;, &quot;labels&quot;: map[string]any{}, &quot;occurred_at&quot;: &quot;example&quot;, &quot;payload&quot;: &quot;example&quot;, &quot;payload_content_type&quot;: &quot;example&quot;, &quot;received_at&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(created)
+</code></pre>
+<h3 id="javascript">JavaScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/js.html#set-up-the-client">JavaScript setup</a>, then call the operations:</p>
+<pre><code class="language-js">const events = await client.Event().list({ application_id: &quot;example&quot; })
+const event = await client.Event().load({ id: &quot;example_id&quot;, application_id: &quot;example&quot; })
+const created = await client.Event().create({ id: &quot;example&quot;, event_id: &quot;example&quot;, event_type_name: &quot;example&quot;, ip: &quot;example&quot;, labels: {}, occurred_at: &quot;example&quot;, payload: &quot;example&quot;, payload_content_type: &quot;example&quot;, received_at: &quot;example&quot; })
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local events, err = client:Event():list({ application_id = &quot;example&quot; })
+local event, err = client:Event():load({ id = &quot;example_id&quot;, application_id = &quot;example&quot; })
+local created, err = client:Event():create({ id = &quot;example&quot;, event_id = &quot;example&quot;, event_type_name = &quot;example&quot;, ip = &quot;example&quot;, labels = {}, occurred_at = &quot;example&quot;, payload = &quot;example&quot;, payload_content_type = &quot;example&quot;, received_at = &quot;example&quot; })
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$events = $client-&gt;Event()-&gt;list([&quot;application_id&quot; =&gt; &quot;example&quot;]);
+$event = $client-&gt;Event()-&gt;load([&quot;id&quot; =&gt; &quot;example_id&quot;, &quot;application_id&quot; =&gt; &quot;example&quot;]);
+$created = $client-&gt;Event()-&gt;create([&quot;id&quot; =&gt; &quot;example&quot;, &quot;event_id&quot; =&gt; &quot;example&quot;, &quot;event_type_name&quot; =&gt; &quot;example&quot;, &quot;ip&quot; =&gt; &quot;example&quot;, &quot;labels&quot; =&gt; [], &quot;occurred_at&quot; =&gt; &quot;example&quot;, &quot;payload&quot; =&gt; &quot;example&quot;, &quot;payload_content_type&quot; =&gt; &quot;example&quot;, &quot;received_at&quot; =&gt; &quot;example&quot;]);
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">events = client.Event().list({&quot;application_id&quot;: &quot;example&quot;})
+event = client.Event().load({&quot;id&quot;: &quot;example_id&quot;, &quot;application_id&quot;: &quot;example&quot;})
+created = client.Event().create({ &quot;id&quot;: &quot;example&quot;, &quot;event_id&quot;: &quot;example&quot;, &quot;event_type_name&quot;: &quot;example&quot;, &quot;ip&quot;: &quot;example&quot;, &quot;labels&quot;: {}, &quot;occurred_at&quot;: &quot;example&quot;, &quot;payload&quot;: &quot;example&quot;, &quot;payload_content_type&quot;: &quot;example&quot;, &quot;received_at&quot;: &quot;example&quot; })
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const events = await client.Event().list({ application_id: &quot;example&quot; })
+const event = await client.Event().load({ id: &quot;example_id&quot;, application_id: &quot;example&quot; })
+const created = await client.Event().create({ id: &quot;example&quot;, event_id: &quot;example&quot;, event_type_name: &quot;example&quot;, ip: &quot;example&quot;, labels: {}, occurred_at: &quot;example&quot;, payload: &quot;example&quot;, payload_content_type: &quot;example&quot;, received_at: &quot;example&quot; })
+</code></pre>
 <h2 id="fields">Fields</h2>
 <table>
 <thead>
@@ -98,70 +147,64 @@
 </thead>
 <tbody>
 <tr>
-<td><code>application_id</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
 <td><code>event_id</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Event Id</td>
 </tr>
 <tr>
 <td><code>event_type_name</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Event Type Name</td>
 </tr>
 <tr>
 <td><code>id</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Id</td>
 </tr>
 <tr>
 <td><code>ip</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Ip</td>
 </tr>
 <tr>
 <td><code>labels</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td></td>
+<td>Labels</td>
 </tr>
 <tr>
 <td><code>metadata</code></td>
 <td><code>object</code></td>
 <td>No</td>
-<td></td>
+<td>Metadata</td>
 </tr>
 <tr>
 <td><code>occurred_at</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Occurred At</td>
 </tr>
 <tr>
 <td><code>payload</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Payload</td>
 </tr>
 <tr>
 <td><code>payload_content_type</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Payload Content Type</td>
 </tr>
 <tr>
 <td><code>received_at</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Received At</td>
 </tr>
 </tbody>
 </table>

@@ -1,16 +1,20 @@
 // Typed models for the Hook0 SDK (JSDoc typedefs).
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Annotations only — no runtime effect. Do not
 // edit by hand.
 
 /**
  * @typedef {Object} Application
+ * @property {number} amount
  * @property {string} application_id
+ * @property {string} application_name
  * @property {Object} consumption
+ * @property {string} date
  * @property {string} [id]
+ * @property {boolean} is_provisional
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
@@ -29,9 +33,13 @@
 
 /**
  * @typedef {Object} ApplicationCreateData
+ * @property {number} amount
  * @property {string} application_id
+ * @property {string} application_name
  * @property {Object} consumption
+ * @property {string} date
  * @property {string} [id]
+ * @property {boolean} is_provisional
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
@@ -41,8 +49,12 @@
 /**
  * @typedef {Object} ApplicationUpdateData
  * @property {string} id
+ * @property {number} [amount]
  * @property {string} [application_id]
+ * @property {string} [application_name]
  * @property {Object} [consumption]
+ * @property {string} [date]
+ * @property {boolean} [is_provisional]
  * @property {string} [name]
  * @property {Object} [onboarding_steps]
  * @property {string} [organization_id]
@@ -101,7 +113,6 @@
 
 /**
  * @typedef {Object} Event
- * @property {string} application_id
  * @property {string} event_id
  * @property {string} event_type_name
  * @property {string} [id]
@@ -128,7 +139,6 @@
 /**
  * @typedef {Object} EventCreateData
  * @property {string} id
- * @property {string} application_id
  * @property {string} event_id
  * @property {string} event_type_name
  * @property {string} ip
@@ -189,22 +199,6 @@
  * @typedef {Object} EventsManagementRemoveMatch
  * @property {string} event_type_name
  * @property {string} application_id
- */
-
-/**
- * @typedef {Object} EventsPerDayEntry
- * @property {number} amount
- * @property {string} application_id
- * @property {string} application_name
- * @property {string} date
- * @property {boolean} is_provisional
- */
-
-/**
- * @typedef {Object} EventsPerDayEntryListMatch
- * @property {string} application_id
- * @property {string} [from]
- * @property {string} [to]
  */
 
 /**
@@ -311,8 +305,13 @@
 
 /**
  * @typedef {Object} Organization
+ * @property {number} amount
+ * @property {string} application_id
+ * @property {string} application_name
  * @property {Object} consumption
+ * @property {string} date
  * @property {string} [id]
+ * @property {boolean} is_provisional
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
@@ -329,8 +328,13 @@
 
 /**
  * @typedef {Object} OrganizationListMatch
+ * @property {number} [amount]
+ * @property {string} [application_id]
+ * @property {string} [application_name]
  * @property {Object} [consumption]
+ * @property {string} [date]
  * @property {string} [id]
+ * @property {boolean} [is_provisional]
  * @property {string} [name]
  * @property {Object} [onboarding_steps]
  * @property {string} [organization_id]
@@ -342,8 +346,13 @@
 
 /**
  * @typedef {Object} OrganizationCreateData
+ * @property {number} amount
+ * @property {string} application_id
+ * @property {string} application_name
  * @property {Object} consumption
+ * @property {string} date
  * @property {string} [id]
+ * @property {boolean} is_provisional
  * @property {string} name
  * @property {Object} onboarding_steps
  * @property {string} organization_id
@@ -356,7 +365,12 @@
 /**
  * @typedef {Object} OrganizationUpdateData
  * @property {string} id
+ * @property {number} [amount]
+ * @property {string} [application_id]
+ * @property {string} [application_name]
  * @property {Object} [consumption]
+ * @property {string} [date]
+ * @property {boolean} [is_provisional]
  * @property {string} [name]
  * @property {Object} [onboarding_steps]
  * @property {string} [organization_id]

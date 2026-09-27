@@ -2,36 +2,51 @@
   "existing": {
     "organization": {
       "ORGANIZATION00": {
+        "amount": 140,
+        "application_id": "APPLICATION01",
+        "application_name": "s8e",
         "consumption": {},
+        "date": "s90",
         "id": "ORGANIZATION00",
-        "name": "s5c",
+        "is_provisional": true,
+        "name": "s93",
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
         "plan": {},
         "quotas": {},
-        "role": "s61",
+        "role": "s98",
         "users": []
       },
       "ORGANIZATION01": {
+        "amount": 280,
+        "application_id": "APPLICATION01",
+        "application_name": "s11a",
         "consumption": {},
+        "date": "s11c",
         "id": "ORGANIZATION01",
-        "name": "sb6",
+        "is_provisional": true,
+        "name": "s11f",
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
         "plan": {},
         "quotas": {},
-        "role": "sbb",
+        "role": "s124",
         "users": []
       },
       "ORGANIZATION02": {
+        "amount": 420,
+        "application_id": "APPLICATION01",
+        "application_name": "s1a6",
         "consumption": {},
+        "date": "s1a8",
         "id": "ORGANIZATION02",
-        "name": "s110",
+        "is_provisional": true,
+        "name": "s1ab",
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
         "plan": {},
         "quotas": {},
-        "role": "s115",
+        "role": "s1b0",
         "users": []
       }
     }
@@ -39,13 +54,18 @@
   "new": {
     "organization": {
       "organization_ref01": {
+        "amount": 560,
+        "application_id": "APPLICATION01",
+        "application_name": "s232",
         "consumption": {},
-        "name": "s16a",
+        "date": "s234",
+        "is_provisional": true,
+        "name": "s237",
         "onboarding_steps": {},
         "organization_id": "ORGANIZATION01",
         "plan": {},
         "quotas": {},
-        "role": "s16f",
+        "role": "s23c",
         "users": []
       }
     }
@@ -53,858 +73,33 @@
   "requests": {
     "POST /api/v1/organizations/": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "organizations.create",
-        "parameters": [],
-        "protocol": "http",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "name"
-                ],
-                "type": "object"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "consumption": {
-                      "properties": {
-                        "applications": {
-                          "format": "int64",
-                          "type": "integer"
-                        },
-                        "events_per_day": {
-                          "format": "int64",
-                          "type": "integer"
-                        },
-                        "members": {
-                          "format": "int64",
-                          "type": "integer"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "onboarding_steps": {
-                      "properties": {
-                        "application": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "event": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "event_type": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "subscription": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "application",
-                        "event",
-                        "event_type",
-                        "subscription"
-                      ],
-                      "type": "object"
-                    },
-                    "organization_id": {
-                      "format": "uuid",
-                      "type": "string"
-                    },
-                    "plan": {
-                      "properties": {
-                        "label": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "label",
-                        "name"
-                      ],
-                      "type": "object"
-                    },
-                    "quotas": {
-                      "properties": {
-                        "applications_per_organization_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "days_of_events_retention_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "events_per_day_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "members_per_organization_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        }
-                      },
-                      "required": [
-                        "applications_per_organization_limit",
-                        "days_of_events_retention_limit",
-                        "events_per_day_limit",
-                        "members_per_organization_limit"
-                      ],
-                      "type": "object"
-                    },
-                    "users": {
-                      "items": {
-                        "properties": {
-                          "email": {
-                            "type": "string"
-                          },
-                          "first_name": {
-                            "type": "string"
-                          },
-                          "last_name": {
-                            "type": "string"
-                          },
-                          "role": {
-                            "type": "string"
-                          },
-                          "user_id": {
-                            "format": "uuid",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "email",
-                          "first_name",
-                          "last_name",
-                          "role",
-                          "user_id"
-                        ],
-                        "type": "object"
-                      },
-                      "type": "array"
-                    }
-                  },
-                  "required": [
-                    "consumption",
-                    "name",
-                    "onboarding_steps",
-                    "organization_id",
-                    "quotas",
-                    "users"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit_user_access": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /api/v1/events_per_day/organization": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
     },
     "GET /api/v1/organizations/": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "organizations.list",
-        "parameters": [],
-        "protocol": "http",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "organization_id": {
-                        "format": "uuid",
-                        "type": "string"
-                      },
-                      "plan": {
-                        "properties": {
-                          "label": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "label",
-                          "name"
-                        ],
-                        "type": "object"
-                      },
-                      "role": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "organization_id",
-                      "role"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
     },
     "GET /api/v1/organizations/{organization_id}/": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "organizations.get",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "simple"
-          }
-        ],
-        "protocol": "http",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "consumption": {
-                      "properties": {
-                        "applications": {
-                          "format": "int64",
-                          "type": "integer"
-                        },
-                        "events_per_day": {
-                          "format": "int64",
-                          "type": "integer"
-                        },
-                        "members": {
-                          "format": "int64",
-                          "type": "integer"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "onboarding_steps": {
-                      "properties": {
-                        "application": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "event": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "event_type": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "subscription": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "application",
-                        "event",
-                        "event_type",
-                        "subscription"
-                      ],
-                      "type": "object"
-                    },
-                    "organization_id": {
-                      "format": "uuid",
-                      "type": "string"
-                    },
-                    "plan": {
-                      "properties": {
-                        "label": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "label",
-                        "name"
-                      ],
-                      "type": "object"
-                    },
-                    "quotas": {
-                      "properties": {
-                        "applications_per_organization_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "days_of_events_retention_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "events_per_day_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "members_per_organization_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        }
-                      },
-                      "required": [
-                        "applications_per_organization_limit",
-                        "days_of_events_retention_limit",
-                        "events_per_day_limit",
-                        "members_per_organization_limit"
-                      ],
-                      "type": "object"
-                    },
-                    "users": {
-                      "items": {
-                        "properties": {
-                          "email": {
-                            "type": "string"
-                          },
-                          "first_name": {
-                            "type": "string"
-                          },
-                          "last_name": {
-                            "type": "string"
-                          },
-                          "role": {
-                            "type": "string"
-                          },
-                          "user_id": {
-                            "format": "uuid",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "email",
-                          "first_name",
-                          "last_name",
-                          "role",
-                          "user_id"
-                        ],
-                        "type": "object"
-                      },
-                      "type": "array"
-                    }
-                  },
-                  "required": [
-                    "consumption",
-                    "name",
-                    "onboarding_steps",
-                    "organization_id",
-                    "quotas",
-                    "users"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
     },
     "DELETE /api/v1/organizations/{organization_id}/": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "organizations.delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "simple"
-          }
-        ],
-        "protocol": "http",
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
     },
     "PUT /api/v1/organizations/{organization_id}/": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "organizations.edit",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "organization_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "simple"
-          }
-        ],
-        "protocol": "http",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "name"
-                ],
-                "type": "object"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "consumption": {
-                      "properties": {
-                        "applications": {
-                          "format": "int64",
-                          "type": "integer"
-                        },
-                        "events_per_day": {
-                          "format": "int64",
-                          "type": "integer"
-                        },
-                        "members": {
-                          "format": "int64",
-                          "type": "integer"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "onboarding_steps": {
-                      "properties": {
-                        "application": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "event": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "event_type": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        },
-                        "subscription": {
-                          "enum": [
-                            "ToDo",
-                            "Done"
-                          ],
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "application",
-                        "event",
-                        "event_type",
-                        "subscription"
-                      ],
-                      "type": "object"
-                    },
-                    "organization_id": {
-                      "format": "uuid",
-                      "type": "string"
-                    },
-                    "plan": {
-                      "properties": {
-                        "label": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "label",
-                        "name"
-                      ],
-                      "type": "object"
-                    },
-                    "quotas": {
-                      "properties": {
-                        "applications_per_organization_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "days_of_events_retention_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "events_per_day_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        },
-                        "members_per_organization_limit": {
-                          "format": "int32",
-                          "type": "integer"
-                        }
-                      },
-                      "required": [
-                        "applications_per_organization_limit",
-                        "days_of_events_retention_limit",
-                        "events_per_day_limit",
-                        "members_per_organization_limit"
-                      ],
-                      "type": "object"
-                    },
-                    "users": {
-                      "items": {
-                        "properties": {
-                          "email": {
-                            "type": "string"
-                          },
-                          "first_name": {
-                            "type": "string"
-                          },
-                          "last_name": {
-                            "type": "string"
-                          },
-                          "role": {
-                            "type": "string"
-                          },
-                          "user_id": {
-                            "format": "uuid",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "email",
-                          "first_name",
-                          "last_name",
-                          "role",
-                          "user_id"
-                        ],
-                        "type": "object"
-                      },
-                      "type": "array"
-                    }
-                  },
-                  "required": [
-                    "consumption",
-                    "name",
-                    "onboarding_steps",
-                    "organization_id",
-                    "quotas",
-                    "users"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
     }
   }
 }

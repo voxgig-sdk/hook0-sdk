@@ -128,7 +128,7 @@ make build-all   # linux/darwin/windows x amd64/arm64, under dist/<os>-<arch>/
 ### Discover the available entities
 
 `/help` in the REPL prints the full entity list, or see [Entities](#entities)
-below — this SDK exposes 24 entities.
+below — this SDK exposes 23 entities.
 
 ## Reference
 
@@ -183,9 +183,9 @@ Meta-commands use the `/` prefix (everything else on a line is evaluated as boru
 
 ### Entities
 
-The 24 entities this SDK exposes (any is valid as `<entity>`):
+The 23 entities this SDK exposes (any is valid as `<entity>`):
 
-application application_secret applications_management event event_type events_management events_per_day_entry health hook0 ingested_event instance login organization organization_edit_role problem quota registration request_attempt response revoke service_token subscription user_authentication user_invitation
+application application_secret applications_management event event_type events_management health hook0 ingested_event instance login organization organization_edit_role problem quota registration request_attempt response revoke service_token subscription user_authentication user_invitation
 
 ## Explanation
 

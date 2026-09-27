@@ -46,7 +46,6 @@ class ReadmeExamplesTest extends TestCase
         "Event" => "event",
         "EventType" => "event_type",
         "EventsManagement" => "events_management",
-        "EventsPerDayEntry" => "events_per_day_entry",
         "Health" => "health",
         "Hook0" => "hook0",
         "IngestedEvent" => "ingested_event",

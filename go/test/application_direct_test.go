@@ -31,7 +31,7 @@ func TestApplicationDirect(t *testing.T) {
 
 
 		result, err := client.Direct(map[string]any{
-			"path":   "api/v1/applications",
+			"path":   "api/v1/events_per_day/application",
 			"method": "GET",
 			"params": map[string]any{},
 		})
@@ -97,7 +97,7 @@ func TestApplicationDirect(t *testing.T) {
 		if setup.live {
 			listParams := map[string]any{}
 			listResult, listErr := client.Direct(map[string]any{
-				"path":   "api/v1/applications",
+				"path":   "api/v1/events_per_day/application",
 				"method": "GET",
 				"params": listParams,
 			})

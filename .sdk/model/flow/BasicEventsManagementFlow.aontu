@@ -1,0 +1,22 @@
+# BasicEventsManagementFlow
+
+main: kit: flow: BasicEventsManagementFlow:
+{
+  entity: "events_management",
+  kind: "basic",
+  name: "BasicEventsManagementFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "events_management_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicEventsManagementFlow"
+}

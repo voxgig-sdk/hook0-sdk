@@ -1,7 +1,11 @@
 export interface Application {
+    amount: number;
     application_id: string;
+    application_name: string;
     consumption: Record<string, any>;
+    date: string;
     id?: string;
+    is_provisional: boolean;
     name: string;
     onboarding_steps: Record<string, any>;
     organization_id: string;
@@ -14,9 +18,13 @@ export interface ApplicationListMatch {
     organization_id: string;
 }
 export interface ApplicationCreateData {
+    amount: number;
     application_id: string;
+    application_name: string;
     consumption: Record<string, any>;
+    date: string;
     id?: string;
+    is_provisional: boolean;
     name: string;
     onboarding_steps: Record<string, any>;
     organization_id: string;
@@ -24,8 +32,12 @@ export interface ApplicationCreateData {
 }
 export interface ApplicationUpdateData {
     id: string;
+    amount?: number;
     application_id?: string;
+    application_name?: string;
     consumption?: Record<string, any>;
+    date?: string;
+    is_provisional?: boolean;
     name?: string;
     onboarding_steps?: Record<string, any>;
     organization_id?: string;
@@ -68,7 +80,6 @@ export interface ApplicationsManagementRemoveMatch {
     application_id: string;
 }
 export interface Event {
-    application_id: string;
     event_id: string;
     event_type_name: string;
     id?: string;
@@ -89,7 +100,6 @@ export interface EventListMatch {
 }
 export interface EventCreateData {
     id: string;
-    application_id: string;
     event_id: string;
     event_type_name: string;
     ip: string;
@@ -138,18 +148,6 @@ export interface EventsManagementListMatch {
 export interface EventsManagementRemoveMatch {
     event_type_name: string;
     application_id: string;
-}
-export interface EventsPerDayEntry {
-    amount: number;
-    application_id: string;
-    application_name: string;
-    date: string;
-    is_provisional: boolean;
-}
-export interface EventsPerDayEntryListMatch {
-    application_id: string;
-    from?: string;
-    to?: string;
 }
 export interface Health {
     database: boolean;
@@ -234,8 +232,13 @@ export interface LoginCreateData {
     password: string;
 }
 export interface Organization {
+    amount: number;
+    application_id: string;
+    application_name: string;
     consumption: Record<string, any>;
+    date: string;
     id?: string;
+    is_provisional: boolean;
     name: string;
     onboarding_steps: Record<string, any>;
     organization_id: string;
@@ -248,8 +251,13 @@ export interface OrganizationLoadMatch {
     id: string;
 }
 export interface OrganizationListMatch {
+    amount?: number;
+    application_id?: string;
+    application_name?: string;
     consumption?: Record<string, any>;
+    date?: string;
     id?: string;
+    is_provisional?: boolean;
     name?: string;
     onboarding_steps?: Record<string, any>;
     organization_id?: string;
@@ -259,8 +267,13 @@ export interface OrganizationListMatch {
     users?: any[];
 }
 export interface OrganizationCreateData {
+    amount: number;
+    application_id: string;
+    application_name: string;
     consumption: Record<string, any>;
+    date: string;
     id?: string;
+    is_provisional: boolean;
     name: string;
     onboarding_steps: Record<string, any>;
     organization_id: string;
@@ -271,7 +284,12 @@ export interface OrganizationCreateData {
 }
 export interface OrganizationUpdateData {
     id: string;
+    amount?: number;
+    application_id?: string;
+    application_name?: string;
     consumption?: Record<string, any>;
+    date?: string;
+    is_provisional?: boolean;
     name?: string;
     onboarding_steps?: Record<string, any>;
     organization_id?: string;

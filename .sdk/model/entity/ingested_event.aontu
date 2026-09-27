@@ -1,0 +1,104 @@
+# Entity: ingested_event
+
+main: kit: entity: ingested_event: {
+
+  alias: field: {}
+
+  fields: {
+    application_id: {
+      fo: "uuid"
+      h: "Application Id"
+      n: "application_id"
+      r: true
+      sh: "UUID of the application this event belongs to."
+      t: "`$STRING`"
+    }
+    event_id: {
+      fo: "uuid"
+      h: "Event Id"
+      n: "event_id"
+      r: false
+      sh: "Optional unique identifier for this event (client-generated UUID)."
+      t: "`$STRING`"
+    }
+    event_type: {
+      h: "Event Type"
+      n: "event_type"
+      r: true
+      sh: "The type of event (e.g., 'user.created', 'order.completed')."
+      t: "`$STRING`"
+    }
+    labels: {
+      h: "Labels"
+      n: "labels"
+      r: true
+      sh: "Labels for event filtering and routing to subscriptions."
+      t: "`$OBJECT`"
+    }
+    metadata: {
+      h: "Metadata"
+      n: "metadata"
+      r: false
+      sh: "Optional metadata key-value pairs associated with the event."
+      t: "`$OBJECT`"
+    }
+    occurred_at: {
+      fo: "date-time"
+      h: "Occurred At"
+      n: "occurred_at"
+      r: true
+      sh: "Timestamp when the event occurred."
+      t: "`$STRING`"
+    }
+    payload: {
+      h: "Payload"
+      n: "payload"
+      r: true
+      sh: "The event payload."
+      t: "`$STRING`"
+    }
+    payload_content_type: {
+      h: "Payload Content Type"
+      n: "payload_content_type"
+      r: true
+      sh: "Content type of the payload."
+      t: "`$STRING`"
+    }
+  }
+
+  name: "ingested_event"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /api/v1/event/"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/api/v1/event/"
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

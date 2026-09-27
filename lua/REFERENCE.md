@@ -65,10 +65,6 @@ Create a new `EventType` entity instance. Pass `nil` for no initial data.
 
 Create a new `EventsManagement` entity instance. Pass `nil` for no initial data.
 
-#### `EventsPerDayEntry(data)`
-
-Create a new `EventsPerDayEntry` entity instance. Pass `nil` for no initial data.
-
 #### `Health(data)`
 
 Create a new `Health` entity instance. Pass `nil` for no initial data.
@@ -183,9 +179,13 @@ local application = client:Application(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `number` | Yes |  |
 | `application_id` | `string` | Yes | Unique identifier of the application. |
+| `application_name` | `string` | Yes |  |
 | `consumption` | `table` | Yes | Current consumption metrics for this application. |
+| `date` | `string` | Yes |  |
 | `id` | `string` | No |  |
+| `is_provisional` | `boolean` | Yes |  |
 | `name` | `string` | Yes | Name of the application. |
 | `onboarding_steps` | `table` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
@@ -199,8 +199,12 @@ Create a new entity with the given data.
 
 ```lua
 local result, err = client:Application():create({
+  amount = --[[ number ]],
   application_id = --[[ string ]],
+  application_name = --[[ string ]],
   consumption = --[[ table ]],
+  date = --[[ string ]],
+  is_provisional = --[[ boolean ]],
   name = --[[ string ]],
   onboarding_steps = --[[ table ]],
   organization_id = --[[ string ]],
@@ -409,7 +413,6 @@ local event = client:Event(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
 | `id` | `string` | No |  |
@@ -430,7 +433,6 @@ Create a new entity with the given data.
 ```lua
 local result, err = client:Event():create({
   id = --[[ string ]],
-  application_id = --[[ string ]],
   event_id = --[[ string ]],
   event_type_name = --[[ string ]],
   ip = --[[ string ]],
@@ -618,62 +620,6 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `EventsManagementEntity` instance with the same client and
-options.
-
-#### `get_name() -> string`
-
-Return the entity name.
-
-
----
-
-## EventsPerDayEntryEntity
-
-```lua
-local events_per_day_entry = client:EventsPerDayEntry(nil)
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `amount` | `number` | Yes |  |
-| `application_id` | `string` | Yes |  |
-| `application_name` | `string` | Yes |  |
-| `date` | `string` | Yes |  |
-| `is_provisional` | `boolean` | Yes |  |
-
-### Operations
-
-#### `list(reqmatch, ctrl) -> any, err`
-
-List entities matching the given criteria. Returns an array.
-
-```lua
-local results, err = client:EventsPerDayEntry():list()
-```
-
-### Common Methods
-
-#### `data_get() -> table`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> table`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `EventsPerDayEntryEntity` instance with the same client and
 options.
 
 #### `get_name() -> string`
@@ -992,8 +938,13 @@ local organization = client:Organization(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `number` | Yes |  |
+| `application_id` | `string` | Yes |  |
+| `application_name` | `string` | Yes |  |
 | `consumption` | `table` | Yes |  |
+| `date` | `string` | Yes |  |
 | `id` | `string` | No |  |
+| `is_provisional` | `boolean` | Yes |  |
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `table` | Yes |  |
 | `organization_id` | `string` | Yes |  |
@@ -1010,7 +961,12 @@ Create a new entity with the given data.
 
 ```lua
 local result, err = client:Organization():create({
+  amount = --[[ number ]],
+  application_id = --[[ string ]],
+  application_name = --[[ string ]],
   consumption = --[[ table ]],
+  date = --[[ string ]],
+  is_provisional = --[[ boolean ]],
   name = --[[ string ]],
   onboarding_steps = --[[ table ]],
   organization_id = --[[ string ]],
@@ -1840,14 +1796,14 @@ Return the entity name.
 
 | Feature | Version | Description |
 | --- | --- | --- |
-| `debug` | 0.0.1 | Request/response capture ring buffer for debugging |
-| `idempotency` | 0.0.1 | Idempotency keys for safe retries of mutating operations |
-| `metrics` | 0.0.1 | Statistics capture: per-operation counters and latency |
-| `paging` | 0.0.1 | Pagination signals for list operations |
-| `ratelimit` | 0.0.1 | Client-side rate limiting via a token bucket |
-| `retry` | 0.0.1 | Automatic retry of transient failures with exponential backoff |
-| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
-| `timeout` | 0.0.1 | Per-request timeout with transport abort |
+| `debug` | 0.0.1 | Debug capture |
+| `idempotency` | 0.0.1 | Idempotency |
+| `metrics` | 0.0.1 | Metrics |
+| `paging` | 0.0.1 | Paging |
+| `ratelimit` | 0.0.1 | Rate limiting |
+| `retry` | 0.0.1 | Retry |
+| `test` | 0.0.1 | Test transport |
+| `timeout` | 0.0.1 | Timeout |
 
 
 Features are activated via the `feature` option:
@@ -1893,7 +1849,7 @@ rather than the transport, so their order does not affect what they observe.
 
 #### `debug`
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 **Configuration**
 
@@ -1924,7 +1880,7 @@ its default unless you name it.
 
 #### `idempotency`
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 **Configuration**
 
@@ -1955,7 +1911,7 @@ its default unless you name it.
 
 #### `metrics`
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 **Configuration**
 
@@ -1983,7 +1939,7 @@ its default unless you name it.
 
 #### `paging`
 
-Pagination signals for list operations.
+Paging.
 
 **Configuration**
 
@@ -2018,7 +1974,7 @@ its default unless you name it.
 
 #### `ratelimit`
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 **Configuration**
 
@@ -2049,7 +2005,7 @@ its default unless you name it.
 
 #### `retry`
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 **Configuration**
 
@@ -2083,7 +2039,7 @@ its default unless you name it.
 
 #### `test`
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 **Configuration**
 
@@ -2114,7 +2070,7 @@ its default unless you name it.
 
 #### `timeout`
 
-Per-request timeout with transport abort.
+Timeout.
 
 **Configuration**
 

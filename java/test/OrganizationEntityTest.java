@@ -77,7 +77,7 @@ public class OrganizationEntityTest {
     Map<String, Object> organizationRef01DataUp0Up = new LinkedHashMap<>();
     organizationRef01DataUp0Up.put("id", organizationRef01Data.get("id"));
 
-    String organizationRef01MarkdefUp0Name = "name";
+    String organizationRef01MarkdefUp0Name = "application_id";
     String organizationRef01MarkdefUp0Value = "Mark01-organization_ref01_" + setup.now;
     organizationRef01DataUp0Up.put(organizationRef01MarkdefUp0Name, organizationRef01MarkdefUp0Value);
 

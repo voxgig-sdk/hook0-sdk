@@ -8,7 +8,6 @@ const ApplicationsManagementEntity_1 = require("./entity/ApplicationsManagementE
 const EventEntity_1 = require("./entity/EventEntity");
 const EventTypeEntity_1 = require("./entity/EventTypeEntity");
 const EventsManagementEntity_1 = require("./entity/EventsManagementEntity");
-const EventsPerDayEntryEntity_1 = require("./entity/EventsPerDayEntryEntity");
 const HealthEntity_1 = require("./entity/HealthEntity");
 const Hook0Entity_1 = require("./entity/Hook0Entity");
 const IngestedEventEntity_1 = require("./entity/IngestedEventEntity");
@@ -107,7 +106,6 @@ class Hook0SDK {
             ctrl: fetchargs.ctrl || {},
         }, this._rootctx);
         const options = this._options;
-        // Build spec directly from SDK options + user-provided fetch args.
         const spec = {
             base: options.base,
             prefix: options.prefix,
@@ -121,14 +119,12 @@ class Hook0SDK {
             step: 'start',
         };
         ctx.spec = spec;
-        // Merge user-provided headers over SDK defaults.
         if (fetchargs.headers) {
             const uheaders = fetchargs.headers;
             for (let key in uheaders) {
                 spec.headers[key] = uheaders[key];
             }
         }
-        // Apply SDK auth (apikey, auth prefix, etc.)
         const authResult = prepareAuth(ctx);
         if (authResult instanceof Error) {
             return authResult;
@@ -203,18 +199,6 @@ class Hook0SDK {
             return { ok: false, err };
         }
     }
-    // Raw GraphQL access: the pressure valve that makes the generated
-    // surface's deliberate omissions (per-call selection sets, typed filter
-    // builders, batching, subscriptions) livable — the whole schema stays
-    // reachable.
-    //
-    // Thin wrapper over the same prepare/fetch path `direct` uses, with the
-    // one thing raw `direct` cannot do for GraphQL: a GraphQL failure rides
-    // HTTP 200 as a top-level `errors` array, so status alone would report a
-    // failed query as ok.
-    //
-    // NOTE: like `direct`, this bypasses the feature pipeline — no retry,
-    // ratelimit or paging features apply.
     async graphql(query, variables, ctrl) {
         const options = this._options;
         if (!options.allow.op.includes('graphql')) {
@@ -289,13 +273,6 @@ class Hook0SDK {
     EventsManagement(entopts) {
         const self = this;
         return new EventsManagementEntity_1.EventsManagementEntity(self, entopts);
-    }
-    // Entity access: `client.EventsPerDayEntry().list()` / `client.EventsPerDayEntry().load({ id })`.
-    // The argument is the entity OPTIONS object (passed to the entity
-    // constructor as entopts), not initial entity data.
-    EventsPerDayEntry(entopts) {
-        const self = this;
-        return new EventsPerDayEntryEntity_1.EventsPerDayEntryEntity(self, entopts);
     }
     // Entity access: `client.Health().list()` / `client.Health().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity

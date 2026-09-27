@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hook0Entity = void 0;
 const Hook0EntityBase_1 = require("../Hook0EntityBase");
-// TODO: needs Entity superclass
 class Hook0Entity extends Hook0EntityBase_1.Hook0EntityBase {
     constructor(client, entopts) {
         super(client, entopts);

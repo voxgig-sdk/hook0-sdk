@@ -1,0 +1,272 @@
+# Entity: request_attempt
+
+main: kit: entity: request_attempt: {
+
+  alias: field: {}
+
+  fields: {
+    created_at: {
+      fo: "date-time"
+      h: "Created At"
+      n: "created_at"
+      r: true
+      t: "`$STRING`"
+    }
+    delay_until: {
+      fo: "date-time"
+      h: "Delay Until"
+      n: "delay_until"
+      r: false
+      t: "`$STRING`"
+    }
+    event: {
+      h: "Event"
+      n: "event"
+      r: true
+      t: "`$OBJECT`"
+    }
+    event_id: {
+      fo: "uuid"
+      h: "Event Id"
+      n: "event_id"
+      r: true
+      t: "`$STRING`"
+    }
+    failed_at: {
+      fo: "date-time"
+      h: "Failed At"
+      n: "failed_at"
+      r: false
+      t: "`$STRING`"
+    }
+    http_response_status: {
+      fo: "int32"
+      h: "Http Response Status"
+      n: "http_response_status"
+      r: false
+      t: "`$INTEGER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    picked_at: {
+      fo: "date-time"
+      h: "Picked At"
+      n: "picked_at"
+      r: false
+      t: "`$STRING`"
+    }
+    request_attempt_id: {
+      fo: "uuid"
+      h: "Request Attempt Id"
+      n: "request_attempt_id"
+      r: true
+      t: "`$STRING`"
+    }
+    response_id: {
+      fo: "uuid"
+      h: "Response Id"
+      n: "response_id"
+      r: false
+      t: "`$STRING`"
+    }
+    retry_count: {
+      fo: "int32"
+      h: "Retry Count"
+      n: "retry_count"
+      r: true
+      t: "`$INTEGER`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: true
+      sh: "Status of a request attempt."
+      t: "`$OBJECT`"
+    }
+    subscription: {
+      h: "Subscription"
+      n: "subscription"
+      r: true
+      t: "`$OBJECT`"
+    }
+    succeeded_at: {
+      fo: "date-time"
+      h: "Succeeded At"
+      n: "succeeded_at"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "request_attempt"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/request_attempts/"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "application_id"
+                or: "application_id"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "event_event_type_name"
+                or: "event_event_type_name"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "event_id"
+                or: "event_id"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "max_created_at"
+                or: "max_created_at"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "min_created_at"
+                or: "min_created_at"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "pagination_cursor"
+                or: "pagination_cursor"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "subscription_id"
+                or: "subscription_id"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/v1/request_attempts/"
+          q: {
+            exist: [
+              "application_id"
+              "event_event_type_name"
+              "event_id"
+              "max_created_at"
+              "min_created_at"
+              "pagination_cursor"
+              "subscription_id"
+            ]
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "request_attempts"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/request_attempts/{request_attempt_id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "request_attempt_id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "application_id"
+                or: "application_id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/v1/request_attempts/{request_attempt_id}"
+          q: {
+            exist: [
+              "application_id"
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              request_attempt_id: "id"
+            }
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "request_attempts"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

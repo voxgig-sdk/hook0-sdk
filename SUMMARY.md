@@ -6,7 +6,7 @@ Core REST API of Hook0, Open-Source Webhooks as a service for SaaS
 
 This guide introduces the API, the client libraries, and the companion tools in this repository. Start with the API capabilities, choose a client for your application, and use the linked reference when you need exact request and response details.
 
-The selected API surface contains 24 entities and 54 HTTP routes. There are 8 SDK targets and 2 companion tools.
+The selected API surface contains 23 entities and 54 HTTP routes. There are 8 SDK targets and 2 companion tools.
 
 An entity groups related API operations. An operation can have several routes with different inputs or authentication requirements. The SDK exposes the entity and its operations using the conventions of the selected language.
 
@@ -55,12 +55,6 @@ SDK operations: `create`, `list`, `load`.
 Results: OK; No Content.
 
 SDK operations: `list`, `remove`.
-
-### [EventsPerDayEntry](docs/api/events_per_day_entry.html)
-
-Results: OK.
-
-SDK operations: `list`.
 
 ### [Health](docs/api/health.html)
 
@@ -190,6 +184,7 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | Entity | SDK operation | HTTP route | Authentication |
 | --- | --- | --- | --- |
 | [Application](docs/api/application.html) | `create` | `POST /api/v1/applications/` | Required |
+| [Application](docs/api/application.html) | `list` | `GET /api/v1/events_per_day/application` | Required |
 | [Application](docs/api/application.html) | `list` | `GET /api/v1/applications/` | Required |
 | [Application](docs/api/application.html) | `load` | `GET /api/v1/applications/{application_id}` | Required |
 | [Application](docs/api/application.html) | `remove` | `DELETE /api/v1/applications/{application_id}` | Required |
@@ -206,8 +201,6 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | [EventType](docs/api/event_type.html) | `load` | `GET /api/v1/event_types/{event_type_name}` | Required |
 | [EventsManagement](docs/api/events_management.html) | `list` | `GET /api/v1/payload_content_types/` | See reference |
 | [EventsManagement](docs/api/events_management.html) | `remove` | `DELETE /api/v1/event_types/{event_type_name}` | Required |
-| [EventsPerDayEntry](docs/api/events_per_day_entry.html) | `list` | `GET /api/v1/events_per_day/application` | Required |
-| [EventsPerDayEntry](docs/api/events_per_day_entry.html) | `list` | `GET /api/v1/events_per_day/organization` | Required |
 | [Health](docs/api/health.html) | `load` | `GET /api/v1/health/` | See reference |
 | [Hook0](docs/api/hook0.html) | `list` | `GET /api/v1/environment_variables/` | See reference |
 | [IngestedEvent](docs/api/ingested_event.html) | `create` | `POST /api/v1/event/` | Required |
@@ -215,6 +208,7 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | [Login](docs/api/login.html) | `create` | `POST /api/v1/auth/login` | See reference |
 | [Login](docs/api/login.html) | `create` | `POST /api/v1/auth/refresh` | Required |
 | [Organization](docs/api/organization.html) | `create` | `POST /api/v1/organizations/` | Required |
+| [Organization](docs/api/organization.html) | `list` | `GET /api/v1/events_per_day/organization` | Required |
 | [Organization](docs/api/organization.html) | `list` | `GET /api/v1/organizations/` | Required |
 | [Organization](docs/api/organization.html) | `load` | `GET /api/v1/organizations/{organization_id}/` | Required |
 | [Organization](docs/api/organization.html) | `remove` | `DELETE /api/v1/organizations/{organization_id}/` | Required |
@@ -300,7 +294,7 @@ Use the MCP server to expose supported API operations to an MCP client.
 
 Repository directory: `go-mcp/`. Not published. Build from the go-mcp directory.
 
-- `hook0_list`: List records for an entity. Supported entities: `application`, `application_secret`, `event`, `event_type`, `events_management`, `events_per_day_entry`, `hook0`, `organization`, `problem`, `request_attempt`, `service_token`, `subscription`.
+- `hook0_list`: List records for an entity. Supported entities: `application`, `application_secret`, `event`, `event_type`, `events_management`, `hook0`, `organization`, `problem`, `request_attempt`, `service_token`, `subscription`.
 - `hook0_load`: Load one record for an entity. Supported entities: `application`, `event`, `event_type`, `health`, `instance`, `organization`, `quota`, `request_attempt`, `response`, `service_token`, `subscription`.
 
 ## Operational features

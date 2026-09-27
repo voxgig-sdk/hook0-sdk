@@ -6,7 +6,6 @@ import { ApplicationsManagementEntity } from './entity/ApplicationsManagementEnt
 import { EventEntity } from './entity/EventEntity'
 import { EventTypeEntity } from './entity/EventTypeEntity'
 import { EventsManagementEntity } from './entity/EventsManagementEntity'
-import { EventsPerDayEntryEntity } from './entity/EventsPerDayEntryEntity'
 import { HealthEntity } from './entity/HealthEntity'
 import { Hook0Entity } from './entity/Hook0Entity'
 import { IngestedEventEntity } from './entity/IngestedEventEntity'
@@ -147,7 +146,6 @@ class Hook0SDK {
 
     const options = this._options
 
-    // Build spec directly from SDK options + user-provided fetch args.
     const spec: any = {
       base: options.base,
       prefix: options.prefix,
@@ -163,7 +161,6 @@ class Hook0SDK {
 
     ctx.spec = spec
 
-    // Merge user-provided headers over SDK defaults.
     if (fetchargs.headers) {
       const uheaders = fetchargs.headers
       for (let key in uheaders) {
@@ -173,7 +170,6 @@ class Hook0SDK {
 
     
 
-    // Apply SDK auth (apikey, auth prefix, etc.)
     const authResult = prepareAuth(ctx)
     if (authResult instanceof Error) {
       return authResult
@@ -266,18 +262,6 @@ class Hook0SDK {
 
 
 
-  // Raw GraphQL access: the pressure valve that makes the generated
-  // surface's deliberate omissions (per-call selection sets, typed filter
-  // builders, batching, subscriptions) livable — the whole schema stays
-  // reachable.
-  //
-  // Thin wrapper over the same prepare/fetch path `direct` uses, with the
-  // one thing raw `direct` cannot do for GraphQL: a GraphQL failure rides
-  // HTTP 200 as a top-level `errors` array, so status alone would report a
-  // failed query as ok.
-  //
-  // NOTE: like `direct`, this bypasses the feature pipeline — no retry,
-  // ratelimit or paging features apply.
   async graphql(query: string, variables?: any, ctrl?: any) {
     const options = this._options
 
@@ -371,15 +355,6 @@ class Hook0SDK {
   EventsManagement(entopts?: Record<string, any>) {
     const self = this
     return new EventsManagementEntity(self, entopts)
-  }
-
-
-  // Entity access: `client.EventsPerDayEntry().list()` / `client.EventsPerDayEntry().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  EventsPerDayEntry(entopts?: Record<string, any>) {
-    const self = this
-    return new EventsPerDayEntryEntity(self, entopts)
   }
 
 

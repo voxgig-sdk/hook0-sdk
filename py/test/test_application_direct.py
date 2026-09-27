@@ -25,7 +25,7 @@ class TestApplicationDirect:
 
 
         result = client.direct({
-            "path": "api/v1/applications",
+            "path": "api/v1/events_per_day/application",
             "method": "GET",
             "params": {},
         })

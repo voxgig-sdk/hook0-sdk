@@ -1,7 +1,7 @@
 // Typed models for the Hook0 SDK.
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 package entity
@@ -14,13 +14,6 @@ import (
 
 // Application is the typed data model for the application entity.
 type Application struct {
-	ApplicationId string `json:"application_id"`
-	Consumption map[string]any `json:"consumption"`
-	Id *string `json:"id,omitempty"`
-	Name string `json:"name"`
-	OnboardingSteps map[string]any `json:"onboarding_steps"`
-	OrganizationId string `json:"organization_id"`
-	Quotas map[string]any `json:"quotas"`
 }
 
 // ApplicationLoadMatch is the typed request payload for Application.LoadTyped.
@@ -35,9 +28,13 @@ type ApplicationListMatch struct {
 
 // ApplicationCreateData is the typed request payload for Application.CreateTyped.
 type ApplicationCreateData struct {
+	Amount int `json:"amount"`
 	ApplicationId string `json:"application_id"`
+	ApplicationName string `json:"application_name"`
 	Consumption map[string]any `json:"consumption"`
+	Date string `json:"date"`
 	Id *string `json:"id,omitempty"`
+	IsProvisional bool `json:"is_provisional"`
 	Name string `json:"name"`
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
@@ -47,8 +44,12 @@ type ApplicationCreateData struct {
 // ApplicationUpdateData is the typed request payload for Application.UpdateTyped.
 type ApplicationUpdateData struct {
 	Id string `json:"id"`
+	Amount *int `json:"amount,omitempty"`
 	ApplicationId *string `json:"application_id,omitempty"`
+	ApplicationName *string `json:"application_name,omitempty"`
 	Consumption *map[string]any `json:"consumption,omitempty"`
+	Date *string `json:"date,omitempty"`
+	IsProvisional *bool `json:"is_provisional,omitempty"`
 	Name *string `json:"name,omitempty"`
 	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
@@ -62,12 +63,6 @@ type ApplicationRemoveMatch struct {
 
 // ApplicationSecret is the typed data model for the application_secret entity.
 type ApplicationSecret struct {
-	ApplicationId string `json:"application_id"`
-	CreatedAt string `json:"created_at"`
-	DeletedAt *string `json:"deleted_at,omitempty"`
-	Id *string `json:"id,omitempty"`
-	Name *string `json:"name,omitempty"`
-	Token string `json:"token"`
 }
 
 // ApplicationSecretListMatch is the typed request payload for ApplicationSecret.ListTyped.
@@ -107,17 +102,6 @@ type ApplicationsManagementRemoveMatch struct {
 
 // Event is the typed data model for the event entity.
 type Event struct {
-	ApplicationId string `json:"application_id"`
-	EventId string `json:"event_id"`
-	EventTypeName string `json:"event_type_name"`
-	Id *string `json:"id,omitempty"`
-	Ip string `json:"ip"`
-	Labels map[string]any `json:"labels"`
-	Metadata *map[string]any `json:"metadata,omitempty"`
-	OccurredAt string `json:"occurred_at"`
-	Payload string `json:"payload"`
-	PayloadContentType string `json:"payload_content_type"`
-	ReceivedAt string `json:"received_at"`
 }
 
 // EventLoadMatch is the typed request payload for Event.LoadTyped.
@@ -134,7 +118,6 @@ type EventListMatch struct {
 // EventCreateData is the typed request payload for Event.CreateTyped.
 type EventCreateData struct {
 	Id string `json:"id"`
-	ApplicationId string `json:"application_id"`
 	EventId string `json:"event_id"`
 	EventTypeName string `json:"event_type_name"`
 	Ip string `json:"ip"`
@@ -148,15 +131,6 @@ type EventCreateData struct {
 
 // EventType is the typed data model for the event_type entity.
 type EventType struct {
-	ApplicationId string `json:"application_id"`
-	EventTypeName string `json:"event_type_name"`
-	Id *string `json:"id,omitempty"`
-	ResourceType string `json:"resource_type"`
-	ResourceTypeName string `json:"resource_type_name"`
-	Service string `json:"service"`
-	ServiceName string `json:"service_name"`
-	Verb string `json:"verb"`
-	VerbName string `json:"verb_name"`
 }
 
 // EventTypeLoadMatch is the typed request payload for EventType.LoadTyped.
@@ -197,31 +171,8 @@ type EventsManagementRemoveMatch struct {
 	ApplicationId string `json:"application_id"`
 }
 
-// EventsPerDayEntry is the typed data model for the events_per_day_entry entity.
-type EventsPerDayEntry struct {
-	Amount int `json:"amount"`
-	ApplicationId string `json:"application_id"`
-	ApplicationName string `json:"application_name"`
-	Date string `json:"date"`
-	IsProvisional bool `json:"is_provisional"`
-}
-
-// EventsPerDayEntryListMatch is the typed request payload for EventsPerDayEntry.ListTyped.
-type EventsPerDayEntryListMatch struct {
-	ApplicationId string `json:"application_id"`
-	From *string `json:"from,omitempty"`
-	To *string `json:"to,omitempty"`
-}
-
 // Health is the typed data model for the health entity.
 type Health struct {
-	Database bool `json:"database"`
-	DatabaseDurationMs int `json:"database_duration_ms"`
-	ObjectStorage *bool `json:"object_storage,omitempty"`
-	ObjectStorageDurationMs *int `json:"object_storage_duration_ms,omitempty"`
-	Pulsar *bool `json:"pulsar,omitempty"`
-	PulsarDurationMs *int `json:"pulsar_duration_ms,omitempty"`
-	TotalDurationMs int `json:"total_duration_ms"`
 }
 
 // HealthLoadMatch is the typed request payload for Health.LoadTyped.
@@ -231,13 +182,6 @@ type HealthLoadMatch struct {
 
 // Hook0 is the typed data model for the hook0 entity.
 type Hook0 struct {
-	Default *string `json:"default,omitempty"`
-	Description *string `json:"description,omitempty"`
-	EnvVar string `json:"env_var"`
-	Group *string `json:"group,omitempty"`
-	Name string `json:"name"`
-	Required bool `json:"required"`
-	Sensitive bool `json:"sensitive"`
 }
 
 // Hook0ListMatch is the typed request payload for Hook0.ListTyped.
@@ -253,14 +197,6 @@ type Hook0ListMatch struct {
 
 // IngestedEvent is the typed data model for the ingested_event entity.
 type IngestedEvent struct {
-	ApplicationId string `json:"application_id"`
-	EventId *string `json:"event_id,omitempty"`
-	EventType string `json:"event_type"`
-	Labels map[string]any `json:"labels"`
-	Metadata *map[string]any `json:"metadata,omitempty"`
-	OccurredAt string `json:"occurred_at"`
-	Payload string `json:"payload"`
-	PayloadContentType string `json:"payload_content_type"`
 }
 
 // IngestedEventCreateData is the typed request payload for IngestedEvent.CreateTyped.
@@ -277,16 +213,6 @@ type IngestedEventCreateData struct {
 
 // Instance is the typed data model for the instance entity.
 type Instance struct {
-	ApplicationSecretCompatibility bool `json:"application_secret_compatibility"`
-	AutoDbMigration bool `json:"auto_db_migration"`
-	BiscuitPublicKey string `json:"biscuit_public_key"`
-	CloudflareTurnstileSiteKey *string `json:"cloudflare_turnstile_site_key,omitempty"`
-	Formbricks map[string]any `json:"formbricks"`
-	Matomo map[string]any `json:"matomo"`
-	PasswordMinimumLength int `json:"password_minimum_length"`
-	QuotaEnforcement bool `json:"quota_enforcement"`
-	RegistrationDisabled bool `json:"registration_disabled"`
-	SupportEmailAddress string `json:"support_email_address"`
 }
 
 // InstanceLoadMatch is the typed request payload for Instance.LoadTyped.
@@ -305,8 +231,6 @@ type InstanceLoadMatch struct {
 
 // Login is the typed data model for the login entity.
 type Login struct {
-	Email string `json:"email"`
-	Password string `json:"password"`
 }
 
 // LoginCreateData is the typed request payload for Login.CreateTyped.
@@ -317,15 +241,6 @@ type LoginCreateData struct {
 
 // Organization is the typed data model for the organization entity.
 type Organization struct {
-	Consumption map[string]any `json:"consumption"`
-	Id *string `json:"id,omitempty"`
-	Name string `json:"name"`
-	OnboardingSteps map[string]any `json:"onboarding_steps"`
-	OrganizationId string `json:"organization_id"`
-	Plan map[string]any `json:"plan"`
-	Quotas map[string]any `json:"quotas"`
-	Role string `json:"role"`
-	Users []any `json:"users"`
 }
 
 // OrganizationLoadMatch is the typed request payload for Organization.LoadTyped.
@@ -335,8 +250,13 @@ type OrganizationLoadMatch struct {
 
 // OrganizationListMatch is the typed request payload for Organization.ListTyped.
 type OrganizationListMatch struct {
+	Amount *int `json:"amount,omitempty"`
+	ApplicationId *string `json:"application_id,omitempty"`
+	ApplicationName *string `json:"application_name,omitempty"`
 	Consumption *map[string]any `json:"consumption,omitempty"`
+	Date *string `json:"date,omitempty"`
 	Id *string `json:"id,omitempty"`
+	IsProvisional *bool `json:"is_provisional,omitempty"`
 	Name *string `json:"name,omitempty"`
 	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
@@ -348,8 +268,13 @@ type OrganizationListMatch struct {
 
 // OrganizationCreateData is the typed request payload for Organization.CreateTyped.
 type OrganizationCreateData struct {
+	Amount int `json:"amount"`
+	ApplicationId string `json:"application_id"`
+	ApplicationName string `json:"application_name"`
 	Consumption map[string]any `json:"consumption"`
+	Date string `json:"date"`
 	Id *string `json:"id,omitempty"`
+	IsProvisional bool `json:"is_provisional"`
 	Name string `json:"name"`
 	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
@@ -362,7 +287,12 @@ type OrganizationCreateData struct {
 // OrganizationUpdateData is the typed request payload for Organization.UpdateTyped.
 type OrganizationUpdateData struct {
 	Id string `json:"id"`
+	Amount *int `json:"amount,omitempty"`
+	ApplicationId *string `json:"application_id,omitempty"`
+	ApplicationName *string `json:"application_name,omitempty"`
 	Consumption *map[string]any `json:"consumption,omitempty"`
+	Date *string `json:"date,omitempty"`
+	IsProvisional *bool `json:"is_provisional,omitempty"`
 	Name *string `json:"name,omitempty"`
 	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
@@ -379,9 +309,6 @@ type OrganizationRemoveMatch struct {
 
 // OrganizationEditRole is the typed data model for the organization_edit_role entity.
 type OrganizationEditRole struct {
-	Id *string `json:"id,omitempty"`
-	Role string `json:"role"`
-	UserId string `json:"user_id"`
 }
 
 // OrganizationEditRoleUpdateData is the typed request payload for OrganizationEditRole.UpdateTyped.
@@ -393,10 +320,6 @@ type OrganizationEditRoleUpdateData struct {
 
 // Problem is the typed data model for the problem entity.
 type Problem struct {
-	Detail string `json:"detail"`
-	Id string `json:"id"`
-	Status int `json:"status"`
-	Title string `json:"title"`
 }
 
 // ProblemListMatch is the typed request payload for Problem.ListTyped.
@@ -409,12 +332,6 @@ type ProblemListMatch struct {
 
 // Quota is the typed data model for the quota entity.
 type Quota struct {
-	GlobalApplicationsPerOrganizationLimit int `json:"global_applications_per_organization_limit"`
-	GlobalDaysOfEventsRetentionLimit int `json:"global_days_of_events_retention_limit"`
-	GlobalEventTypesPerApplicationLimit int `json:"global_event_types_per_application_limit"`
-	GlobalEventsPerDayLimit int `json:"global_events_per_day_limit"`
-	GlobalMembersPerOrganizationLimit int `json:"global_members_per_organization_limit"`
-	GlobalSubscriptionsPerApplicationLimit int `json:"global_subscriptions_per_application_limit"`
 }
 
 // QuotaLoadMatch is the typed request payload for Quota.LoadTyped.
@@ -429,12 +346,6 @@ type QuotaLoadMatch struct {
 
 // Registration is the typed data model for the registration entity.
 type Registration struct {
-	Email string `json:"email"`
-	FirstName string `json:"first_name"`
-	Gclid *string `json:"gclid,omitempty"`
-	LastName string `json:"last_name"`
-	Password string `json:"password"`
-	TurnstileToken *string `json:"turnstile_token,omitempty"`
 }
 
 // RegistrationCreateData is the typed request payload for Registration.CreateTyped.
@@ -449,20 +360,6 @@ type RegistrationCreateData struct {
 
 // RequestAttempt is the typed data model for the request_attempt entity.
 type RequestAttempt struct {
-	CreatedAt string `json:"created_at"`
-	DelayUntil *string `json:"delay_until,omitempty"`
-	Event map[string]any `json:"event"`
-	EventId string `json:"event_id"`
-	FailedAt *string `json:"failed_at,omitempty"`
-	HttpResponseStatus *int `json:"http_response_status,omitempty"`
-	Id *string `json:"id,omitempty"`
-	PickedAt *string `json:"picked_at,omitempty"`
-	RequestAttemptId string `json:"request_attempt_id"`
-	ResponseId *string `json:"response_id,omitempty"`
-	RetryCount int `json:"retry_count"`
-	Status map[string]any `json:"status"`
-	Subscription map[string]any `json:"subscription"`
-	SucceededAt *string `json:"succeeded_at,omitempty"`
 }
 
 // RequestAttemptLoadMatch is the typed request payload for RequestAttempt.LoadTyped.
@@ -484,7 +381,6 @@ type RequestAttemptListMatch struct {
 
 // Response is the typed data model for the response entity.
 type Response struct {
-	Id *string `json:"id,omitempty"`
 }
 
 // ResponseLoadMatch is the typed request payload for Response.LoadTyped.
@@ -504,12 +400,6 @@ type RevokeRemoveMatch struct {
 
 // ServiceToken is the typed data model for the service_token entity.
 type ServiceToken struct {
-	Biscuit string `json:"biscuit"`
-	CreatedAt string `json:"created_at"`
-	Id *string `json:"id,omitempty"`
-	Name string `json:"name"`
-	OrganizationId string `json:"organization_id"`
-	TokenId string `json:"token_id"`
 }
 
 // ServiceTokenLoadMatch is the typed request payload for ServiceToken.LoadTyped.
@@ -551,21 +441,6 @@ type ServiceTokenRemoveMatch struct {
 
 // Subscription is the typed data model for the subscription entity.
 type Subscription struct {
-	ApplicationId string `json:"application_id"`
-	CreatedAt string `json:"created_at"`
-	DedicatedWorkers []any `json:"dedicated_workers"`
-	Description *string `json:"description,omitempty"`
-	EventTypes []any `json:"event_types"`
-	Id *string `json:"id,omitempty"`
-	IsEnabled bool `json:"is_enabled"`
-	LabelKey string `json:"label_key"`
-	LabelValue string `json:"label_value"`
-	Labels map[string]any `json:"labels"`
-	Metadata map[string]any `json:"metadata"`
-	Secret string `json:"secret"`
-	SubscriptionId string `json:"subscription_id"`
-	Target map[string]any `json:"target"`
-	UpdatedAt string `json:"updated_at"`
 }
 
 // SubscriptionLoadMatch is the typed request payload for Subscription.LoadTyped.
@@ -624,9 +499,6 @@ type SubscriptionRemoveMatch struct {
 
 // UserAuthentication is the typed data model for the user_authentication entity.
 type UserAuthentication struct {
-	Email string `json:"email"`
-	NewPassword string `json:"new_password"`
-	Token string `json:"token"`
 }
 
 // UserAuthenticationCreateData is the typed request payload for UserAuthentication.CreateTyped.
@@ -638,8 +510,6 @@ type UserAuthenticationCreateData struct {
 
 // UserInvitation is the typed data model for the user_invitation entity.
 type UserInvitation struct {
-	Email string `json:"email"`
-	Role string `json:"role"`
 }
 
 // UserInvitationCreateData is the typed request payload for UserInvitation.CreateTyped.

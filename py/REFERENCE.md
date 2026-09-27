@@ -66,10 +66,6 @@ Create a new `EventTypeEntity` instance. Pass `None` for no initial data.
 
 Create a new `EventsManagementEntity` instance. Pass `None` for no initial data.
 
-#### `EventsPerDayEntry(data=None)`
-
-Create a new `EventsPerDayEntryEntity` instance. Pass `None` for no initial data.
-
 #### `Health(data=None)`
 
 Create a new `HealthEntity` instance. Pass `None` for no initial data.
@@ -180,9 +176,13 @@ application = client.Application()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `int` | Yes |  |
 | `application_id` | `str` | Yes | Unique identifier of the application. |
+| `application_name` | `str` | Yes |  |
 | `consumption` | `dict` | Yes | Current consumption metrics for this application. |
+| `date` | `str` | Yes |  |
 | `id` | `str` | No |  |
+| `is_provisional` | `bool` | Yes |  |
 | `name` | `str` | Yes | Name of the application. |
 | `onboarding_steps` | `dict` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `str` | Yes | UUID of the organization this application belongs to. |
@@ -196,8 +196,12 @@ Create a new entity with the given data. Returns the created entity data and rai
 
 ```python
 result = client.Application().create({
+    "amount": 1,  # int
     "application_id": "example_application_id",  # str
+    "application_name": "example_application_name",  # str
     "consumption": {},  # dict
+    "date": "example_date",  # str
+    "is_provisional": True,  # bool
     "name": "example_name",  # str
     "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
@@ -407,7 +411,6 @@ event = client.Event()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `str` | Yes |  |
 | `event_id` | `str` | Yes |  |
 | `event_type_name` | `str` | Yes |  |
 | `id` | `str` | No |  |
@@ -428,7 +431,6 @@ Create a new entity with the given data. Returns the created entity data and rai
 ```python
 result = client.Event().create({
     "id": "example_id",  # str
-    "application_id": "example_application_id",  # str
     "event_id": "example_event_id",  # str
     "event_type_name": "example_event_type_name",  # str
     "ip": "example_ip",  # str
@@ -620,63 +622,6 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `EventsManagementEntity` instance with the same options.
-
-#### `get_name() -> str`
-
-Return the entity name.
-
-
----
-
-## EventsPerDayEntryEntity
-
-```python
-events_per_day_entry = client.EventsPerDayEntry()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `amount` | `int` | Yes |  |
-| `application_id` | `str` | Yes |  |
-| `application_name` | `str` | Yes |  |
-| `date` | `str` | Yes |  |
-| `is_provisional` | `bool` | Yes |  |
-
-### Operations
-
-#### `list(reqmatch=None, ctrl=None) -> list`
-
-List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
-
-```python
-results = client.EventsPerDayEntry().list({"application_id": "example"})
-for events_per_day_entry in results:
-    print(events_per_day_entry)
-```
-
-### Common Methods
-
-#### `data_get() -> dict`
-
-Get the entity data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> dict`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `EventsPerDayEntryEntity` instance with the same options.
 
 #### `get_name() -> str`
 
@@ -991,8 +936,13 @@ organization = client.Organization()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `int` | Yes |  |
+| `application_id` | `str` | Yes |  |
+| `application_name` | `str` | Yes |  |
 | `consumption` | `dict` | Yes |  |
+| `date` | `str` | Yes |  |
 | `id` | `str` | No |  |
+| `is_provisional` | `bool` | Yes |  |
 | `name` | `str` | Yes |  |
 | `onboarding_steps` | `dict` | Yes |  |
 | `organization_id` | `str` | Yes |  |
@@ -1009,7 +959,12 @@ Create a new entity with the given data. Returns the created entity data and rai
 
 ```python
 result = client.Organization().create({
+    "amount": 1,  # int
+    "application_id": "example_application_id",  # str
+    "application_name": "example_application_name",  # str
     "consumption": {},  # dict
+    "date": "example_date",  # str
+    "is_provisional": True,  # bool
     "name": "example_name",  # str
     "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
@@ -1837,14 +1792,14 @@ Return the entity name.
 
 | Feature | Version | Description |
 | --- | --- | --- |
-| `debug` | 0.0.1 | Request/response capture ring buffer for debugging |
-| `idempotency` | 0.0.1 | Idempotency keys for safe retries of mutating operations |
-| `metrics` | 0.0.1 | Statistics capture: per-operation counters and latency |
-| `paging` | 0.0.1 | Pagination signals for list operations |
-| `ratelimit` | 0.0.1 | Client-side rate limiting via a token bucket |
-| `retry` | 0.0.1 | Automatic retry of transient failures with exponential backoff |
-| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
-| `timeout` | 0.0.1 | Per-request timeout with transport abort |
+| `debug` | 0.0.1 | Debug capture |
+| `idempotency` | 0.0.1 | Idempotency |
+| `metrics` | 0.0.1 | Metrics |
+| `paging` | 0.0.1 | Paging |
+| `ratelimit` | 0.0.1 | Rate limiting |
+| `retry` | 0.0.1 | Retry |
+| `test` | 0.0.1 | Test transport |
+| `timeout` | 0.0.1 | Timeout |
 
 
 Features are activated via the `feature` option:
@@ -1890,7 +1845,7 @@ rather than the transport, so their order does not affect what they observe.
 
 #### `debug`
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 **Configuration**
 
@@ -1921,7 +1876,7 @@ its default unless you name it.
 
 #### `idempotency`
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 **Configuration**
 
@@ -1952,7 +1907,7 @@ its default unless you name it.
 
 #### `metrics`
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 **Configuration**
 
@@ -1980,7 +1935,7 @@ its default unless you name it.
 
 #### `paging`
 
-Pagination signals for list operations.
+Paging.
 
 **Configuration**
 
@@ -2015,7 +1970,7 @@ its default unless you name it.
 
 #### `ratelimit`
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 **Configuration**
 
@@ -2046,7 +2001,7 @@ its default unless you name it.
 
 #### `retry`
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 **Configuration**
 
@@ -2080,7 +2035,7 @@ its default unless you name it.
 
 #### `test`
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 **Configuration**
 
@@ -2111,7 +2066,7 @@ its default unless you name it.
 
 #### `timeout`
 
-Per-request timeout with transport abort.
+Timeout.
 
 **Configuration**
 

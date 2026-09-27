@@ -1,0 +1,106 @@
+# Entity: instance
+
+main: kit: entity: instance: {
+
+  alias: field: {}
+
+  fields: {
+    application_secret_compatibility: {
+      h: "Application Secret Compatibility"
+      n: "application_secret_compatibility"
+      r: true
+      t: "`$BOOLEAN`"
+    }
+    auto_db_migration: {
+      h: "Auto Db Migration"
+      n: "auto_db_migration"
+      r: true
+      t: "`$BOOLEAN`"
+    }
+    biscuit_public_key: {
+      h: "Biscuit Public Key"
+      n: "biscuit_public_key"
+      r: true
+      t: "`$STRING`"
+    }
+    cloudflare_turnstile_site_key: {
+      h: "Cloudflare Turnstile Site Key"
+      n: "cloudflare_turnstile_site_key"
+      r: false
+      t: "`$STRING`"
+    }
+    formbricks: {
+      h: "Formbricks"
+      n: "formbricks"
+      r: true
+      t: "`$OBJECT`"
+    }
+    matomo: {
+      h: "Matomo"
+      n: "matomo"
+      r: true
+      t: "`$OBJECT`"
+    }
+    password_minimum_length: {
+      fo: "int32"
+      h: "Password Minimum Length"
+      n: "password_minimum_length"
+      r: true
+      t: "`$INTEGER`"
+    }
+    quota_enforcement: {
+      h: "Quota Enforcement"
+      n: "quota_enforcement"
+      r: true
+      t: "`$BOOLEAN`"
+    }
+    registration_disabled: {
+      h: "Registration Disabled"
+      n: "registration_disabled"
+      r: true
+      t: "`$BOOLEAN`"
+    }
+    support_email_address: {
+      h: "Support Email Address"
+      n: "support_email_address"
+      r: true
+      t: "`$STRING`"
+    }
+  }
+
+  name: "instance"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/instance/"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/api/v1/instance/"
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "instance"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

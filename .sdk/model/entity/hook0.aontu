@@ -1,0 +1,87 @@
+# Entity: hook0
+
+main: kit: entity: hook0: {
+
+  alias: field: {}
+
+  fields: {
+    default: {
+      h: "Default"
+      n: "default"
+      r: false
+      t: "`$STRING`"
+    }
+    description: {
+      h: "Description"
+      n: "description"
+      r: false
+      t: "`$STRING`"
+    }
+    env_var: {
+      h: "Env Var"
+      n: "env_var"
+      r: true
+      t: "`$STRING`"
+    }
+    group: {
+      h: "Group"
+      n: "group"
+      r: false
+      t: "`$STRING`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: true
+      t: "`$STRING`"
+    }
+    required: {
+      h: "Required"
+      n: "required"
+      r: true
+      t: "`$BOOLEAN`"
+    }
+    sensitive: {
+      h: "Sensitive"
+      n: "sensitive"
+      r: true
+      t: "`$BOOLEAN`"
+    }
+  }
+
+  name: "hook0"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/environment_variables/"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/api/v1/environment_variables/"
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "environment_variables"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

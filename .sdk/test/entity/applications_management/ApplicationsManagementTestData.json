@@ -23,81 +23,8 @@
   "requests": {
     "DELETE /api/v1/application_secrets/{application_secret_token}": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "applicationSecrets.delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "application_secret_token",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "query",
-            "name": "application_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "form"
-          }
-        ],
-        "protocol": "http",
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
     }
   }
 }

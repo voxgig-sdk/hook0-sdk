@@ -343,12 +343,6 @@ class Hook0SDK:
         return EventsManagementEntity(self, data)
 
 
-    def EventsPerDayEntry(self, data=None) -> "EventsPerDayEntryEntity":
-        """Entity factory: client.EventsPerDayEntry().list() / client.EventsPerDayEntry().load({"id": ...})."""
-        from hook0_sdk.entity.events_per_day_entry_entity import EventsPerDayEntryEntity
-        return EventsPerDayEntryEntity(self, data)
-
-
     def Health(self, data=None) -> "HealthEntity":
         """Entity factory: client.Health().list() / client.Health().load({"id": ...})."""
         from hook0_sdk.entity.health_entity import HealthEntity
@@ -484,7 +478,6 @@ if TYPE_CHECKING:
     from hook0_sdk.entity.event_entity import EventEntity
     from hook0_sdk.entity.event_type_entity import EventTypeEntity
     from hook0_sdk.entity.events_management_entity import EventsManagementEntity
-    from hook0_sdk.entity.events_per_day_entry_entity import EventsPerDayEntryEntity
     from hook0_sdk.entity.health_entity import HealthEntity
     from hook0_sdk.entity.hook0_entity import Hook0Entity
     from hook0_sdk.entity.ingested_event_entity import IngestedEventEntity

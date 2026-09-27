@@ -1,0 +1,213 @@
+# Entity: event_type
+
+main: kit: entity: event_type: {
+
+  alias: field: {}
+
+  fields: {
+    application_id: {
+      fo: "uuid"
+      h: "Application Id"
+      n: "application_id"
+      r: true
+      t: "`$STRING`"
+    }
+    event_type_name: {
+      h: "Event Type Name"
+      n: "event_type_name"
+      r: true
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    resource_type: {
+      h: "Resource Type"
+      n: "resource_type"
+      r: true
+      t: "`$STRING`"
+    }
+    resource_type_name: {
+      h: "Resource Type Name"
+      n: "resource_type_name"
+      r: true
+      t: "`$STRING`"
+    }
+    service: {
+      h: "Service"
+      n: "service"
+      r: true
+      t: "`$STRING`"
+    }
+    service_name: {
+      h: "Service Name"
+      n: "service_name"
+      r: true
+      t: "`$STRING`"
+    }
+    verb: {
+      h: "Verb"
+      n: "verb"
+      r: true
+      t: "`$STRING`"
+    }
+    verb_name: {
+      h: "Verb Name"
+      n: "verb_name"
+      r: true
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "event_type"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /api/v1/event_types/"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/api/v1/event_types/"
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event_types"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/event_types/"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "application_id"
+                or: "application_id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/v1/event_types/"
+          q: {
+            exist: [
+              "application_id"
+            ]
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event_types"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/event_types/{event_type_name}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "event_type_name"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "application_id"
+                or: "application_id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/v1/event_types/{event_type_name}"
+          q: {
+            exist: [
+              "application_id"
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              event_type_name: "id"
+            }
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "event_types"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

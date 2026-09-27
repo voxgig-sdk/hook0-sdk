@@ -1,15 +1,19 @@
 -- Typed models for the Hook0 SDK (LuaLS annotations).
 --
--- GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
--- params (op.<name>.points[].args.params[]). Field/param types come from the
+-- GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+-- params (op.<name>.points[].g.params[]). Field/param types come from the
 -- canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 -- @voxgig/apidef VALID_CANON). Annotations only — no runtime effect. Do not
 -- edit by hand.
 
 ---@class Application
+---@field amount number
 ---@field application_id string
+---@field application_name string
 ---@field consumption table
+---@field date string
 ---@field id? string
+---@field is_provisional boolean
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
@@ -22,9 +26,13 @@
 ---@field organization_id string
 
 ---@class ApplicationCreateData
+---@field amount number
 ---@field application_id string
+---@field application_name string
 ---@field consumption table
+---@field date string
 ---@field id? string
+---@field is_provisional boolean
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
@@ -32,8 +40,12 @@
 
 ---@class ApplicationUpdateData
 ---@field id string
+---@field amount? number
 ---@field application_id? string
+---@field application_name? string
 ---@field consumption? table
+---@field date? string
+---@field is_provisional? boolean
 ---@field name? string
 ---@field onboarding_steps? table
 ---@field organization_id? string
@@ -76,7 +88,6 @@
 ---@field application_id string
 
 ---@class Event
----@field application_id string
 ---@field event_id string
 ---@field event_type_name string
 ---@field id? string
@@ -97,7 +108,6 @@
 
 ---@class EventCreateData
 ---@field id string
----@field application_id string
 ---@field event_id string
 ---@field event_type_name string
 ---@field ip string
@@ -144,18 +154,6 @@
 ---@class EventsManagementRemoveMatch
 ---@field event_type_name string
 ---@field application_id string
-
----@class EventsPerDayEntry
----@field amount number
----@field application_id string
----@field application_name string
----@field date string
----@field is_provisional boolean
-
----@class EventsPerDayEntryListMatch
----@field application_id string
----@field from? string
----@field to? string
 
 ---@class Health
 ---@field database boolean
@@ -240,8 +238,13 @@
 ---@field password string
 
 ---@class Organization
+---@field amount number
+---@field application_id string
+---@field application_name string
 ---@field consumption table
+---@field date string
 ---@field id? string
+---@field is_provisional boolean
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
@@ -254,8 +257,13 @@
 ---@field id string
 
 ---@class OrganizationListMatch
+---@field amount? number
+---@field application_id? string
+---@field application_name? string
 ---@field consumption? table
+---@field date? string
 ---@field id? string
+---@field is_provisional? boolean
 ---@field name? string
 ---@field onboarding_steps? table
 ---@field organization_id? string
@@ -265,8 +273,13 @@
 ---@field users? table
 
 ---@class OrganizationCreateData
+---@field amount number
+---@field application_id string
+---@field application_name string
 ---@field consumption table
+---@field date string
 ---@field id? string
+---@field is_provisional boolean
 ---@field name string
 ---@field onboarding_steps table
 ---@field organization_id string
@@ -277,7 +290,12 @@
 
 ---@class OrganizationUpdateData
 ---@field id string
+---@field amount? number
+---@field application_id? string
+---@field application_name? string
 ---@field consumption? table
+---@field date? string
+---@field is_provisional? boolean
 ---@field name? string
 ---@field onboarding_steps? table
 ---@field organization_id? string

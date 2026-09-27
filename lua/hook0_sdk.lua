@@ -437,20 +437,6 @@ function Hook0SDK:EventsManagement(data)
 end
 
 
--- Idiomatic facade: client:EventsPerDayEntry():list() / client:EventsPerDayEntry():load({ id = ... })
--- Entity access is capitalised (PascalCase) for parity with the other SDKs.
-function Hook0SDK:EventsPerDayEntry(data)
-  local EntityMod = require("entity.events_per_day_entry_entity")
-  if data == nil then
-    if self._events_per_day_entry == nil then
-      self._events_per_day_entry = EntityMod.new(self, nil)
-    end
-    return self._events_per_day_entry
-  end
-  return EntityMod.new(self, data)
-end
-
-
 -- Idiomatic facade: client:Health():list() / client:Health():load({ id = ... })
 -- Entity access is capitalised (PascalCase) for parity with the other SDKs.
 function Hook0SDK:Health(data)

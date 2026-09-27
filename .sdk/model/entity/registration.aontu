@@ -1,0 +1,82 @@
+# Entity: registration
+
+main: kit: entity: registration: {
+
+  alias: field: {}
+
+  fields: {
+    email: {
+      h: "Email"
+      n: "email"
+      r: true
+      t: "`$STRING`"
+    }
+    first_name: {
+      h: "First Name"
+      n: "first_name"
+      r: true
+      t: "`$STRING`"
+    }
+    gclid: {
+      h: "Gclid"
+      n: "gclid"
+      r: false
+      sh: "Optional Google Ads click identifier captured during the user's journey from a Google Ad."
+      t: "`$STRING`"
+    }
+    last_name: {
+      h: "Last Name"
+      n: "last_name"
+      r: true
+      t: "`$STRING`"
+    }
+    password: {
+      h: "Password"
+      n: "password"
+      r: true
+      t: "`$STRING`"
+    }
+    turnstile_token: {
+      h: "Turnstile Token"
+      n: "turnstile_token"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  name: "registration"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /api/v1/register/"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/api/v1/register/"
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "register"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

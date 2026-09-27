@@ -1,0 +1,28 @@
+# BasicInstanceFlow
+
+main: kit: flow: BasicInstanceFlow:
+{
+  entity: "instance",
+  kind: "basic",
+  name: "BasicInstanceFlow",
+  step: [
+    {
+      i: {
+        ref: "instance_ref01",
+        srcdatavar: "instance_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-instance_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicInstanceFlow"
+}

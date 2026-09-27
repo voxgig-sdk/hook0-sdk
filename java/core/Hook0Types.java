@@ -2,8 +2,8 @@ package voxgig.hook0sdk.core;
 
 // Typed reference models for the Hook0 SDK.
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels (source of truth: @voxgig/apidef VALID_CANON). Do
 // not edit by hand.
 //
@@ -20,15 +20,15 @@ public final class Hook0Types {
 
   private Hook0Types() {}
 
-  public record Application(String application_id, Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
+  public record Application(Long amount, String application_id, String application_name, Map<String, Object> consumption, String date, String id, Boolean is_provisional, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
 
   public record ApplicationLoadMatch(String id) {}
 
   public record ApplicationListMatch(String organization_id) {}
 
-  public record ApplicationCreateData(String application_id, Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
+  public record ApplicationCreateData(Long amount, String application_id, String application_name, Map<String, Object> consumption, String date, String id, Boolean is_provisional, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
 
-  public record ApplicationUpdateData(String id, String application_id, Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
+  public record ApplicationUpdateData(String id, Long amount, String application_id, String application_name, Map<String, Object> consumption, String date, Boolean is_provisional, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> quotas) {}
 
   public record ApplicationRemoveMatch(String id) {}
 
@@ -44,13 +44,13 @@ public final class Hook0Types {
 
   public record ApplicationsManagementRemoveMatch(String application_secret_token, String application_id) {}
 
-  public record Event(String application_id, String event_id, String event_type_name, String id, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
+  public record Event(String event_id, String event_type_name, String id, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
 
   public record EventLoadMatch(String id, String application_id) {}
 
   public record EventListMatch(String application_id) {}
 
-  public record EventCreateData(String id, String application_id, String event_id, String event_type_name, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
+  public record EventCreateData(String id, String event_id, String event_type_name, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
 
   public record EventType(String application_id, String event_type_name, String id, String resource_type, String resource_type_name, String service, String service_name, String verb, String verb_name) {}
 
@@ -65,10 +65,6 @@ public final class Hook0Types {
   public record EventsManagementListMatch() {}
 
   public record EventsManagementRemoveMatch(String event_type_name, String application_id) {}
-
-  public record EventsPerDayEntry(Long amount, String application_id, String application_name, String date, Boolean is_provisional) {}
-
-  public record EventsPerDayEntryListMatch(String application_id, String from, String to) {}
 
   public record Health(Boolean database, Long database_duration_ms, Boolean object_storage, Long object_storage_duration_ms, Boolean pulsar, Long pulsar_duration_ms, Long total_duration_ms) {}
 
@@ -90,15 +86,15 @@ public final class Hook0Types {
 
   public record LoginCreateData(String email, String password) {}
 
-  public record Organization(Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
+  public record Organization(Long amount, String application_id, String application_name, Map<String, Object> consumption, String date, String id, Boolean is_provisional, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
   public record OrganizationLoadMatch(String id) {}
 
-  public record OrganizationListMatch(Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
+  public record OrganizationListMatch(Long amount, String application_id, String application_name, Map<String, Object> consumption, String date, String id, Boolean is_provisional, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
-  public record OrganizationCreateData(Map<String, Object> consumption, String id, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
+  public record OrganizationCreateData(Long amount, String application_id, String application_name, Map<String, Object> consumption, String date, String id, Boolean is_provisional, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
-  public record OrganizationUpdateData(String id, Map<String, Object> consumption, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
+  public record OrganizationUpdateData(String id, Long amount, String application_id, String application_name, Map<String, Object> consumption, String date, Boolean is_provisional, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
   public record OrganizationRemoveMatch(String id) {}
 

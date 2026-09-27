@@ -1,0 +1,77 @@
+# Entity: applications_management
+
+main: kit: entity: applications_management: {
+
+  alias: field: {}
+
+  name: "applications_management"
+  op: {
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /api/v1/application_secrets/{application_secret_token}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "application_secret_token"
+                or: "application_secret_token"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "application_id"
+                or: "application_id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/api/v1/application_secrets/{application_secret_token}"
+          q: {
+            exist: [
+              "application_id"
+              "application_secret_token"
+            ]
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "application_secrets"
+            }
+            {
+              var: "application_secret_token"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  fields: {
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.application_secret")]
+  ]
+
+}

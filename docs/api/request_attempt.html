@@ -12,7 +12,6 @@
 <a href="../api/event.html">Event</a>
 <a href="../api/event_type.html">EventType</a>
 <a href="../api/events_management.html">EventsManagement</a>
-<a href="../api/events_per_day_entry.html">EventsPerDayEntry</a>
 <a href="../api/health.html">Health</a>
 <a href="../api/hook0.html">Hook0</a>
 <a href="../api/ingested_event.html">IngestedEvent</a>
@@ -45,14 +44,14 @@
 <a href="../sdks/zig.html">Zig</a></details>
 <details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
 <a href="../tools/go-mcp.html">Go MCP server</a></details>
-<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
-<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
-<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
-<a href="../features/paging.html">Pagination signals for list operations</a>
-<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
-<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
-<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
-<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="requestattempt">RequestAttempt</h1>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="requestattempt">RequestAttempt</h1>
 <h2 id="operations">Operations</h2>
 <p>Every route this entity exposes. Each route links to its own reference on this page.</p>
 <table>
@@ -79,6 +78,46 @@
 </tr>
 </tbody>
 </table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">request_attempts, err := client.RequestAttempt(nil).List(map[string]any{&quot;application_id&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(request_attempts)
+request_attempt, err := client.RequestAttempt(nil).Load(map[string]any{&quot;id&quot;: &quot;example_id&quot;, &quot;application_id&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(request_attempt)
+</code></pre>
+<h3 id="javascript">JavaScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/js.html#set-up-the-client">JavaScript setup</a>, then call the operations:</p>
+<pre><code class="language-js">const request_attempts = await client.RequestAttempt().list({ application_id: &quot;example&quot; })
+const request_attempt = await client.RequestAttempt().load({ id: &quot;example_id&quot;, application_id: &quot;example&quot; })
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local request_attempts, err = client:RequestAttempt():list({ application_id = &quot;example&quot; })
+local request_attempt, err = client:RequestAttempt():load({ id = &quot;example_id&quot;, application_id = &quot;example&quot; })
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$request_attempts = $client-&gt;RequestAttempt()-&gt;list([&quot;application_id&quot; =&gt; &quot;example&quot;]);
+$request_attempt = $client-&gt;RequestAttempt()-&gt;load([&quot;id&quot; =&gt; &quot;example_id&quot;, &quot;application_id&quot; =&gt; &quot;example&quot;]);
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">request_attempts = client.RequestAttempt().list({&quot;application_id&quot;: &quot;example&quot;})
+request_attempt = client.RequestAttempt().load({&quot;id&quot;: &quot;example_id&quot;, &quot;application_id&quot;: &quot;example&quot;})
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const request_attempts = await client.RequestAttempt().list({ application_id: &quot;example&quot; })
+const request_attempt = await client.RequestAttempt().load({ id: &quot;example_id&quot;, application_id: &quot;example&quot; })
+</code></pre>
 <h2 id="fields">Fields</h2>
 <table>
 <thead>
@@ -94,67 +133,67 @@
 <td><code>created_at</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Created At</td>
 </tr>
 <tr>
 <td><code>delay_until</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Delay Until</td>
 </tr>
 <tr>
 <td><code>event</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td></td>
+<td>Event</td>
 </tr>
 <tr>
 <td><code>event_id</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Event Id</td>
 </tr>
 <tr>
 <td><code>failed_at</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Failed At</td>
 </tr>
 <tr>
 <td><code>http_response_status</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td></td>
+<td>Http Response Status</td>
 </tr>
 <tr>
 <td><code>id</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Id</td>
 </tr>
 <tr>
 <td><code>picked_at</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Picked At</td>
 </tr>
 <tr>
 <td><code>request_attempt_id</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Request Attempt Id</td>
 </tr>
 <tr>
 <td><code>response_id</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Response Id</td>
 </tr>
 <tr>
 <td><code>retry_count</code></td>
 <td><code>integer</code></td>
 <td>Yes</td>
-<td></td>
+<td>Retry Count</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -166,13 +205,13 @@
 <td><code>subscription</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td></td>
+<td>Subscription</td>
 </tr>
 <tr>
 <td><code>succeeded_at</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Succeeded At</td>
 </tr>
 </tbody>
 </table>
@@ -279,7 +318,7 @@
 <td><code>[].status</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td>Status of a request attempt. The 'type' field indicates the status variant. - waiting: {type, since, until} - Scheduled for future delivery - pending: {type, since} - Ready to be processed - in_progress: {type, since} - Currently being delivered - successful: {type, at, full_processing_ms} - Delivered successfully - failed: {type, at, full_processing_ms} - Delivery failed</td>
+<td>Status of a request attempt. The 'type' field indicates the status variant. - waiting: {type, since, until} - Scheduled for future delivery - pending: {type, since} - Ready to be processed - <code>in_progress</code>: {type, since} - Currently being delivered - successful: {type, at, <code>full_processing_ms</code>} - Delivered successfully - failed: {type, at, <code>full_processing_ms</code>} - Delivery failed</td>
 </tr>
 <tr>
 <td><code>[].status.at</code></td>
@@ -297,13 +336,13 @@
 <td><code>[].status.since</code></td>
 <td><code>string (date-time)</code></td>
 <td>No</td>
-<td>Timestamp when the status started (present in waiting, pending, in_progress)</td>
+<td>Timestamp when the status started (present in waiting, pending, <code>in_progress</code>)</td>
 </tr>
 <tr>
 <td><code>[].status.type</code></td>
 <td><code>enum: waiting, pending, in_progress, successful, failed</code></td>
 <td>Yes</td>
-<td>Status type discriminator. One of: waiting, pending, in_progress, successful, failed</td>
+<td>Status type discriminator. One of: waiting, pending, <code>in_progress</code>, successful, failed</td>
 </tr>
 <tr>
 <td><code>[].status.until</code></td>
@@ -441,7 +480,7 @@
 <td><code>status</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td>Status of a request attempt. The 'type' field indicates the status variant. - waiting: {type, since, until} - Scheduled for future delivery - pending: {type, since} - Ready to be processed - in_progress: {type, since} - Currently being delivered - successful: {type, at, full_processing_ms} - Delivered successfully - failed: {type, at, full_processing_ms} - Delivery failed</td>
+<td>Status of a request attempt. The 'type' field indicates the status variant. - waiting: {type, since, until} - Scheduled for future delivery - pending: {type, since} - Ready to be processed - <code>in_progress</code>: {type, since} - Currently being delivered - successful: {type, at, <code>full_processing_ms</code>} - Delivered successfully - failed: {type, at, <code>full_processing_ms</code>} - Delivery failed</td>
 </tr>
 <tr>
 <td><code>status.at</code></td>
@@ -459,13 +498,13 @@
 <td><code>status.since</code></td>
 <td><code>string (date-time)</code></td>
 <td>No</td>
-<td>Timestamp when the status started (present in waiting, pending, in_progress)</td>
+<td>Timestamp when the status started (present in waiting, pending, <code>in_progress</code>)</td>
 </tr>
 <tr>
 <td><code>status.type</code></td>
 <td><code>enum: waiting, pending, in_progress, successful, failed</code></td>
 <td>Yes</td>
-<td>Status type discriminator. One of: waiting, pending, in_progress, successful, failed</td>
+<td>Status type discriminator. One of: waiting, pending, <code>in_progress</code>, successful, failed</td>
 </tr>
 <tr>
 <td><code>status.until</code></td>

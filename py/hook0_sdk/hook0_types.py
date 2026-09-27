@@ -1,7 +1,7 @@
 # Typed models for the Hook0 SDK.
 #
-# GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-# params (op.<name>.points[].args.params[]). Field/param types come from the
+# GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+# params (op.<name>.points[].g.params[]). Field/param types come from the
 # canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 # @voxgig/apidef VALID_CANON). Do not edit by hand.
 #
@@ -17,8 +17,12 @@ from typing import TypedDict, Any
 
 
 class ApplicationRequired(TypedDict):
+    amount: int
     application_id: str
+    application_name: str
     consumption: dict
+    date: str
+    is_provisional: bool
     name: str
     onboarding_steps: dict
     organization_id: str
@@ -38,8 +42,12 @@ class ApplicationListMatch(TypedDict):
 
 
 class ApplicationCreateDataRequired(TypedDict):
+    amount: int
     application_id: str
+    application_name: str
     consumption: dict
+    date: str
+    is_provisional: bool
     name: str
     onboarding_steps: dict
     organization_id: str
@@ -55,8 +63,12 @@ class ApplicationUpdateDataRequired(TypedDict):
 
 
 class ApplicationUpdateData(ApplicationUpdateDataRequired, total=False):
+    amount: int
     application_id: str
+    application_name: str
     consumption: dict
+    date: str
+    is_provisional: bool
     name: str
     onboarding_steps: dict
     organization_id: str
@@ -117,7 +129,6 @@ class ApplicationsManagementRemoveMatch(TypedDict):
 
 
 class EventRequired(TypedDict):
-    application_id: str
     event_id: str
     event_type_name: str
     ip: str
@@ -144,7 +155,6 @@ class EventListMatch(TypedDict):
 
 class EventCreateDataRequired(TypedDict):
     id: str
-    application_id: str
     event_id: str
     event_type_name: str
     ip: str
@@ -209,22 +219,6 @@ class EventsManagementListMatch(TypedDict):
 class EventsManagementRemoveMatch(TypedDict):
     event_type_name: str
     application_id: str
-
-
-class EventsPerDayEntry(TypedDict):
-    amount: int
-    application_id: str
-    application_name: str
-    date: str
-    is_provisional: bool
-
-
-class EventsPerDayEntryListMatchRequired(TypedDict):
-    application_id: str
-
-
-class EventsPerDayEntryListMatch(EventsPerDayEntryListMatchRequired, total=False):
-    to: str
 
 
 class HealthRequired(TypedDict):
@@ -335,7 +329,12 @@ class LoginCreateData(TypedDict):
 
 
 class OrganizationRequired(TypedDict):
+    amount: int
+    application_id: str
+    application_name: str
     consumption: dict
+    date: str
+    is_provisional: bool
     name: str
     onboarding_steps: dict
     organization_id: str
@@ -354,8 +353,13 @@ class OrganizationLoadMatch(TypedDict):
 
 
 class OrganizationListMatch(TypedDict, total=False):
+    amount: int
+    application_id: str
+    application_name: str
     consumption: dict
+    date: str
     id: str
+    is_provisional: bool
     name: str
     onboarding_steps: dict
     organization_id: str
@@ -366,7 +370,12 @@ class OrganizationListMatch(TypedDict, total=False):
 
 
 class OrganizationCreateDataRequired(TypedDict):
+    amount: int
+    application_id: str
+    application_name: str
     consumption: dict
+    date: str
+    is_provisional: bool
     name: str
     onboarding_steps: dict
     organization_id: str
@@ -385,7 +394,12 @@ class OrganizationUpdateDataRequired(TypedDict):
 
 
 class OrganizationUpdateData(OrganizationUpdateDataRequired, total=False):
+    amount: int
+    application_id: str
+    application_name: str
     consumption: dict
+    date: str
+    is_provisional: bool
     name: str
     onboarding_steps: dict
     organization_id: str

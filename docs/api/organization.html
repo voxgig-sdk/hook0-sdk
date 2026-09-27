@@ -12,13 +12,13 @@
 <a href="../api/event.html">Event</a>
 <a href="../api/event_type.html">EventType</a>
 <a href="../api/events_management.html">EventsManagement</a>
-<a href="../api/events_per_day_entry.html">EventsPerDayEntry</a>
 <a href="../api/health.html">Health</a>
 <a href="../api/hook0.html">Hook0</a>
 <a href="../api/ingested_event.html">IngestedEvent</a>
 <a href="../api/instance.html">Instance</a>
 <a href="../api/login.html">Login</a>
 <a aria-current="page" href="../api/organization.html">Organization</a><div class="nav-sections"><a class="nav-section" href="#post-apiv1organizations">POST /api/v1/organizations/</a>
+<a class="nav-section" href="#get-apiv1events_per_dayorganization">GET /api/v1/events_per_day/organization</a>
 <a class="nav-section" href="#get-apiv1organizations">GET /api/v1/organizations/</a>
 <a class="nav-section" href="#get-apiv1organizationsorganization_id">GET /api/v1/organizations/{organization_id}/</a>
 <a class="nav-section" href="#delete-apiv1organizationsorganization_id">DELETE /api/v1/organizations/{organization_id}/</a>
@@ -48,14 +48,14 @@
 <a href="../sdks/zig.html">Zig</a></details>
 <details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
 <a href="../tools/go-mcp.html">Go MCP server</a></details>
-<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
-<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
-<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
-<a href="../features/paging.html">Pagination signals for list operations</a>
-<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
-<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
-<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
-<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="organization">Organization</h1>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="organization">Organization</h1>
 <h2 id="operations">Operations</h2>
 <p>Every route this entity exposes. Each route links to its own reference on this page.</p>
 <table>
@@ -72,6 +72,12 @@
 <td><code>POST</code></td>
 <td><a href="#post-apiv1organizations"><code>/api/v1/organizations/</code></a></td>
 <td><code>create</code></td>
+<td>OK</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-apiv1events_per_dayorganization"><code>/api/v1/events_per_day/organization</code></a></td>
+<td><code>list</code></td>
 <td>OK</td>
 </tr>
 <tr>
@@ -100,6 +106,76 @@
 </tr>
 </tbody>
 </table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">organizations, err := client.Organization(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(organizations)
+organization, err := client.Organization(nil).Load(map[string]any{&quot;id&quot;: &quot;example_id&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(organization)
+created, err := client.Organization(nil).Create(map[string]any{&quot;amount&quot;: 1, &quot;application_id&quot;: &quot;example&quot;, &quot;application_name&quot;: &quot;example&quot;, &quot;consumption&quot;: map[string]any{}, &quot;date&quot;: &quot;example&quot;, &quot;is_provisional&quot;: true, &quot;name&quot;: &quot;example&quot;, &quot;onboarding_steps&quot;: map[string]any{}, &quot;organization_id&quot;: &quot;example&quot;, &quot;plan&quot;: map[string]any{}, &quot;quotas&quot;: map[string]any{}, &quot;role&quot;: &quot;example&quot;, &quot;users&quot;: []any{}}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(created)
+updated, err := client.Organization(nil).Update(map[string]any{&quot;id&quot;: &quot;example_id&quot;, &quot;amount&quot;: 1, &quot;application_id&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(updated)
+removed, err := client.Organization(nil).Remove(map[string]any{&quot;id&quot;: &quot;example_id&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(removed)
+</code></pre>
+<h3 id="javascript">JavaScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/js.html#set-up-the-client">JavaScript setup</a>, then call the operations:</p>
+<pre><code class="language-js">const organizations = await client.Organization().list()
+const organization = await client.Organization().load({ id: &quot;example_id&quot; })
+const created = await client.Organization().create({ amount: 1, application_id: &quot;example&quot;, application_name: &quot;example&quot;, consumption: {}, date: &quot;example&quot;, is_provisional: true, name: &quot;example&quot;, onboarding_steps: {}, organization_id: &quot;example&quot;, plan: {}, quotas: {}, role: &quot;example&quot;, users: [] })
+const updated = await client.Organization().update({ id: &quot;example_id&quot;, amount: 1, application_id: &quot;example&quot; })
+await client.Organization().remove({ id: &quot;example_id&quot; })
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local organizations, err = client:Organization():list()
+local organization, err = client:Organization():load({ id = &quot;example_id&quot; })
+local created, err = client:Organization():create({ amount = 1, application_id = &quot;example&quot;, application_name = &quot;example&quot;, consumption = {}, date = &quot;example&quot;, is_provisional = true, name = &quot;example&quot;, onboarding_steps = {}, organization_id = &quot;example&quot;, plan = {}, quotas = {}, role = &quot;example&quot;, users = {} })
+local updated, err = client:Organization():update({ id = &quot;example_id&quot;, amount = 1, application_id = &quot;example&quot; })
+local removed, err = client:Organization():remove({ id = &quot;example_id&quot; })
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$organizations = $client-&gt;Organization()-&gt;list();
+$organization = $client-&gt;Organization()-&gt;load([&quot;id&quot; =&gt; &quot;example_id&quot;]);
+$created = $client-&gt;Organization()-&gt;create([&quot;amount&quot; =&gt; 1, &quot;application_id&quot; =&gt; &quot;example&quot;, &quot;application_name&quot; =&gt; &quot;example&quot;, &quot;consumption&quot; =&gt; [], &quot;date&quot; =&gt; &quot;example&quot;, &quot;is_provisional&quot; =&gt; true, &quot;name&quot; =&gt; &quot;example&quot;, &quot;onboarding_steps&quot; =&gt; [], &quot;organization_id&quot; =&gt; &quot;example&quot;, &quot;plan&quot; =&gt; [], &quot;quotas&quot; =&gt; [], &quot;role&quot; =&gt; &quot;example&quot;, &quot;users&quot; =&gt; []]);
+$updated = $client-&gt;Organization()-&gt;update([&quot;id&quot; =&gt; &quot;example_id&quot;, &quot;amount&quot; =&gt; 1, &quot;application_id&quot; =&gt; &quot;example&quot;]);
+$client-&gt;Organization()-&gt;remove([&quot;id&quot; =&gt; &quot;example_id&quot;]);
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">organizations = client.Organization().list()
+organization = client.Organization().load({&quot;id&quot;: &quot;example_id&quot;})
+created = client.Organization().create({ &quot;amount&quot;: 1, &quot;application_id&quot;: &quot;example&quot;, &quot;application_name&quot;: &quot;example&quot;, &quot;consumption&quot;: {}, &quot;date&quot;: &quot;example&quot;, &quot;is_provisional&quot;: True, &quot;name&quot;: &quot;example&quot;, &quot;onboarding_steps&quot;: {}, &quot;organization_id&quot;: &quot;example&quot;, &quot;plan&quot;: {}, &quot;quotas&quot;: {}, &quot;role&quot;: &quot;example&quot;, &quot;users&quot;: [] })
+updated = client.Organization().update({&quot;id&quot;: &quot;example_id&quot;, &quot;amount&quot;: 1, &quot;application_id&quot;: &quot;example&quot;})
+client.Organization().remove({&quot;id&quot;: &quot;example_id&quot;})
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const organizations = await client.Organization().list()
+const organization = await client.Organization().load({ id: &quot;example_id&quot; })
+const created = await client.Organization().create({ amount: 1, application_id: &quot;example&quot;, application_name: &quot;example&quot;, consumption: {}, date: &quot;example&quot;, is_provisional: true, name: &quot;example&quot;, onboarding_steps: {}, organization_id: &quot;example&quot;, plan: {}, quotas: {}, role: &quot;example&quot;, users: [] })
+const updated = await client.Organization().update({ id: &quot;example_id&quot;, amount: 1, application_id: &quot;example&quot; })
+await client.Organization().remove({ id: &quot;example_id&quot; })
+</code></pre>
 <h2 id="fields">Fields</h2>
 <table>
 <thead>
@@ -112,58 +188,88 @@
 </thead>
 <tbody>
 <tr>
+<td><code>amount</code></td>
+<td><code>integer</code></td>
+<td>Yes</td>
+<td>Amount</td>
+</tr>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Application Id</td>
+</tr>
+<tr>
+<td><code>application_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Application Name</td>
+</tr>
+<tr>
 <td><code>consumption</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td></td>
+<td>Consumption</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Date</td>
 </tr>
 <tr>
 <td><code>id</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Id</td>
+</tr>
+<tr>
+<td><code>is_provisional</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td>Is Provisional</td>
 </tr>
 <tr>
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Name</td>
 </tr>
 <tr>
 <td><code>onboarding_steps</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td></td>
+<td>Onboarding Steps</td>
 </tr>
 <tr>
 <td><code>organization_id</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Organization Id</td>
 </tr>
 <tr>
 <td><code>plan</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td></td>
+<td>Plan</td>
 </tr>
 <tr>
 <td><code>quotas</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td></td>
+<td>Quotas</td>
 </tr>
 <tr>
 <td><code>role</code></td>
 <td><code>string</code></td>
 <td>Yes</td>
-<td></td>
+<td>Role</td>
 </tr>
 <tr>
 <td><code>users</code></td>
 <td><code>array</code></td>
 <td>Yes</td>
-<td></td>
+<td>Users</td>
 </tr>
 </tbody>
 </table>
@@ -363,11 +469,71 @@
 <h5 id="500-internal-server-error" class="status" data-status="5xx">500: Internal Server Error</h5>
 <h5 id="503-service-unavailable" class="status" data-status="5xx">503: Service Unavailable</h5>
 <h2 id="list">list</h2>
+<h3 id="get-apiv1events_per_dayorganization" class="operation" data-method="get"><code>GET</code> /api/v1/events_per_day/organization</h3>
+<p>Operation ID: <code>events_per_day.list_for_organization</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>from</code> | <code>query</code> | <code>string (date)</code> | No | Start of date range (inclusive). Defaults to 30 days before <code>to</code>. |
+| <code>organization_id</code> | <code>query</code> | <code>string (uuid)</code> | Yes |  |
+| <code>to</code> | <code>query</code> | <code>string (date)</code> | No | End of date range (inclusive). Defaults to today. |</p>
+<h4 id="responses-1">Responses</h4>
+<h5 id="200-ok-1" class="status" data-status="2xx">200: OK</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[].amount</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].application_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].application_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].date</code></td>
+<td><code>string (date)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].is_provisional</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-1" class="status" data-status="4xx">400: Bad Request</h5>
+<h5 id="403-forbidden-1" class="status" data-status="4xx">403: Forbidden</h5>
+<h5 id="404-not-found-1" class="status" data-status="4xx">404: Not Found</h5>
+<h5 id="409-conflict-1" class="status" data-status="4xx">409: Conflict</h5>
+<h5 id="500-internal-server-error-1" class="status" data-status="5xx">500: Internal Server Error</h5>
+<h5 id="503-service-unavailable-1" class="status" data-status="5xx">503: Service Unavailable</h5>
 <h3 id="get-apiv1organizations" class="operation" data-method="get"><code>GET</code> /api/v1/organizations/</h3>
 <p>Operation ID: <code>organizations.list</code>.</p>
 <p>Authentication: API key in the header (<code>biscuit</code>).</p>
-<h4 id="responses-1">Responses</h4>
-<h5 id="200-ok-1" class="status" data-status="2xx">200: OK</h5>
+<h4 id="responses-2">Responses</h4>
+<h5 id="200-ok-2" class="status" data-status="2xx">200: OK</h5>
 <p><code>application/json</code></p>
 <table>
 <thead>
@@ -417,236 +583,21 @@
 </tr>
 </tbody>
 </table>
-<h5 id="400-bad-request-1" class="status" data-status="4xx">400: Bad Request</h5>
-<h5 id="403-forbidden-1" class="status" data-status="4xx">403: Forbidden</h5>
-<h5 id="404-not-found-1" class="status" data-status="4xx">404: Not Found</h5>
-<h5 id="409-conflict-1" class="status" data-status="4xx">409: Conflict</h5>
-<h5 id="500-internal-server-error-1" class="status" data-status="5xx">500: Internal Server Error</h5>
-<h5 id="503-service-unavailable-1" class="status" data-status="5xx">503: Service Unavailable</h5>
-<h2 id="load">load</h2>
-<h3 id="get-apiv1organizationsorganization_id" class="operation" data-method="get"><code>GET</code> /api/v1/organizations/{organization_id}/</h3>
-<p>Operation ID: <code>organizations.get</code>.</p>
-<p>Authentication: API key in the header (<code>biscuit</code>).</p>
-<h4 id="parameters">Parameters</h4>
-<p>| Parameter | In | Type | Required | Description |
-| --- | --- | --- | --- |
-| <code>organization_id</code> | <code>path</code> | <code>string (uuid)</code> | Yes |  |</p>
-<h4 id="responses-2">Responses</h4>
-<h5 id="200-ok-2" class="status" data-status="2xx">200: OK</h5>
-<p><code>application/json</code></p>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Type</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>consumption</code></td>
-<td><code>object</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>consumption.applications</code></td>
-<td><code>integer (int64)</code></td>
-<td>No</td>
-<td></td>
-</tr>
-<tr>
-<td><code>consumption.events_per_day</code></td>
-<td><code>integer (int64)</code></td>
-<td>No</td>
-<td></td>
-</tr>
-<tr>
-<td><code>consumption.members</code></td>
-<td><code>integer (int64)</code></td>
-<td>No</td>
-<td></td>
-</tr>
-<tr>
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>onboarding_steps</code></td>
-<td><code>object</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>onboarding_steps.application</code></td>
-<td><code>enum: ToDo, Done</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>onboarding_steps.event</code></td>
-<td><code>enum: ToDo, Done</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>onboarding_steps.event_type</code></td>
-<td><code>enum: ToDo, Done</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>onboarding_steps.subscription</code></td>
-<td><code>enum: ToDo, Done</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>organization_id</code></td>
-<td><code>string (uuid)</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>plan</code></td>
-<td><code>object</code></td>
-<td>No</td>
-<td></td>
-</tr>
-<tr>
-<td><code>plan.label</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>plan.name</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>quotas</code></td>
-<td><code>object</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>quotas.applications_per_organization_limit</code></td>
-<td><code>integer (int32)</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>quotas.days_of_events_retention_limit</code></td>
-<td><code>integer (int32)</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>quotas.events_per_day_limit</code></td>
-<td><code>integer (int32)</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>quotas.members_per_organization_limit</code></td>
-<td><code>integer (int32)</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>users</code></td>
-<td><code>array of object</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>users[].email</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>users[].first_name</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>users[].last_name</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>users[].role</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td><code>users[].user_id</code></td>
-<td><code>string (uuid)</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <h5 id="400-bad-request-2" class="status" data-status="4xx">400: Bad Request</h5>
 <h5 id="403-forbidden-2" class="status" data-status="4xx">403: Forbidden</h5>
 <h5 id="404-not-found-2" class="status" data-status="4xx">404: Not Found</h5>
 <h5 id="409-conflict-2" class="status" data-status="4xx">409: Conflict</h5>
 <h5 id="500-internal-server-error-2" class="status" data-status="5xx">500: Internal Server Error</h5>
 <h5 id="503-service-unavailable-2" class="status" data-status="5xx">503: Service Unavailable</h5>
-<h2 id="remove">remove</h2>
-<h3 id="delete-apiv1organizationsorganization_id" class="operation" data-method="delete"><code>DELETE</code> /api/v1/organizations/{organization_id}/</h3>
-<p>Operation ID: <code>organizations.delete</code>.</p>
+<h2 id="load">load</h2>
+<h3 id="get-apiv1organizationsorganization_id" class="operation" data-method="get"><code>GET</code> /api/v1/organizations/{organization_id}/</h3>
+<p>Operation ID: <code>organizations.get</code>.</p>
 <p>Authentication: API key in the header (<code>biscuit</code>).</p>
 <h4 id="parameters-1">Parameters</h4>
 <p>| Parameter | In | Type | Required | Description |
 | --- | --- | --- | --- |
 | <code>organization_id</code> | <code>path</code> | <code>string (uuid)</code> | Yes |  |</p>
 <h4 id="responses-3">Responses</h4>
-<h5 id="204-no-content" class="status" data-status="2xx">204: No Content</h5>
-<h5 id="400-bad-request-3" class="status" data-status="4xx">400: Bad Request</h5>
-<h5 id="403-forbidden-3" class="status" data-status="4xx">403: Forbidden</h5>
-<h5 id="404-not-found-3" class="status" data-status="4xx">404: Not Found</h5>
-<h5 id="409-conflict-3" class="status" data-status="4xx">409: Conflict</h5>
-<h5 id="500-internal-server-error-3" class="status" data-status="5xx">500: Internal Server Error</h5>
-<h5 id="503-service-unavailable-3" class="status" data-status="5xx">503: Service Unavailable</h5>
-<h2 id="update">update</h2>
-<h3 id="put-apiv1organizationsorganization_id" class="operation" data-method="put"><code>PUT</code> /api/v1/organizations/{organization_id}/</h3>
-<p>Operation ID: <code>organizations.edit</code>.</p>
-<p>Authentication: API key in the header (<code>biscuit</code>).</p>
-<h4 id="parameters-2">Parameters</h4>
-<p>| Parameter | In | Type | Required | Description |
-| --- | --- | --- | --- |
-| <code>organization_id</code> | <code>path</code> | <code>string (uuid)</code> | Yes |  |</p>
-<h4 id="request-body-1">Request body</h4>
-<p><code>application/json</code></p>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Type</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>Yes</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h4 id="responses-4">Responses</h4>
 <h5 id="200-ok-3" class="status" data-status="2xx">200: OK</h5>
 <p><code>application/json</code></p>
 <table>
@@ -811,11 +762,226 @@
 </tr>
 </tbody>
 </table>
+<h5 id="400-bad-request-3" class="status" data-status="4xx">400: Bad Request</h5>
+<h5 id="403-forbidden-3" class="status" data-status="4xx">403: Forbidden</h5>
+<h5 id="404-not-found-3" class="status" data-status="4xx">404: Not Found</h5>
+<h5 id="409-conflict-3" class="status" data-status="4xx">409: Conflict</h5>
+<h5 id="500-internal-server-error-3" class="status" data-status="5xx">500: Internal Server Error</h5>
+<h5 id="503-service-unavailable-3" class="status" data-status="5xx">503: Service Unavailable</h5>
+<h2 id="remove">remove</h2>
+<h3 id="delete-apiv1organizationsorganization_id" class="operation" data-method="delete"><code>DELETE</code> /api/v1/organizations/{organization_id}/</h3>
+<p>Operation ID: <code>organizations.delete</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters-2">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>organization_id</code> | <code>path</code> | <code>string (uuid)</code> | Yes |  |</p>
+<h4 id="responses-4">Responses</h4>
+<h5 id="204-no-content" class="status" data-status="2xx">204: No Content</h5>
 <h5 id="400-bad-request-4" class="status" data-status="4xx">400: Bad Request</h5>
 <h5 id="403-forbidden-4" class="status" data-status="4xx">403: Forbidden</h5>
 <h5 id="404-not-found-4" class="status" data-status="4xx">404: Not Found</h5>
 <h5 id="409-conflict-4" class="status" data-status="4xx">409: Conflict</h5>
 <h5 id="500-internal-server-error-4" class="status" data-status="5xx">500: Internal Server Error</h5>
 <h5 id="503-service-unavailable-4" class="status" data-status="5xx">503: Service Unavailable</h5>
+<h2 id="update">update</h2>
+<h3 id="put-apiv1organizationsorganization_id" class="operation" data-method="put"><code>PUT</code> /api/v1/organizations/{organization_id}/</h3>
+<p>Operation ID: <code>organizations.edit</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters-3">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>organization_id</code> | <code>path</code> | <code>string (uuid)</code> | Yes |  |</p>
+<h4 id="request-body-1">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses-5">Responses</h4>
+<h5 id="200-ok-4" class="status" data-status="2xx">200: OK</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>consumption</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>consumption.applications</code></td>
+<td><code>integer (int64)</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>consumption.events_per_day</code></td>
+<td><code>integer (int64)</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>consumption.members</code></td>
+<td><code>integer (int64)</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>onboarding_steps</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>onboarding_steps.application</code></td>
+<td><code>enum: ToDo, Done</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>onboarding_steps.event</code></td>
+<td><code>enum: ToDo, Done</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>onboarding_steps.event_type</code></td>
+<td><code>enum: ToDo, Done</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>onboarding_steps.subscription</code></td>
+<td><code>enum: ToDo, Done</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>plan</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>plan.label</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>plan.name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quotas</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quotas.applications_per_organization_limit</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quotas.days_of_events_retention_limit</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quotas.events_per_day_limit</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quotas.members_per_organization_limit</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>users</code></td>
+<td><code>array of object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>users[].email</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>users[].first_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>users[].last_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>users[].role</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>users[].user_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-5" class="status" data-status="4xx">400: Bad Request</h5>
+<h5 id="403-forbidden-5" class="status" data-status="4xx">403: Forbidden</h5>
+<h5 id="404-not-found-5" class="status" data-status="4xx">404: Not Found</h5>
+<h5 id="409-conflict-5" class="status" data-status="4xx">409: Conflict</h5>
+<h5 id="500-internal-server-error-5" class="status" data-status="5xx">500: Internal Server Error</h5>
+<h5 id="503-service-unavailable-5" class="status" data-status="5xx">503: Service Unavailable</h5>
 </main></div>
 <script src="../assets/search.js" defer></script></body></html>

@@ -21,7 +21,7 @@ describe("OrganizationDirect", function()
 
 
     local result, err = client:direct({
-      path = "api/v1/organizations",
+      path = "api/v1/events_per_day/organization",
       method = "GET",
       params = {},
     })

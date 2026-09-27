@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 // Typed models for the Hook0 SDK.
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 //
@@ -15,9 +15,13 @@ declare(strict_types=1);
 /** Application entity data model. */
 class Application
 {
+    public int $amount;
     public string $application_id;
+    public string $application_name;
     public array $consumption;
+    public string $date;
     public ?string $id = null;
+    public bool $is_provisional;
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
@@ -39,9 +43,13 @@ class ApplicationListMatch
 /** Request payload for Application#create. */
 class ApplicationCreateData
 {
+    public int $amount;
     public string $application_id;
+    public string $application_name;
     public array $consumption;
+    public string $date;
     public ?string $id = null;
+    public bool $is_provisional;
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
@@ -52,8 +60,12 @@ class ApplicationCreateData
 class ApplicationUpdateData
 {
     public string $id;
+    public ?int $amount = null;
     public ?string $application_id = null;
+    public ?string $application_name = null;
     public ?array $consumption = null;
+    public ?string $date = null;
+    public ?bool $is_provisional = null;
     public ?string $name = null;
     public ?array $onboarding_steps = null;
     public ?string $organization_id = null;
@@ -120,7 +132,6 @@ class ApplicationsManagementRemoveMatch
 /** Event entity data model. */
 class Event
 {
-    public string $application_id;
     public string $event_id;
     public string $event_type_name;
     public ?string $id = null;
@@ -150,7 +161,6 @@ class EventListMatch
 class EventCreateData
 {
     public string $id;
-    public string $application_id;
     public string $event_id;
     public string $event_type_name;
     public string $ip;
@@ -218,24 +228,6 @@ class EventsManagementRemoveMatch
 {
     public string $event_type_name;
     public string $application_id;
-}
-
-/** EventsPerDayEntry entity data model. */
-class EventsPerDayEntry
-{
-    public int $amount;
-    public string $application_id;
-    public string $application_name;
-    public string $date;
-    public bool $is_provisional;
-}
-
-/** Request payload for EventsPerDayEntry#list. */
-class EventsPerDayEntryListMatch
-{
-    public string $application_id;
-    public ?string $from = null;
-    public ?string $to = null;
 }
 
 /** Health entity data model. */
@@ -353,8 +345,13 @@ class LoginCreateData
 /** Organization entity data model. */
 class Organization
 {
+    public int $amount;
+    public string $application_id;
+    public string $application_name;
     public array $consumption;
+    public string $date;
     public ?string $id = null;
+    public bool $is_provisional;
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
@@ -373,8 +370,13 @@ class OrganizationLoadMatch
 /** Request payload for Organization#list. */
 class OrganizationListMatch
 {
+    public ?int $amount = null;
+    public ?string $application_id = null;
+    public ?string $application_name = null;
     public ?array $consumption = null;
+    public ?string $date = null;
     public ?string $id = null;
+    public ?bool $is_provisional = null;
     public ?string $name = null;
     public ?array $onboarding_steps = null;
     public ?string $organization_id = null;
@@ -387,8 +389,13 @@ class OrganizationListMatch
 /** Request payload for Organization#create. */
 class OrganizationCreateData
 {
+    public int $amount;
+    public string $application_id;
+    public string $application_name;
     public array $consumption;
+    public string $date;
     public ?string $id = null;
+    public bool $is_provisional;
     public string $name;
     public array $onboarding_steps;
     public string $organization_id;
@@ -402,7 +409,12 @@ class OrganizationCreateData
 class OrganizationUpdateData
 {
     public string $id;
+    public ?int $amount = null;
+    public ?string $application_id = null;
+    public ?string $application_name = null;
     public ?array $consumption = null;
+    public ?string $date = null;
+    public ?bool $is_provisional = null;
     public ?string $name = null;
     public ?array $onboarding_steps = null;
     public ?string $organization_id = null;

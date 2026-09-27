@@ -396,11 +396,6 @@ pub const Hook0SDK = struct {
         return @import("../entity/events_management.zig").EventsManagementEntity.new(self, entopts);
     }
 
-    /// EventsPerDayEntry entity bound to this client.
-    pub fn events_per_day_entry(self: *@This(), entopts: Value) *@import("../entity/events_per_day_entry.zig").EventsPerDayEntryEntity {
-        return @import("../entity/events_per_day_entry.zig").EventsPerDayEntryEntity.new(self, entopts);
-    }
-
     /// Health entity bound to this client.
     pub fn health(self: *@This(), entopts: Value) *@import("../entity/health.zig").HealthEntity {
         return @import("../entity/health.zig").HealthEntity.new(self, entopts);

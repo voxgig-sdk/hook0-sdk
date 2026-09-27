@@ -264,7 +264,6 @@ func (sdk *Hook0SDK) rawRequest(fetchargs map[string]any) (map[string]any, error
 		if !noBody {
 			if jf := vs.GetProp(fm, "json"); jf != nil {
 				if f, ok := jf.(func() any); ok {
-					// f() returns nil on parse error in our fetcher.
 					jsonData = f()
 				}
 			}
@@ -281,17 +280,6 @@ func (sdk *Hook0SDK) rawRequest(fetchargs map[string]any) (map[string]any, error
 	return map[string]any{"ok": false, "err": ctx.MakeError("direct_invalid", "invalid response type")}, nil
 }
 
-// Raw GraphQL access: the pressure valve that makes the generated surface's
-// deliberate omissions (per-call selection sets, typed filter builders,
-// batching, subscriptions) livable — the whole schema stays reachable.
-//
-// Thin wrapper over the same prepare/fetch path Direct uses, with the one
-// thing raw Direct cannot do for GraphQL: a GraphQL failure rides HTTP 200
-// as a top-level `errors` array, so status alone would report a failed query
-// as ok.
-//
-// NOTE: like Direct, this bypasses the feature pipeline — no retry,
-// ratelimit or paging features apply.
 func (sdk *Hook0SDK) Graphql(
 	query string, variables map[string]any, ctrl map[string]any,
 ) (map[string]any, error) {
@@ -383,14 +371,6 @@ func (sdk *Hook0SDK) EventType(data map[string]any) Hook0Entity {
 // client.EventsManagement(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *Hook0SDK) EventsManagement(data map[string]any) Hook0Entity {
 	return NewEventsManagementEntityFunc(sdk, data)
-}
-
-
-// EventsPerDayEntry returns a EventsPerDayEntry entity bound to this client.
-// Idiomatic usage: client.EventsPerDayEntry(nil).List(nil, nil) or
-// client.EventsPerDayEntry(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) EventsPerDayEntry(data map[string]any) Hook0Entity {
-	return NewEventsPerDayEntryEntityFunc(sdk, data)
 }
 
 

@@ -66,10 +66,6 @@ Create a new `EventTypeEntity` instance. Pass `null` for no initial data.
 
 Create a new `EventsManagementEntity` instance. Pass `null` for no initial data.
 
-#### `EventsPerDayEntry($data = null)`
-
-Create a new `EventsPerDayEntryEntity` instance. Pass `null` for no initial data.
-
 #### `Health($data = null)`
 
 Create a new `HealthEntity` instance. Pass `null` for no initial data.
@@ -185,9 +181,13 @@ $application = $client->Application();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `int` | Yes |  |
 | `application_id` | `string` | Yes | Unique identifier of the application. |
+| `application_name` | `string` | Yes |  |
 | `consumption` | `array` | Yes | Current consumption metrics for this application. |
+| `date` | `string` | Yes |  |
 | `id` | `string` | No |  |
+| `is_provisional` | `bool` | Yes |  |
 | `name` | `string` | Yes | Name of the application. |
 | `onboarding_steps` | `array` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `string` | Yes | UUID of the organization this application belongs to. |
@@ -201,8 +201,12 @@ Create a new entity with the given data. Throws on error.
 
 ```php
 $result = $client->Application()->create([
+  "amount" => null, // int
   "application_id" => null, // string
+  "application_name" => null, // string
   "consumption" => null, // array
+  "date" => null, // string
+  "is_provisional" => null, // bool
   "name" => null, // string
   "onboarding_steps" => null, // array
   "organization_id" => null, // string
@@ -411,7 +415,6 @@ $event = $client->Event();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `string` | Yes |  |
 | `event_id` | `string` | Yes |  |
 | `event_type_name` | `string` | Yes |  |
 | `id` | `string` | No |  |
@@ -432,7 +435,6 @@ Create a new entity with the given data. Throws on error.
 ```php
 $result = $client->Event()->create([
   "id" => null, // string
-  "application_id" => null, // string
   "event_id" => null, // string
   "event_type_name" => null, // string
   "ip" => null, // string
@@ -620,62 +622,6 @@ Set the entity match criteria.
 #### `make(): EventsManagementEntity`
 
 Create a new `EventsManagementEntity` instance with the same client and
-options.
-
-#### `get_name(): string`
-
-Return the entity name.
-
-
----
-
-## EventsPerDayEntryEntity
-
-```php
-$events_per_day_entry = $client->EventsPerDayEntry();
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `amount` | `int` | Yes |  |
-| `application_id` | `string` | Yes |  |
-| `application_name` | `string` | Yes |  |
-| `date` | `string` | Yes |  |
-| `is_provisional` | `bool` | Yes |  |
-
-### Operations
-
-#### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
-
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
-
-```php
-$results = $client->EventsPerDayEntry()->list();
-```
-
-### Common Methods
-
-#### `data_get(): array`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set($data): void`
-
-Set the entity data.
-
-#### `match_get(): array`
-
-Get the entity match criteria.
-
-#### `match_set($match): void`
-
-Set the entity match criteria.
-
-#### `make(): EventsPerDayEntryEntity`
-
-Create a new `EventsPerDayEntryEntity` instance with the same client and
 options.
 
 #### `get_name(): string`
@@ -994,8 +940,13 @@ $organization = $client->Organization();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `int` | Yes |  |
+| `application_id` | `string` | Yes |  |
+| `application_name` | `string` | Yes |  |
 | `consumption` | `array` | Yes |  |
+| `date` | `string` | Yes |  |
 | `id` | `string` | No |  |
+| `is_provisional` | `bool` | Yes |  |
 | `name` | `string` | Yes |  |
 | `onboarding_steps` | `array` | Yes |  |
 | `organization_id` | `string` | Yes |  |
@@ -1012,7 +963,12 @@ Create a new entity with the given data. Throws on error.
 
 ```php
 $result = $client->Organization()->create([
+  "amount" => null, // int
+  "application_id" => null, // string
+  "application_name" => null, // string
   "consumption" => null, // array
+  "date" => null, // string
+  "is_provisional" => null, // bool
   "name" => null, // string
   "onboarding_steps" => null, // array
   "organization_id" => null, // string
@@ -1842,14 +1798,14 @@ Return the entity name.
 
 | Feature | Version | Description |
 | --- | --- | --- |
-| `debug` | 0.0.1 | Request/response capture ring buffer for debugging |
-| `idempotency` | 0.0.1 | Idempotency keys for safe retries of mutating operations |
-| `metrics` | 0.0.1 | Statistics capture: per-operation counters and latency |
-| `paging` | 0.0.1 | Pagination signals for list operations |
-| `ratelimit` | 0.0.1 | Client-side rate limiting via a token bucket |
-| `retry` | 0.0.1 | Automatic retry of transient failures with exponential backoff |
-| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
-| `timeout` | 0.0.1 | Per-request timeout with transport abort |
+| `debug` | 0.0.1 | Debug capture |
+| `idempotency` | 0.0.1 | Idempotency |
+| `metrics` | 0.0.1 | Metrics |
+| `paging` | 0.0.1 | Paging |
+| `ratelimit` | 0.0.1 | Rate limiting |
+| `retry` | 0.0.1 | Retry |
+| `test` | 0.0.1 | Test transport |
+| `timeout` | 0.0.1 | Timeout |
 
 
 Features are activated via the `feature` option:
@@ -1895,7 +1851,7 @@ rather than the transport, so their order does not affect what they observe.
 
 #### `debug`
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 **Configuration**
 
@@ -1926,7 +1882,7 @@ its default unless you name it.
 
 #### `idempotency`
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 **Configuration**
 
@@ -1957,7 +1913,7 @@ its default unless you name it.
 
 #### `metrics`
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 **Configuration**
 
@@ -1985,7 +1941,7 @@ its default unless you name it.
 
 #### `paging`
 
-Pagination signals for list operations.
+Paging.
 
 **Configuration**
 
@@ -2020,7 +1976,7 @@ its default unless you name it.
 
 #### `ratelimit`
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 **Configuration**
 
@@ -2051,7 +2007,7 @@ its default unless you name it.
 
 #### `retry`
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 **Configuration**
 
@@ -2085,7 +2041,7 @@ its default unless you name it.
 
 #### `test`
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 **Configuration**
 
@@ -2116,7 +2072,7 @@ its default unless you name it.
 
 #### `timeout`
 
-Per-request timeout with transport abort.
+Timeout.
 
 **Configuration**
 

@@ -4,7 +4,6 @@ import { ApplicationsManagementEntity } from './entity/ApplicationsManagementEnt
 import { EventEntity } from './entity/EventEntity';
 import { EventTypeEntity } from './entity/EventTypeEntity';
 import { EventsManagementEntity } from './entity/EventsManagementEntity';
-import { EventsPerDayEntryEntity } from './entity/EventsPerDayEntryEntity';
 import { HealthEntity } from './entity/HealthEntity';
 import { Hook0Entity } from './entity/Hook0Entity';
 import { IngestedEventEntity } from './entity/IngestedEventEntity';
@@ -73,7 +72,6 @@ declare class Hook0SDK {
     Event(entopts?: Record<string, any>): EventEntity;
     EventType(entopts?: Record<string, any>): EventTypeEntity;
     EventsManagement(entopts?: Record<string, any>): EventsManagementEntity;
-    EventsPerDayEntry(entopts?: Record<string, any>): EventsPerDayEntryEntity;
     Health(entopts?: Record<string, any>): HealthEntity;
     Hook0(entopts?: Record<string, any>): Hook0Entity;
     IngestedEvent(entopts?: Record<string, any>): IngestedEventEntity;

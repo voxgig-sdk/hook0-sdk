@@ -70,11 +70,6 @@ Create a new `EventType` entity instance (returns `SdkEntity`). Pass
 Create a new `EventsManagement` entity instance (returns `SdkEntity`). Pass
 `null` for no initial options.
 
-#### `eventsPerDayEntry(entopts)`
-
-Create a new `EventsPerDayEntry` entity instance (returns `SdkEntity`). Pass
-`null` for no initial options.
-
 #### `health(entopts)`
 
 Create a new `Health` entity instance (returns `SdkEntity`). Pass
@@ -205,9 +200,13 @@ SdkEntity application = client.application(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `Long` | Yes |  |
 | `application_id` | `String` | Yes | Unique identifier of the application. |
+| `application_name` | `String` | Yes |  |
 | `consumption` | `Map<String, Object>` | Yes | Current consumption metrics for this application. |
+| `date` | `String` | Yes |  |
 | `id` | `String` | No |  |
+| `is_provisional` | `Boolean` | Yes |  |
 | `name` | `String` | Yes | Name of the application. |
 | `onboarding_steps` | `Map<String, Object>` | Yes | Onboarding completion status for this application. |
 | `organization_id` | `String` | Yes | UUID of the organization this application belongs to. |
@@ -221,8 +220,12 @@ Create a new entity with the given data. Returns the created entity data and rai
 
 ```java
 Object result = client.application(null).create(Map.of(
+    "amount", 1L,  // Long
     "application_id", "example_application_id",  // String
+    "application_name", "example_application_name",  // String
     "consumption", Map.of(),  // Map<String, Object>
+    "date", "example_date",  // String
+    "is_provisional", true,  // Boolean
     "name", "example_name",  // String
     "onboarding_steps", Map.of(),  // Map<String, Object>
     "organization_id", "example_organization_id",  // String
@@ -404,7 +407,6 @@ SdkEntity event = client.event(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `application_id` | `String` | Yes |  |
 | `event_id` | `String` | Yes |  |
 | `event_type_name` | `String` | Yes |  |
 | `id` | `String` | No |  |
@@ -425,7 +427,6 @@ Create a new entity with the given data. Returns the created entity data and rai
 ```java
 Object result = client.event(null).create(Map.of(
     "id", "example_id",  // String
-    "application_id", "example_application_id",  // String
     "event_id", "example_event_id",  // String
     "event_type_name", "example_event_type_name",  // String
     "ip", "example_ip",  // String
@@ -590,54 +591,6 @@ Get or set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `EventsManagement` entity instance with the same options.
-
-#### `getName() -> String`
-
-Return the entity name.
-
-
----
-
-## EventsPerDayEntry
-
-```java
-SdkEntity eventsPerDayEntry = client.eventsPerDayEntry(null);
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `amount` | `Long` | Yes |  |
-| `application_id` | `String` | Yes |  |
-| `application_name` | `String` | Yes |  |
-| `date` | `String` | Yes |  |
-| `is_provisional` | `Boolean` | Yes |  |
-
-### Operations
-
-#### `list(reqmatch, ctrl) -> Object`
-
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
-
-```java
-Object results = client.eventsPerDayEntry(null).list(null, null);
-System.out.println(results);
-```
-
-### Common Methods
-
-#### `data(newdata...) -> Object`
-
-Get or set the entity data.
-
-#### `match(newmatch...) -> Object`
-
-Get or set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `EventsPerDayEntry` entity instance with the same options.
 
 #### `getName() -> String`
 
@@ -911,8 +864,13 @@ SdkEntity organization = client.organization(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `amount` | `Long` | Yes |  |
+| `application_id` | `String` | Yes |  |
+| `application_name` | `String` | Yes |  |
 | `consumption` | `Map<String, Object>` | Yes |  |
+| `date` | `String` | Yes |  |
 | `id` | `String` | No |  |
+| `is_provisional` | `Boolean` | Yes |  |
 | `name` | `String` | Yes |  |
 | `onboarding_steps` | `Map<String, Object>` | Yes |  |
 | `organization_id` | `String` | Yes |  |
@@ -929,7 +887,12 @@ Create a new entity with the given data. Returns the created entity data and rai
 
 ```java
 Object result = client.organization(null).create(Map.of(
+    "amount", 1L,  // Long
+    "application_id", "example_application_id",  // String
+    "application_name", "example_application_name",  // String
     "consumption", Map.of(),  // Map<String, Object>
+    "date", "example_date",  // String
+    "is_provisional", true,  // Boolean
     "name", "example_name",  // String
     "onboarding_steps", Map.of(),  // Map<String, Object>
     "organization_id", "example_organization_id",  // String
@@ -1652,14 +1615,14 @@ Return the entity name.
 
 | Feature | Version | Description |
 | --- | --- | --- |
-| `debug` | 0.0.1 | Request/response capture ring buffer for debugging |
-| `idempotency` | 0.0.1 | Idempotency keys for safe retries of mutating operations |
-| `metrics` | 0.0.1 | Statistics capture: per-operation counters and latency |
-| `paging` | 0.0.1 | Pagination signals for list operations |
-| `ratelimit` | 0.0.1 | Client-side rate limiting via a token bucket |
-| `retry` | 0.0.1 | Automatic retry of transient failures with exponential backoff |
-| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
-| `timeout` | 0.0.1 | Per-request timeout with transport abort |
+| `debug` | 0.0.1 | Debug capture |
+| `idempotency` | 0.0.1 | Idempotency |
+| `metrics` | 0.0.1 | Metrics |
+| `paging` | 0.0.1 | Paging |
+| `ratelimit` | 0.0.1 | Rate limiting |
+| `retry` | 0.0.1 | Retry |
+| `test` | 0.0.1 | Test transport |
+| `timeout` | 0.0.1 | Timeout |
 
 
 Features are activated via the `feature` option:
@@ -1705,7 +1668,7 @@ rather than the transport, so their order does not affect what they observe.
 
 #### `debug`
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 **Configuration**
 
@@ -1736,7 +1699,7 @@ its default unless you name it.
 
 #### `idempotency`
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 **Configuration**
 
@@ -1767,7 +1730,7 @@ its default unless you name it.
 
 #### `metrics`
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 **Configuration**
 
@@ -1795,7 +1758,7 @@ its default unless you name it.
 
 #### `paging`
 
-Pagination signals for list operations.
+Paging.
 
 **Configuration**
 
@@ -1830,7 +1793,7 @@ its default unless you name it.
 
 #### `ratelimit`
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 **Configuration**
 
@@ -1861,7 +1824,7 @@ its default unless you name it.
 
 #### `retry`
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 **Configuration**
 
@@ -1895,7 +1858,7 @@ its default unless you name it.
 
 #### `test`
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 **Configuration**
 
@@ -1926,7 +1889,7 @@ its default unless you name it.
 
 #### `timeout`
 
-Per-request timeout with transport abort.
+Timeout.
 
 **Configuration**
 

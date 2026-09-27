@@ -2,392 +2,73 @@
   "existing": {
     "event": {
       "EVENT00": {
-        "application_id": "APPLICATION01",
         "event_id": "EVENT01",
-        "event_type_name": "s70",
+        "event_type_name": "s65",
         "id": "EVENT00",
-        "ip": "s72",
+        "ip": "s67",
         "labels": {},
         "metadata": {},
-        "occurred_at": "s75",
-        "payload": "s76",
-        "payload_content_type": "s77",
-        "received_at": "s78"
+        "occurred_at": "s6a",
+        "payload": "s6b",
+        "payload_content_type": "s6c",
+        "received_at": "s6d"
       },
       "EVENT01": {
-        "application_id": "APPLICATION01",
         "event_id": "EVENT01",
-        "event_type_name": "sde",
+        "event_type_name": "sc9",
         "id": "EVENT01",
-        "ip": "se0",
+        "ip": "scb",
         "labels": {},
         "metadata": {},
-        "occurred_at": "se3",
-        "payload": "se4",
-        "payload_content_type": "se5",
-        "received_at": "se6"
+        "occurred_at": "sce",
+        "payload": "scf",
+        "payload_content_type": "sd0",
+        "received_at": "sd1"
       },
       "EVENT02": {
-        "application_id": "APPLICATION01",
         "event_id": "EVENT01",
-        "event_type_name": "s14c",
+        "event_type_name": "s12d",
         "id": "EVENT02",
-        "ip": "s14e",
+        "ip": "s12f",
         "labels": {},
         "metadata": {},
-        "occurred_at": "s151",
-        "payload": "s152",
-        "payload_content_type": "s153",
-        "received_at": "s154"
+        "occurred_at": "s132",
+        "payload": "s133",
+        "payload_content_type": "s134",
+        "received_at": "s135"
       }
     }
   },
   "new": {
     "event": {
       "event_ref01": {
-        "application_id": "APPLICATION01",
         "event_id": "EVENT01",
-        "event_type_name": "s1ba",
-        "ip": "s1bc",
+        "event_type_name": "s191",
+        "ip": "s193",
         "labels": {},
         "metadata": {},
-        "occurred_at": "s1bf",
-        "payload": "s1c0",
-        "payload_content_type": "s1c1",
-        "received_at": "s1c2"
+        "occurred_at": "s196",
+        "payload": "s197",
+        "payload_content_type": "s198",
+        "received_at": "s199"
       }
     }
   },
   "requests": {
     "POST /api/v1/events/{event_id}/replay": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "events.replay",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "event_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "simple"
-          }
-        ],
-        "protocol": "http",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "application_id": {
-                    "format": "uuid",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "application_id"
-                ],
-                "type": "object"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
     },
     "GET /api/v1/events/": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "events.list",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "application_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "form"
-          }
-        ],
-        "protocol": "http",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "properties": {
-                      "event_id": {
-                        "format": "uuid",
-                        "type": "string"
-                      },
-                      "event_type_name": {
-                        "type": "string"
-                      },
-                      "ip": {
-                        "type": "string"
-                      },
-                      "labels": {
-                        "type": "object"
-                      },
-                      "metadata": {
-                        "type": "object"
-                      },
-                      "occurred_at": {
-                        "format": "date-time",
-                        "type": "string"
-                      },
-                      "payload_content_type": {
-                        "type": "string"
-                      },
-                      "received_at": {
-                        "format": "date-time",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "event_id",
-                      "event_type_name",
-                      "ip",
-                      "labels",
-                      "occurred_at",
-                      "payload_content_type",
-                      "received_at"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
     },
     "GET /api/v1/events/{event_id}": {
       "provenance": "operation-contract",
-      "contract": {
-        "operationId": "events.get",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "event_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "query",
-            "name": "application_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "style": "form"
-          }
-        ],
-        "protocol": "http",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "event_id": {
-                      "format": "uuid",
-                      "type": "string"
-                    },
-                    "event_type_name": {
-                      "type": "string"
-                    },
-                    "ip": {
-                      "type": "string"
-                    },
-                    "labels": {
-                      "type": "object"
-                    },
-                    "metadata": {
-                      "type": "object"
-                    },
-                    "occurred_at": {
-                      "format": "date-time",
-                      "type": "string"
-                    },
-                    "payload": {
-                      "type": "string"
-                    },
-                    "payload_content_type": {
-                      "type": "string"
-                    },
-                    "received_at": {
-                      "format": "date-time",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "event_id",
-                    "event_type_name",
-                    "ip",
-                    "labels",
-                    "occurred_at",
-                    "payload",
-                    "payload_content_type",
-                    "received_at"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          }
-        },
-        "security": [
-          {
-            "biscuit": []
-          }
-        ],
-        "securitySchemes": {
-          "biscuit": {
-            "description": "Authentication using a Biscuit token (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_refresh": {
-            "description": "Authentication using a Biscuit token of type 'refresh' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          },
-          "biscuit_user_access": {
-            "description": "Authentication using a Biscuit token of type 'user_access' (use the format `Bearer TOKEN`)",
-            "in": "header",
-            "name": "Authorization",
-            "type": "apiKey"
-          }
-        },
-        "securitySource": "operation"
-      }
+      "version": 2,
+      "source": "openapi3"
     }
   }
 }

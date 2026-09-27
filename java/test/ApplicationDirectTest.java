@@ -44,7 +44,7 @@ public class ApplicationDirectTest {
 
 
     Map<String, Object> result = client.direct(jm(
-        "path", "api/v1/applications",
+        "path", "api/v1/events_per_day/application",
         "method", "GET",
         "params", new LinkedHashMap<>()));
     if (setup.live) {
@@ -86,7 +86,7 @@ public class ApplicationDirectTest {
     if (setup.live) {
       Map<String, Object> listParams = new LinkedHashMap<>();
       Map<String, Object> listResult = client.direct(jm(
-          "path", "api/v1/applications",
+          "path", "api/v1/events_per_day/application",
           "method", "GET",
           "params", listParams));
       Assumptions.assumeTrue(Boolean.TRUE.equals(listResult.get("ok")),

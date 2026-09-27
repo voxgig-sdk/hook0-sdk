@@ -32,8 +32,6 @@ var NewEventTypeEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0E
 
 var NewEventsManagementEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 
-var NewEventsPerDayEntryEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
-
 var NewHealthEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 
 var NewHook0EntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity

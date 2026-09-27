@@ -1,0 +1,107 @@
+# Entity: health
+
+main: kit: entity: health: {
+
+  alias: field: {}
+
+  fields: {
+    database: {
+      h: "Database"
+      n: "database"
+      r: true
+      t: "`$BOOLEAN`"
+    }
+    database_duration_ms: {
+      fo: "int64"
+      h: "Database Duration Ms"
+      n: "database_duration_ms"
+      r: true
+      t: "`$INTEGER`"
+    }
+    object_storage: {
+      h: "Object Storage"
+      n: "object_storage"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    object_storage_duration_ms: {
+      fo: "int64"
+      h: "Object Storage Duration Ms"
+      n: "object_storage_duration_ms"
+      r: false
+      t: "`$INTEGER`"
+    }
+    pulsar: {
+      h: "Pulsar"
+      n: "pulsar"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    pulsar_duration_ms: {
+      fo: "int64"
+      h: "Pulsar Duration Ms"
+      n: "pulsar_duration_ms"
+      r: false
+      t: "`$INTEGER`"
+    }
+    total_duration_ms: {
+      fo: "int64"
+      h: "Total Duration Ms"
+      n: "total_duration_ms"
+      r: true
+      t: "`$INTEGER`"
+    }
+  }
+
+  name: "health"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/health/"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "key"
+                or: "key"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/v1/health/"
+          q: {
+            exist: [
+              "key"
+            ]
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "health"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -214,78 +214,75 @@ class Config {
 
     entity: {
       
-      application: {
-      },
-
-      application_secret: {
-      },
-
-      applications_management: {
-      },
-
-      event: {
-      },
-
-      event_type: {
-      },
-
-      events_management: {
-      },
-
-      events_per_day_entry: {
-      },
-
-      health: {
-      },
-
-      hook0: {
-      },
-
-      ingested_event: {
-      },
-
-      instance: {
-      },
-
-      login: {
-      },
-
-      organization: {
-      },
-
-      organization_edit_role: {
-      },
-
-      problem: {
-      },
-
-      quota: {
-      },
-
-      registration: {
-      },
-
-      request_attempt: {
-      },
-
-      response: {
-      },
-
-      revoke: {
-      },
-
-      service_token: {
-      },
-
-      subscription: {
-      },
-
-      user_authentication: {
-      },
-
-      user_invitation: {
-      },
-
+        application: {
+        },
+  
+        application_secret: {
+        },
+  
+        applications_management: {
+        },
+  
+        event: {
+        },
+  
+        event_type: {
+        },
+  
+        events_management: {
+        },
+  
+        health: {
+        },
+  
+        hook0: {
+        },
+  
+        ingested_event: {
+        },
+  
+        instance: {
+        },
+  
+        login: {
+        },
+  
+        organization: {
+        },
+  
+        organization_edit_role: {
+        },
+  
+        problem: {
+        },
+  
+        quota: {
+        },
+  
+        registration: {
+        },
+  
+        request_attempt: {
+        },
+  
+        response: {
+        },
+  
+        revoke: {
+        },
+  
+        service_token: {
+        },
+  
+        subscription: {
+        },
+  
+        user_authentication: {
+        },
+  
+        user_invitation: {
+        },
+  
     }
   }
 
@@ -294,46 +291,79 @@ class Config {
     "application": {
       "fields": [
         {
-          "format": "uuid",
+          "name": "amount",
+          "title": "Amount",
+          "type": "`$INTEGER`",
+          "req": true,
+          "format": "int32"
+        },
+        {
           "name": "application_id",
+          "title": "Application Id",
+          "type": "`$STRING`",
           "req": true,
           "short": "Unique identifier of the application.",
-          "type": "`$STRING`"
+          "format": "uuid"
+        },
+        {
+          "name": "application_name",
+          "title": "Application Name",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "consumption",
+          "title": "Consumption",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Current consumption metrics for this application.",
-          "type": "`$OBJECT`"
+          "short": "Current consumption metrics for this application."
+        },
+        {
+          "name": "date",
+          "title": "Date",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "date"
         },
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
+        },
+        {
+          "name": "is_provisional",
+          "title": "Is Provisional",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
           "name": "name",
+          "title": "Name",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Name of the application.",
-          "type": "`$STRING`"
+          "short": "Name of the application."
         },
         {
           "name": "onboarding_steps",
+          "title": "Onboarding Steps",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Onboarding completion status for this application.",
-          "type": "`$OBJECT`"
+          "short": "Onboarding completion status for this application."
         },
         {
-          "format": "uuid",
           "name": "organization_id",
+          "title": "Organization Id",
+          "type": "`$STRING`",
           "req": true,
           "short": "UUID of the organization this application belongs to.",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "quotas",
+          "title": "Quotas",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Quota limits for this application.",
-          "type": "`$OBJECT`"
+          "short": "Quota limits for this application."
         }
       ],
       "id": {
@@ -347,7 +377,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/applications/",
@@ -362,309 +391,18 @@ class Config {
                   "lit": "applications"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "applications"
-              ]
-            }
-          ]
-        },
-        "list": {
-          "input": "data",
-          "name": "list",
-          "points": [
-            {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "organization_id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "GET",
-              "orig": "/api/v1/applications/",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "applications"
-                }
               ],
-              "select": {
-                "exist": [
-                  "organization_id"
-                ]
-              },
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "api",
-                "v1",
-                "applications"
-              ]
-            }
-          ]
-        },
-        "load": {
-          "input": "data",
-          "name": "load",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "GET",
-              "orig": "/api/v1/applications/{application_id}",
-              "rename": {
-                "param": {
-                  "application_id": "id"
-                }
-              },
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "applications"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "applications",
-                "{id}"
-              ]
-            }
-          ]
-        },
-        "remove": {
-          "input": "data",
-          "name": "remove",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "DELETE",
-              "orig": "/api/v1/applications/{application_id}",
-              "rename": {
-                "param": {
-                  "application_id": "id"
-                }
-              },
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "applications"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "applications",
-                "{id}"
-              ]
-            }
-          ]
-        },
-        "update": {
-          "input": "data",
-          "name": "update",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "PUT",
-              "orig": "/api/v1/applications/{application_id}",
-              "rename": {
-                "param": {
-                  "application_id": "id"
-                }
-              },
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "applications"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "applications",
-                "{id}"
-              ]
-            }
-          ]
-        }
-      },
-      "relations": {
-        "ancestors": []
-      }
-    },
-    "application_secret": {
-      "fields": [
-        {
-          "format": "uuid",
-          "name": "application_id",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "format": "date-time",
-          "name": "created_at",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "format": "date-time",
-          "name": "deleted_at",
-          "type": "`$STRING`"
-        },
-        {
-          "name": "id",
-          "type": "`$STRING`"
-        },
-        {
-          "name": "name",
-          "type": "`$STRING`"
-        },
-        {
-          "format": "uuid",
-          "name": "token",
-          "req": true,
-          "type": "`$STRING`"
-        }
-      ],
-      "id": {
-        "field": "id",
-        "name": "id"
-      },
-      "name": "application_secret",
-      "op": {
-        "create": {
-          "input": "data",
-          "name": "create",
-          "points": [
-            {
               "args": {},
-              "kind": "http",
-              "method": "POST",
-              "orig": "/api/v1/application_secrets/",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "application_secrets"
-                }
-              ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "application_secrets"
-              ]
+              "select": {}
             }
           ]
         },
@@ -673,801 +411,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "GET",
-              "orig": "/api/v1/application_secrets/",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "application_secrets"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "application_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "application_secrets"
-              ]
-            }
-          ]
-        },
-        "update": {
-          "input": "data",
-          "name": "update",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "application_secret_token",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "PUT",
-              "orig": "/api/v1/application_secrets/{application_secret_token}",
-              "rename": {
-                "param": {
-                  "application_secret_token": "id"
-                }
-              },
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "application_secrets"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "application_secrets",
-                "{id}"
-              ]
-            }
-          ]
-        }
-      },
-      "relations": {
-        "ancestors": []
-      }
-    },
-    "applications_management": {
-      "fields": [],
-      "name": "applications_management",
-      "op": {
-        "remove": {
-          "input": "data",
-          "name": "remove",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "application_secret_token",
-                    "orig": "application_secret_token",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "DELETE",
-              "orig": "/api/v1/application_secrets/{application_secret_token}",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "application_secrets"
-                },
-                {
-                  "var": "application_secret_token"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "application_id",
-                  "application_secret_token"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "application_secrets",
-                "{application_secret_token}"
-              ]
-            }
-          ]
-        }
-      },
-      "relations": {
-        "ancestors": [
-          [
-            "application_secret"
-          ]
-        ]
-      }
-    },
-    "event": {
-      "fields": [
-        {
-          "format": "uuid",
-          "name": "application_id",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "format": "uuid",
-          "name": "event_id",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "event_type_name",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "id",
-          "type": "`$STRING`"
-        },
-        {
-          "name": "ip",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "labels",
-          "req": true,
-          "type": "`$OBJECT`"
-        },
-        {
-          "name": "metadata",
-          "type": "`$OBJECT`"
-        },
-        {
-          "format": "date-time",
-          "name": "occurred_at",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "payload",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "payload_content_type",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "format": "date-time",
-          "name": "received_at",
-          "req": true,
-          "type": "`$STRING`"
-        }
-      ],
-      "id": {
-        "field": "id",
-        "name": "id"
-      },
-      "name": "event",
-      "op": {
-        "create": {
-          "input": "data",
-          "name": "create",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "event_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "POST",
-              "orig": "/api/v1/events/{event_id}/replay",
-              "rename": {
-                "param": {
-                  "event_id": "id"
-                }
-              },
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "events"
-                },
-                {
-                  "var": "id"
-                },
-                {
-                  "lit": "replay"
-                }
-              ],
-              "select": {
-                "$action": "replay",
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "events",
-                "{id}",
-                "replay"
-              ]
-            }
-          ]
-        },
-        "list": {
-          "input": "data",
-          "name": "list",
-          "points": [
-            {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "GET",
-              "orig": "/api/v1/events/",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "events"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "application_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "events"
-              ]
-            }
-          ]
-        },
-        "load": {
-          "input": "data",
-          "name": "load",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "event_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "GET",
-              "orig": "/api/v1/events/{event_id}",
-              "rename": {
-                "param": {
-                  "event_id": "id"
-                }
-              },
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "events"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "application_id",
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "events",
-                "{id}"
-              ]
-            }
-          ]
-        }
-      },
-      "relations": {
-        "ancestors": []
-      }
-    },
-    "event_type": {
-      "fields": [
-        {
-          "format": "uuid",
-          "name": "application_id",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "event_type_name",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "id",
-          "type": "`$STRING`"
-        },
-        {
-          "name": "resource_type",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "resource_type_name",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "service",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "service_name",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "verb",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "verb_name",
-          "req": true,
-          "type": "`$STRING`"
-        }
-      ],
-      "id": {
-        "field": "id",
-        "name": "id"
-      },
-      "name": "event_type",
-      "op": {
-        "create": {
-          "input": "data",
-          "name": "create",
-          "points": [
-            {
-              "args": {},
-              "kind": "http",
-              "method": "POST",
-              "orig": "/api/v1/event_types/",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "event_types"
-                }
-              ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "event_types"
-              ]
-            }
-          ]
-        },
-        "list": {
-          "input": "data",
-          "name": "list",
-          "points": [
-            {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "GET",
-              "orig": "/api/v1/event_types/",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "event_types"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "application_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "event_types"
-              ]
-            }
-          ]
-        },
-        "load": {
-          "input": "data",
-          "name": "load",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "event_type_name",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "GET",
-              "orig": "/api/v1/event_types/{event_type_name}",
-              "rename": {
-                "param": {
-                  "event_type_name": "id"
-                }
-              },
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "event_types"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "application_id",
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "event_types",
-                "{id}"
-              ]
-            }
-          ]
-        }
-      },
-      "relations": {
-        "ancestors": []
-      }
-    },
-    "events_management": {
-      "fields": [],
-      "name": "events_management",
-      "op": {
-        "list": {
-          "input": "data",
-          "name": "list",
-          "points": [
-            {
-              "args": {},
-              "kind": "http",
-              "method": "GET",
-              "orig": "/api/v1/payload_content_types/",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "payload_content_types"
-                }
-              ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "payload_content_types"
-              ]
-            }
-          ]
-        },
-        "remove": {
-          "input": "data",
-          "name": "remove",
-          "points": [
-            {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "event_type_name",
-                    "orig": "event_type_name",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "DELETE",
-              "orig": "/api/v1/event_types/{event_type_name}",
-              "segments": [
-                {
-                  "lit": "api"
-                },
-                {
-                  "lit": "v1"
-                },
-                {
-                  "lit": "event_types"
-                },
-                {
-                  "var": "event_type_name"
-                }
-              ],
-              "select": {
-                "exist": [
-                  "application_id",
-                  "event_type_name"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "event_types",
-                "{event_type_name}"
-              ]
-            }
-          ]
-        }
-      },
-      "relations": {
-        "ancestors": [
-          [
-            "event_type"
-          ]
-        ]
-      }
-    },
-    "events_per_day_entry": {
-      "fields": [
-        {
-          "format": "int32",
-          "name": "amount",
-          "req": true,
-          "type": "`$INTEGER`"
-        },
-        {
-          "format": "uuid",
-          "name": "application_id",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "application_name",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "format": "date",
-          "name": "date",
-          "req": true,
-          "type": "`$STRING`"
-        },
-        {
-          "name": "is_provisional",
-          "req": true,
-          "type": "`$BOOLEAN`"
-        }
-      ],
-      "name": "events_per_day_entry",
-      "op": {
-        "list": {
-          "input": "data",
-          "name": "list",
-          "points": [
-            {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "from",
-                    "orig": "from",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "to",
-                    "orig": "to",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/events_per_day/application",
@@ -1485,51 +428,52 @@ class Config {
                   "lit": "application"
                 }
               ],
+              "parts": [
+                "api",
+                "v1",
+                "events_per_day",
+                "application"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  },
+                  {
+                    "name": "from",
+                    "orig": "from",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "to",
+                    "orig": "to",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "application_id",
                   "from",
                   "to"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "events_per_day",
-                "application"
-              ]
+              }
             },
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "from",
-                    "orig": "from",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "organization_id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "to",
-                    "orig": "to",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
-              "orig": "/api/v1/events_per_day/organization",
+              "orig": "/api/v1/applications/",
               "segments": [
                 {
                   "lit": "api"
@@ -1538,29 +482,203 @@ class Config {
                   "lit": "v1"
                 },
                 {
-                  "lit": "events_per_day"
-                },
-                {
-                  "lit": "organization"
+                  "lit": "applications"
                 }
               ],
+              "parts": [
+                "api",
+                "v1",
+                "applications"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "organization_id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
               "select": {
                 "exist": [
-                  "from",
-                  "organization_id",
-                  "to"
+                  "organization_id"
                 ]
+              }
+            }
+          ]
+        },
+        "load": {
+          "input": "data",
+          "name": "load",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/api/v1/applications/{application_id}",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "applications"
+                },
+                {
+                  "var": "id"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "applications",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "application_id": "id"
+                }
               },
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
+            }
+          ]
+        },
+        "remove": {
+          "input": "data",
+          "name": "remove",
+          "points": [
+            {
+              "kind": "http",
+              "method": "DELETE",
+              "orig": "/api/v1/applications/{application_id}",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "applications"
+                },
+                {
+                  "var": "id"
+                }
+              ],
               "parts": [
                 "api",
                 "v1",
-                "events_per_day",
-                "organization"
-              ]
+                "applications",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "application_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
+            }
+          ]
+        },
+        "update": {
+          "input": "data",
+          "name": "update",
+          "points": [
+            {
+              "kind": "http",
+              "method": "PUT",
+              "orig": "/api/v1/applications/{application_id}",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "applications"
+                },
+                {
+                  "var": "id"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "applications",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "application_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -1569,42 +687,888 @@ class Config {
         "ancestors": []
       }
     },
+    "application_secret": {
+      "fields": [
+        {
+          "name": "application_id",
+          "title": "Application Id",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "uuid"
+        },
+        {
+          "name": "created_at",
+          "title": "Created At",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "date-time"
+        },
+        {
+          "name": "deleted_at",
+          "title": "Deleted At",
+          "type": "`$STRING`",
+          "format": "date-time"
+        },
+        {
+          "name": "id",
+          "title": "Id",
+          "type": "`$STRING`"
+        },
+        {
+          "name": "name",
+          "title": "Name",
+          "type": "`$STRING`"
+        },
+        {
+          "name": "token",
+          "title": "Token",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "uuid"
+        }
+      ],
+      "id": {
+        "field": "id",
+        "name": "id"
+      },
+      "name": "application_secret",
+      "op": {
+        "create": {
+          "input": "data",
+          "name": "create",
+          "points": [
+            {
+              "kind": "http",
+              "method": "POST",
+              "orig": "/api/v1/application_secrets/",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "application_secrets"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "application_secrets"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
+            }
+          ]
+        },
+        "list": {
+          "input": "data",
+          "name": "list",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/api/v1/application_secrets/",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "application_secrets"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "application_secrets"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id"
+                ]
+              }
+            }
+          ]
+        },
+        "update": {
+          "input": "data",
+          "name": "update",
+          "points": [
+            {
+              "kind": "http",
+              "method": "PUT",
+              "orig": "/api/v1/application_secrets/{application_secret_token}",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "application_secrets"
+                },
+                {
+                  "var": "id"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "application_secrets",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "application_secret_token": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "application_secret_token",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "relations": {
+        "ancestors": []
+      }
+    },
+    "applications_management": {
+      "fields": [],
+      "name": "applications_management",
+      "op": {
+        "remove": {
+          "input": "data",
+          "name": "remove",
+          "points": [
+            {
+              "kind": "http",
+              "method": "DELETE",
+              "orig": "/api/v1/application_secrets/{application_secret_token}",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "application_secrets"
+                },
+                {
+                  "var": "application_secret_token"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "application_secrets",
+                "{application_secret_token}"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "application_secret_token",
+                    "orig": "application_secret_token",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id",
+                  "application_secret_token"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "relations": {
+        "ancestors": [
+          [
+            "$.main.kit.entity.application_secret"
+          ]
+        ]
+      }
+    },
+    "event": {
+      "fields": [
+        {
+          "name": "event_id",
+          "title": "Event Id",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "uuid"
+        },
+        {
+          "name": "event_type_name",
+          "title": "Event Type Name",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "id",
+          "title": "Id",
+          "type": "`$STRING`"
+        },
+        {
+          "name": "ip",
+          "title": "Ip",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "labels",
+          "title": "Labels",
+          "type": "`$OBJECT`",
+          "req": true
+        },
+        {
+          "name": "metadata",
+          "title": "Metadata",
+          "type": "`$OBJECT`"
+        },
+        {
+          "name": "occurred_at",
+          "title": "Occurred At",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "date-time"
+        },
+        {
+          "name": "payload",
+          "title": "Payload",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "payload_content_type",
+          "title": "Payload Content Type",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "received_at",
+          "title": "Received At",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "date-time"
+        }
+      ],
+      "id": {
+        "field": "id",
+        "name": "id"
+      },
+      "name": "event",
+      "op": {
+        "create": {
+          "input": "data",
+          "name": "create",
+          "points": [
+            {
+              "kind": "http",
+              "method": "POST",
+              "orig": "/api/v1/events/{event_id}/replay",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "events"
+                },
+                {
+                  "var": "id"
+                },
+                {
+                  "lit": "replay"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "events",
+                "{id}",
+                "replay"
+              ],
+              "rename": {
+                "param": {
+                  "event_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "event_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "$action": "replay",
+                "exist": [
+                  "id"
+                ]
+              }
+            }
+          ]
+        },
+        "list": {
+          "input": "data",
+          "name": "list",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/api/v1/events/",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "events"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "events"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id"
+                ]
+              }
+            }
+          ]
+        },
+        "load": {
+          "input": "data",
+          "name": "load",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/api/v1/events/{event_id}",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "events"
+                },
+                {
+                  "var": "id"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "events",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "event_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "event_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id",
+                  "id"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "relations": {
+        "ancestors": []
+      }
+    },
+    "event_type": {
+      "fields": [
+        {
+          "name": "application_id",
+          "title": "Application Id",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "uuid"
+        },
+        {
+          "name": "event_type_name",
+          "title": "Event Type Name",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "id",
+          "title": "Id",
+          "type": "`$STRING`"
+        },
+        {
+          "name": "resource_type",
+          "title": "Resource Type",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "resource_type_name",
+          "title": "Resource Type Name",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "service",
+          "title": "Service",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "service_name",
+          "title": "Service Name",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "verb",
+          "title": "Verb",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "verb_name",
+          "title": "Verb Name",
+          "type": "`$STRING`",
+          "req": true
+        }
+      ],
+      "id": {
+        "field": "id",
+        "name": "id"
+      },
+      "name": "event_type",
+      "op": {
+        "create": {
+          "input": "data",
+          "name": "create",
+          "points": [
+            {
+              "kind": "http",
+              "method": "POST",
+              "orig": "/api/v1/event_types/",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "event_types"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "event_types"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
+            }
+          ]
+        },
+        "list": {
+          "input": "data",
+          "name": "list",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/api/v1/event_types/",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "event_types"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "event_types"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id"
+                ]
+              }
+            }
+          ]
+        },
+        "load": {
+          "input": "data",
+          "name": "load",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/api/v1/event_types/{event_type_name}",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "event_types"
+                },
+                {
+                  "var": "id"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "event_types",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "event_type_name": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "event_type_name",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id",
+                  "id"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "relations": {
+        "ancestors": []
+      }
+    },
+    "events_management": {
+      "fields": [],
+      "name": "events_management",
+      "op": {
+        "list": {
+          "input": "data",
+          "name": "list",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/api/v1/payload_content_types/",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "payload_content_types"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "payload_content_types"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
+            }
+          ]
+        },
+        "remove": {
+          "input": "data",
+          "name": "remove",
+          "points": [
+            {
+              "kind": "http",
+              "method": "DELETE",
+              "orig": "/api/v1/event_types/{event_type_name}",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "event_types"
+                },
+                {
+                  "var": "event_type_name"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "event_types",
+                "{event_type_name}"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "event_type_name",
+                    "orig": "event_type_name",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id",
+                  "event_type_name"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "relations": {
+        "ancestors": [
+          [
+            "$.main.kit.entity.event_type"
+          ]
+        ]
+      }
+    },
     "health": {
       "fields": [
         {
           "name": "database",
-          "req": true,
-          "type": "`$BOOLEAN`"
+          "title": "Database",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
-          "format": "int64",
           "name": "database_duration_ms",
+          "title": "Database Duration Ms",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int64"
         },
         {
           "name": "object_storage",
+          "title": "Object Storage",
           "type": "`$BOOLEAN`"
         },
         {
-          "format": "int64",
           "name": "object_storage_duration_ms",
-          "type": "`$INTEGER`"
+          "title": "Object Storage Duration Ms",
+          "type": "`$INTEGER`",
+          "format": "int64"
         },
         {
           "name": "pulsar",
+          "title": "Pulsar",
           "type": "`$BOOLEAN`"
         },
         {
-          "format": "int64",
           "name": "pulsar_duration_ms",
-          "type": "`$INTEGER`"
+          "title": "Pulsar Duration Ms",
+          "type": "`$INTEGER`",
+          "format": "int64"
         },
         {
-          "format": "int64",
           "name": "total_duration_ms",
+          "title": "Total Duration Ms",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int64"
         }
       ],
       "name": "health",
@@ -1614,16 +1578,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "key",
-                    "orig": "key",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/health/",
@@ -1638,20 +1592,31 @@ class Config {
                   "lit": "health"
                 }
               ],
-              "select": {
-                "exist": [
-                  "key"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "health"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "key",
+                    "orig": "key",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "key"
+                ]
+              }
             }
           ]
         }
@@ -1664,35 +1629,42 @@ class Config {
       "fields": [
         {
           "name": "default",
+          "title": "Default",
           "type": "`$STRING`"
         },
         {
           "name": "description",
+          "title": "Description",
           "type": "`$STRING`"
         },
         {
           "name": "env_var",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Env Var",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "group",
+          "title": "Group",
           "type": "`$STRING`"
         },
         {
           "name": "name",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Name",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "required",
-          "req": true,
-          "type": "`$BOOLEAN`"
+          "title": "Required",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
           "name": "sensitive",
-          "req": true,
-          "type": "`$BOOLEAN`"
+          "title": "Sensitive",
+          "type": "`$BOOLEAN`",
+          "req": true
         }
       ],
       "name": "hook0",
@@ -1702,7 +1674,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/environment_variables/",
@@ -1717,16 +1688,18 @@ class Config {
                   "lit": "environment_variables"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "environment_variables"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -1738,53 +1711,61 @@ class Config {
     "ingested_event": {
       "fields": [
         {
-          "format": "uuid",
           "name": "application_id",
+          "title": "Application Id",
+          "type": "`$STRING`",
           "req": true,
           "short": "UUID of the application this event belongs to.",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
-          "format": "uuid",
           "name": "event_id",
+          "title": "Event Id",
+          "type": "`$STRING`",
           "short": "Optional unique identifier for this event (client-generated UUID).",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "event_type",
+          "title": "Event Type",
+          "type": "`$STRING`",
           "req": true,
-          "short": "The type of event (e.g., 'user.created', 'order.completed').",
-          "type": "`$STRING`"
+          "short": "The type of event (e.g., 'user.created', 'order.completed')."
         },
         {
           "name": "labels",
+          "title": "Labels",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Labels for event filtering and routing to subscriptions.",
-          "type": "`$OBJECT`"
+          "short": "Labels for event filtering and routing to subscriptions."
         },
         {
           "name": "metadata",
-          "short": "Optional metadata key-value pairs associated with the event.",
-          "type": "`$OBJECT`"
+          "title": "Metadata",
+          "type": "`$OBJECT`",
+          "short": "Optional metadata key-value pairs associated with the event."
         },
         {
-          "format": "date-time",
           "name": "occurred_at",
+          "title": "Occurred At",
+          "type": "`$STRING`",
           "req": true,
           "short": "Timestamp when the event occurred.",
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "payload",
+          "title": "Payload",
+          "type": "`$STRING`",
           "req": true,
-          "short": "The event payload.",
-          "type": "`$STRING`"
+          "short": "The event payload."
         },
         {
           "name": "payload_content_type",
+          "title": "Payload Content Type",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Content type of the payload.",
-          "type": "`$STRING`"
+          "short": "Content type of the payload."
         }
       ],
       "name": "ingested_event",
@@ -1794,7 +1775,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/event/",
@@ -1809,16 +1789,18 @@ class Config {
                   "lit": "event"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "event"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -1831,53 +1813,63 @@ class Config {
       "fields": [
         {
           "name": "application_secret_compatibility",
-          "req": true,
-          "type": "`$BOOLEAN`"
+          "title": "Application Secret Compatibility",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
           "name": "auto_db_migration",
-          "req": true,
-          "type": "`$BOOLEAN`"
+          "title": "Auto Db Migration",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
           "name": "biscuit_public_key",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Biscuit Public Key",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "cloudflare_turnstile_site_key",
+          "title": "Cloudflare Turnstile Site Key",
           "type": "`$STRING`"
         },
         {
           "name": "formbricks",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Formbricks",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "matomo",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Matomo",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "int32",
           "name": "password_minimum_length",
+          "title": "Password Minimum Length",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
           "name": "quota_enforcement",
-          "req": true,
-          "type": "`$BOOLEAN`"
+          "title": "Quota Enforcement",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
           "name": "registration_disabled",
-          "req": true,
-          "type": "`$BOOLEAN`"
+          "title": "Registration Disabled",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
           "name": "support_email_address",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Support Email Address",
+          "type": "`$STRING`",
+          "req": true
         }
       ],
       "name": "instance",
@@ -1887,7 +1879,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/instance/",
@@ -1902,16 +1893,18 @@ class Config {
                   "lit": "instance"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "instance"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -1924,13 +1917,15 @@ class Config {
       "fields": [
         {
           "name": "email",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Email",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "password",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Password",
+          "type": "`$STRING`",
+          "req": true
         }
       ],
       "name": "login",
@@ -1940,7 +1935,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/auth/login",
@@ -1958,20 +1952,21 @@ class Config {
                   "lit": "login"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "auth",
                 "login"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/auth/refresh",
@@ -1989,17 +1984,19 @@ class Config {
                   "lit": "refresh"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "auth",
                 "refresh"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -2011,49 +2008,91 @@ class Config {
     "organization": {
       "fields": [
         {
-          "name": "consumption",
+          "name": "amount",
+          "title": "Amount",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$OBJECT`"
+          "format": "int32"
+        },
+        {
+          "name": "application_id",
+          "title": "Application Id",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "uuid"
+        },
+        {
+          "name": "application_name",
+          "title": "Application Name",
+          "type": "`$STRING`",
+          "req": true
+        },
+        {
+          "name": "consumption",
+          "title": "Consumption",
+          "type": "`$OBJECT`",
+          "req": true
+        },
+        {
+          "name": "date",
+          "title": "Date",
+          "type": "`$STRING`",
+          "req": true,
+          "format": "date"
         },
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
+        },
+        {
+          "name": "is_provisional",
+          "title": "Is Provisional",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
           "name": "name",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Name",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "onboarding_steps",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Onboarding Steps",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "uuid",
           "name": "organization_id",
+          "title": "Organization Id",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "plan",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Plan",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "quotas",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Quotas",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "role",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Role",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "users",
-          "req": true,
-          "type": "`$ARRAY`"
+          "title": "Users",
+          "type": "`$ARRAY`",
+          "req": true
         }
       ],
       "id": {
@@ -2067,7 +2106,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/organizations/",
@@ -2082,16 +2120,18 @@ class Config {
                   "lit": "organizations"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "organizations"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -2100,7 +2140,66 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {},
+              "kind": "http",
+              "method": "GET",
+              "orig": "/api/v1/events_per_day/organization",
+              "segments": [
+                {
+                  "lit": "api"
+                },
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "events_per_day"
+                },
+                {
+                  "lit": "organization"
+                }
+              ],
+              "parts": [
+                "api",
+                "v1",
+                "events_per_day",
+                "organization"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "from",
+                    "orig": "from",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "organization_id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  },
+                  {
+                    "name": "to",
+                    "orig": "to",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "from",
+                  "organization_id",
+                  "to"
+                ]
+              }
+            },
+            {
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/organizations/",
@@ -2115,16 +2214,18 @@ class Config {
                   "lit": "organizations"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "organizations"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -2133,25 +2234,9 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/organizations/{organization_id}/",
-              "rename": {
-                "param": {
-                  "organization_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -2166,21 +2251,37 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "organizations",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "organization_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         },
@@ -2189,25 +2290,9 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "DELETE",
               "orig": "/api/v1/organizations/{organization_id}/",
-              "rename": {
-                "param": {
-                  "organization_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -2222,21 +2307,37 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "organizations",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "organization_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         },
@@ -2245,25 +2346,9 @@ class Config {
           "name": "update",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "PUT",
               "orig": "/api/v1/organizations/{organization_id}/",
-              "rename": {
-                "param": {
-                  "organization_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -2278,21 +2363,37 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "organizations",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "organization_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -2305,18 +2406,21 @@ class Config {
       "fields": [
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
         },
         {
           "name": "role",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Role",
+          "type": "`$STRING`",
+          "req": true
         },
         {
-          "format": "uuid",
           "name": "user_id",
+          "title": "User Id",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         }
       ],
       "id": {
@@ -2330,25 +2434,9 @@ class Config {
           "name": "update",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "PUT",
               "orig": "/api/v1/organizations/{organization_id}/invite",
-              "rename": {
-                "param": {
-                  "organization_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -2366,23 +2454,39 @@ class Config {
                   "lit": "invite"
                 }
               ],
-              "select": {
-                "$action": "invite",
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "organizations",
                 "{id}",
                 "invite"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "organization_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "$action": "invite",
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -2395,24 +2499,28 @@ class Config {
       "fields": [
         {
           "name": "detail",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Detail",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "id",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Id",
+          "type": "`$STRING`",
+          "req": true
         },
         {
-          "format": "int32",
           "name": "status",
+          "title": "Status",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
           "name": "title",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Title",
+          "type": "`$STRING`",
+          "req": true
         }
       ],
       "id": {
@@ -2426,7 +2534,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/errors/",
@@ -2441,16 +2548,18 @@ class Config {
                   "lit": "errors"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "errors"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -2462,40 +2571,46 @@ class Config {
     "quota": {
       "fields": [
         {
-          "format": "int32",
           "name": "global_applications_per_organization_limit",
+          "title": "Global Applications Per Organization Limit",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
-          "format": "int32",
           "name": "global_days_of_events_retention_limit",
+          "title": "Global Days Of Events Retention Limit",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
-          "format": "int32",
           "name": "global_event_types_per_application_limit",
+          "title": "Global Event Types Per Application Limit",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
-          "format": "int32",
           "name": "global_events_per_day_limit",
+          "title": "Global Events Per Day Limit",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
-          "format": "int32",
           "name": "global_members_per_organization_limit",
+          "title": "Global Members Per Organization Limit",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
-          "format": "int32",
           "name": "global_subscriptions_per_application_limit",
+          "title": "Global Subscriptions Per Application Limit",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         }
       ],
       "name": "quota",
@@ -2505,7 +2620,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/quotas/",
@@ -2520,16 +2634,18 @@ class Config {
                   "lit": "quotas"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.limits`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "quotas"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.limits`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -2542,31 +2658,37 @@ class Config {
       "fields": [
         {
           "name": "email",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Email",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "first_name",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "First Name",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "gclid",
-          "short": "Optional Google Ads click identifier captured during the user's journey from a Google Ad.",
-          "type": "`$STRING`"
+          "title": "Gclid",
+          "type": "`$STRING`",
+          "short": "Optional Google Ads click identifier captured during the user's journey from a Google Ad."
         },
         {
           "name": "last_name",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Last Name",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "password",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Password",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "turnstile_token",
+          "title": "Turnstile Token",
           "type": "`$STRING`"
         }
       ],
@@ -2577,7 +2699,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/register/",
@@ -2592,16 +2713,18 @@ class Config {
                   "lit": "register"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "register"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -2613,78 +2736,92 @@ class Config {
     "request_attempt": {
       "fields": [
         {
-          "format": "date-time",
           "name": "created_at",
+          "title": "Created At",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
-          "format": "date-time",
           "name": "delay_until",
-          "type": "`$STRING`"
+          "title": "Delay Until",
+          "type": "`$STRING`",
+          "format": "date-time"
         },
         {
           "name": "event",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Event",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "uuid",
           "name": "event_id",
+          "title": "Event Id",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
-          "format": "date-time",
           "name": "failed_at",
-          "type": "`$STRING`"
+          "title": "Failed At",
+          "type": "`$STRING`",
+          "format": "date-time"
         },
         {
-          "format": "int32",
           "name": "http_response_status",
-          "type": "`$INTEGER`"
+          "title": "Http Response Status",
+          "type": "`$INTEGER`",
+          "format": "int32"
         },
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
         },
         {
-          "format": "date-time",
           "name": "picked_at",
-          "type": "`$STRING`"
+          "title": "Picked At",
+          "type": "`$STRING`",
+          "format": "date-time"
         },
         {
-          "format": "uuid",
           "name": "request_attempt_id",
+          "title": "Request Attempt Id",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
-          "format": "uuid",
           "name": "response_id",
-          "type": "`$STRING`"
+          "title": "Response Id",
+          "type": "`$STRING`",
+          "format": "uuid"
         },
         {
-          "format": "int32",
           "name": "retry_count",
+          "title": "Retry Count",
+          "type": "`$INTEGER`",
           "req": true,
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
           "name": "status",
+          "title": "Status",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Status of a request attempt.",
-          "type": "`$OBJECT`"
+          "short": "Status of a request attempt."
         },
         {
           "name": "subscription",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Subscription",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "date-time",
           "name": "succeeded_at",
-          "type": "`$STRING`"
+          "title": "Succeeded At",
+          "type": "`$STRING`",
+          "format": "date-time"
         }
       ],
       "id": {
@@ -2698,53 +2835,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "event_event_type_name",
-                    "orig": "event_event_type_name",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "event_id",
-                    "orig": "event_id",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "max_created_at",
-                    "orig": "max_created_at",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "min_created_at",
-                    "orig": "min_created_at",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "pagination_cursor",
-                    "orig": "pagination_cursor",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "subscription_id",
-                    "orig": "subscription_id",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/request_attempts/",
@@ -2759,6 +2849,63 @@ class Config {
                   "lit": "request_attempts"
                 }
               ],
+              "parts": [
+                "api",
+                "v1",
+                "request_attempts"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  },
+                  {
+                    "name": "event_event_type_name",
+                    "orig": "event_event_type_name",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "event_id",
+                    "orig": "event_id",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "max_created_at",
+                    "orig": "max_created_at",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "min_created_at",
+                    "orig": "min_created_at",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "pagination_cursor",
+                    "orig": "pagination_cursor",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "subscription_id",
+                    "orig": "subscription_id",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "application_id",
@@ -2769,16 +2916,7 @@ class Config {
                   "pagination_cursor",
                   "subscription_id"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "api",
-                "v1",
-                "request_attempts"
-              ]
+              }
             }
           ]
         },
@@ -2787,34 +2925,9 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "request_attempt_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/request_attempts/{request_attempt_id}",
-              "rename": {
-                "param": {
-                  "request_attempt_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -2829,22 +2942,47 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "application_id",
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "request_attempts",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "request_attempt_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "request_attempt_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id",
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -2857,6 +2995,7 @@ class Config {
       "fields": [
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
         }
       ],
@@ -2871,34 +3010,9 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "response_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/responses/{response_id}",
-              "rename": {
-                "param": {
-                  "response_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -2913,22 +3027,47 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "application_id",
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.headers`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "responses",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "response_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.headers`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "response_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id",
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -2946,17 +3085,6 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "organization_id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "DELETE",
               "orig": "/api/v1/organizations/{organization_id}/invite",
@@ -2977,22 +3105,34 @@ class Config {
                   "lit": "invite"
                 }
               ],
-              "select": {
-                "exist": [
-                  "organization_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "organizations",
                 "{organization_id}",
                 "invite"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "organization_id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "organization_id"
+                ]
+              }
             }
           ]
         }
@@ -3000,7 +3140,7 @@ class Config {
       "relations": {
         "ancestors": [
           [
-            "organization"
+            "$.main.kit.entity.organization"
           ]
         ]
       }
@@ -3009,35 +3149,41 @@ class Config {
       "fields": [
         {
           "name": "biscuit",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Biscuit",
+          "type": "`$STRING`",
+          "req": true
         },
         {
-          "format": "date-time",
           "name": "created_at",
+          "title": "Created At",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
         },
         {
           "name": "name",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Name",
+          "type": "`$STRING`",
+          "req": true
         },
         {
-          "format": "uuid",
           "name": "organization_id",
+          "title": "Organization Id",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
-          "format": "uuid",
           "name": "token_id",
+          "title": "Token Id",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         }
       ],
       "id": {
@@ -3051,7 +3197,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/service_token/",
@@ -3066,16 +3211,18 @@ class Config {
                   "lit": "service_token"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "service_token"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -3084,17 +3231,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "organization_id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/service_token/",
@@ -3109,20 +3245,32 @@ class Config {
                   "lit": "service_token"
                 }
               ],
-              "select": {
-                "exist": [
-                  "organization_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "service_token"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "organization_id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "organization_id"
+                ]
+              }
             }
           ]
         },
@@ -3131,34 +3279,9 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "service_token_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "organization_id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/service_token/{service_token_id}",
-              "rename": {
-                "param": {
-                  "service_token_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -3173,22 +3296,47 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id",
-                  "organization_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "service_token",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "service_token_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "service_token_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "organization_id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id",
+                  "organization_id"
+                ]
+              }
             }
           ]
         },
@@ -3197,34 +3345,9 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "service_token_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "organization_id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "DELETE",
               "orig": "/api/v1/service_token/{service_token_id}",
-              "rename": {
-                "param": {
-                  "service_token_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -3239,22 +3362,47 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id",
-                  "organization_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "service_token",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "service_token_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "service_token_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "organization_id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id",
+                  "organization_id"
+                ]
+              }
             }
           ]
         },
@@ -3263,25 +3411,9 @@ class Config {
           "name": "update",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "service_token_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "PUT",
               "orig": "/api/v1/service_token/{service_token_id}",
-              "rename": {
-                "param": {
-                  "service_token_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -3296,21 +3428,37 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "service_token",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "service_token_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "service_token_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -3322,19 +3470,24 @@ class Config {
     "subscription": {
       "fields": [
         {
-          "format": "uuid",
           "name": "application_id",
+          "title": "Application Id",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
-          "format": "date-time",
           "name": "created_at",
+          "title": "Created At",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "dedicated_workers",
+          "title": "Dedicated Workers",
+          "type": "`$ARRAY`",
+          "req": true,
           "op": {
             "create": {
               "type": "`$ARRAY`"
@@ -3342,30 +3495,35 @@ class Config {
             "update": {
               "type": "`$ARRAY`"
             }
-          },
-          "req": true,
-          "type": "`$ARRAY`"
+          }
         },
         {
           "name": "description",
+          "title": "Description",
           "type": "`$STRING`"
         },
         {
           "name": "event_types",
-          "req": true,
-          "type": "`$ARRAY`"
+          "title": "Event Types",
+          "type": "`$ARRAY`",
+          "req": true
         },
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
         },
         {
           "name": "is_enabled",
-          "req": true,
-          "type": "`$BOOLEAN`"
+          "title": "Is Enabled",
+          "type": "`$BOOLEAN`",
+          "req": true
         },
         {
           "name": "label_key",
+          "title": "Label Key",
+          "type": "`$STRING`",
+          "req": true,
           "op": {
             "create": {
               "type": "`$STRING`"
@@ -3374,12 +3532,13 @@ class Config {
               "type": "`$STRING`"
             }
           },
-          "req": true,
-          "short": "_Kept for backward compatibility, you should use `labels`_",
-          "type": "`$STRING`"
+          "short": "_Kept for backward compatibility, you should use `labels`_"
         },
         {
           "name": "label_value",
+          "title": "Label Value",
+          "type": "`$STRING`",
+          "req": true,
           "op": {
             "create": {
               "type": "`$STRING`"
@@ -3388,12 +3547,13 @@ class Config {
               "type": "`$STRING`"
             }
           },
-          "req": true,
-          "short": "_Kept for backward compatibility, you should use `labels`_",
-          "type": "`$STRING`"
+          "short": "_Kept for backward compatibility, you should use `labels`_"
         },
         {
           "name": "labels",
+          "title": "Labels",
+          "type": "`$OBJECT`",
+          "req": true,
           "op": {
             "create": {
               "type": "`$OBJECT`"
@@ -3401,12 +3561,13 @@ class Config {
             "update": {
               "type": "`$OBJECT`"
             }
-          },
-          "req": true,
-          "type": "`$OBJECT`"
+          }
         },
         {
           "name": "metadata",
+          "title": "Metadata",
+          "type": "`$OBJECT`",
+          "req": true,
           "op": {
             "create": {
               "type": "`$OBJECT`"
@@ -3414,32 +3575,34 @@ class Config {
             "update": {
               "type": "`$OBJECT`"
             }
-          },
-          "req": true,
-          "type": "`$OBJECT`"
+          }
         },
         {
-          "format": "uuid",
           "name": "secret",
+          "title": "Secret",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
-          "format": "uuid",
           "name": "subscription_id",
+          "title": "Subscription Id",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "target",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Target",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "date-time",
           "name": "updated_at",
+          "title": "Updated At",
+          "type": "`$STRING`",
           "req": true,
-          "type": "`$STRING`"
+          "format": "date-time"
         }
       ],
       "id": {
@@ -3453,7 +3616,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/subscriptions/",
@@ -3468,16 +3630,18 @@ class Config {
                   "lit": "subscriptions"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "subscriptions"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -3486,17 +3650,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/subscriptions/",
@@ -3511,20 +3664,32 @@ class Config {
                   "lit": "subscriptions"
                 }
               ],
-              "select": {
-                "exist": [
-                  "application_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "subscriptions"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id"
+                ]
+              }
             }
           ]
         },
@@ -3533,25 +3698,9 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "subscription_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/api/v1/subscriptions/{subscription_id}",
-              "rename": {
-                "param": {
-                  "subscription_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -3566,21 +3715,37 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "subscriptions",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "subscription_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "subscription_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         },
@@ -3589,34 +3754,9 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "subscription_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "application_id",
-                    "orig": "application_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "DELETE",
               "orig": "/api/v1/subscriptions/{subscription_id}",
-              "rename": {
-                "param": {
-                  "subscription_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -3631,22 +3771,47 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "application_id",
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "subscriptions",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "subscription_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "subscription_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "application_id",
+                    "orig": "application_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "application_id",
+                  "id"
+                ]
+              }
             }
           ]
         },
@@ -3655,25 +3820,9 @@ class Config {
           "name": "update",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "subscription_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "PUT",
               "orig": "/api/v1/subscriptions/{subscription_id}",
-              "rename": {
-                "param": {
-                  "subscription_id": "id"
-                }
-              },
               "segments": [
                 {
                   "lit": "api"
@@ -3688,21 +3837,37 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "subscriptions",
                 "{id}"
-              ]
+              ],
+              "rename": {
+                "param": {
+                  "subscription_id": "id"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "subscription_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -3715,18 +3880,21 @@ class Config {
       "fields": [
         {
           "name": "email",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Email",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "new_password",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "New Password",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "token",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Token",
+          "type": "`$STRING`",
+          "req": true
         }
       ],
       "name": "user_authentication",
@@ -3736,7 +3904,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/auth/begin-reset-password",
@@ -3754,20 +3921,21 @@ class Config {
                   "lit": "begin-reset-password"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "auth",
                 "begin-reset-password"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/auth/logout",
@@ -3785,20 +3953,21 @@ class Config {
                   "lit": "logout"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "auth",
                 "logout"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/auth/password",
@@ -3816,20 +3985,21 @@ class Config {
                   "lit": "password"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "auth",
                 "password"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/auth/reset-password",
@@ -3847,20 +4017,21 @@ class Config {
                   "lit": "reset-password"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "auth",
                 "reset-password"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/auth/verify-email",
@@ -3878,17 +4049,19 @@ class Config {
                   "lit": "verify-email"
                 }
               ],
-              "select": {},
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "auth",
                 "verify-email"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -3901,13 +4074,15 @@ class Config {
       "fields": [
         {
           "name": "email",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Email",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "role",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Role",
+          "type": "`$STRING`",
+          "req": true
         }
       ],
       "name": "user_invitation",
@@ -3917,17 +4092,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "organization_id",
-                    "orig": "organization_id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "POST",
               "orig": "/api/v1/organizations/{organization_id}/invite",
@@ -3948,22 +4112,34 @@ class Config {
                   "lit": "invite"
                 }
               ],
-              "select": {
-                "exist": [
-                  "organization_id"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
               "parts": [
                 "api",
                 "v1",
                 "organizations",
                 "{organization_id}",
                 "invite"
-              ]
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "organization_id",
+                    "orig": "organization_id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "organization_id"
+                ]
+              }
             }
           ]
         }
@@ -3971,7 +4147,7 @@ class Config {
       "relations": {
         "ancestors": [
           [
-            "organization"
+            "$.main.kit.entity.organization"
           ]
         ]
       }

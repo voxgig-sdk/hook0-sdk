@@ -71,10 +71,10 @@ catch (RuntimeException err) {
 
 ```java
 // Create — returns the ENTITY (call data() for the record)
-Object created = client.application(null).create(Map.of("application_id", "example_application_id", "consumption", Map.of(), "name", "example_name", "onboarding_steps", Map.of(), "organization_id", "example_organization_id", "quotas", Map.of()), null);
+Object created = client.application(null).create(Map.of("amount", 1L, "application_id", "example_application_id", "application_name", "example_application_name", "consumption", Map.of(), "date", "example_date", "is_provisional", true, "name", "example_name", "onboarding_steps", Map.of(), "organization_id", "example_organization_id", "quotas", Map.of()), null);
 
 // Update — supply the id in the match/data
-client.application(null).update(Map.of("id", "example_id", "application_id", "example_application_id", "consumption", Map.of()), null);
+client.application(null).update(Map.of("id", "example_id", "amount", 1L, "application_id", "example_application_id"), null);
 
 // Remove
 client.application(null).remove(Map.of("id", "example_id"), null);
@@ -87,8 +87,8 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const applications = await client.Application().list()
-  console.log(applications)
+  const eventtypes = await client.EventType().list()
+  console.log(eventtypes)
 } catch (err) {
   console.error('list failed:', err)
 }
@@ -157,9 +157,9 @@ Hook0SDK client = Hook0SDK.testSDK(null, null);
 
 // Entity ops return the ENTITY and raises on error;
 // call data() for the record.
-Object application = client.application(null).list(null, null);
-// application holds the mock response record
-System.out.println(application);
+Object eventType = client.eventType(null).list(null, null);
+// eventType holds the mock response record
+System.out.println(eventType);
 ```
 
 ### Use a custom fetch function
@@ -242,7 +242,6 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `event` | `(entopts) -> SdkEntity` | Create an Event entity instance. |
 | `eventType` | `(entopts) -> SdkEntity` | Create an EventType entity instance. |
 | `eventsManagement` | `(entopts) -> SdkEntity` | Create an EventsManagement entity instance. |
-| `eventsPerDayEntry` | `(entopts) -> SdkEntity` | Create an EventsPerDayEntry entity instance. |
 | `health` | `(entopts) -> SdkEntity` | Create a Health entity instance. |
 | `hook0` | `(entopts) -> SdkEntity` | Create a Hook0 entity instance. |
 | `ingestedEvent` | `(entopts) -> SdkEntity` | Create an IngestedEvent entity instance. |
@@ -301,9 +300,13 @@ On error, `ok` is `false` and `err` contains the error value.
 
 | Field | Description |
 | --- | --- |
+| `amount` |  |
 | `application_id` | Unique identifier of the application. |
+| `application_name` |  |
 | `consumption` | Current consumption metrics for this application. |
+| `date` |  |
 | `id` |  |
+| `is_provisional` |  |
 | `name` | Name of the application. |
 | `onboarding_steps` | Onboarding completion status for this application. |
 | `organization_id` | UUID of the organization this application belongs to. |
@@ -341,7 +344,6 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
-| `application_id` |  |
 | `event_id` |  |
 | `event_type_name` |  |
 | `id` |  |
@@ -383,20 +385,6 @@ API path: `/api/v1/event_types/`
 Operations: list, remove.
 
 API path: `/api/v1/payload_content_types/`
-
-#### EventsPerDayEntry
-
-| Field | Description |
-| --- | --- |
-| `amount` |  |
-| `application_id` |  |
-| `application_name` |  |
-| `date` |  |
-| `is_provisional` |  |
-
-Operations: list.
-
-API path: `/api/v1/events_per_day/application`
 
 #### Health
 
@@ -481,8 +469,13 @@ API path: `/api/v1/auth/login`
 
 | Field | Description |
 | --- | --- |
+| `amount` |  |
+| `application_id` |  |
+| `application_name` |  |
 | `consumption` |  |
+| `date` |  |
 | `id` |  |
+| `is_provisional` |  |
 | `name` |  |
 | `onboarding_steps` |  |
 | `organization_id` |  |
@@ -677,9 +670,13 @@ Create an instance: `SdkEntity application = client.application(null);`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `Long` |  |
 | `application_id` | `String` | Unique identifier of the application. |
+| `application_name` | `String` |  |
 | `consumption` | `Map<String, Object>` | Current consumption metrics for this application. |
+| `date` | `String` |  |
 | `id` | `String` |  |
+| `is_provisional` | `Boolean` |  |
 | `name` | `String` | Name of the application. |
 | `onboarding_steps` | `Map<String, Object>` | Onboarding completion status for this application. |
 | `organization_id` | `String` | UUID of the organization this application belongs to. |
@@ -701,8 +698,12 @@ Object applicationList = client.application(null).list(null, null);
 
 ```java
 Object application = client.application(null).create(Map.of(
+    "amount", 1L,  // Long
     "application_id", "example_application_id",  // String
+    "application_name", "example_application_name",  // String
     "consumption", Map.of(),  // Map<String, Object>
+    "date", "example_date",  // String
+    "is_provisional", true,  // Boolean
     "name", "example_name",  // String
     "onboarding_steps", Map.of(),  // Map<String, Object>
     "organization_id", "example_organization_id",  // String
@@ -778,7 +779,6 @@ Create an instance: `SdkEntity event = client.event(null);`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `String` |  |
 | `event_id` | `String` |  |
 | `event_type_name` | `String` |  |
 | `id` | `String` |  |
@@ -807,7 +807,6 @@ Object eventList = client.event(null).list(null, null);
 ```java
 Object event = client.event(null).create(Map.of(
     "id", "example_id",  // String
-    "application_id", "example_application_id",  // String
     "event_id", "example_event_id",  // String
     "event_type_name", "example_event_type_name",  // String
     "ip", "example_ip",  // String
@@ -889,33 +888,6 @@ Create an instance: `SdkEntity eventsManagement = client.eventsManagement(null);
 
 ```java
 Object eventsManagementList = client.eventsManagement(null).list(null, null);
-```
-
-
-### EventsPerDayEntry
-
-Create an instance: `SdkEntity eventsPerDayEntry = client.eventsPerDayEntry(null);`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(null, null)` | List entities, optionally matching the given criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `amount` | `Long` |  |
-| `application_id` | `String` |  |
-| `application_name` | `String` |  |
-| `date` | `String` |  |
-| `is_provisional` | `Boolean` |  |
-
-#### Example: List
-
-```java
-Object eventsPerDayEntryList = client.eventsPerDayEntry(null).list(null, null);
 ```
 
 
@@ -1091,8 +1063,13 @@ Create an instance: `SdkEntity organization = client.organization(null);`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `Long` |  |
+| `application_id` | `String` |  |
+| `application_name` | `String` |  |
 | `consumption` | `Map<String, Object>` |  |
+| `date` | `String` |  |
 | `id` | `String` |  |
+| `is_provisional` | `Boolean` |  |
 | `name` | `String` |  |
 | `onboarding_steps` | `Map<String, Object>` |  |
 | `organization_id` | `String` |  |
@@ -1117,7 +1094,12 @@ Object organizationList = client.organization(null).list(null, null);
 
 ```java
 Object organization = client.organization(null).create(Map.of(
+    "amount", 1L,  // Long
+    "application_id", "example_application_id",  // String
+    "application_name", "example_application_name",  // String
     "consumption", Map.of(),  // Map<String, Object>
+    "date", "example_date",  // String
+    "is_provisional", true,  // Boolean
     "name", "example_name",  // String
     "onboarding_steps", Map.of(),  // Map<String, Object>
     "organization_id", "example_organization_id",  // String
@@ -1496,14 +1478,14 @@ above:
 
 | Feature | What it does |
 |---|---|
-| [`debug`](#debug) | Request/response capture ring buffer for debugging |
-| [`idempotency`](#idempotency) | Idempotency keys for safe retries of mutating operations |
-| [`metrics`](#metrics) | Statistics capture: per-operation counters and latency |
-| [`paging`](#paging) | Pagination signals for list operations |
-| [`ratelimit`](#ratelimit) | Client-side rate limiting via a token bucket |
-| [`retry`](#retry) | Automatic retry of transient failures with exponential backoff |
-| [`test`](#test) | In-memory mock transport for testing without a live server |
-| [`timeout`](#timeout) | Per-request timeout with transport abort |
+| [`debug`](#debug) | Debug capture |
+| [`idempotency`](#idempotency) | Idempotency |
+| [`metrics`](#metrics) | Metrics |
+| [`paging`](#paging) | Paging |
+| [`ratelimit`](#ratelimit) | Rate limiting |
+| [`retry`](#retry) | Retry |
+| [`test`](#test) | Test transport |
+| [`timeout`](#timeout) | Timeout |
 
 > **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
@@ -1512,7 +1494,7 @@ above:
 
 ### debug
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 | Option | Default |
 |---|---|
@@ -1524,7 +1506,7 @@ Set `feature.debug.active` to enable it, then override any of the options above.
 
 ### idempotency
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 | Option | Default |
 |---|---|
@@ -1537,7 +1519,7 @@ Set `feature.idempotency.active` to enable it, then override any of the options 
 
 ### metrics
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 | Option | Default |
 |---|---|
@@ -1547,7 +1529,7 @@ Set `feature.metrics.active` to enable it, then override any of the options abov
 
 ### paging
 
-Pagination signals for list operations.
+Paging.
 
 | Option | Default |
 |---|---|
@@ -1563,7 +1545,7 @@ Set `feature.paging.active` to enable it, then override any of the options above
 
 ### ratelimit
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 | Option | Default |
 |---|---|
@@ -1579,7 +1561,7 @@ activated earlier.
 
 ### retry
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 | Option | Default |
 |---|---|
@@ -1598,7 +1580,7 @@ activated earlier.
 
 ### test
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 | Option | Default |
 |---|---|
@@ -1608,7 +1590,7 @@ Set `feature.test.active` to enable it, then override any of the options above.
 
 ### timeout
 
-Per-request timeout with transport abort.
+Timeout.
 
 | Option | Default |
 |---|---|
@@ -1660,14 +1642,14 @@ a function that receives the context.
 
 The SDK ships with built-in features:
 
-- **DebugFeature**: Request/response capture ring buffer for debugging
-- **IdempotencyFeature**: Idempotency keys for safe retries of mutating operations
-- **MetricsFeature**: Statistics capture: per-operation counters and latency
-- **PagingFeature**: Pagination signals for list operations
-- **RatelimitFeature**: Client-side rate limiting via a token bucket
-- **RetryFeature**: Automatic retry of transient failures with exponential backoff
-- **TestFeature**: In-memory mock transport for testing without a live server
-- **TimeoutFeature**: Per-request timeout with transport abort
+- **DebugFeature**: Debug capture
+- **IdempotencyFeature**: Idempotency
+- **MetricsFeature**: Metrics
+- **PagingFeature**: Paging
+- **RatelimitFeature**: Rate limiting
+- **RetryFeature**: Retry
+- **TestFeature**: Test transport
+- **TimeoutFeature**: Timeout
 
 Features are initialized in order. Hooks fire in the order features
 were added, so later features can override earlier ones.
@@ -1706,11 +1688,11 @@ stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const application = client.Application()
-await application.list()
+const eventtype = client.EventType()
+await eventtype.list()
 
-// application.data() now returns the application data from the last `list`
-// application.match() returns the last match criteria
+// eventtype.data() now returns the eventtype data from the last `list`
+// eventtype.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

@@ -70,14 +70,14 @@ func main() {
     fmt.Println(application)
 
     // Create a application.
-    created, err := client.Application(nil).Create(map[string]any{"application_id": "example_application_id", "consumption": map[string]any{}, "name": "example_name", "onboarding_steps": map[string]any{}, "organization_id": "example_organization_id", "quotas": map[string]any{}}, nil)
+    created, err := client.Application(nil).Create(map[string]any{"amount": 1, "application_id": "example_application_id", "application_name": "example_application_name", "consumption": map[string]any{}, "date": "example_date", "is_provisional": true, "name": "example_name", "onboarding_steps": map[string]any{}, "organization_id": "example_organization_id", "quotas": map[string]any{}}, nil)
     if err != nil {
         panic(err)
     }
     fmt.Println(created)
 
     // Update a application.
-    updated, err := client.Application(nil).Update(map[string]any{"id": "example_id", "application_id": "example_application_id", "consumption": map[string]any{}}, nil)
+    updated, err := client.Application(nil).Update(map[string]any{"id": "example_id", "amount": 1, "application_id": "example_application_id"}, nil)
     if err != nil {
         panic(err)
     }
@@ -99,12 +99,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-applications, err := client.Application(nil).List(nil, nil)
+eventtypes, err := client.EventType(nil).List(nil, nil)
 if err != nil {
     // handle err
     return
 }
-_ = applications
+_ = eventtypes
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -168,13 +168,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-application, err := client.Application(nil).List(
+eventType, err := client.EventType(nil).List(
     nil, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(application) // the returned mock data
+fmt.Println(eventType) // the returned mock data
 ```
 
 ### Use a custom fetch function
@@ -259,7 +259,6 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Event` | `(data map[string]any) Hook0Entity` | Create an Event entity instance. |
 | `EventType` | `(data map[string]any) Hook0Entity` | Create an EventType entity instance. |
 | `EventsManagement` | `(data map[string]any) Hook0Entity` | Create an EventsManagement entity instance. |
-| `EventsPerDayEntry` | `(data map[string]any) Hook0Entity` | Create an EventsPerDayEntry entity instance. |
 | `Health` | `(data map[string]any) Hook0Entity` | Create a Health entity instance. |
 | `Hook0` | `(data map[string]any) Hook0Entity` | Create a Hook0 entity instance. |
 | `IngestedEvent` | `(data map[string]any) Hook0Entity` | Create an IngestedEvent entity instance. |
@@ -321,9 +320,13 @@ Only `Direct()` returns a response envelope — a `map[string]any` with
 
 | Field | Description |
 | --- | --- |
+| `"amount"` |  |
 | `"application_id"` | Unique identifier of the application. |
+| `"application_name"` |  |
 | `"consumption"` | Current consumption metrics for this application. |
+| `"date"` |  |
 | `"id"` |  |
+| `"is_provisional"` |  |
 | `"name"` | Name of the application. |
 | `"onboarding_steps"` | Onboarding completion status for this application. |
 | `"organization_id"` | UUID of the organization this application belongs to. |
@@ -361,7 +364,6 @@ API path: `/api/v1/application_secrets/{application_secret_token}`
 
 | Field | Description |
 | --- | --- |
-| `"application_id"` |  |
 | `"event_id"` |  |
 | `"event_type_name"` |  |
 | `"id"` |  |
@@ -403,20 +405,6 @@ API path: `/api/v1/event_types/`
 Operations: List, Remove.
 
 API path: `/api/v1/payload_content_types/`
-
-#### EventsPerDayEntry
-
-| Field | Description |
-| --- | --- |
-| `"amount"` |  |
-| `"application_id"` |  |
-| `"application_name"` |  |
-| `"date"` |  |
-| `"is_provisional"` |  |
-
-Operations: List.
-
-API path: `/api/v1/events_per_day/application`
 
 #### Health
 
@@ -501,8 +489,13 @@ API path: `/api/v1/auth/login`
 
 | Field | Description |
 | --- | --- |
+| `"amount"` |  |
+| `"application_id"` |  |
+| `"application_name"` |  |
 | `"consumption"` |  |
+| `"date"` |  |
 | `"id"` |  |
+| `"is_provisional"` |  |
 | `"name"` |  |
 | `"onboarding_steps"` |  |
 | `"organization_id"` |  |
@@ -697,9 +690,13 @@ Create an instance: `application := client.Application(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `int` |  |
 | `application_id` | `string` | Unique identifier of the application. |
+| `application_name` | `string` |  |
 | `consumption` | `map[string]any` | Current consumption metrics for this application. |
+| `date` | `string` |  |
 | `id` | `string` |  |
+| `is_provisional` | `bool` |  |
 | `name` | `string` | Name of the application. |
 | `onboarding_steps` | `map[string]any` | Onboarding completion status for this application. |
 | `organization_id` | `string` | UUID of the organization this application belongs to. |
@@ -729,8 +726,12 @@ fmt.Println(applications) // the array of records
 
 ```go
 result, err := client.Application(nil).Create(map[string]any{
+    "amount": 1,
     "application_id": "example_application_id",
+    "application_name": "example_application_name",
     "consumption": map[string]any{},
+    "date": "example_date",
+    "is_provisional": true,
     "name": "example_name",
     "onboarding_steps": map[string]any{},
     "organization_id": "example_organization_id",
@@ -818,7 +819,6 @@ Create an instance: `event := client.Event(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `application_id` | `string` |  |
 | `event_id` | `string` |  |
 | `event_type_name` | `string` |  |
 | `id` | `string` |  |
@@ -855,7 +855,6 @@ fmt.Println(events) // the array of records
 ```go
 result, err := client.Event(nil).Create(map[string]any{
     "id": "example_id",
-    "application_id": "example_application_id",
     "event_id": "example_event_id",
     "event_type_name": "example_event_type_name",
     "ip": "example_ip",
@@ -957,37 +956,6 @@ if err != nil {
     panic(err)
 }
 fmt.Println(eventsManagements) // the array of records
-```
-
-
-### EventsPerDayEntry
-
-Create an instance: `eventsPerDayEntry := client.EventsPerDayEntry(nil)`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `List(match, ctrl)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `amount` | `int` |  |
-| `application_id` | `string` |  |
-| `application_name` | `string` |  |
-| `date` | `string` |  |
-| `is_provisional` | `bool` |  |
-
-#### Example: List
-
-```go
-eventsPerDayEntrys, err := client.EventsPerDayEntry(nil).List(nil, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(eventsPerDayEntrys) // the array of records
 ```
 
 
@@ -1183,8 +1151,13 @@ Create an instance: `organization := client.Organization(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `amount` | `int` |  |
+| `application_id` | `string` |  |
+| `application_name` | `string` |  |
 | `consumption` | `map[string]any` |  |
+| `date` | `string` |  |
 | `id` | `string` |  |
+| `is_provisional` | `bool` |  |
 | `name` | `string` |  |
 | `onboarding_steps` | `map[string]any` |  |
 | `organization_id` | `string` |  |
@@ -1217,7 +1190,12 @@ fmt.Println(organizations) // the array of records
 
 ```go
 result, err := client.Organization(nil).Create(map[string]any{
+    "amount": 1,
+    "application_id": "example_application_id",
+    "application_name": "example_application_name",
     "consumption": map[string]any{},
+    "date": "example_date",
+    "is_provisional": true,
     "name": "example_name",
     "onboarding_steps": map[string]any{},
     "organization_id": "example_organization_id",
@@ -1656,14 +1634,14 @@ above:
 
 | Feature | What it does |
 |---|---|
-| [`debug`](#debug) | Request/response capture ring buffer for debugging |
-| [`idempotency`](#idempotency) | Idempotency keys for safe retries of mutating operations |
-| [`metrics`](#metrics) | Statistics capture: per-operation counters and latency |
-| [`paging`](#paging) | Pagination signals for list operations |
-| [`ratelimit`](#ratelimit) | Client-side rate limiting via a token bucket |
-| [`retry`](#retry) | Automatic retry of transient failures with exponential backoff |
-| [`test`](#test) | In-memory mock transport for testing without a live server |
-| [`timeout`](#timeout) | Per-request timeout with transport abort |
+| [`debug`](#debug) | Debug capture |
+| [`idempotency`](#idempotency) | Idempotency |
+| [`metrics`](#metrics) | Metrics |
+| [`paging`](#paging) | Paging |
+| [`ratelimit`](#ratelimit) | Rate limiting |
+| [`retry`](#retry) | Retry |
+| [`test`](#test) | Test transport |
+| [`timeout`](#timeout) | Timeout |
 
 > **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
@@ -1672,7 +1650,7 @@ above:
 
 ### debug
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 | Option | Default |
 |---|---|
@@ -1684,7 +1662,7 @@ Set `feature.debug.active` to enable it, then override any of the options above.
 
 ### idempotency
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 | Option | Default |
 |---|---|
@@ -1697,7 +1675,7 @@ Set `feature.idempotency.active` to enable it, then override any of the options 
 
 ### metrics
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 | Option | Default |
 |---|---|
@@ -1707,7 +1685,7 @@ Set `feature.metrics.active` to enable it, then override any of the options abov
 
 ### paging
 
-Pagination signals for list operations.
+Paging.
 
 | Option | Default |
 |---|---|
@@ -1723,7 +1701,7 @@ Set `feature.paging.active` to enable it, then override any of the options above
 
 ### ratelimit
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 | Option | Default |
 |---|---|
@@ -1739,7 +1717,7 @@ activated earlier.
 
 ### retry
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 | Option | Default |
 |---|---|
@@ -1758,7 +1736,7 @@ activated earlier.
 
 ### test
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 | Option | Default |
 |---|---|
@@ -1768,7 +1746,7 @@ Set `feature.test.active` to enable it, then override any of the options above.
 
 ### timeout
 
-Per-request timeout with transport abort.
+Timeout.
 
 | Option | Default |
 |---|---|
@@ -1820,14 +1798,14 @@ stage names.
 
 The SDK ships with built-in features:
 
-- **DebugFeature**: Request/response capture ring buffer for debugging
-- **IdempotencyFeature**: Idempotency keys for safe retries of mutating operations
-- **MetricsFeature**: Statistics capture: per-operation counters and latency
-- **PagingFeature**: Pagination signals for list operations
-- **RatelimitFeature**: Client-side rate limiting via a token bucket
-- **RetryFeature**: Automatic retry of transient failures with exponential backoff
-- **TestFeature**: In-memory mock transport for testing without a live server
-- **TimeoutFeature**: Per-request timeout with transport abort
+- **DebugFeature**: Debug capture
+- **IdempotencyFeature**: Idempotency
+- **MetricsFeature**: Metrics
+- **PagingFeature**: Paging
+- **RatelimitFeature**: Rate limiting
+- **RetryFeature**: Retry
+- **TestFeature**: Test transport
+- **TimeoutFeature**: Timeout
 
 Features are initialized in order. Hooks fire in the order features
 were added, so later features can override earlier ones.
@@ -1862,11 +1840,11 @@ Entity instances are stateful. After a successful `List`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-application := client.Application(nil)
-application.List(nil, nil)
+eventtype := client.EventType(nil)
+eventtype.List(nil, nil)
 
-// application.Data() now returns the application data from the last list
-// application.Match() returns the last match criteria
+// eventtype.Data() now returns the eventtype data from the last list
+// eventtype.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

@@ -19,7 +19,6 @@ import type {
   ProblemListMatch,
 } from '../Hook0Types'
 
-// TODO: needs Entity superclass
 class ProblemEntity extends Hook0EntityBase<Problem> {
 
   constructor(client: Hook0SDK, entopts: any) {

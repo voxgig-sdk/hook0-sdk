@@ -103,7 +103,7 @@ describe("OrganizationEntity", function()
       id = organization_ref01_data["id"],
     }
 
-    local organization_ref01_markdef_up0_name = "name"
+    local organization_ref01_markdef_up0_name = "application_id"
     local organization_ref01_markdef_up0_value = "Mark01-organization_ref01_" .. tostring(setup.now)
     organization_ref01_data_up0_up[organization_ref01_markdef_up0_name] = organization_ref01_markdef_up0_value
 

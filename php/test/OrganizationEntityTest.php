@@ -103,7 +103,7 @@ class OrganizationEntityTest extends TestCase
             "id" => $organization_ref01_data["id"],
         ];
 
-        $organization_ref01_markdef_up0_name = "name";
+        $organization_ref01_markdef_up0_name = "application_id";
         $organization_ref01_markdef_up0_value = "Mark01-organization_ref01_" . $setup["now"];
         $organization_ref01_data_up0_up[$organization_ref01_markdef_up0_name] = $organization_ref01_markdef_up0_value;
 

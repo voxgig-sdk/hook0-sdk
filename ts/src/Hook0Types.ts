@@ -1,14 +1,18 @@
 // Typed models for the Hook0 SDK.
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 
 export interface Application {
+  amount: number
   application_id: string
+  application_name: string
   consumption: Record<string, any>
+  date: string
   id?: string
+  is_provisional: boolean
   name: string
   onboarding_steps: Record<string, any>
   organization_id: string
@@ -24,9 +28,13 @@ export interface ApplicationListMatch {
 }
 
 export interface ApplicationCreateData {
+  amount: number
   application_id: string
+  application_name: string
   consumption: Record<string, any>
+  date: string
   id?: string
+  is_provisional: boolean
   name: string
   onboarding_steps: Record<string, any>
   organization_id: string
@@ -35,8 +43,12 @@ export interface ApplicationCreateData {
 
 export interface ApplicationUpdateData {
   id: string
+  amount?: number
   application_id?: string
+  application_name?: string
   consumption?: Record<string, any>
+  date?: string
+  is_provisional?: boolean
   name?: string
   onboarding_steps?: Record<string, any>
   organization_id?: string
@@ -87,7 +99,6 @@ export interface ApplicationsManagementRemoveMatch {
 }
 
 export interface Event {
-  application_id: string
   event_id: string
   event_type_name: string
   id?: string
@@ -111,7 +122,6 @@ export interface EventListMatch {
 
 export interface EventCreateData {
   id: string
-  application_id: string
   event_id: string
   event_type_name: string
   ip: string
@@ -171,20 +181,6 @@ export interface EventsManagementListMatch {
 export interface EventsManagementRemoveMatch {
   event_type_name: string
   application_id: string
-}
-
-export interface EventsPerDayEntry {
-  amount: number
-  application_id: string
-  application_name: string
-  date: string
-  is_provisional: boolean
-}
-
-export interface EventsPerDayEntryListMatch {
-  application_id: string
-  from?: string
-  to?: string
 }
 
 export interface Health {
@@ -280,8 +276,13 @@ export interface LoginCreateData {
 }
 
 export interface Organization {
+  amount: number
+  application_id: string
+  application_name: string
   consumption: Record<string, any>
+  date: string
   id?: string
+  is_provisional: boolean
   name: string
   onboarding_steps: Record<string, any>
   organization_id: string
@@ -296,8 +297,13 @@ export interface OrganizationLoadMatch {
 }
 
 export interface OrganizationListMatch {
+  amount?: number
+  application_id?: string
+  application_name?: string
   consumption?: Record<string, any>
+  date?: string
   id?: string
+  is_provisional?: boolean
   name?: string
   onboarding_steps?: Record<string, any>
   organization_id?: string
@@ -308,8 +314,13 @@ export interface OrganizationListMatch {
 }
 
 export interface OrganizationCreateData {
+  amount: number
+  application_id: string
+  application_name: string
   consumption: Record<string, any>
+  date: string
   id?: string
+  is_provisional: boolean
   name: string
   onboarding_steps: Record<string, any>
   organization_id: string
@@ -321,7 +332,12 @@ export interface OrganizationCreateData {
 
 export interface OrganizationUpdateData {
   id: string
+  amount?: number
+  application_id?: string
+  application_name?: string
   consumption?: Record<string, any>
+  date?: string
+  is_provisional?: boolean
   name?: string
   onboarding_steps?: Record<string, any>
   organization_id?: string

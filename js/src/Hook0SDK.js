@@ -6,7 +6,6 @@ const { ApplicationsManagementEntity } = require('./entity/ApplicationsManagemen
 const { EventEntity } = require('./entity/EventEntity')
 const { EventTypeEntity } = require('./entity/EventTypeEntity')
 const { EventsManagementEntity } = require('./entity/EventsManagementEntity')
-const { EventsPerDayEntryEntity } = require('./entity/EventsPerDayEntryEntity')
 const { HealthEntity } = require('./entity/HealthEntity')
 const { Hook0Entity } = require('./entity/Hook0Entity')
 const { IngestedEventEntity } = require('./entity/IngestedEventEntity')
@@ -367,15 +366,6 @@ class Hook0SDK {
   EventsManagement(entopts) {
     const self = this
     return new EventsManagementEntity(self, entopts)
-  }
-
-
-  // Entity access: `client.EventsPerDayEntry().list()` / `client.EventsPerDayEntry().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  EventsPerDayEntry(entopts) {
-    const self = this
-    return new EventsPerDayEntryEntity(self, entopts)
   }
 
 
