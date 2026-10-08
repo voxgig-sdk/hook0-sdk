@@ -216,7 +216,7 @@ SdkEntity application = client.application(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.application(null).create(Map.of(
@@ -235,16 +235,18 @@ Object result = client.application(null).create(Map.of(
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.application(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.application(null).list(Map.of("organization_id", "example"), null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.application(null).load(Map.of("id", "application_id"), null);
@@ -252,7 +254,7 @@ Object result = client.application(null).load(Map.of("id", "application_id"), nu
 
 #### `remove(reqmatch, ctrl) -> Object`
 
-Remove the entity matching the given criteria. Raises on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```java
 Object result = client.application(null).remove(Map.of("id", "application_id"), null);
@@ -260,7 +262,7 @@ Object result = client.application(null).remove(Map.of("id", "application_id"), 
 
 #### `update(reqdata, ctrl) -> Object`
 
-Update an existing entity. The data must include the entity `id`. Returns the updated entity data and raises on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
 
 ```java
 Object result = client.application(null).update(Map.of(
@@ -310,7 +312,7 @@ SdkEntity applicationSecret = client.applicationSecret(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.applicationSecret(null).create(Map.of(
@@ -322,16 +324,18 @@ Object result = client.applicationSecret(null).create(Map.of(
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.applicationSecret(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.applicationSecret(null).list(Map.of("application_id", "example"), null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `update(reqdata, ctrl) -> Object`
 
-Update an existing entity. The data must include the entity `id`. Returns the updated entity data and raises on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
 
 ```java
 Object result = client.applicationSecret(null).update(Map.of(
@@ -370,7 +374,7 @@ SdkEntity applicationsManagement = client.applicationsManagement(null);
 
 #### `remove(reqmatch, ctrl) -> Object`
 
-Remove the entity matching the given criteria. Raises on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```java
 Object result = client.applicationsManagement(null).remove(Map.of("application_secret_token", "application_secret_token", "application_id", "application_id"), null);
@@ -422,7 +426,7 @@ SdkEntity event = client.event(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.event(null).create(Map.of(
@@ -440,16 +444,18 @@ Object result = client.event(null).create(Map.of(
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.event(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.event(null).list(Map.of("application_id", "example"), null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.event(null).load(Map.of("id", "event_id", "application_id", "application_id"), null);
@@ -500,7 +506,7 @@ SdkEntity eventType = client.eventType(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.eventType(null).create(Map.of(
@@ -517,16 +523,18 @@ Object result = client.eventType(null).create(Map.of(
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.eventType(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.eventType(null).list(Map.of("application_id", "example"), null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.eventType(null).load(Map.of("id", "event_type_id", "application_id", "application_id"), null);
@@ -563,16 +571,18 @@ SdkEntity eventsManagement = client.eventsManagement(null);
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.eventsManagement(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.eventsManagement(null).list(null, null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `remove(reqmatch, ctrl) -> Object`
 
-Remove the entity matching the given criteria. Raises on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```java
 Object result = client.eventsManagement(null).remove(Map.of("event_type_name", "event_type_name", "application_id", "application_id"), null);
@@ -621,7 +631,7 @@ SdkEntity health = client.health(null);
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.health(null).load(null, null);
@@ -670,11 +680,13 @@ SdkEntity hook0 = client.hook0(null);
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.hook0(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.hook0(null).list(null, null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 ### Common Methods
@@ -721,7 +733,7 @@ SdkEntity ingestedEvent = client.ingestedEvent(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.ingestedEvent(null).create(Map.of(
@@ -780,7 +792,7 @@ SdkEntity instance = client.instance(null);
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.instance(null).load(null, null);
@@ -824,7 +836,7 @@ SdkEntity login = client.login(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.login(null).create(Map.of(
@@ -883,38 +895,40 @@ SdkEntity organization = client.organization(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
-Object result = client.organization(null).create(Map.of(
-    "amount", 1L,  // Long
-    "application_id", "example_application_id",  // String
-    "application_name", "example_application_name",  // String
-    "consumption", Map.of(),  // Map<String, Object>
-    "date", "example_date",  // String
-    "is_provisional", true,  // Boolean
-    "name", "example_name",  // String
-    "onboarding_steps", Map.of(),  // Map<String, Object>
-    "organization_id", "example_organization_id",  // String
-    "plan", Map.of(),  // Map<String, Object>
-    "quotas", Map.of(),  // Map<String, Object>
-    "role", "example_role",  // String
-    "users", List.of()  // List<Object>
+Object result = client.organization(null).create(Map.ofEntries(
+    Map.entry("amount", 1L),  // Long
+    Map.entry("application_id", "example_application_id"),  // String
+    Map.entry("application_name", "example_application_name"),  // String
+    Map.entry("consumption", Map.of()),  // Map<String, Object>
+    Map.entry("date", "example_date"),  // String
+    Map.entry("is_provisional", true),  // Boolean
+    Map.entry("name", "example_name"),  // String
+    Map.entry("onboarding_steps", Map.of()),  // Map<String, Object>
+    Map.entry("organization_id", "example_organization_id"),  // String
+    Map.entry("plan", Map.of()),  // Map<String, Object>
+    Map.entry("quotas", Map.of()),  // Map<String, Object>
+    Map.entry("role", "example_role"),  // String
+    Map.entry("users", List.of())  // List<Object>
 ), null);
 ```
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.organization(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.organization(null).list(null, null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.organization(null).load(Map.of("id", "organization_id"), null);
@@ -922,7 +936,7 @@ Object result = client.organization(null).load(Map.of("id", "organization_id"), 
 
 #### `remove(reqmatch, ctrl) -> Object`
 
-Remove the entity matching the given criteria. Raises on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```java
 Object result = client.organization(null).remove(Map.of("id", "organization_id"), null);
@@ -930,7 +944,7 @@ Object result = client.organization(null).remove(Map.of("id", "organization_id")
 
 #### `update(reqdata, ctrl) -> Object`
 
-Update an existing entity. The data must include the entity `id`. Returns the updated entity data and raises on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
 
 ```java
 Object result = client.organization(null).update(Map.of(
@@ -977,7 +991,7 @@ SdkEntity organizationEditRole = client.organizationEditRole(null);
 
 #### `update(reqdata, ctrl) -> Object`
 
-Update an existing entity. The data must include the entity `id`. Returns the updated entity data and raises on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
 
 ```java
 Object result = client.organizationEditRole(null).update(Map.of(
@@ -1025,11 +1039,13 @@ SdkEntity problem = client.problem(null);
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.problem(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.problem(null).list(null, null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 ### Common Methods
@@ -1063,18 +1079,14 @@ SdkEntity quota = client.quota(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `global_applications_per_organization_limit` | `Long` | Yes |  |
-| `global_days_of_events_retention_limit` | `Long` | Yes |  |
-| `global_event_types_per_application_limit` | `Long` | Yes |  |
-| `global_events_per_day_limit` | `Long` | Yes |  |
-| `global_members_per_organization_limit` | `Long` | Yes |  |
-| `global_subscriptions_per_application_limit` | `Long` | Yes |  |
+| `enabled` | `Boolean` | Yes |  |
+| `limits` | `Map<String, Object>` | Yes |  |
 
 ### Operations
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.quota(null).load(null, null);
@@ -1122,7 +1134,7 @@ SdkEntity registration = client.registration(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.registration(null).create(Map.of(
@@ -1183,16 +1195,18 @@ SdkEntity requestAttempt = client.requestAttempt(null);
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.requestAttempt(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.requestAttempt(null).list(Map.of("application_id", "example"), null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.requestAttempt(null).load(Map.of("id", "request_attempt_id", "application_id", "application_id"), null);
@@ -1229,13 +1243,19 @@ SdkEntity response = client.response(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `body` | `String` | No |  |
+| `elapsed_time_ms` | `Long` | No |  |
+| `headers` | `Map<String, Object>` | No |  |
+| `http_code` | `Long` | No |  |
 | `id` | `String` | No |  |
+| `response_error_name` | `String` | No |  |
+| `response_id` | `String` | Yes |  |
 
 ### Operations
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.response(null).load(Map.of("id", "response_id", "application_id", "application_id"), null);
@@ -1272,7 +1292,7 @@ SdkEntity revoke = client.revoke(null);
 
 #### `remove(reqmatch, ctrl) -> Object`
 
-Remove the entity matching the given criteria. Raises on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```java
 Object result = client.revoke(null).remove(Map.of("organization_id", "organization_id"), null);
@@ -1320,7 +1340,7 @@ SdkEntity serviceToken = client.serviceToken(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.serviceToken(null).create(Map.of(
@@ -1334,16 +1354,18 @@ Object result = client.serviceToken(null).create(Map.of(
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.serviceToken(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.serviceToken(null).list(Map.of("organization_id", "example"), null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.serviceToken(null).load(Map.of("id", "service_token_id", "organization_id", "organization_id"), null);
@@ -1351,7 +1373,7 @@ Object result = client.serviceToken(null).load(Map.of("id", "service_token_id", 
 
 #### `remove(reqmatch, ctrl) -> Object`
 
-Remove the entity matching the given criteria. Raises on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```java
 Object result = client.serviceToken(null).remove(Map.of("id", "service_token_id", "organization_id", "organization_id"), null);
@@ -1359,7 +1381,7 @@ Object result = client.serviceToken(null).remove(Map.of("id", "service_token_id"
 
 #### `update(reqdata, ctrl) -> Object`
 
-Update an existing entity. The data must include the entity `id`. Returns the updated entity data and raises on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
 
 ```java
 Object result = client.serviceToken(null).update(Map.of(
@@ -1438,38 +1460,40 @@ SdkEntity subscription = client.subscription(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
-Object result = client.subscription(null).create(Map.of(
-    "application_id", "example_application_id",  // String
-    "created_at", "example_created_at",  // String
-    "dedicated_workers", List.of(),  // List<Object>
-    "event_types", List.of(),  // List<Object>
-    "is_enabled", true,  // Boolean
-    "label_key", "example_label_key",  // String
-    "label_value", "example_label_value",  // String
-    "labels", Map.of(),  // Map<String, Object>
-    "metadata", Map.of(),  // Map<String, Object>
-    "secret", "example_secret",  // String
-    "subscription_id", "example_subscription_id",  // String
-    "target", Map.of(),  // Map<String, Object>
-    "updated_at", "example_updated_at"  // String
+Object result = client.subscription(null).create(Map.ofEntries(
+    Map.entry("application_id", "example_application_id"),  // String
+    Map.entry("created_at", "example_created_at"),  // String
+    Map.entry("dedicated_workers", List.of()),  // List<Object>
+    Map.entry("event_types", List.of()),  // List<Object>
+    Map.entry("is_enabled", true),  // Boolean
+    Map.entry("label_key", "example_label_key"),  // String
+    Map.entry("label_value", "example_label_value"),  // String
+    Map.entry("labels", Map.of()),  // Map<String, Object>
+    Map.entry("metadata", Map.of()),  // Map<String, Object>
+    Map.entry("secret", "example_secret"),  // String
+    Map.entry("subscription_id", "example_subscription_id"),  // String
+    Map.entry("target", Map.of()),  // Map<String, Object>
+    Map.entry("updated_at", "example_updated_at")  // String
 ), null);
 ```
 
 #### `list(reqmatch, ctrl) -> Object`
 
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns an aggregate list and raises on error.
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```java
-Object results = client.subscription(null).list(null, null);
-System.out.println(results);
+List<?> results = (List<?>) client.subscription(null).list(Map.of("application_id", "example"), null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
 ```
 
 #### `load(reqmatch, ctrl) -> Object`
 
-Load a single entity matching the given criteria. Returns the entity data and raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data()` reads, and raises on error.
 
 ```java
 Object result = client.subscription(null).load(Map.of("id", "subscription_id"), null);
@@ -1477,7 +1501,7 @@ Object result = client.subscription(null).load(Map.of("id", "subscription_id"), 
 
 #### `remove(reqmatch, ctrl) -> Object`
 
-Remove the entity matching the given criteria. Raises on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```java
 Object result = client.subscription(null).remove(Map.of("id", "subscription_id", "application_id", "application_id"), null);
@@ -1485,7 +1509,7 @@ Object result = client.subscription(null).remove(Map.of("id", "subscription_id",
 
 #### `update(reqdata, ctrl) -> Object`
 
-Update an existing entity. The data must include the entity `id`. Returns the updated entity data and raises on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
 
 ```java
 Object result = client.subscription(null).update(Map.of(
@@ -1532,7 +1556,7 @@ SdkEntity userAuthentication = client.userAuthentication(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.userAuthentication(null).create(Map.of(
@@ -1580,7 +1604,7 @@ SdkEntity userInvitation = client.userInvitation(null);
 
 #### `create(reqdata, ctrl) -> Object`
 
-Create a new entity with the given data. Returns the created entity data and raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
 Object result = client.userInvitation(null).create(Map.of(
@@ -1901,6 +1925,7 @@ Timeout.
 | Option | Type |
 |---|---|
 | `clearTimer` | function |
+| `now` | function |
 | `setTimer` | function |
 
 These take no default: the feature behaves one way when you supply them and

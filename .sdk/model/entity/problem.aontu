@@ -50,6 +50,10 @@ main: kit: entity: problem: {
           }
           m: "GET"
           o: "/api/v1/errors/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"

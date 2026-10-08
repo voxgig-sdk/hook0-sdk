@@ -15,9 +15,13 @@ predictable and low-friction for both humans and AI agents.
 
 ## Install
 This package is not yet published to npm. Install it from the GitHub
-release tag (`ts/vX.Y.Z`):
+release tag (`ts/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/hook0-sdk/tags)), or from a
+clone, which carries the compiled `dist/`:
 
-- Releases: [https://github.com/voxgig-sdk/hook0-sdk/releases](https://github.com/voxgig-sdk/hook0-sdk/releases)
+```bash
+git clone https://github.com/voxgig-sdk/hook0-sdk
+npm install ./hook0-sdk/ts
+```
 
 
 ## Tutorial: your first API call
@@ -45,18 +49,18 @@ resolves to entities, not raw records. Iterate them directly, and call
 const applications = await client.Application().list({ organization_id: "example" })
 
 for (const application of applications) {
-  console.log(application)
+  console.log(application.data())
 }
 ```
 
 ### 3. Load an application
 
-`load()` returns the entity directly and throws on failure:
+`load()` returns the entity and throws on failure; `.data()` reads its record:
 
 ```ts
 try {
   const application = await client.Application().load({ id: 'example_id' })
-  console.log(application)
+  console.log(application.data())
 } catch (err) {
   console.error('load failed:', err)
 }
@@ -99,15 +103,16 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const eventtypes = await client.EventType().list()
-  console.log(eventtypes)
+  const response = await client.Response().load({ id: "example_id", application_id: "example" })
+  console.log(response.data())
 } catch (err) {
-  console.error('list failed:', err)
+  console.error('load failed:', err)
 }
 ```
 
 The low-level `direct()` method does **not** throw — it returns the
-value or an `Error`, so check the result before using it:
+result envelope. Branch on `ok`; on failure `status` holds the HTTP status
+(for error responses) and `err` holds the error:
 
 ```ts
 const result = await client.direct({
@@ -116,8 +121,8 @@ const result = await client.direct({
   params: { id: 'example_id' },
 })
 
-if (result instanceof Error) {
-  throw result
+if (!result.ok) {
+  console.error('request failed:', result.status, result.err)
 }
 ```
 
@@ -135,9 +140,6 @@ const result = await client.direct({
   params: { id: 'example' },
 })
 
-if (result instanceof Error) {
-  throw result
-}
 if (result.ok) {
   console.log(result.status)  // 200
   console.log(result.data)    // response body
@@ -166,10 +168,9 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = Hook0SDK.test()
 
-const eventtype = await client.EventType().list()
-// eventtype is the entity, populated with mock response data
-// — call eventtype.data() for the record itself
-console.log(eventtype)
+const response = await client.Response().load({ id: 'test01', application_id: 'example_application_id' })
+// response is the Response entity; .data() reads its mock record
+console.log(response.data())
 ```
 
 You can also use the instance method:
@@ -184,10 +185,10 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```ts
-const entity = client.EventType()
+const entity = client.Response()
 
 // First call runs the operation and stores its result
-await entity.list()
+await entity.load({ id: 'example', application_id: 'example_application_id' })
 
 // Subsequent calls reuse the stored state
 const data = entity.data()
@@ -310,11 +311,11 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `load(reqmatch?, ctrl?): Promise<Entity>` | Load a single entity by match criteria. |
-| `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria. |
-| `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity. |
-| `update` | `update(reqdata?, ctrl?): Promise<Entity>` | Update an existing entity. |
-| `remove` | `remove(reqmatch?, ctrl?): Promise<void>` | Remove an entity. |
+| `load` | `load(reqmatch?, ctrl?): Promise<Entity>` | Load a single entity by match criteria, and return it. |
+| `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria, one per record. |
+| `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity, and return it. |
+| `update` | `update(reqdata?, ctrl?): Promise<Entity>` | Update an existing entity, and return it. |
+| `remove` | `remove(reqmatch?, ctrl?): Promise<Entity>` | Remove an entity, and return it marked as deleted. |
 | `data` | `data(data?: Partial<Entity>): Entity` | Get or set entity data. |
 | `match` | `match(match?: Partial<Entity>): Partial<Entity>` | Get or set entity match criteria. |
 | `make` | `make(): Entity` | Create a new instance with the same options. |
@@ -323,13 +324,13 @@ All entities share the same interface.
 
 #### Return values
 
-Entity operations resolve to the entity data directly — there is no
-result envelope:
+Entity operations resolve to the entity itself — there is no result
+envelope, and an entity's `data()` reads its record:
 
 - `load`, `create` and `update` resolve to a single entity object.
 - `list` resolves to an **array** of entity objects (iterate it directly;
   there is no `.data` and no `.ok`).
-- `remove` resolves to `void`.
+- `remove` resolves to the entity, marked as deleted.
 
 On a failed request these methods **throw**, so wrap calls in
 `try`/`catch` to handle errors. Only `direct()` returns the result
@@ -586,12 +587,8 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `global_applications_per_organization_limit` |  |
-| `global_days_of_events_retention_limit` |  |
-| `global_event_types_per_application_limit` |  |
-| `global_events_per_day_limit` |  |
-| `global_members_per_organization_limit` |  |
-| `global_subscriptions_per_application_limit` |  |
+| `enabled` |  |
+| `limits` |  |
 
 Operations: load.
 
@@ -639,7 +636,13 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `body` |  |
+| `elapsed_time_ms` |  |
+| `headers` |  |
+| `http_code` |  |
 | `id` |  |
+| `response_error_name` |  |
+| `response_id` |  |
 
 Operations: load.
 
@@ -1239,12 +1242,8 @@ Create an instance: `const quota = client.Quota()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `global_applications_per_organization_limit` | `number` |  |
-| `global_days_of_events_retention_limit` | `number` |  |
-| `global_event_types_per_application_limit` | `number` |  |
-| `global_events_per_day_limit` | `number` |  |
-| `global_members_per_organization_limit` | `number` |  |
-| `global_subscriptions_per_application_limit` | `number` |  |
+| `enabled` | `boolean` |  |
+| `limits` | `Record<string, any>` |  |
 
 #### Example: Load
 
@@ -1343,7 +1342,13 @@ Create an instance: `const response = client.Response()`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `body` | `string` |  |
+| `elapsed_time_ms` | `number` |  |
+| `headers` | `Record<string, any>` |  |
+| `http_code` | `number` |  |
 | `id` | `string` |  |
+| `response_error_name` | `string` |  |
+| `response_id` | `string` |  |
 
 #### Example: Load
 
@@ -1744,16 +1749,16 @@ import { Hook0SDK } from '@voxgig-sdk/hook0-sdk'
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const eventtype = client.EventType()
-await eventtype.list()
+const response = client.Response()
+await response.load({ id: "example_id", application_id: "example" })
 
-// eventtype.data() now returns the eventtype data from the last `list`
-// eventtype.match() returns the last match criteria
+// response.data() now returns the response data from the last `load`
+// response.match() returns { id: "example_id" }
 ```
 
 Call `make()` to create a fresh instance with the same configuration

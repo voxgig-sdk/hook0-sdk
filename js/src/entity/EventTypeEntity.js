@@ -24,7 +24,7 @@ class EventTypeEntity extends Hook0EntityBase {
   /**
    * @param {EventTypeLoadMatch} [reqmatch]
    * @param {Object} [ctrl]
-   * @returns {Promise<EventType>}
+   * @returns {Promise<EventTypeEntity>}
    */
   async load(reqmatch, ctrl) {
 
@@ -129,9 +129,15 @@ class EventTypeEntity extends Hook0EntityBase {
       return (ctx.result && ctx.result.ok) ? this : out
     }
     catch (err) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -149,7 +155,7 @@ class EventTypeEntity extends Hook0EntityBase {
   /**
    * @param {EventTypeListMatch} [reqmatch]
    * @param {Object} [ctrl]
-   * @returns {Promise<EventType[]>}
+   * @returns {Promise<EventTypeEntity[]>}
    */
   async list(reqmatch, ctrl) {
 
@@ -242,9 +248,15 @@ class EventTypeEntity extends Hook0EntityBase {
       return done(ctx)
     }
     catch (err) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -262,7 +274,7 @@ class EventTypeEntity extends Hook0EntityBase {
   /**
    * @param {EventTypeCreateData} [reqdata]
    * @param {Object} [ctrl]
-   * @returns {Promise<EventType>}
+   * @returns {Promise<EventTypeEntity>}
    */
   async create(reqdata, ctrl) {
 
@@ -362,9 +374,15 @@ class EventTypeEntity extends Hook0EntityBase {
       return (ctx.result && ctx.result.ok) ? this : out
     }
     catch (err) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -376,6 +394,7 @@ class EventTypeEntity extends Hook0EntityBase {
       }
     }
   }
+
 
 
 

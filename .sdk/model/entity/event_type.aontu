@@ -73,6 +73,12 @@ main: kit: entity: event_type: {
       name: "create"
       points: [
         {
+          bf: [
+            "application_id"
+            "resource_type"
+            "service"
+            "verb"
+          ]
           co: {
             id: "POST /api/v1/event_types/"
             source: "openapi3"
@@ -80,6 +86,10 @@ main: kit: entity: event_type: {
           }
           m: "POST"
           o: "/api/v1/event_types/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"
@@ -124,6 +134,10 @@ main: kit: entity: event_type: {
             exist: [
               "application_id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -184,6 +198,10 @@ main: kit: entity: event_type: {
             param: {
               event_type_name: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

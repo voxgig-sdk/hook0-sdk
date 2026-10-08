@@ -37,6 +37,10 @@ main: kit: entity: organization_edit_role: {
       name: "update"
       points: [
         {
+          bf: [
+            "role"
+            "user_id"
+          ]
           co: {
             id: "PUT /api/v1/organizations/{organization_id}/invite"
             source: "openapi3"
@@ -65,6 +69,10 @@ main: kit: entity: organization_edit_role: {
             param: {
               organization_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

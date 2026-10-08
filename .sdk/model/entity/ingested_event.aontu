@@ -72,6 +72,16 @@ main: kit: entity: ingested_event: {
       name: "create"
       points: [
         {
+          bf: [
+            "application_id"
+            "event_id"
+            "event_type"
+            "labels"
+            "metadata"
+            "occurred_at"
+            "payload"
+            "payload_content_type"
+          ]
           co: {
             id: "POST /api/v1/event/"
             source: "openapi3"
@@ -79,6 +89,10 @@ main: kit: entity: ingested_event: {
           }
           m: "POST"
           o: "/api/v1/event/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"

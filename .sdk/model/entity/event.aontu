@@ -81,6 +81,9 @@ main: kit: entity: event: {
       name: "create"
       points: [
         {
+          bf: [
+            "application_id"
+          ]
           co: {
             id: "POST /api/v1/events/{event_id}/replay"
             source: "openapi3"
@@ -161,6 +164,10 @@ main: kit: entity: event: {
               "application_id"
             ]
           }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"
@@ -220,6 +227,10 @@ main: kit: entity: event: {
             param: {
               event_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

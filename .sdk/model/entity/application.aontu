@@ -94,6 +94,10 @@ main: kit: entity: application: {
       name: "create"
       points: [
         {
+          bf: [
+            "name"
+            "organization_id"
+          ]
           co: {
             id: "POST /api/v1/applications/"
             source: "openapi3"
@@ -101,6 +105,10 @@ main: kit: entity: application: {
           }
           m: "POST"
           o: "/api/v1/applications/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"
@@ -158,9 +166,11 @@ main: kit: entity: application: {
           q: {
             exist: [
               "application_id"
-              "from"
-              "to"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -204,6 +214,10 @@ main: kit: entity: application: {
             exist: [
               "organization_id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -254,6 +268,10 @@ main: kit: entity: application: {
             param: {
               application_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -333,6 +351,10 @@ main: kit: entity: application: {
       name: "update"
       points: [
         {
+          bf: [
+            "name"
+            "organization_id"
+          ]
           co: {
             id: "PUT /api/v1/applications/{application_id}"
             source: "openapi3"
@@ -360,6 +382,10 @@ main: kit: entity: application: {
             param: {
               application_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

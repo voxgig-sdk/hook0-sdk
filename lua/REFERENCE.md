@@ -195,7 +195,7 @@ local application = client:Application(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Application():create({
@@ -214,15 +214,15 @@ local result, err = client:Application():create({
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:Application():list()
+local results, err = client:Application():list({ organization_id = "example" })
 ```
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Application():load({ id = "application_id" })
@@ -230,7 +230,7 @@ local result, err = client:Application():load({ id = "application_id" })
 
 #### `remove(reqmatch, ctrl) -> any, err`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Application():remove({ id = "application_id" })
@@ -238,7 +238,7 @@ local result, err = client:Application():remove({ id = "application_id" })
 
 #### `update(reqdata, ctrl) -> any, err`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Application():update({
@@ -298,7 +298,7 @@ local application_secret = client:ApplicationSecret(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:ApplicationSecret():create({
@@ -310,15 +310,15 @@ local result, err = client:ApplicationSecret():create({
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:ApplicationSecret():list()
+local results, err = client:ApplicationSecret():list({ application_id = "example" })
 ```
 
 #### `update(reqdata, ctrl) -> any, err`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:ApplicationSecret():update({
@@ -367,7 +367,7 @@ local applications_management = client:ApplicationsManagement(nil)
 
 #### `remove(reqmatch, ctrl) -> any, err`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:ApplicationsManagement():remove({ application_secret_token = "application_secret_token", application_id = "application_id" })
@@ -428,7 +428,7 @@ local event = client:Event(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Event():create({
@@ -446,15 +446,15 @@ local result, err = client:Event():create({
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:Event():list()
+local results, err = client:Event():list({ application_id = "example" })
 ```
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Event():load({ id = "event_id", application_id = "application_id" })
@@ -514,7 +514,7 @@ local event_type = client:EventType(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:EventType():create({
@@ -531,15 +531,15 @@ local result, err = client:EventType():create({
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:EventType():list()
+local results, err = client:EventType():list({ application_id = "example" })
 ```
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:EventType():load({ id = "event_type_id", application_id = "application_id" })
@@ -585,7 +585,7 @@ local events_management = client:EventsManagement(nil)
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
 local results, err = client:EventsManagement():list()
@@ -593,7 +593,7 @@ local results, err = client:EventsManagement():list()
 
 #### `remove(reqmatch, ctrl) -> any, err`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:EventsManagement():remove({ event_type_name = "event_type_name", application_id = "application_id" })
@@ -651,7 +651,7 @@ local health = client:Health(nil)
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Health():load()
@@ -709,7 +709,7 @@ local hook0 = client:Hook0(nil)
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
 local results, err = client:Hook0():list()
@@ -768,7 +768,7 @@ local ingested_event = client:IngestedEvent(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:IngestedEvent():create({
@@ -836,7 +836,7 @@ local instance = client:Instance(nil)
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Instance():load()
@@ -889,7 +889,7 @@ local login = client:Login(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Login():create({
@@ -957,7 +957,7 @@ local organization = client:Organization(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Organization():create({
@@ -979,7 +979,7 @@ local result, err = client:Organization():create({
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
 local results, err = client:Organization():list()
@@ -987,7 +987,7 @@ local results, err = client:Organization():list()
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Organization():load({ id = "organization_id" })
@@ -995,7 +995,7 @@ local result, err = client:Organization():load({ id = "organization_id" })
 
 #### `remove(reqmatch, ctrl) -> any, err`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Organization():remove({ id = "organization_id" })
@@ -1003,7 +1003,7 @@ local result, err = client:Organization():remove({ id = "organization_id" })
 
 #### `update(reqdata, ctrl) -> any, err`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Organization():update({
@@ -1060,7 +1060,7 @@ local organization_edit_role = client:OrganizationEditRole(nil)
 
 #### `update(reqdata, ctrl) -> any, err`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:OrganizationEditRole():update({
@@ -1118,7 +1118,7 @@ local problem = client:Problem(nil)
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
 local results, err = client:Problem():list()
@@ -1164,18 +1164,14 @@ local quota = client:Quota(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `global_applications_per_organization_limit` | `number` | Yes |  |
-| `global_days_of_events_retention_limit` | `number` | Yes |  |
-| `global_event_types_per_application_limit` | `number` | Yes |  |
-| `global_events_per_day_limit` | `number` | Yes |  |
-| `global_members_per_organization_limit` | `number` | Yes |  |
-| `global_subscriptions_per_application_limit` | `number` | Yes |  |
+| `enabled` | `boolean` | Yes |  |
+| `limits` | `table` | Yes |  |
 
 ### Operations
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Quota():load()
@@ -1232,7 +1228,7 @@ local registration = client:Registration(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Registration():create({
@@ -1302,15 +1298,15 @@ local request_attempt = client:RequestAttempt(nil)
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:RequestAttempt():list()
+local results, err = client:RequestAttempt():list({ application_id = "example" })
 ```
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:RequestAttempt():load({ id = "request_attempt_id", application_id = "application_id" })
@@ -1356,13 +1352,19 @@ local response = client:Response(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `body` | `string` | No |  |
+| `elapsed_time_ms` | `number` | No |  |
+| `headers` | `table` | No |  |
+| `http_code` | `number` | No |  |
 | `id` | `string` | No |  |
+| `response_error_name` | `string` | No |  |
+| `response_id` | `string` | Yes |  |
 
 ### Operations
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Response():load({ id = "response_id", application_id = "application_id" })
@@ -1408,7 +1410,7 @@ local revoke = client:Revoke(nil)
 
 #### `remove(reqmatch, ctrl) -> any, err`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Revoke():remove({ organization_id = "organization_id" })
@@ -1465,7 +1467,7 @@ local service_token = client:ServiceToken(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:ServiceToken():create({
@@ -1479,15 +1481,15 @@ local result, err = client:ServiceToken():create({
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:ServiceToken():list()
+local results, err = client:ServiceToken():list({ organization_id = "example" })
 ```
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:ServiceToken():load({ id = "service_token_id", organization_id = "organization_id" })
@@ -1495,7 +1497,7 @@ local result, err = client:ServiceToken():load({ id = "service_token_id", organi
 
 #### `remove(reqmatch, ctrl) -> any, err`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:ServiceToken():remove({ id = "service_token_id", organization_id = "organization_id" })
@@ -1503,7 +1505,7 @@ local result, err = client:ServiceToken():remove({ id = "service_token_id", orga
 
 #### `update(reqdata, ctrl) -> any, err`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:ServiceToken():update({
@@ -1592,7 +1594,7 @@ local subscription = client:Subscription(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Subscription():create({
@@ -1614,15 +1616,15 @@ local result, err = client:Subscription():create({
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:Subscription():list()
+local results, err = client:Subscription():list({ application_id = "example" })
 ```
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Subscription():load({ id = "subscription_id" })
@@ -1630,7 +1632,7 @@ local result, err = client:Subscription():load({ id = "subscription_id" })
 
 #### `remove(reqmatch, ctrl) -> any, err`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Subscription():remove({ id = "subscription_id", application_id = "application_id" })
@@ -1638,7 +1640,7 @@ local result, err = client:Subscription():remove({ id = "subscription_id", appli
 
 #### `update(reqdata, ctrl) -> any, err`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Subscription():update({
@@ -1695,7 +1697,7 @@ local user_authentication = client:UserAuthentication(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:UserAuthentication():create({
@@ -1752,7 +1754,7 @@ local user_invitation = client:UserInvitation(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:UserInvitation():create({
@@ -2082,6 +2084,7 @@ Timeout.
 | Option | Type |
 |---|---|
 | `clearTimer` | function |
+| `now` | function |
 | `setTimer` | function |
 
 These take no default: the feature behaves one way when you supply them and

@@ -165,6 +165,18 @@ main: kit: entity: subscription: {
       name: "create"
       points: [
         {
+          bf: [
+            "application_id"
+            "dedicated_workers"
+            "description"
+            "event_types"
+            "is_enabled"
+            "label_key"
+            "label_value"
+            "labels"
+            "metadata"
+            "target"
+          ]
           co: {
             id: "POST /api/v1/subscriptions/"
             source: "openapi3"
@@ -172,6 +184,10 @@ main: kit: entity: subscription: {
           }
           m: "POST"
           o: "/api/v1/subscriptions/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"
@@ -216,6 +232,10 @@ main: kit: entity: subscription: {
             exist: [
               "application_id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -266,6 +286,10 @@ main: kit: entity: subscription: {
             param: {
               subscription_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -355,6 +379,18 @@ main: kit: entity: subscription: {
       name: "update"
       points: [
         {
+          bf: [
+            "application_id"
+            "dedicated_workers"
+            "description"
+            "event_types"
+            "is_enabled"
+            "label_key"
+            "label_value"
+            "labels"
+            "metadata"
+            "target"
+          ]
           co: {
             id: "PUT /api/v1/subscriptions/{subscription_id}"
             source: "openapi3"
@@ -382,6 +418,10 @@ main: kit: entity: subscription: {
             param: {
               subscription_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

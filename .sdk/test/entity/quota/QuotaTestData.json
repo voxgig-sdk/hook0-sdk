@@ -2,30 +2,18 @@
   "existing": {
     "quota": {
       "QUOTA00": {
-        "global_applications_per_organization_limit": 60,
-        "global_days_of_events_retention_limit": 61,
-        "global_event_types_per_application_limit": 62,
-        "global_events_per_day_limit": 63,
-        "global_members_per_organization_limit": 64,
-        "global_subscriptions_per_application_limit": 65,
+        "enabled": true,
+        "limits": {},
         "id": "QUOTA00"
       },
       "QUOTA01": {
-        "global_applications_per_organization_limit": 120,
-        "global_days_of_events_retention_limit": 121,
-        "global_event_types_per_application_limit": 122,
-        "global_events_per_day_limit": 123,
-        "global_members_per_organization_limit": 124,
-        "global_subscriptions_per_application_limit": 125,
+        "enabled": true,
+        "limits": {},
         "id": "QUOTA01"
       },
       "QUOTA02": {
-        "global_applications_per_organization_limit": 180,
-        "global_days_of_events_retention_limit": 181,
-        "global_event_types_per_application_limit": 182,
-        "global_events_per_day_limit": 183,
-        "global_members_per_organization_limit": 184,
-        "global_subscriptions_per_application_limit": 185,
+        "enabled": true,
+        "limits": {},
         "id": "QUOTA02"
       }
     }
@@ -33,12 +21,8 @@
   "new": {
     "quota": {
       "quota_ref01": {
-        "global_applications_per_organization_limit": 240,
-        "global_days_of_events_retention_limit": 241,
-        "global_event_types_per_application_limit": 242,
-        "global_events_per_day_limit": 243,
-        "global_members_per_organization_limit": 244,
-        "global_subscriptions_per_application_limit": 245
+        "enabled": true,
+        "limits": {}
       }
     }
   },

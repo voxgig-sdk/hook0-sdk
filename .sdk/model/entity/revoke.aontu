@@ -10,6 +10,9 @@ main: kit: entity: revoke: {
       name: "remove"
       points: [
         {
+          bf: [
+            "user_id"
+          ]
           co: {
             id: "DELETE /api/v1/organizations/{organization_id}/invite"
             source: "openapi3"
@@ -32,6 +35,10 @@ main: kit: entity: revoke: {
             exist: [
               "organization_id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

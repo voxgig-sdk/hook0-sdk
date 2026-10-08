@@ -15,7 +15,7 @@ keeps the cognitive load low.
 
 ## Install
 Zig has no central package registry, so this package is distributed as a
-git tag (`zig/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/hook0-sdk/releases)). Add it to
+git tag (`zig/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/hook0-sdk/tags)). Add it to
 your `build.zig.zon` dependencies, or build from a source checkout:
 
 ```bash
@@ -54,23 +54,28 @@ const client = sdk.Hook0SDK.new(h.jo(&.{
 
 ### 2. List application records
 
-`list()` returns an `OpResult` whose `.ok` is a `Value` array —
-`switch` on it.
+`list()`'s `.ok` is a slice of entities, one per record — `switch` on
+it. `asEntity().data(null)` reads an entity's record.
 
 ```zig
-switch (client.application(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |applications| std.debug.print("{s}\n", .{h.stringify(applications)}),
+switch (client.application(h.vnull()).list(h.jo(&.{.{ "organization_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |applications| {
+        for (applications) |application| {
+            std.debug.print("{s}\n", .{h.stringify(application.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
 
 ### 3. Load an application
 
-`load()`'s `.ok` carries the bare record.
+`load()`'s `.ok` carries the entity; `asEntity().data(null)` reads its
+record.
 
 ```zig
 switch (client.application(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("example_id") }}), h.vnull())) {
-    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application)}),
+    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -78,21 +83,21 @@ switch (client.application(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("example_id")
 ### 4. Create, update, and remove
 
 ```zig
-// Create — .ok carries the created record
+// Create — .ok carries the created entity
 switch (client.application(h.vnull()).create(h.jo(&.{.{ "amount", h.vnum(1) }, .{ "application_id", h.vstr("example_application_id") }, .{ "application_name", h.vstr("example_application_name") }, .{ "consumption", h.omap() }, .{ "date", h.vstr("example_date") }, .{ "is_provisional", h.vbool(true) }, .{ "name", h.vstr("example_name") }, .{ "onboarding_steps", h.omap() }, .{ "organization_id", h.vstr("example_organization_id") }, .{ "quotas", h.omap() }}), h.vnull())) {
-    .ok => |created| std.debug.print("{s}\n", .{h.stringify(created)}),
+    .ok => |created| std.debug.print("{s}\n", .{h.stringify(created.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 
 // Update
 switch (client.application(h.vnull()).update(h.jo(&.{.{ "id", h.vstr("example_id") }, .{ "amount", h.vnum(1) }, .{ "application_id", h.vstr("example_application_id") }}), h.vnull())) {
-    .ok => |updated| std.debug.print("{s}\n", .{h.stringify(updated)}),
+    .ok => |updated| std.debug.print("{s}\n", .{h.stringify(updated.asEntity().data(null))}),
     .err => |e| std.debug.print("update failed: {s}\n", .{e.msg}),
 }
 
 // Remove
 switch (client.application(h.vnull()).remove(h.jo(&.{.{ "id", h.vstr("example_id") }}), h.vnull())) {
-    .ok => |_| std.debug.print("removed\n", .{}),
+    .ok => std.debug.print("removed\n", .{}),
     .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
 }
 ```
@@ -104,15 +109,16 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const eventtypes = await client.EventType().list()
-  console.log(eventtypes)
+  const response = await client.Response().load({ id: "example_id", application_id: "example" })
+  console.log(response.data())
 } catch (err) {
-  console.error('list failed:', err)
+  console.error('load failed:', err)
 }
 ```
 
 The low-level `direct()` method does **not** throw — it returns the
-value or an `Error`, so check the result before using it:
+result envelope. Branch on `ok`; on failure `status` holds the HTTP status
+(for error responses) and `err` holds the error:
 
 ```ts
 const result = await client.direct({
@@ -121,8 +127,8 @@ const result = await client.direct({
   params: { id: 'example_id' },
 })
 
-if (result instanceof Error) {
-  throw result
+if (!result.ok) {
+  console.error('request failed:', result.status, result.err)
 }
 ```
 
@@ -172,10 +178,10 @@ Create a mock client for unit testing — no server required:
 ```zig
 const client = sdk.test_sdk(h.vnull(), h.vnull());
 
-// Entity ops return an OpResult — .ok carries the record, .err the error.
-switch (client.event_type(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |event_type| std.debug.print("{s}\n", .{h.stringify(event_type)}), // the mock record
-    .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
+// Entity ops return a result union — .ok carries the entity, .err the error.
+switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("test01") }}), h.vnull())) {
+    .ok => |response| std.debug.print("{s}\n", .{h.stringify(response.asEntity().data(null))}), // the mock record
+    .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -275,21 +281,22 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(reqmatch: Value, ctrl: Value) OpResult` | Load a single entity by match criteria. |
-| `list` | `(reqmatch: Value, ctrl: Value) OpResult` | List entities matching the criteria (`.ok` is a `Value` array). |
-| `create` | `(reqdata: Value, ctrl: Value) OpResult` | Create a new entity. |
-| `update` | `(reqdata: Value, ctrl: Value) OpResult` | Update an existing entity. |
-| `remove` | `(reqmatch: Value, ctrl: Value) OpResult` | Remove an entity. |
-| `stream` | `(action: []const u8, args: Value, callopts: Value) []Value` | Run an op through the pipeline and materialise its result items. |
+| `load` | `(reqmatch: Value, ctrl: Value) EntResult` | Load a single entity by match criteria. |
+| `list` | `(reqmatch: Value, ctrl: Value) EntListResult` | List entities matching the criteria (`.ok` is a slice of entities, one per record). |
+| `create` | `(reqdata: Value, ctrl: Value) EntResult` | Create a new entity. |
+| `update` | `(reqdata: Value, ctrl: Value) EntResult` | Update an existing entity. |
+| `remove` | `(reqmatch: Value, ctrl: Value) EntResult` | Remove an entity, which is returned marked as deleted. |
+| `stream` | `(action: []const u8, args: Value, callopts: Value) StreamResult` | Run an op through the pipeline: `.ok` with its result items, or `.err` with the error that failed it. |
 | `data` | `(args: ?Value) Value` | Get entity data (pass a map to set). |
 | `matchv` | `(args: ?Value) Value` | Get entity match criteria (pass a map to set). |
 | `get_name` | `() []const u8` | Return the entity name. |
 
 ### Result shape
 
-Entity operations return an `OpResult` union — `switch` on it: `.ok`
-carries the bare result data (a `Value` object for single-entity ops, a
-`Value` array for `list`), `.err` carries the branded error pointer.
+Entity operations return a result union — `switch` on it: `.ok` carries
+the entity (`EntResult`), or for `list` a slice of entities, one per record
+(`EntListResult`), and `asEntity().data(null)` reads an entity's record;
+`.err` carries the branded error pointer.
 
 The `direct()` escape hatch returns a result `Value` map directly (no
 error union) — even on a non-2xx response — that you branch on via
@@ -527,12 +534,8 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `global_applications_per_organization_limit` |  |
-| `global_days_of_events_retention_limit` |  |
-| `global_event_types_per_application_limit` |  |
-| `global_events_per_day_limit` |  |
-| `global_members_per_organization_limit` |  |
-| `global_subscriptions_per_application_limit` |  |
+| `enabled` |  |
+| `limits` |  |
 
 Operations: Load.
 
@@ -580,7 +583,13 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `body` |  |
+| `elapsed_time_ms` |  |
+| `headers` |  |
+| `http_code` |  |
 | `id` |  |
+| `response_error_name` |  |
+| `response_id` |  |
 
 Operations: Load.
 
@@ -676,8 +685,9 @@ Create an instance: `const application = client.application(h.vnull());`
 | `remove(reqmatch, ctrl)` | Remove the matching entity. |
 | `update(reqdata, ctrl)` | Update an existing entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -699,7 +709,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.application(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("application_id") }}), h.vnull())) {
-    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application)}),
+    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -707,8 +717,12 @@ switch (client.application(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("application_
 #### Example: List
 
 ```zig
-switch (client.application(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |applications| std.debug.print("{s}\n", .{h.stringify(applications)}),
+switch (client.application(h.vnull()).list(h.jo(&.{.{ "organization_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |applications| {
+        for (applications) |application| {
+            std.debug.print("{s}\n", .{h.stringify(application.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -728,7 +742,7 @@ switch (client.application(h.vnull()).create(h.jo(&.{
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
     .{ "quotas", h.omap() }, // Value (object)
 }), h.vnull())) {
-    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application)}),
+    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -746,8 +760,9 @@ Create an instance: `const application_secret = client.application_secret(h.vnul
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 | `update(reqdata, ctrl)` | Update an existing entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -763,8 +778,12 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 #### Example: List
 
 ```zig
-switch (client.application_secret(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |application_secrets| std.debug.print("{s}\n", .{h.stringify(application_secrets)}),
+switch (client.application_secret(h.vnull()).list(h.jo(&.{.{ "application_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |application_secrets| {
+        for (application_secrets) |application_secret| {
+            std.debug.print("{s}\n", .{h.stringify(application_secret.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -777,7 +796,7 @@ switch (client.application_secret(h.vnull()).create(h.jo(&.{
     .{ "created_at", h.vstr("example_created_at") }, // []const u8
     .{ "token", h.vstr("example_token") }, // []const u8
 }), h.vnull())) {
-    .ok => |application_secret| std.debug.print("{s}\n", .{h.stringify(application_secret)}),
+    .ok => |application_secret| std.debug.print("{s}\n", .{h.stringify(application_secret.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -793,8 +812,9 @@ Create an instance: `const applications_management = client.applications_managem
 | --- | --- |
 | `remove(reqmatch, ctrl)` | Remove the matching entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 
 ### Event
@@ -809,8 +829,9 @@ Create an instance: `const event = client.event(h.vnull());`
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -831,7 +852,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.event(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
-    .ok => |event| std.debug.print("{s}\n", .{h.stringify(event)}),
+    .ok => |event| std.debug.print("{s}\n", .{h.stringify(event.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -839,8 +860,12 @@ switch (client.event(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_id") }, .{ "
 #### Example: List
 
 ```zig
-switch (client.event(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |events| std.debug.print("{s}\n", .{h.stringify(events)}),
+switch (client.event(h.vnull()).list(h.jo(&.{.{ "application_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |events| {
+        for (events) |event| {
+            std.debug.print("{s}\n", .{h.stringify(event.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -859,7 +884,7 @@ switch (client.event(h.vnull()).create(h.jo(&.{
     .{ "payload_content_type", h.vstr("example_payload_content_type") }, // []const u8
     .{ "received_at", h.vstr("example_received_at") }, // []const u8
 }), h.vnull())) {
-    .ok => |event| std.debug.print("{s}\n", .{h.stringify(event)}),
+    .ok => |event| std.debug.print("{s}\n", .{h.stringify(event.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -877,8 +902,9 @@ Create an instance: `const event_type = client.event_type(h.vnull());`
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -898,7 +924,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.event_type(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_type_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
-    .ok => |event_type| std.debug.print("{s}\n", .{h.stringify(event_type)}),
+    .ok => |event_type| std.debug.print("{s}\n", .{h.stringify(event_type.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -906,8 +932,12 @@ switch (client.event_type(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_type_id
 #### Example: List
 
 ```zig
-switch (client.event_type(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |event_types| std.debug.print("{s}\n", .{h.stringify(event_types)}),
+switch (client.event_type(h.vnull()).list(h.jo(&.{.{ "application_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |event_types| {
+        for (event_types) |event_type| {
+            std.debug.print("{s}\n", .{h.stringify(event_type.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -925,7 +955,7 @@ switch (client.event_type(h.vnull()).create(h.jo(&.{
     .{ "verb", h.vstr("example_verb") }, // []const u8
     .{ "verb_name", h.vstr("example_verb_name") }, // []const u8
 }), h.vnull())) {
-    .ok => |event_type| std.debug.print("{s}\n", .{h.stringify(event_type)}),
+    .ok => |event_type| std.debug.print("{s}\n", .{h.stringify(event_type.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -942,14 +972,19 @@ Create an instance: `const events_management = client.events_management(h.vnull(
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 | `remove(reqmatch, ctrl)` | Remove the matching entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Example: List
 
 ```zig
 switch (client.events_management(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |events_managements| std.debug.print("{s}\n", .{h.stringify(events_managements)}),
+    .ok => |events_managements| {
+        for (events_managements) |events_management| {
+            std.debug.print("{s}\n", .{h.stringify(events_management.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -965,8 +1000,9 @@ Create an instance: `const health = client.health(h.vnull());`
 | --- | --- |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -984,7 +1020,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.health(h.vnull()).load(h.vnull(), h.vnull())) {
-    .ok => |health| std.debug.print("{s}\n", .{h.stringify(health)}),
+    .ok => |health| std.debug.print("{s}\n", .{h.stringify(health.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1000,8 +1036,9 @@ Create an instance: `const hook0 = client.hook0(h.vnull());`
 | --- | --- |
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1019,7 +1056,11 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.hook0(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |hook0s| std.debug.print("{s}\n", .{h.stringify(hook0s)}),
+    .ok => |hook0s| {
+        for (hook0s) |hook0| {
+            std.debug.print("{s}\n", .{h.stringify(hook0.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1035,8 +1076,9 @@ Create an instance: `const ingested_event = client.ingested_event(h.vnull());`
 | --- | --- |
 | `create(reqdata, ctrl)` | Create a new entity with the given data. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1062,7 +1104,7 @@ switch (client.ingested_event(h.vnull()).create(h.jo(&.{
     .{ "payload", h.vstr("example_payload") }, // []const u8
     .{ "payload_content_type", h.vstr("example_payload_content_type") }, // []const u8
 }), h.vnull())) {
-    .ok => |ingested_event| std.debug.print("{s}\n", .{h.stringify(ingested_event)}),
+    .ok => |ingested_event| std.debug.print("{s}\n", .{h.stringify(ingested_event.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1078,8 +1120,9 @@ Create an instance: `const instance = client.instance(h.vnull());`
 | --- | --- |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1100,7 +1143,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.instance(h.vnull()).load(h.vnull(), h.vnull())) {
-    .ok => |instance| std.debug.print("{s}\n", .{h.stringify(instance)}),
+    .ok => |instance| std.debug.print("{s}\n", .{h.stringify(instance.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1116,8 +1159,9 @@ Create an instance: `const login = client.login(h.vnull());`
 | --- | --- |
 | `create(reqdata, ctrl)` | Create a new entity with the given data. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1133,7 +1177,7 @@ switch (client.login(h.vnull()).create(h.jo(&.{
     .{ "email", h.vstr("example_email") }, // []const u8
     .{ "password", h.vstr("example_password") }, // []const u8
 }), h.vnull())) {
-    .ok => |login| std.debug.print("{s}\n", .{h.stringify(login)}),
+    .ok => |login| std.debug.print("{s}\n", .{h.stringify(login.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1153,8 +1197,9 @@ Create an instance: `const organization = client.organization(h.vnull());`
 | `remove(reqmatch, ctrl)` | Remove the matching entity. |
 | `update(reqdata, ctrl)` | Update an existing entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1179,7 +1224,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.organization(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("organization_id") }}), h.vnull())) {
-    .ok => |organization| std.debug.print("{s}\n", .{h.stringify(organization)}),
+    .ok => |organization| std.debug.print("{s}\n", .{h.stringify(organization.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1188,7 +1233,11 @@ switch (client.organization(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("organizatio
 
 ```zig
 switch (client.organization(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |organizations| std.debug.print("{s}\n", .{h.stringify(organizations)}),
+    .ok => |organizations| {
+        for (organizations) |organization| {
+            std.debug.print("{s}\n", .{h.stringify(organization.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1211,7 +1260,7 @@ switch (client.organization(h.vnull()).create(h.jo(&.{
     .{ "role", h.vstr("example_role") }, // []const u8
     .{ "users", h.olist() }, // Value (array)
 }), h.vnull())) {
-    .ok => |organization| std.debug.print("{s}\n", .{h.stringify(organization)}),
+    .ok => |organization| std.debug.print("{s}\n", .{h.stringify(organization.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1227,8 +1276,9 @@ Create an instance: `const organization_edit_role = client.organization_edit_rol
 | --- | --- |
 | `update(reqdata, ctrl)` | Update an existing entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1249,8 +1299,9 @@ Create an instance: `const problem = client.problem(h.vnull());`
 | --- | --- |
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1265,7 +1316,11 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.problem(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |problems| std.debug.print("{s}\n", .{h.stringify(problems)}),
+    .ok => |problems| {
+        for (problems) |problem| {
+            std.debug.print("{s}\n", .{h.stringify(problem.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1281,25 +1336,22 @@ Create an instance: `const quota = client.quota(h.vnull());`
 | --- | --- |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `global_applications_per_organization_limit` | `i64` |  |
-| `global_days_of_events_retention_limit` | `i64` |  |
-| `global_event_types_per_application_limit` | `i64` |  |
-| `global_events_per_day_limit` | `i64` |  |
-| `global_members_per_organization_limit` | `i64` |  |
-| `global_subscriptions_per_application_limit` | `i64` |  |
+| `enabled` | `bool` |  |
+| `limits` | `Value (object)` |  |
 
 #### Example: Load
 
 ```zig
 switch (client.quota(h.vnull()).load(h.vnull(), h.vnull())) {
-    .ok => |quota| std.debug.print("{s}\n", .{h.stringify(quota)}),
+    .ok => |quota| std.debug.print("{s}\n", .{h.stringify(quota.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1315,8 +1367,9 @@ Create an instance: `const registration = client.registration(h.vnull());`
 | --- | --- |
 | `create(reqdata, ctrl)` | Create a new entity with the given data. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1338,7 +1391,7 @@ switch (client.registration(h.vnull()).create(h.jo(&.{
     .{ "last_name", h.vstr("example_last_name") }, // []const u8
     .{ "password", h.vstr("example_password") }, // []const u8
 }), h.vnull())) {
-    .ok => |registration| std.debug.print("{s}\n", .{h.stringify(registration)}),
+    .ok => |registration| std.debug.print("{s}\n", .{h.stringify(registration.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1355,8 +1408,9 @@ Create an instance: `const request_attempt = client.request_attempt(h.vnull());`
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1381,7 +1435,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.request_attempt(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("request_attempt_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
-    .ok => |request_attempt| std.debug.print("{s}\n", .{h.stringify(request_attempt)}),
+    .ok => |request_attempt| std.debug.print("{s}\n", .{h.stringify(request_attempt.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1389,8 +1443,12 @@ switch (client.request_attempt(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("request_
 #### Example: List
 
 ```zig
-switch (client.request_attempt(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |request_attempts| std.debug.print("{s}\n", .{h.stringify(request_attempts)}),
+switch (client.request_attempt(h.vnull()).list(h.jo(&.{.{ "application_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |request_attempts| {
+        for (request_attempts) |request_attempt| {
+            std.debug.print("{s}\n", .{h.stringify(request_attempt.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1406,20 +1464,27 @@ Create an instance: `const response = client.response(h.vnull());`
 | --- | --- |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `body` | `[]const u8` |  |
+| `elapsed_time_ms` | `i64` |  |
+| `headers` | `Value (object)` |  |
+| `http_code` | `i64` |  |
 | `id` | `[]const u8` |  |
+| `response_error_name` | `[]const u8` |  |
+| `response_id` | `[]const u8` |  |
 
 #### Example: Load
 
 ```zig
 switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("response_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
-    .ok => |response| std.debug.print("{s}\n", .{h.stringify(response)}),
+    .ok => |response| std.debug.print("{s}\n", .{h.stringify(response.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1435,8 +1500,9 @@ Create an instance: `const revoke = client.revoke(h.vnull());`
 | --- | --- |
 | `remove(reqmatch, ctrl)` | Remove the matching entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 
 ### ServiceToken
@@ -1453,8 +1519,9 @@ Create an instance: `const service_token = client.service_token(h.vnull());`
 | `remove(reqmatch, ctrl)` | Remove the matching entity. |
 | `update(reqdata, ctrl)` | Update an existing entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1471,7 +1538,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.service_token(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("service_token_id") }, .{ "organization_id", h.vstr("organization_id") }}), h.vnull())) {
-    .ok => |service_token| std.debug.print("{s}\n", .{h.stringify(service_token)}),
+    .ok => |service_token| std.debug.print("{s}\n", .{h.stringify(service_token.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1479,8 +1546,12 @@ switch (client.service_token(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("service_to
 #### Example: List
 
 ```zig
-switch (client.service_token(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |service_tokens| std.debug.print("{s}\n", .{h.stringify(service_tokens)}),
+switch (client.service_token(h.vnull()).list(h.jo(&.{.{ "organization_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |service_tokens| {
+        for (service_tokens) |service_token| {
+            std.debug.print("{s}\n", .{h.stringify(service_token.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1495,7 +1566,7 @@ switch (client.service_token(h.vnull()).create(h.jo(&.{
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
     .{ "token_id", h.vstr("example_token_id") }, // []const u8
 }), h.vnull())) {
-    .ok => |service_token| std.debug.print("{s}\n", .{h.stringify(service_token)}),
+    .ok => |service_token| std.debug.print("{s}\n", .{h.stringify(service_token.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1515,8 +1586,9 @@ Create an instance: `const subscription = client.subscription(h.vnull());`
 | `remove(reqmatch, ctrl)` | Remove the matching entity. |
 | `update(reqdata, ctrl)` | Update an existing entity. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1542,7 +1614,7 @@ carries the result `Value`, `.err => |e|` carries the branded error.
 
 ```zig
 switch (client.subscription(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("subscription_id") }}), h.vnull())) {
-    .ok => |subscription| std.debug.print("{s}\n", .{h.stringify(subscription)}),
+    .ok => |subscription| std.debug.print("{s}\n", .{h.stringify(subscription.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1550,8 +1622,12 @@ switch (client.subscription(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("subscriptio
 #### Example: List
 
 ```zig
-switch (client.subscription(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |subscriptions| std.debug.print("{s}\n", .{h.stringify(subscriptions)}),
+switch (client.subscription(h.vnull()).list(h.jo(&.{.{ "application_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |subscriptions| {
+        for (subscriptions) |subscription| {
+            std.debug.print("{s}\n", .{h.stringify(subscription.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1574,7 +1650,7 @@ switch (client.subscription(h.vnull()).create(h.jo(&.{
     .{ "target", h.omap() }, // Value (object)
     .{ "updated_at", h.vstr("example_updated_at") }, // []const u8
 }), h.vnull())) {
-    .ok => |subscription| std.debug.print("{s}\n", .{h.stringify(subscription)}),
+    .ok => |subscription| std.debug.print("{s}\n", .{h.stringify(subscription.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1590,8 +1666,9 @@ Create an instance: `const user_authentication = client.user_authentication(h.vn
 | --- | --- |
 | `create(reqdata, ctrl)` | Create a new entity with the given data. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1609,7 +1686,7 @@ switch (client.user_authentication(h.vnull()).create(h.jo(&.{
     .{ "new_password", h.vstr("example_new_password") }, // []const u8
     .{ "token", h.vstr("example_token") }, // []const u8
 }), h.vnull())) {
-    .ok => |user_authentication| std.debug.print("{s}\n", .{h.stringify(user_authentication)}),
+    .ok => |user_authentication| std.debug.print("{s}\n", .{h.stringify(user_authentication.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1625,8 +1702,9 @@ Create an instance: `const user_invitation = client.user_invitation(h.vnull());`
 | --- | --- |
 | `create(reqdata, ctrl)` | Create a new entity with the given data. |
 
-Each operation returns an `OpResult` — `switch` on it: `.ok => |data|`
-carries the result `Value`, `.err => |e|` carries the branded error.
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 #### Fields
 
@@ -1643,7 +1721,7 @@ switch (client.user_invitation(h.vnull()).create(h.jo(&.{
     .{ "email", h.vstr("example_email") }, // []const u8
     .{ "role", h.vstr("example_role") }, // []const u8
 }), h.vnull())) {
-    .ok => |user_invitation| std.debug.print("{s}\n", .{h.stringify(user_invitation)}),
+    .ok => |user_invitation| std.debug.print("{s}\n", .{h.stringify(user_invitation.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
@@ -1867,16 +1945,16 @@ entity or utility modules only when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const eventtype = client.EventType()
-await eventtype.list()
+const response = client.Response()
+await response.load({ id: "example_id", application_id: "example" })
 
-// eventtype.data() now returns the eventtype data from the last `list`
-// eventtype.match() returns the last match criteria
+// response.data() now returns the response data from the last `load`
+// response.match() returns { id: "example_id" }
 ```
 
 Call `make()` to create a fresh instance with the same configuration

@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('ApplicationsManagementEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.ApplicationsManagement().remove({"application_secret_token":1,"application_id":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
@@ -51,7 +63,7 @@ describe('ApplicationsManagementEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{},"name":"applications_management","op":{"remove":{"input":"data","name":"remove","points":[{"a":true,"co":{"id":"DELETE /api/v1/application_secrets/{application_secret_token}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"application_secret_token","or":"application_secret_token","r":true,"t":"`$STRING`","index$":0}],"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"DELETE","o":"/api/v1/application_secrets/{application_secret_token}","q":{"exist":["application_id","application_secret_token"]},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"application_secrets"},{"var":"application_secret_token"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"remove"}},"relations":{"ancestors":[["$.main.kit.entity.application_secret"]]},"key$":"applications_management","name__orig":"applications_management","Name":"ApplicationsManagement","name_":"applications_management","name-":"applications-management","NAME":"APPLICATIONS_MANAGEMENT","index$":2}, {"active":true,"entity":"applications_management","key$":"BasicApplicationsManagementFlow","kind":"basic","name":"BasicApplicationsManagementFlow","param":{},"step":[]}, 'ApplicationsManagement', {"DELETE /api/v1/application_secrets/{application_secret_token}":{"protocol":"http","parameters":[{"in":"path","name":"application_secret_token","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0},{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":1}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{},"name":"applications_management","op":{"remove":{"input":"data","name":"remove","points":[{"a":true,"co":{"id":"DELETE /api/v1/application_secrets/{application_secret_token}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"application_secret_token","or":"application_secret_token","r":true,"t":"`$STRING`","index$":0}],"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"DELETE","o":"/api/v1/application_secrets/{application_secret_token}","q":{"exist":["application_id","application_secret_token"]},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"application_secrets"},{"var":"application_secret_token"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"remove"}},"relations":{"ancestors":[["$.main.kit.entity.application_secret"]]},"key$":"applications_management","name__orig":"applications_management","Name":"ApplicationsManagement","name_":"applications_management","name-":"applications-management","NAME":"APPLICATIONS_MANAGEMENT","index$":2}, {"active":true,"entity":"applications_management","key$":"BasicApplicationsManagementFlow","kind":"basic","name":"BasicApplicationsManagementFlow","param":{},"step":[]}, 'ApplicationsManagement', {"DELETE /api/v1/application_secrets/{application_secret_token}":{"protocol":"http","parameters":[{"in":"path","name":"application_secret_token","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0},{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":1}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -65,6 +77,12 @@ describe('ApplicationsManagementEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

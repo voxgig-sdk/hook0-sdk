@@ -106,6 +106,9 @@ main: kit: entity: organization: {
       name: "create"
       points: [
         {
+          bf: [
+            "name"
+          ]
           co: {
             id: "POST /api/v1/organizations/"
             source: "openapi3"
@@ -113,6 +116,10 @@ main: kit: entity: organization: {
           }
           m: "POST"
           o: "/api/v1/organizations/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"
@@ -169,10 +176,12 @@ main: kit: entity: organization: {
           o: "/api/v1/events_per_day/organization"
           q: {
             exist: [
-              "from"
               "organization_id"
-              "to"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -201,6 +210,10 @@ main: kit: entity: organization: {
           }
           m: "GET"
           o: "/api/v1/organizations/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"
@@ -250,6 +263,10 @@ main: kit: entity: organization: {
             param: {
               organization_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -329,6 +346,9 @@ main: kit: entity: organization: {
       name: "update"
       points: [
         {
+          bf: [
+            "name"
+          ]
           co: {
             id: "PUT /api/v1/organizations/{organization_id}/"
             source: "openapi3"
@@ -356,6 +376,10 @@ main: kit: entity: organization: {
             param: {
               organization_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

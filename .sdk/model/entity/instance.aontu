@@ -81,6 +81,10 @@ main: kit: entity: instance: {
           }
           m: "GET"
           o: "/api/v1/instance/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"

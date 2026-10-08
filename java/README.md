@@ -15,7 +15,7 @@ keeps the cognitive load low.
 
 ## Install
 This package is not yet published to Maven Central. Install it from the GitHub
-release tag (`java/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/hook0-sdk/releases)) or
+release tag (`java/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/hook0-sdk/tags)) or
 from a source checkout — build the library with Maven:
 
 ```bash
@@ -31,7 +31,10 @@ loading a specific record.
 ### 1. Create a client
 
 ```java
+import java.util.List;
+import java.util.Map;
 import voxgig.hook0sdk.core.Hook0SDK;
+import voxgig.hook0sdk.core.SdkEntity;
 
 Map<String, Object> options = new java.util.LinkedHashMap<>();
 options.put("apikey", System.getenv("HOOK0_APIKEY"));
@@ -40,13 +43,15 @@ Hook0SDK client = new Hook0SDK(options);
 
 ### 2. List application records
 
-`list(null, null)` returns an aggregate list of records (as `Object`, an
-aggregate list) and raises on error.
+`list(null, null)` returns a list of entities, one per record (as `Object`),
+and raises on error; an entity's `data()` reads its record.
 
 ```java
 try {
-    Object applicationList = client.application(null).list(null, null);
-    System.out.println(applicationList);
+    List<?> applicationList = (List<?>) client.application(null).list(Map.of("organization_id", "example"), null);
+    for (Object applicationItem : applicationList) {
+        System.out.println(((SdkEntity) applicationItem).data());
+    }
 }
 catch (RuntimeException err) {
     System.out.println("list failed: " + err.getMessage());
@@ -59,8 +64,8 @@ catch (RuntimeException err) {
 
 ```java
 try {
-    Object application = client.application(null).load(Map.of("id", "example_id"), null);
-    System.out.println(application);
+    SdkEntity application = (SdkEntity) client.application(null).load(Map.of("id", "example_id"), null);
+    System.out.println(application.data());
 }
 catch (RuntimeException err) {
     System.out.println("load failed: " + err.getMessage());
@@ -87,15 +92,16 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const eventtypes = await client.EventType().list()
-  console.log(eventtypes)
+  const response = await client.Response().load({ id: "example_id", application_id: "example" })
+  console.log(response.data())
 } catch (err) {
-  console.error('list failed:', err)
+  console.error('load failed:', err)
 }
 ```
 
 The low-level `direct()` method does **not** throw — it returns the
-value or an `Error`, so check the result before using it:
+result envelope. Branch on `ok`; on failure `status` holds the HTTP status
+(for error responses) and `err` holds the error:
 
 ```ts
 const result = await client.direct({
@@ -104,8 +110,8 @@ const result = await client.direct({
   params: { id: 'example_id' },
 })
 
-if (result instanceof Error) {
-  throw result
+if (!result.ok) {
+  console.error('request failed:', result.status, result.err)
 }
 ```
 
@@ -155,11 +161,10 @@ Create a mock client for unit testing — no server required:
 ```java
 Hook0SDK client = Hook0SDK.testSDK(null, null);
 
-// Entity ops return the ENTITY and raises on error;
-// call data() for the record.
-Object eventType = client.eventType(null).list(null, null);
-// eventType holds the mock response record
-System.out.println(eventType);
+// Entity ops return the entity; they raise on error.
+SdkEntity response = (SdkEntity) client.response(null).load(Map.of("id", "test01"), null);
+// data() reads the entity's mock record
+System.out.println(response.data());
 ```
 
 ### Use a custom fetch function
@@ -266,11 +271,11 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(reqmatch, ctrl) -> Object` | Load a single entity by match criteria. Raises on error. |
-| `list` | `(reqmatch, ctrl) -> Object` | List entities matching the criteria (an aggregate list). Raises on error. |
-| `create` | `(reqdata, ctrl) -> Object` | Create a new entity. Raises on error. |
-| `update` | `(reqdata, ctrl) -> Object` | Update an existing entity. Raises on error. |
-| `remove` | `(reqmatch, ctrl) -> Object` | Remove an entity. Raises on error. |
+| `load` | `(reqmatch, ctrl) -> Object` | Load a single entity by match criteria, and return it. Raises on error. |
+| `list` | `(reqmatch, ctrl) -> Object` | List entities matching the criteria, one per record. Raises on error. |
+| `create` | `(reqdata, ctrl) -> Object` | Create a new entity, and return it. Raises on error. |
+| `update` | `(reqdata, ctrl) -> Object` | Update an existing entity, and return it. Raises on error. |
+| `remove` | `(reqmatch, ctrl) -> Object` | Remove an entity, and return it marked as deleted. Raises on error. |
 | `data` | `(newdata...) -> Object` | Get or set entity data. |
 | `match` | `(newmatch...) -> Object` | Get or set entity match criteria. |
 | `make` | `() -> Entity` | Create a new instance with the same options. |
@@ -278,9 +283,10 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the ENTITY (call data() for the record) (a `Map` for single-entity
-ops, an aggregate `List` for `list`) as `Object` and raise on error. Wrap
-calls in `try`/`catch` to handle failures.
+Entity operations return the entity, and `list` a list of entities, one per
+record, as `Object`; an entity is an `SdkEntity`, whose `data()` reads its
+record. They raise on error, so wrap calls in `try`/`catch` to handle
+failures.
 
 The `direct()` escape hatch never raises — it returns a result
 `Map<String, Object>` you branch on via `result.get("ok")`:
@@ -517,12 +523,8 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `global_applications_per_organization_limit` |  |
-| `global_days_of_events_retention_limit` |  |
-| `global_event_types_per_application_limit` |  |
-| `global_events_per_day_limit` |  |
-| `global_members_per_organization_limit` |  |
-| `global_subscriptions_per_application_limit` |  |
+| `enabled` |  |
+| `limits` |  |
 
 Operations: load.
 
@@ -570,7 +572,13 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `body` |  |
+| `elapsed_time_ms` |  |
+| `headers` |  |
+| `http_code` |  |
 | `id` |  |
+| `response_error_name` |  |
+| `response_id` |  |
 
 Operations: load.
 
@@ -691,7 +699,7 @@ Object application = client.application(null).load(Map.of("id", "application_id"
 #### Example: List
 
 ```java
-Object applicationList = client.application(null).list(null, null);
+Object applicationList = client.application(null).list(Map.of("organization_id", "example"), null);
 ```
 
 #### Example: Create
@@ -738,7 +746,7 @@ Create an instance: `SdkEntity applicationSecret = client.applicationSecret(null
 #### Example: List
 
 ```java
-Object applicationSecretList = client.applicationSecret(null).list(null, null);
+Object applicationSecretList = client.applicationSecret(null).list(Map.of("application_id", "example"), null);
 ```
 
 #### Example: Create
@@ -799,7 +807,7 @@ Object event = client.event(null).load(Map.of("id", "event_id", "application_id"
 #### Example: List
 
 ```java
-Object eventList = client.event(null).list(null, null);
+Object eventList = client.event(null).list(Map.of("application_id", "example"), null);
 ```
 
 #### Example: Create
@@ -854,7 +862,7 @@ Object eventType = client.eventType(null).load(Map.of("id", "event_type_id", "ap
 #### Example: List
 
 ```java
-Object eventTypeList = client.eventType(null).list(null, null);
+Object eventTypeList = client.eventType(null).list(Map.of("application_id", "example"), null);
 ```
 
 #### Example: Create
@@ -1093,20 +1101,20 @@ Object organizationList = client.organization(null).list(null, null);
 #### Example: Create
 
 ```java
-Object organization = client.organization(null).create(Map.of(
-    "amount", 1L,  // Long
-    "application_id", "example_application_id",  // String
-    "application_name", "example_application_name",  // String
-    "consumption", Map.of(),  // Map<String, Object>
-    "date", "example_date",  // String
-    "is_provisional", true,  // Boolean
-    "name", "example_name",  // String
-    "onboarding_steps", Map.of(),  // Map<String, Object>
-    "organization_id", "example_organization_id",  // String
-    "plan", Map.of(),  // Map<String, Object>
-    "quotas", Map.of(),  // Map<String, Object>
-    "role", "example_role",  // String
-    "users", List.of()  // List<Object>
+Object organization = client.organization(null).create(Map.ofEntries(
+    Map.entry("amount", 1L),  // Long
+    Map.entry("application_id", "example_application_id"),  // String
+    Map.entry("application_name", "example_application_name"),  // String
+    Map.entry("consumption", Map.of()),  // Map<String, Object>
+    Map.entry("date", "example_date"),  // String
+    Map.entry("is_provisional", true),  // Boolean
+    Map.entry("name", "example_name"),  // String
+    Map.entry("onboarding_steps", Map.of()),  // Map<String, Object>
+    Map.entry("organization_id", "example_organization_id"),  // String
+    Map.entry("plan", Map.of()),  // Map<String, Object>
+    Map.entry("quotas", Map.of()),  // Map<String, Object>
+    Map.entry("role", "example_role"),  // String
+    Map.entry("users", List.of())  // List<Object>
 ), null);
 ```
 
@@ -1170,12 +1178,8 @@ Create an instance: `SdkEntity quota = client.quota(null);`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `global_applications_per_organization_limit` | `Long` |  |
-| `global_days_of_events_retention_limit` | `Long` |  |
-| `global_event_types_per_application_limit` | `Long` |  |
-| `global_events_per_day_limit` | `Long` |  |
-| `global_members_per_organization_limit` | `Long` |  |
-| `global_subscriptions_per_application_limit` | `Long` |  |
+| `enabled` | `Boolean` |  |
+| `limits` | `Map<String, Object>` |  |
 
 #### Example: Load
 
@@ -1256,7 +1260,7 @@ Object requestAttempt = client.requestAttempt(null).load(Map.of("id", "request_a
 #### Example: List
 
 ```java
-Object requestAttemptList = client.requestAttempt(null).list(null, null);
+Object requestAttemptList = client.requestAttempt(null).list(Map.of("application_id", "example"), null);
 ```
 
 
@@ -1274,7 +1278,13 @@ Create an instance: `SdkEntity response = client.response(null);`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `body` | `String` |  |
+| `elapsed_time_ms` | `Long` |  |
+| `headers` | `Map<String, Object>` |  |
+| `http_code` | `Long` |  |
 | `id` | `String` |  |
+| `response_error_name` | `String` |  |
+| `response_id` | `String` |  |
 
 #### Example: Load
 
@@ -1328,7 +1338,7 @@ Object serviceToken = client.serviceToken(null).load(Map.of("id", "service_token
 #### Example: List
 
 ```java
-Object serviceTokenList = client.serviceToken(null).list(null, null);
+Object serviceTokenList = client.serviceToken(null).list(Map.of("organization_id", "example"), null);
 ```
 
 #### Example: Create
@@ -1387,26 +1397,26 @@ Object subscription = client.subscription(null).load(Map.of("id", "subscription_
 #### Example: List
 
 ```java
-Object subscriptionList = client.subscription(null).list(null, null);
+Object subscriptionList = client.subscription(null).list(Map.of("application_id", "example"), null);
 ```
 
 #### Example: Create
 
 ```java
-Object subscription = client.subscription(null).create(Map.of(
-    "application_id", "example_application_id",  // String
-    "created_at", "example_created_at",  // String
-    "dedicated_workers", List.of(),  // List<Object>
-    "event_types", List.of(),  // List<Object>
-    "is_enabled", true,  // Boolean
-    "label_key", "example_label_key",  // String
-    "label_value", "example_label_value",  // String
-    "labels", Map.of(),  // Map<String, Object>
-    "metadata", Map.of(),  // Map<String, Object>
-    "secret", "example_secret",  // String
-    "subscription_id", "example_subscription_id",  // String
-    "target", Map.of(),  // Map<String, Object>
-    "updated_at", "example_updated_at"  // String
+Object subscription = client.subscription(null).create(Map.ofEntries(
+    Map.entry("application_id", "example_application_id"),  // String
+    Map.entry("created_at", "example_created_at"),  // String
+    Map.entry("dedicated_workers", List.of()),  // List<Object>
+    Map.entry("event_types", List.of()),  // List<Object>
+    Map.entry("is_enabled", true),  // Boolean
+    Map.entry("label_key", "example_label_key"),  // String
+    Map.entry("label_value", "example_label_value"),  // String
+    Map.entry("labels", Map.of()),  // Map<String, Object>
+    Map.entry("metadata", Map.of()),  // Map<String, Object>
+    Map.entry("secret", "example_secret"),  // String
+    Map.entry("subscription_id", "example_subscription_id"),  // String
+    Map.entry("target", Map.of()),  // Map<String, Object>
+    Map.entry("updated_at", "example_updated_at")  // String
 ), null);
 ```
 
@@ -1683,16 +1693,16 @@ when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const eventtype = client.EventType()
-await eventtype.list()
+const response = client.Response()
+await response.load({ id: "example_id", application_id: "example" })
 
-// eventtype.data() now returns the eventtype data from the last `list`
-// eventtype.match() returns the last match criteria
+// response.data() now returns the response data from the last `load`
+// response.match() returns { id: "example_id" }
 ```
 
 Call `make()` to create a fresh instance with the same configuration

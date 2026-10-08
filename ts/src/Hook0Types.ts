@@ -384,21 +384,13 @@ export interface ProblemListMatch {
 }
 
 export interface Quota {
-  global_applications_per_organization_limit: number
-  global_days_of_events_retention_limit: number
-  global_event_types_per_application_limit: number
-  global_events_per_day_limit: number
-  global_members_per_organization_limit: number
-  global_subscriptions_per_application_limit: number
+  enabled: boolean
+  limits: Record<string, any>
 }
 
 export interface QuotaLoadMatch {
-  global_applications_per_organization_limit?: number
-  global_days_of_events_retention_limit?: number
-  global_event_types_per_application_limit?: number
-  global_events_per_day_limit?: number
-  global_members_per_organization_limit?: number
-  global_subscriptions_per_application_limit?: number
+  enabled?: boolean
+  limits?: Record<string, any>
 }
 
 export interface Registration {
@@ -452,7 +444,13 @@ export interface RequestAttemptListMatch {
 }
 
 export interface Response {
+  body?: string
+  elapsed_time_ms?: number
+  headers?: Record<string, any>
+  http_code?: number
   id?: string
+  response_error_name?: string
+  response_id: string
 }
 
 export interface ResponseLoadMatch {

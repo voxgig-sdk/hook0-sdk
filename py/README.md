@@ -15,7 +15,7 @@ keeps the cognitive load low.
 
 ## Install
 This package is not yet published to PyPI. Install it from the GitHub
-release tag (`py/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/hook0-sdk/releases)) or
+release tag (`py/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/hook0-sdk/tags)) or
 from a source checkout:
 
 ```bash
@@ -41,14 +41,14 @@ client = Hook0SDK({
 
 ### 2. List application records
 
-`list()` returns a `list` of records (each a `dict`) and raises on
-error — iterate it directly.
+`list()` returns a `list` of entities, one per record, and raises on
+error; an entity's `data_get()` reads its record (a `dict`).
 
 ```python
 try:
     applications = client.Application().list({"organization_id": "example"})
     for application in applications:
-        print(application)
+        print(application.data_get())
 except Exception as err:
     print(f"list failed: {err}")
 ```
@@ -60,7 +60,7 @@ except Exception as err:
 ```python
 try:
     application = client.Application().load({"id": "example_id"})
-    print(application)
+    print(application.data_get())
 except Exception as err:
     print(f"load failed: {err}")
 ```
@@ -71,7 +71,7 @@ except Exception as err:
 # Create — returns the ENTITY (call data_get() for the record)
 created = client.Application().create({"amount": 1, "application_id": "example_application_id", "application_name": "example_application_name", "consumption": {}, "date": "example_date", "is_provisional": True, "name": "example_name", "onboarding_steps": {}, "organization_id": "example_organization_id", "quotas": {}})
 
-# Update — the created record's id is a plain dict key
+# Update — the created entity's record holds its id
 client.Application().update({"id": created.data_get()["id"], "amount": 1, "application_id": "example_application_id"})
 
 # Remove
@@ -85,10 +85,10 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    eventtypes = client.EventType().list()
-    print(eventtypes)
+    response = client.Response().load({"id": "example_id", "application_id": "example"})
+    print(response.data_get())
 except Exception as err:
-    print(f"list failed: {err}")
+    print(f"load failed: {err}")
 ```
 
 `direct()` does **not** raise — it returns the result envelope. Branch
@@ -152,10 +152,9 @@ Create a mock client for unit testing — no server required:
 ```python
 client = Hook0SDK.test()
 
-# Entity ops return the ENTITY and raises on error;
-# call data_get() for the record.
-eventtype = client.EventType().list()
-# eventtype contains the mock response record
+# Entity ops return the entity, and list one per record; they raise on error.
+response = client.Response().load({"id": "test01", "application_id": "example"})
+# data_get() on an entity reads its mock response record
 ```
 
 ### Use a custom fetch function
@@ -263,11 +262,11 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria. Raises on error. |
-| `list` | `(reqmatch, ctrl) -> list` | List entities matching the criteria. Raises on error. |
-| `create` | `(reqdata, ctrl) -> any` | Create a new entity. Raises on error. |
-| `update` | `(reqdata, ctrl) -> any` | Update an existing entity. Raises on error. |
-| `remove` | `(reqmatch, ctrl) -> any` | Remove an entity. Raises on error. |
+| `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria, and return it. Raises on error. |
+| `list` | `(reqmatch, ctrl) -> list` | List entities matching the criteria, one per record. Raises on error. |
+| `create` | `(reqdata, ctrl) -> any` | Create a new entity, and return it. Raises on error. |
+| `update` | `(reqdata, ctrl) -> any` | Update an existing entity, and return it. Raises on error. |
+| `remove` | `(reqmatch, ctrl) -> any` | Remove an entity, and return it marked as deleted. Raises on error. |
 | `data_get` | `() -> dict` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
 | `match_get` | `() -> dict` | Get entity match criteria. |
@@ -277,9 +276,9 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the ENTITY (call data_get() for the record) (a `dict` for single-entity
-ops, a `list` for `list`) and raise on error. Wrap calls in
-`try`/`except` to handle failures.
+Entity operations return the entity, and `list` a `list` of entities, one
+per record; an entity's `data_get()` reads its record (a `dict`). They raise
+on error, so wrap calls in `try`/`except` to handle failures.
 
 The `direct()` escape hatch never raises — it returns a result `dict`
 you branch on via `result["ok"]`:
@@ -516,12 +515,8 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `global_applications_per_organization_limit` |  |
-| `global_days_of_events_retention_limit` |  |
-| `global_event_types_per_application_limit` |  |
-| `global_events_per_day_limit` |  |
-| `global_members_per_organization_limit` |  |
-| `global_subscriptions_per_application_limit` |  |
+| `enabled` |  |
+| `limits` |  |
 
 Operations: Load.
 
@@ -569,7 +564,13 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `body` |  |
+| `elapsed_time_ms` |  |
+| `headers` |  |
+| `http_code` |  |
 | `id` |  |
+| `response_error_name` |  |
+| `response_id` |  |
 
 Operations: Load.
 
@@ -1169,12 +1170,8 @@ Create an instance: `quota = client.Quota()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `global_applications_per_organization_limit` | `int` |  |
-| `global_days_of_events_retention_limit` | `int` |  |
-| `global_event_types_per_application_limit` | `int` |  |
-| `global_events_per_day_limit` | `int` |  |
-| `global_members_per_organization_limit` | `int` |  |
-| `global_subscriptions_per_application_limit` | `int` |  |
+| `enabled` | `bool` |  |
+| `limits` | `dict` |  |
 
 #### Example: Load
 
@@ -1273,7 +1270,13 @@ Create an instance: `response = client.Response()`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `body` | `str` |  |
+| `elapsed_time_ms` | `int` |  |
+| `headers` | `dict` |  |
+| `http_code` | `int` |  |
 | `id` | `str` |  |
+| `response_error_name` | `str` |  |
+| `response_id` | `str` |  |
 
 #### Example: Load
 
@@ -1682,15 +1685,15 @@ Import entity or utility modules directly only when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-eventtype = client.EventType()
-eventtype.list()
+response = client.Response()
+response.load({"id": "example_id", "application_id": "example"})
 
-# eventtype.data_get() now returns the eventtype data from the last list
-# eventtype.match_get() returns the last match criteria
+# response.data_get() now returns the response data from the last load
+# response.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

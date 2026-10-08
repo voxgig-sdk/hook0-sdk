@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('RevokeEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Revoke().remove({"organization_id":1} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
@@ -51,7 +63,7 @@ describe('RevokeEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{},"name":"revoke","op":{"remove":{"input":"data","name":"remove","points":[{"a":true,"co":{"id":"DELETE /api/v1/organizations/{organization_id}/invite","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"organization_id","or":"organization_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"DELETE","o":"/api/v1/organizations/{organization_id}/invite","q":{"exist":["organization_id"]},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"organizations"},{"var":"organization_id"},{"lit":"invite"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"remove"}},"relations":{"ancestors":[["$.main.kit.entity.organization"]]},"key$":"revoke","name__orig":"revoke","Name":"Revoke","name_":"revoke","name-":"revoke","NAME":"REVOKE","index$":18}, {"active":true,"entity":"revoke","key$":"BasicRevokeFlow","kind":"basic","name":"BasicRevokeFlow","param":{},"step":[]}, 'Revoke', {"DELETE /api/v1/organizations/{organization_id}/invite":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"user_id":{"type":"string","format":"uuid"}},"required":["user_id"],"x-ref":"#/components/schemas/Revoke"}}},"required":true},"parameters":[{"in":"path","name":"organization_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{},"name":"revoke","op":{"remove":{"input":"data","name":"remove","points":[{"a":true,"bf":["user_id"],"co":{"id":"DELETE /api/v1/organizations/{organization_id}/invite","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"organization_id","or":"organization_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"DELETE","o":"/api/v1/organizations/{organization_id}/invite","q":{"exist":["organization_id"]},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"organizations"},{"var":"organization_id"},{"lit":"invite"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"remove"}},"relations":{"ancestors":[["$.main.kit.entity.organization"]]},"key$":"revoke","name__orig":"revoke","Name":"Revoke","name_":"revoke","name-":"revoke","NAME":"REVOKE","index$":18}, {"active":true,"entity":"revoke","key$":"BasicRevokeFlow","kind":"basic","name":"BasicRevokeFlow","param":{},"step":[]}, 'Revoke', {"DELETE /api/v1/organizations/{organization_id}/invite":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"user_id":{"type":"string","format":"uuid"}},"required":["user_id"],"x-ref":"#/components/schemas/Revoke"}}},"required":true},"parameters":[{"in":"path","name":"organization_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -65,6 +77,12 @@ describe('RevokeEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

@@ -50,6 +50,14 @@ main: kit: entity: registration: {
       name: "create"
       points: [
         {
+          bf: [
+            "email"
+            "first_name"
+            "gclid"
+            "last_name"
+            "password"
+            "turnstile_token"
+          ]
           co: {
             id: "POST /api/v1/register/"
             source: "openapi3"
@@ -57,6 +65,10 @@ main: kit: entity: registration: {
           }
           m: "POST"
           o: "/api/v1/register/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"

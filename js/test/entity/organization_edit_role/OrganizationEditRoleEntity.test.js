@@ -38,12 +38,24 @@ describe('OrganizationEditRoleEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == config.feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.OrganizationEditRole().update({"id":1}),
+      (err) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"id":{"a":true,"h":"Id","n":"id","r":false,"t":"`$STRING`","key$":"id","index$":0},"role":{"a":true,"h":"Role","n":"role","r":true,"t":"`$STRING`","key$":"role","index$":1},"user_id":{"a":true,"fo":"uuid","h":"User Id","n":"user_id","r":true,"t":"`$STRING`","key$":"user_id","index$":2}},"id":{"field":"id","name":"id"},"name":"organization_edit_role","op":{"update":{"input":"data","name":"update","points":[{"a":true,"co":{"id":"PUT /api/v1/organizations/{organization_id}/invite","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"organization_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"PUT","o":"/api/v1/organizations/{organization_id}/invite","q":{"$action":"invite","exist":["id"]},"r":{"param":{"organization_id":"id"}},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"organizations"},{"var":"id"},{"lit":"invite"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"update"}},"relations":{"ancestors":[]},"key$":"organization_edit_role","name__orig":"organization_edit_role","Name":"OrganizationEditRole","name_":"organization_edit_role","name-":"organization-edit-role","NAME":"ORGANIZATION_EDIT_ROLE","index$":12}, {"active":true,"entity":"organization_edit_role","key$":"BasicOrganizationEditRoleFlow","kind":"basic","name":"BasicOrganizationEditRoleFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"organization_edit_role_ref01","srcdatavar":"organization_edit_role_ref01_data","suffix":"_up0","textfield":"role"},"m":{},"o":"update","s":[{"apply":"TextFieldMark","def":{"mark":"Mark01-organization_edit_role_ref01"}}],"v":[],"index$":0}]}, 'OrganizationEditRole', {"PUT /api/v1/organizations/{organization_id}/invite":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"role":{"type":"string","key$":"role"},"user_id":{"type":"string","format":"uuid","key$":"user_id"}},"required":["role","user_id"],"x-ref":"#/components/schemas/OrganizationEditRole"}}},"required":true},"parameters":[{"in":"path","name":"organization_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"id":{"a":true,"h":"Id","n":"id","r":false,"t":"`$STRING`","key$":"id","index$":0},"role":{"a":true,"h":"Role","n":"role","r":true,"t":"`$STRING`","key$":"role","index$":1},"user_id":{"a":true,"fo":"uuid","h":"User Id","n":"user_id","r":true,"t":"`$STRING`","key$":"user_id","index$":2}},"id":{"field":"id","name":"id"},"name":"organization_edit_role","op":{"update":{"input":"data","name":"update","points":[{"a":true,"bf":["role","user_id"],"co":{"id":"PUT /api/v1/organizations/{organization_id}/invite","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"organization_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"PUT","o":"/api/v1/organizations/{organization_id}/invite","q":{"$action":"invite","exist":["id"]},"r":{"param":{"organization_id":"id"}},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"organizations"},{"var":"id"},{"lit":"invite"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"update"}},"relations":{"ancestors":[]},"key$":"organization_edit_role","name__orig":"organization_edit_role","Name":"OrganizationEditRole","name_":"organization_edit_role","name-":"organization-edit-role","NAME":"ORGANIZATION_EDIT_ROLE","index$":12}, {"active":true,"entity":"organization_edit_role","key$":"BasicOrganizationEditRoleFlow","kind":"basic","name":"BasicOrganizationEditRoleFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"organization_edit_role_ref01","srcdatavar":"organization_edit_role_ref01_data","suffix":"_up0","textfield":"role"},"m":{},"o":"update","s":[{"apply":"TextFieldMark","def":{"mark":"Mark01-organization_edit_role_ref01"}}],"v":[],"index$":0}]}, 'OrganizationEditRole', {"PUT /api/v1/organizations/{organization_id}/invite":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"role":{"type":"string","key$":"role"},"user_id":{"type":"string","format":"uuid","key$":"user_id"}},"required":["role","user_id"],"x-ref":"#/components/schemas/OrganizationEditRole"}}},"required":true},"parameters":[{"in":"path","name":"organization_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -71,6 +83,12 @@ describe('OrganizationEditRoleEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra) {
   // TODO: fix test def options

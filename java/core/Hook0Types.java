@@ -106,9 +106,9 @@ public final class Hook0Types {
 
   public record ProblemListMatch(String detail, String id, Long status, String title) {}
 
-  public record Quota(Long global_applications_per_organization_limit, Long global_days_of_events_retention_limit, Long global_event_types_per_application_limit, Long global_events_per_day_limit, Long global_members_per_organization_limit, Long global_subscriptions_per_application_limit) {}
+  public record Quota(Boolean enabled, Map<String, Object> limits) {}
 
-  public record QuotaLoadMatch(Long global_applications_per_organization_limit, Long global_days_of_events_retention_limit, Long global_event_types_per_application_limit, Long global_events_per_day_limit, Long global_members_per_organization_limit, Long global_subscriptions_per_application_limit) {}
+  public record QuotaLoadMatch(Boolean enabled, Map<String, Object> limits) {}
 
   public record Registration(String email, String first_name, String gclid, String last_name, String password, String turnstile_token) {}
 
@@ -120,7 +120,7 @@ public final class Hook0Types {
 
   public record RequestAttemptListMatch(String application_id, String event_event_type_name, String event_id, String max_created_at, String min_created_at, String pagination_cursor, String subscription_id) {}
 
-  public record Response(String id) {}
+  public record Response(String body, Long elapsed_time_ms, Map<String, Object> headers, Long http_code, String id, String response_error_name, String response_id) {}
 
   public record ResponseLoadMatch(String id, String application_id) {}
 

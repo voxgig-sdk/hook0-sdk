@@ -57,6 +57,10 @@ main: kit: entity: service_token: {
       name: "create"
       points: [
         {
+          bf: [
+            "name"
+            "organization_id"
+          ]
           co: {
             id: "POST /api/v1/service_token/"
             source: "openapi3"
@@ -64,6 +68,10 @@ main: kit: entity: service_token: {
           }
           m: "POST"
           o: "/api/v1/service_token/"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"
@@ -108,6 +116,10 @@ main: kit: entity: service_token: {
             exist: [
               "organization_id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -168,6 +180,10 @@ main: kit: entity: service_token: {
             param: {
               service_token_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -257,6 +273,10 @@ main: kit: entity: service_token: {
       name: "update"
       points: [
         {
+          bf: [
+            "name"
+            "organization_id"
+          ]
           co: {
             id: "PUT /api/v1/service_token/{service_token_id}"
             source: "openapi3"
@@ -284,6 +304,10 @@ main: kit: entity: service_token: {
             param: {
               service_token_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

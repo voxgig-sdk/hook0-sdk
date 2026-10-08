@@ -1,6 +1,9 @@
 package entity
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/voxgig-sdk/hook0-sdk/go/core"
 
 	vs "github.com/voxgig-sdk/hook0-sdk/go/utility/struct"
@@ -49,6 +52,25 @@ func NewEventsManagementEntity(client *core.Hook0SDK, entopts map[string]any) *E
 }
 
 func (e *EventsManagementEntity) GetName() string { return e.name }
+
+// An entity prints and serialises as its data, as ts's toString and toJSON
+// do: the client it holds carries the options.
+func (e *EventsManagementEntity) String() string {
+	return "EventsManagement " + vs.Jsonify(e.data, map[string]any{"indent": 0})
+}
+
+func (e *EventsManagementEntity) GoString() string {
+	return e.String()
+}
+
+func (e *EventsManagementEntity) MarshalJSON() ([]byte, error) {
+	out := map[string]any{}
+	for k, v := range e.data {
+		out[k] = v
+	}
+	out["voxgig$entity"] = "EventsManagement"
+	return json.Marshal(out)
+}
 
 func (e *EventsManagementEntity) MarkDeleted() {
 	e.deleted = true
@@ -118,8 +140,8 @@ func (e *EventsManagementEntity) MatchTyped(match ...EventsManagement) EventsMan
 	return typedFrom[EventsManagement](e.Match())
 }
 
-func (e *EventsManagementEntity) Stream(action string, args map[string]any, callopts map[string]any) <-chan any {
-	out := make(chan any)
+func (e *EventsManagementEntity) Stream(action string, args map[string]any, callopts map[string]any) <-chan core.StreamItem {
+	out := make(chan core.StreamItem)
 
 	if callopts == nil {
 		callopts = map[string]any{}
@@ -161,7 +183,7 @@ func (e *EventsManagementEntity) Stream(action string, args map[string]any, call
 		ctx.Meta["stream_out"] = body
 	}
 
-	send := func(item any) bool {
+	send := func(item core.StreamItem) bool {
 		select {
 		case <-signal:
 			return false
@@ -170,76 +192,105 @@ func (e *EventsManagementEntity) Stream(action string, args map[string]any, call
 		}
 	}
 
-	go func() {
-		defer close(out)
-
-		utility.FeatureHook(ctx, "PrePoint")
-		point, err := utility.MakePoint(ctx)
-		ctx.Out["point"] = point
+	// What MakeError or Done hands back: the error, as the last value, or
+	// under `throw: false` the data there is.
+	sendData := func(data any, err error) {
 		if err != nil {
-			return
-		}
-
-		utility.FeatureHook(ctx, "PreSpec")
-		spec, err := utility.MakeSpec(ctx)
-		ctx.Out["spec"] = spec
-		if err != nil {
-			return
-		}
-
-		utility.FeatureHook(ctx, "PreRequest")
-		req, err := utility.MakeRequest(ctx)
-		ctx.Out["request"] = req
-		if err != nil {
-			return
-		}
-
-		utility.FeatureHook(ctx, "PreResponse")
-		resp, err := utility.MakeResponse(ctx)
-		ctx.Out["response"] = resp
-		if err != nil {
-			return
-		}
-
-		utility.FeatureHook(ctx, "PreResult")
-		result, err := utility.MakeResult(ctx)
-		ctx.Out["result"] = result
-		if err != nil {
-			return
-		}
-
-		utility.FeatureHook(ctx, "PreDone")
-
-		// Inbound: prefer the streaming feature's incremental iterator; else
-		// fall back to the materialised items so Stream always yields.
-		if ctx.Result != nil && ctx.Result.Stream != nil {
-			for item := range ctx.Result.Stream() {
-				if !send(item) {
-					return
-				}
-			}
-			return
-		}
-
-		data, derr := utility.Done(ctx)
-		if derr != nil {
+			send(core.StreamItem{Err: err})
 			return
 		}
 		switch d := data.(type) {
 		case []any:
 			for _, item := range d {
-				if !send(item) {
+				if !send(core.StreamItem{Item: item}) {
 					return
 				}
 			}
 		case nil:
 			// nothing to yield
 		default:
-			send(d)
+			send(core.StreamItem{Item: d})
 		}
+	}
+
+	go func() {
+		defer close(out)
+
+		// A panicking hook or stream function leaves through MakeError, as
+		// runOp's does. A goroutine the stream function starts is out of reach.
+		defer func() {
+			if r := recover(); r != nil {
+				sendData(e.recovered(ctx, r))
+			}
+		}()
+
+		// A failed step leaves through MakeError, as an operation's does.
+		if err := e.streamSteps(ctx); err != nil {
+			sendData(utility.MakeError(ctx, err))
+			return
+		}
+
+		// Inbound: prefer the streaming feature's incremental iterator; else
+		// fall back to the materialised items so Stream always yields.
+		if ctx.Result != nil && ctx.Result.Stream != nil {
+			// Done does not run on this path, so its record is cleaned here.
+			utility.CleanExplain(ctx)
+			for item := range ctx.Result.Stream() {
+				if !send(core.StreamItem{Item: item}) {
+					return
+				}
+			}
+			return
+		}
+
+		sendData(utility.Done(ctx))
 	}()
 
 	return out
+}
+
+// The steps an operation runs, with their hooks; the first that fails hands
+// back its error.
+func (e *EventsManagementEntity) streamSteps(ctx *core.Context) error {
+	utility := e.utility
+
+	utility.FeatureHook(ctx, "PrePoint")
+	point, err := utility.MakePoint(ctx)
+	ctx.Out["point"] = point
+	if err != nil {
+		return err
+	}
+
+	utility.FeatureHook(ctx, "PreSpec")
+	spec, err := utility.MakeSpec(ctx)
+	ctx.Out["spec"] = spec
+	if err != nil {
+		return err
+	}
+
+	utility.FeatureHook(ctx, "PreRequest")
+	req, err := utility.MakeRequest(ctx)
+	ctx.Out["request"] = req
+	if err != nil {
+		return err
+	}
+
+	utility.FeatureHook(ctx, "PreResponse")
+	resp, err := utility.MakeResponse(ctx)
+	ctx.Out["response"] = resp
+	if err != nil {
+		return err
+	}
+
+	utility.FeatureHook(ctx, "PreResult")
+	result, err := utility.MakeResult(ctx)
+	ctx.Out["result"] = result
+	if err != nil {
+		return err
+	}
+
+	utility.FeatureHook(ctx, "PreDone")
+	return nil
 }
 
 func (e *EventsManagementEntity) Load(_ map[string]any, _ map[string]any) (any, error) {
@@ -290,6 +341,11 @@ func (e *EventsManagementEntity) Update(_ map[string]any, _ map[string]any) (any
 }
 
 
+func (e *EventsManagementEntity) Patch(_ map[string]any, _ map[string]any) (any, error) {
+	return core.UnsupportedOp("patch", e.name)
+}
+
+
 
 func (e *EventsManagementEntity) Remove(reqmatch map[string]any, ctrl map[string]any) (any, error) {
 	utility := e.utility
@@ -329,8 +385,14 @@ func (e *EventsManagementEntity) RemoveTyped(reqmatch EventsManagementRemoveMatc
 
 
 
-func (e *EventsManagementEntity) runOp(ctx *core.Context, postDone func()) (any, error) {
+func (e *EventsManagementEntity) runOp(ctx *core.Context, postDone func()) (out any, err error) {
 	utility := e.utility
+
+	defer func() {
+		if r := recover(); r != nil {
+			out, err = e.recovered(ctx, r)
+		}
+	}()
 
 	utility.FeatureHook(ctx, "PrePoint")
 	point, err := utility.MakePoint(ctx)
@@ -370,9 +432,9 @@ func (e *EventsManagementEntity) runOp(ctx *core.Context, postDone func()) (any,
 	utility.FeatureHook(ctx, "PreDone")
 	postDone()
 
-	out, doneErr := utility.Done(ctx)
-	if doneErr != nil {
-		return out, doneErr
+	out, err = utility.Done(ctx)
+	if err != nil {
+		return out, err
 	}
 
 	opname := ""
@@ -388,4 +450,14 @@ func (e *EventsManagementEntity) runOp(ctx *core.Context, postDone func()) (any,
 	}
 
 	return out, nil
+}
+
+// A hook, fetcher or parser that panics never reached MakeError, and its
+// message can quote the request.
+func (e *EventsManagementEntity) recovered(ctx *core.Context, r any) (any, error) {
+	perr, ok := r.(error)
+	if !ok {
+		perr = fmt.Errorf("%v", r)
+	}
+	return e.utility.MakeError(ctx, perr)
 }

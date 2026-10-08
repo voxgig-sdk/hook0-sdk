@@ -446,21 +446,13 @@ class ProblemListMatch(TypedDict, total=False):
 
 
 class Quota(TypedDict):
-    global_applications_per_organization_limit: int
-    global_days_of_events_retention_limit: int
-    global_event_types_per_application_limit: int
-    global_events_per_day_limit: int
-    global_members_per_organization_limit: int
-    global_subscriptions_per_application_limit: int
+    enabled: bool
+    limits: dict
 
 
 class QuotaLoadMatch(TypedDict, total=False):
-    global_applications_per_organization_limit: int
-    global_days_of_events_retention_limit: int
-    global_event_types_per_application_limit: int
-    global_events_per_day_limit: int
-    global_members_per_organization_limit: int
-    global_subscriptions_per_application_limit: int
+    enabled: bool
+    limits: dict
 
 
 class RegistrationRequired(TypedDict):
@@ -525,8 +517,17 @@ class RequestAttemptListMatch(RequestAttemptListMatchRequired, total=False):
     subscription_id: str
 
 
-class Response(TypedDict, total=False):
+class ResponseRequired(TypedDict):
+    response_id: str
+
+
+class Response(ResponseRequired, total=False):
+    body: str
+    elapsed_time_ms: int
+    headers: dict
+    http_code: int
     id: str
+    response_error_name: str
 
 
 class ResponseLoadMatch(TypedDict):

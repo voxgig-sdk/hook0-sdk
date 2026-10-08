@@ -16,7 +16,7 @@ go get github.com/voxgig-sdk/hook0-sdk/go@latest
 ```
 
 The Go module proxy resolves the version from the `go/vX.Y.Z` GitHub
-release tag — see [Releases](https://github.com/voxgig-sdk/hook0-sdk/releases) for the available versions.
+release tag — see [Tags](https://github.com/voxgig-sdk/hook0-sdk/tags) for the available versions.
 
 To vendor from a local checkout instead, clone this repo alongside your
 project and add a `replace` directive pointing at the checked-out
@@ -35,9 +35,10 @@ loading a specific record.
 ### Quickstart
 
 A complete program: create a client, then call the entity operations.
-Each operation returns `(value, error)` — the value is the data itself
-(there is no `{ok, data}` wrapper), so check `err` and use the value
-directly.
+Each operation returns `(value, error)` — the value is the entity, and for
+`List` a `[]any` of entities, one per record (there is no `{ok, data}`
+wrapper), so check `err` and read a record through the entity's
+`Data()`.
 
 ```go
 package main
@@ -53,42 +54,42 @@ func main() {
         "apikey": os.Getenv("HOOK0_APIKEY"),
     })
 
-    // List application records — the value is the array of records itself.
-    applications, err := client.Application(nil).List(nil, nil)
+    // List application records — the value is a []any of entities, one per record.
+    applications, err := client.Application(nil).List(map[string]any{"organization_id": "example"}, nil)
     if err != nil {
         panic(err)
     }
     for _, item := range applications.([]any) {
-        fmt.Println(item)
+        fmt.Println(item.(sdk.Entity).Data())
     }
 
-    // Load a single application — the value is the loaded record.
+    // Load a single application — the value is the entity; Data() reads its record.
     application, err := client.Application(nil).Load(map[string]any{"id": "example_id"}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(application)
+    fmt.Println(application.(sdk.Entity).Data())
 
     // Create a application.
     created, err := client.Application(nil).Create(map[string]any{"amount": 1, "application_id": "example_application_id", "application_name": "example_application_name", "consumption": map[string]any{}, "date": "example_date", "is_provisional": true, "name": "example_name", "onboarding_steps": map[string]any{}, "organization_id": "example_organization_id", "quotas": map[string]any{}}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(created)
+    fmt.Println(created.(sdk.Entity).Data())
 
     // Update a application.
     updated, err := client.Application(nil).Update(map[string]any{"id": "example_id", "amount": 1, "application_id": "example_application_id"}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(updated)
+    fmt.Println(updated.(sdk.Entity).Data())
 
     // Remove a application.
     removed, err := client.Application(nil).Remove(map[string]any{"id": "example_id"}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(removed)
+    fmt.Println(removed.(sdk.Entity).Data())
 }
 ```
 
@@ -99,12 +100,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-eventtypes, err := client.EventType(nil).List(nil, nil)
+response, err := client.Response(nil).Load(map[string]any{"id": "example_id", "application_id": "example"}, nil)
 if err != nil {
     // handle err
     return
 }
-_ = eventtypes
+_ = response
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -168,13 +169,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-eventType, err := client.EventType(nil).List(
-    nil, nil,
+response, err := client.Response(nil).Load(
+    map[string]any{"id": "test01", "application_id": "example"}, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(eventType) // the returned mock data
+fmt.Println(response.(sdk.Entity).Data()) // the entity's mock record
 ```
 
 ### Use a custom fetch function
@@ -283,11 +284,11 @@ All entities implement the `Hook0Entity` interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria. |
-| `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria. |
-| `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity. |
-| `Update` | `(reqdata, ctrl map[string]any) (any, error)` | Update an existing entity. |
-| `Remove` | `(reqmatch, ctrl map[string]any) (any, error)` | Remove an entity. |
+| `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria, and return it. |
+| `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria, one per record. |
+| `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity, and return it. |
+| `Update` | `(reqdata, ctrl map[string]any) (any, error)` | Update an existing entity, and return it. |
+| `Remove` | `(reqmatch, ctrl map[string]any) (any, error)` | Remove an entity, and return it marked as deleted. |
 | `Data` | `(args ...any) any` | Get or set entity data. |
 | `Match` | `(args ...any) any` | Get or set entity match criteria. |
 | `Make` | `() Entity` | Create a new instance with the same options. |
@@ -295,21 +296,21 @@ All entities implement the `Hook0Entity` interface.
 
 ### Result shape
 
-Entity operations return `(value, error)`. The `value` is the
-operation's data **directly** — there is no wrapper:
+Entity operations return `(value, error)`. The `value` is the entity
+itself — there is no wrapper:
 
 | Operation | `value` |
 | --- | --- |
-| `Load` / `Create` / `Update` / `Remove` | the entity record (`map[string]any`) |
-| `List` | a `[]any` of entity records |
+| `Load` / `Create` / `Update` / `Remove` | the entity, whose `Data()` reads its record (`map[string]any`) |
+| `List` | a `[]any` of entities, one per record |
 
 Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
 slice):
 
-    application, err := client.Application(nil).List(map[string]any{/* fields */}, nil)
+    application, err := client.Application(nil).List(map[string]any{"organization_id": "example"}, nil)
     if err != nil { /* handle */ }
-    // application is the returned record
+    // application is a []any of entities, one per record
 
 Only `Direct()` returns a response envelope — a `map[string]any` with
 `"ok"`, `"status"`, `"headers"`, and `"data"` keys.
@@ -537,12 +538,8 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `"global_applications_per_organization_limit"` |  |
-| `"global_days_of_events_retention_limit"` |  |
-| `"global_event_types_per_application_limit"` |  |
-| `"global_events_per_day_limit"` |  |
-| `"global_members_per_organization_limit"` |  |
-| `"global_subscriptions_per_application_limit"` |  |
+| `"enabled"` |  |
+| `"limits"` |  |
 
 Operations: Load.
 
@@ -590,7 +587,13 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `"body"` |  |
+| `"elapsed_time_ms"` |  |
+| `"headers"` |  |
+| `"http_code"` |  |
 | `"id"` |  |
+| `"response_error_name"` |  |
+| `"response_id"` |  |
 
 Operations: Load.
 
@@ -709,17 +712,20 @@ application, err := client.Application(nil).Load(map[string]any{"id": "applicati
 if err != nil {
     panic(err)
 }
-fmt.Println(application) // the loaded record
+fmt.Println(application.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
 
 ```go
-applications, err := client.Application(nil).List(nil, nil)
+applications, err := client.Application(nil).List(map[string]any{"organization_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(applications) // the array of records
+// A []any of entities, one per record.
+for _, item := range applications.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -740,7 +746,7 @@ result, err := client.Application(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -770,11 +776,14 @@ Create an instance: `applicationSecret := client.ApplicationSecret(nil)`
 #### Example: List
 
 ```go
-applicationSecrets, err := client.ApplicationSecret(nil).List(nil, nil)
+applicationSecrets, err := client.ApplicationSecret(nil).List(map[string]any{"application_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(applicationSecrets) // the array of records
+// A []any of entities, one per record.
+for _, item := range applicationSecrets.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -788,7 +797,7 @@ result, err := client.ApplicationSecret(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -837,17 +846,20 @@ event, err := client.Event(nil).Load(map[string]any{"id": "event_id", "applicati
 if err != nil {
     panic(err)
 }
-fmt.Println(event) // the loaded record
+fmt.Println(event.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
 
 ```go
-events, err := client.Event(nil).List(nil, nil)
+events, err := client.Event(nil).List(map[string]any{"application_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(events) // the array of records
+// A []any of entities, one per record.
+for _, item := range events.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -867,7 +879,7 @@ result, err := client.Event(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -904,17 +916,20 @@ eventType, err := client.EventType(nil).Load(map[string]any{"id": "event_type_id
 if err != nil {
     panic(err)
 }
-fmt.Println(eventType) // the loaded record
+fmt.Println(eventType.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
 
 ```go
-eventTypes, err := client.EventType(nil).List(nil, nil)
+eventTypes, err := client.EventType(nil).List(map[string]any{"application_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(eventTypes) // the array of records
+// A []any of entities, one per record.
+for _, item := range eventTypes.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -933,7 +948,7 @@ result, err := client.EventType(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -955,7 +970,10 @@ eventsManagements, err := client.EventsManagement(nil).List(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(eventsManagements) // the array of records
+// A []any of entities, one per record.
+for _, item := range eventsManagements.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 
@@ -988,7 +1006,7 @@ health, err := client.Health(nil).Load(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(health) // the loaded record
+fmt.Println(health.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -1021,7 +1039,10 @@ hook0s, err := client.Hook0(nil).List(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(hook0s) // the array of records
+// A []any of entities, one per record.
+for _, item := range hook0s.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 
@@ -1062,7 +1083,7 @@ result, err := client.IngestedEvent(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -1098,7 +1119,7 @@ instance, err := client.Instance(nil).Load(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(instance) // the loaded record
+fmt.Println(instance.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -1129,7 +1150,7 @@ result, err := client.Login(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -1173,7 +1194,7 @@ organization, err := client.Organization(nil).Load(map[string]any{"id": "organiz
 if err != nil {
     panic(err)
 }
-fmt.Println(organization) // the loaded record
+fmt.Println(organization.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
@@ -1183,7 +1204,10 @@ organizations, err := client.Organization(nil).List(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(organizations) // the array of records
+// A []any of entities, one per record.
+for _, item := range organizations.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -1207,7 +1231,7 @@ result, err := client.Organization(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -1256,7 +1280,10 @@ problems, err := client.Problem(nil).List(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(problems) // the array of records
+// A []any of entities, one per record.
+for _, item := range problems.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 
@@ -1274,12 +1301,8 @@ Create an instance: `quota := client.Quota(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `global_applications_per_organization_limit` | `int` |  |
-| `global_days_of_events_retention_limit` | `int` |  |
-| `global_event_types_per_application_limit` | `int` |  |
-| `global_events_per_day_limit` | `int` |  |
-| `global_members_per_organization_limit` | `int` |  |
-| `global_subscriptions_per_application_limit` | `int` |  |
+| `enabled` | `bool` |  |
+| `limits` | `map[string]any` |  |
 
 #### Example: Load
 
@@ -1288,7 +1311,7 @@ quota, err := client.Quota(nil).Load(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(quota) // the loaded record
+fmt.Println(quota.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -1325,7 +1348,7 @@ result, err := client.Registration(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -1366,17 +1389,20 @@ requestAttempt, err := client.RequestAttempt(nil).Load(map[string]any{"id": "req
 if err != nil {
     panic(err)
 }
-fmt.Println(requestAttempt) // the loaded record
+fmt.Println(requestAttempt.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
 
 ```go
-requestAttempts, err := client.RequestAttempt(nil).List(nil, nil)
+requestAttempts, err := client.RequestAttempt(nil).List(map[string]any{"application_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(requestAttempts) // the array of records
+// A []any of entities, one per record.
+for _, item := range requestAttempts.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 
@@ -1394,7 +1420,13 @@ Create an instance: `response := client.Response(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `body` | `string` |  |
+| `elapsed_time_ms` | `int` |  |
+| `headers` | `map[string]any` |  |
+| `http_code` | `int` |  |
 | `id` | `string` |  |
+| `response_error_name` | `string` |  |
+| `response_id` | `string` |  |
 
 #### Example: Load
 
@@ -1403,7 +1435,7 @@ response, err := client.Response(nil).Load(map[string]any{"id": "response_id", "
 if err != nil {
     panic(err)
 }
-fmt.Println(response) // the loaded record
+fmt.Println(response.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -1450,17 +1482,20 @@ serviceToken, err := client.ServiceToken(nil).Load(map[string]any{"id": "service
 if err != nil {
     panic(err)
 }
-fmt.Println(serviceToken) // the loaded record
+fmt.Println(serviceToken.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
 
 ```go
-serviceTokens, err := client.ServiceToken(nil).List(nil, nil)
+serviceTokens, err := client.ServiceToken(nil).List(map[string]any{"organization_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(serviceTokens) // the array of records
+// A []any of entities, one per record.
+for _, item := range serviceTokens.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -1476,7 +1511,7 @@ result, err := client.ServiceToken(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -1521,17 +1556,20 @@ subscription, err := client.Subscription(nil).Load(map[string]any{"id": "subscri
 if err != nil {
     panic(err)
 }
-fmt.Println(subscription) // the loaded record
+fmt.Println(subscription.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
 
 ```go
-subscriptions, err := client.Subscription(nil).List(nil, nil)
+subscriptions, err := client.Subscription(nil).List(map[string]any{"application_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(subscriptions) // the array of records
+// A []any of entities, one per record.
+for _, item := range subscriptions.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -1555,7 +1593,7 @@ result, err := client.Subscription(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -1588,7 +1626,7 @@ result, err := client.UserAuthentication(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -1620,7 +1658,7 @@ result, err := client.UserInvitation(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 ## Features
@@ -1816,7 +1854,9 @@ The Go SDK uses `map[string]any` throughout rather than typed structs.
 This mirrors the dynamic nature of the API and keeps the SDK
 flexible — no code generation is needed when the API schema changes.
 
-Use `core.ToMapAny()` to safely cast results and nested data.
+An operation returns the entity, and its `Data()` returns the record. Use
+`core.ToMapAny()` to safely cast that record, or data nested in it, to
+`map[string]any`: it returns `nil` for anything else, an entity included.
 
 ### Package structure
 
@@ -1836,15 +1876,15 @@ like `core.ToMapAny`.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `List`, the entity
+Entity instances are stateful. After a successful `Load`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-eventtype := client.EventType(nil)
-eventtype.List(nil, nil)
+response := client.Response(nil)
+response.Load(map[string]any{"id": "example_id", "application_id": "example"}, nil)
 
-// eventtype.Data() now returns the eventtype data from the last list
-// eventtype.Match() returns the last match criteria
+// response.Data() now returns the response data from the last load
+// response.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

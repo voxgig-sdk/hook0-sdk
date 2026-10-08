@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('UserAuthenticationEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.UserAuthentication().create({"email":1,"new_password":"x","token":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
@@ -51,7 +63,7 @@ describe('UserAuthenticationEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"email":{"a":true,"h":"Email","n":"email","r":true,"t":"`$STRING`","key$":"email","index$":0},"new_password":{"a":true,"h":"New Password","n":"new_password","r":true,"t":"`$STRING`","key$":"new_password","index$":1},"token":{"a":true,"h":"Token","n":"token","r":true,"t":"`$STRING`","key$":"token","index$":2}},"name":"user_authentication","op":{"create":{"input":"data","name":"create","points":[{"a":true,"co":{"id":"POST /api/v1/auth/begin-reset-password","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/begin-reset-password","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"begin-reset-password"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0},{"a":true,"co":{"id":"POST /api/v1/auth/logout","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/logout","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"logout"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":1},{"a":true,"co":{"id":"POST /api/v1/auth/password","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/password","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"password"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":2},{"a":true,"co":{"id":"POST /api/v1/auth/reset-password","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/reset-password","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"reset-password"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":3},{"a":true,"co":{"id":"POST /api/v1/auth/verify-email","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/verify-email","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"verify-email"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":4}],"key$":"create"}},"relations":{"ancestors":[]},"key$":"user_authentication","name__orig":"user_authentication","Name":"UserAuthentication","name_":"user_authentication","name-":"user-authentication","NAME":"USER_AUTHENTICATION","index$":21}, {"active":true,"entity":"user_authentication","key$":"BasicUserAuthenticationFlow","kind":"basic","name":"BasicUserAuthenticationFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"user_authentication_ref01"},"m":{},"o":"create","s":[],"v":[],"index$":0}]}, 'UserAuthentication', {"POST /api/v1/auth/begin-reset-password":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"email":{"type":"string","key$":"email"}},"required":["email"],"x-ref":"#/components/schemas/BeginResetPasswordPost","index$":1}}},"required":true},"parameters":[]},"POST /api/v1/auth/logout":{"protocol":"http","parameters":[]},"POST /api/v1/auth/password":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"new_password":{"type":"string","key$":"new_password"}},"required":["new_password"],"x-ref":"#/components/schemas/ChangePasswordPost","index$":1}}},"required":true},"parameters":[]},"POST /api/v1/auth/reset-password":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"new_password":{"type":"string","key$":"new_password"},"token":{"type":"string","key$":"token"}},"required":["new_password","token"],"x-ref":"#/components/schemas/ResetPasswordPost","index$":1}}},"required":true},"parameters":[]},"POST /api/v1/auth/verify-email":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"token":{"type":"string","key$":"token"}},"required":["token"],"x-ref":"#/components/schemas/EmailVerificationPost","index$":1}}},"required":true},"parameters":[]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"email":{"a":true,"h":"Email","n":"email","r":true,"t":"`$STRING`","key$":"email","index$":0},"new_password":{"a":true,"h":"New Password","n":"new_password","r":true,"t":"`$STRING`","key$":"new_password","index$":1},"token":{"a":true,"h":"Token","n":"token","r":true,"t":"`$STRING`","key$":"token","index$":2}},"name":"user_authentication","op":{"create":{"input":"data","name":"create","points":[{"a":true,"bf":["email"],"co":{"id":"POST /api/v1/auth/begin-reset-password","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/begin-reset-password","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"begin-reset-password"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0},{"a":true,"co":{"id":"POST /api/v1/auth/logout","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/logout","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"logout"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":1},{"a":true,"bf":["new_password"],"co":{"id":"POST /api/v1/auth/password","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/password","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"password"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":2},{"a":true,"bf":["new_password","token"],"co":{"id":"POST /api/v1/auth/reset-password","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/reset-password","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"reset-password"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":3},{"a":true,"bf":["token"],"co":{"id":"POST /api/v1/auth/verify-email","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/api/v1/auth/verify-email","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"auth"},{"lit":"verify-email"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":4}],"key$":"create"}},"relations":{"ancestors":[]},"key$":"user_authentication","name__orig":"user_authentication","Name":"UserAuthentication","name_":"user_authentication","name-":"user-authentication","NAME":"USER_AUTHENTICATION","index$":21}, {"active":true,"entity":"user_authentication","key$":"BasicUserAuthenticationFlow","kind":"basic","name":"BasicUserAuthenticationFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"user_authentication_ref01"},"m":{},"o":"create","s":[],"v":[],"index$":0}]}, 'UserAuthentication', {"POST /api/v1/auth/begin-reset-password":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"email":{"type":"string","key$":"email"}},"required":["email"],"x-ref":"#/components/schemas/BeginResetPasswordPost","index$":1}}},"required":true},"parameters":[]},"POST /api/v1/auth/logout":{"protocol":"http","parameters":[]},"POST /api/v1/auth/password":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"new_password":{"type":"string","key$":"new_password"}},"required":["new_password"],"x-ref":"#/components/schemas/ChangePasswordPost","index$":1}}},"required":true},"parameters":[]},"POST /api/v1/auth/reset-password":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"new_password":{"type":"string","key$":"new_password"},"token":{"type":"string","key$":"token"}},"required":["new_password","token"],"x-ref":"#/components/schemas/ResetPasswordPost","index$":1}}},"required":true},"parameters":[]},"POST /api/v1/auth/verify-email":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"token":{"type":"string","key$":"token"}},"required":["token"],"x-ref":"#/components/schemas/EmailVerificationPost","index$":1}}},"required":true},"parameters":[]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +84,12 @@ describe('UserAuthenticationEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

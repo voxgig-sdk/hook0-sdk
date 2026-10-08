@@ -25,6 +25,10 @@ main: kit: entity: user_invitation: {
       name: "create"
       points: [
         {
+          bf: [
+            "email"
+            "role"
+          ]
           co: {
             id: "POST /api/v1/organizations/{organization_id}/invite"
             source: "openapi3"
@@ -47,6 +51,10 @@ main: kit: entity: user_invitation: {
             exist: [
               "organization_id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

@@ -3,11 +3,16 @@ declare(strict_types=1);
 
 // Hook0 SDK utility: prepare_body
 
+require_once __DIR__ . '/Media.php';
+
 class Hook0PrepareBody
 {
     public static function call(Hook0Context $ctx): mixed
     {
         if ($ctx->op->input === 'data') {
+            if (Hook0Media::isRawRequest($ctx->point)) {
+                return Hook0Media::rawBody($ctx->reqdata);
+            }
             $body = ($ctx->utility->transform_request)($ctx);
             // PHP cannot tell an empty map from an empty list, and this
             // vendored struct answers [] where the canonical transform

@@ -130,7 +130,7 @@ main: kit: entity: request_attempt: {
               {
                 k: "query"
                 n: "event_event_type_name"
-                or: "event_event_type_name"
+                or: "event.event_type_names"
                 r: false
                 t: "`$STRING`"
               }
@@ -176,13 +176,11 @@ main: kit: entity: request_attempt: {
           q: {
             exist: [
               "application_id"
-              "event_event_type_name"
-              "event_id"
-              "max_created_at"
-              "min_created_at"
-              "pagination_cursor"
-              "subscription_id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -243,6 +241,10 @@ main: kit: entity: request_attempt: {
             param: {
               request_attempt_id: "id"
             }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

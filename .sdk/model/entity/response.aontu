@@ -5,10 +5,49 @@ main: kit: entity: response: {
   alias: field: {}
 
   fields: {
+    body: {
+      h: "Body"
+      n: "body"
+      r: false
+      t: "`$STRING`"
+    }
+    elapsed_time_ms: {
+      fo: "int32"
+      h: "Elapsed Time Ms"
+      n: "elapsed_time_ms"
+      r: false
+      t: "`$INTEGER`"
+    }
+    headers: {
+      h: "Headers"
+      n: "headers"
+      r: false
+      t: "`$OBJECT`"
+    }
+    http_code: {
+      fo: "int32"
+      h: "Http Code"
+      n: "http_code"
+      r: false
+      t: "`$INTEGER`"
+    }
     id: {
       h: "Id"
       n: "id"
       r: false
+      t: "`$STRING`"
+    }
+    response_error_name: {
+      h: "Response Error Name"
+      n: "response_error_name"
+      r: false
+      t: "`$STRING`"
+    }
+    response_id: {
+      fo: "uuid"
+      h: "Response Id"
+      n: "response_id"
+      r: true
       t: "`$STRING`"
     }
   }
@@ -62,6 +101,10 @@ main: kit: entity: response: {
               response_id: "id"
             }
           }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "api"
@@ -78,7 +121,7 @@ main: kit: entity: response: {
           ]
           t: {
             req: "`reqdata`"
-            res: "`body.headers`"
+            res: "`body`"
           }
         }
       ]

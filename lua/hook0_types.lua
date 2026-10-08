@@ -330,20 +330,12 @@
 ---@field title? string
 
 ---@class Quota
----@field global_applications_per_organization_limit number
----@field global_days_of_events_retention_limit number
----@field global_event_types_per_application_limit number
----@field global_events_per_day_limit number
----@field global_members_per_organization_limit number
----@field global_subscriptions_per_application_limit number
+---@field enabled boolean
+---@field limits table
 
 ---@class QuotaLoadMatch
----@field global_applications_per_organization_limit? number
----@field global_days_of_events_retention_limit? number
----@field global_event_types_per_application_limit? number
----@field global_events_per_day_limit? number
----@field global_members_per_organization_limit? number
----@field global_subscriptions_per_application_limit? number
+---@field enabled? boolean
+---@field limits? table
 
 ---@class Registration
 ---@field email string
@@ -391,7 +383,13 @@
 ---@field subscription_id? string
 
 ---@class Response
+---@field body? string
+---@field elapsed_time_ms? number
+---@field headers? table
+---@field http_code? number
 ---@field id? string
+---@field response_error_name? string
+---@field response_id string
 
 ---@class ResponseLoadMatch
 ---@field id string

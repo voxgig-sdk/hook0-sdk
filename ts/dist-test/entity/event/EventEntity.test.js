@@ -54,30 +54,72 @@ const utility_1 = require("../../utility");
         const ent = testsdk.Event();
         (0, node_assert_1.default)(null != ent);
     });
+    class FailHook extends __1.BaseFeature {
+        name = 'failhook';
+        version = '0.0.1';
+        active = true;
+        unexpected = 0;
+        init() { }
+        PreSpec() { throw new Error('event hook failed'); }
+        PreUnexpected() { this.unexpected++; }
+    }
+    (0, node_test_1.test)('stream-error', async () => {
+        const offline = { net: { offline: true } };
+        await node_assert_1.default.rejects(async () => {
+            for await (const _item of __1.Hook0SDK.test(offline).Event().stream('list')) { }
+        }, /offline/);
+        for await (const _item of __1.Hook0SDK.test(offline).Event()
+            .stream('list', undefined, { ctrl: { throw: false } })) { }
+        if (null != __1.config.feature?.rbac) {
+            const denied = __1.Hook0SDK.test(undefined, { feature: { rbac: { active: true, deny: true } } });
+            await node_assert_1.default.rejects(async () => {
+                for await (const _item of denied.Event().stream('list')) { }
+            }, (err) => 'rbac_denied' === err.code);
+        }
+    });
+    (0, node_test_1.test)('stream-ctrl', async () => {
+        const explain = {};
+        const ctrl = { explain };
+        for await (const _item of __1.Hook0SDK.test().Event().stream('list', undefined, { ctrl })) { }
+        node_assert_1.default.deepStrictEqual(Object.keys(ctrl), ['explain']);
+        (0, node_assert_1.default)(explain === ctrl.explain && 0 < Object.keys(explain).length);
+    });
+    (0, node_test_1.test)('unexpected', async () => {
+        const hook = new FailHook();
+        const client = new __1.Hook0SDK({ feature: { test: { active: true } }, extend: [hook] });
+        await node_assert_1.default.rejects(client.Event().list(), /hook failed/);
+        (0, node_assert_1.default)(0 < hook.unexpected);
+        const fired = hook.unexpected;
+        node_assert_1.default.strictEqual(await client.Event().list(undefined, { throw: false }), undefined);
+        (0, node_assert_1.default)(fired < hook.unexpected);
+    });
+    (0, node_test_1.test)('validate', async (t) => {
+        if (null == __1.config.feature?.validate) {
+            t.skip('feature not present in this SDK: validate');
+            return;
+        }
+        const client = __1.Hook0SDK.test(undefined, { feature: { validate: { active: true } } });
+        await node_assert_1.default.rejects(client.Event().list({ "application_id": 1 }), (err) => 'validate_failed' === err.code);
+    });
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.HOOK0_TEST_LIVE;
-        for (const op of ['create', 'list', 'load']) {
+        for (const op of ['list', 'load']) {
             if (!live && (0, utility_1.maybeSkipControl)(t, 'entityOp', 'event.' + op, live))
                 return;
         }
         const setup = basicSetup();
         if (setup.live) {
-            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "event_id": { "a": true, "fo": "uuid", "h": "Event Id", "n": "event_id", "r": true, "t": "`$STRING`", "key$": "event_id", "index$": 0 }, "event_type_name": { "a": true, "h": "Event Type Name", "n": "event_type_name", "r": true, "t": "`$STRING`", "key$": "event_type_name", "index$": 1 }, "id": { "a": true, "h": "Id", "n": "id", "r": false, "t": "`$STRING`", "key$": "id", "index$": 2 }, "ip": { "a": true, "h": "Ip", "n": "ip", "r": true, "t": "`$STRING`", "key$": "ip", "index$": 3 }, "labels": { "a": true, "h": "Labels", "n": "labels", "r": true, "t": "`$OBJECT`", "key$": "labels", "index$": 4 }, "metadata": { "a": true, "h": "Metadata", "n": "metadata", "r": false, "t": "`$OBJECT`", "key$": "metadata", "index$": 5 }, "occurred_at": { "a": true, "fo": "date-time", "h": "Occurred At", "n": "occurred_at", "r": true, "t": "`$STRING`", "key$": "occurred_at", "index$": 6 }, "payload": { "a": true, "h": "Payload", "n": "payload", "r": true, "t": "`$STRING`", "key$": "payload", "index$": 7 }, "payload_content_type": { "a": true, "h": "Payload Content Type", "n": "payload_content_type", "r": true, "t": "`$STRING`", "key$": "payload_content_type", "index$": 8 }, "received_at": { "a": true, "fo": "date-time", "h": "Received At", "n": "received_at", "r": true, "t": "`$STRING`", "key$": "received_at", "index$": 9 } }, "id": { "field": "id", "name": "id" }, "name": "event", "op": { "create": { "input": "data", "name": "create", "points": [{ "a": true, "co": { "id": "POST /api/v1/events/{event_id}/replay", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "id", "or": "event_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "POST", "o": "/api/v1/events/{event_id}/replay", "q": { "$action": "replay", "exist": ["id"] }, "r": { "param": { "event_id": "id" } }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "events" }, { "var": "id" }, { "lit": "replay" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "create" }, "list": { "input": "data", "name": "list", "points": [{ "a": true, "co": { "id": "GET /api/v1/events/", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/api/v1/events/", "q": { "exist": ["application_id"] }, "r": {}, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "events" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "list" }, "load": { "input": "data", "name": "load", "points": [{ "a": true, "co": { "id": "GET /api/v1/events/{event_id}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "id", "or": "event_id", "r": true, "t": "`$STRING`", "index$": 0 }], "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/api/v1/events/{event_id}", "q": { "exist": ["application_id", "id"] }, "r": { "param": { "event_id": "id" } }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "events" }, { "var": "id" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "event", "name__orig": "event", "Name": "Event", "name_": "event", "name-": "event", "NAME": "EVENT", "index$": 3 }, { "active": true, "entity": "event", "key$": "BasicEventFlow", "kind": "basic", "name": "BasicEventFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": { "ref": "event_ref01" }, "m": { "event_id": "event01" }, "o": "create", "s": [], "v": [], "index$": 0 }, { "a": true, "d": {}, "i": {}, "m": {}, "o": "list", "s": [], "v": [{ "apply": "ItemExists", "def": { "ref": "event_ref01" } }], "index$": 1 }, { "a": true, "d": {}, "i": { "ref": "event_ref01", "srcdatavar": "event_ref01_data", "suffix": "_dt0" }, "m": { "id": "event01" }, "o": "load", "s": [], "v": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-event_ref01" } }], "index$": 2 }] }, 'Event', { "POST /api/v1/events/{event_id}/replay": { "protocol": "http", "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "application_id": { "type": "string", "format": "uuid" } }, "required": ["application_id"], "x-ref": "#/components/schemas/ReplayEvent" } } }, "required": true }, "parameters": [{ "in": "path", "name": "event_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "simple", "index$": 0 }] }, "GET /api/v1/events/": { "protocol": "http", "parameters": [{ "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 0 }] }, "GET /api/v1/events/{event_id}": { "protocol": "http", "parameters": [{ "in": "path", "name": "event_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "simple", "index$": 0 }, { "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 1 }] } });
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "event_id": { "a": true, "fo": "uuid", "h": "Event Id", "n": "event_id", "r": true, "t": "`$STRING`", "key$": "event_id", "index$": 0 }, "event_type_name": { "a": true, "h": "Event Type Name", "n": "event_type_name", "r": true, "t": "`$STRING`", "key$": "event_type_name", "index$": 1 }, "id": { "a": true, "h": "Id", "n": "id", "r": false, "t": "`$STRING`", "key$": "id", "index$": 2 }, "ip": { "a": true, "h": "Ip", "n": "ip", "r": true, "t": "`$STRING`", "key$": "ip", "index$": 3 }, "labels": { "a": true, "h": "Labels", "n": "labels", "r": true, "t": "`$OBJECT`", "key$": "labels", "index$": 4 }, "metadata": { "a": true, "h": "Metadata", "n": "metadata", "r": false, "t": "`$OBJECT`", "key$": "metadata", "index$": 5 }, "occurred_at": { "a": true, "fo": "date-time", "h": "Occurred At", "n": "occurred_at", "r": true, "t": "`$STRING`", "key$": "occurred_at", "index$": 6 }, "payload": { "a": true, "h": "Payload", "n": "payload", "r": true, "t": "`$STRING`", "key$": "payload", "index$": 7 }, "payload_content_type": { "a": true, "h": "Payload Content Type", "n": "payload_content_type", "r": true, "t": "`$STRING`", "key$": "payload_content_type", "index$": 8 }, "received_at": { "a": true, "fo": "date-time", "h": "Received At", "n": "received_at", "r": true, "t": "`$STRING`", "key$": "received_at", "index$": 9 } }, "id": { "field": "id", "name": "id" }, "name": "event", "op": { "create": { "input": "data", "name": "create", "points": [{ "a": true, "bf": ["application_id"], "co": { "id": "POST /api/v1/events/{event_id}/replay", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "id", "or": "event_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "POST", "o": "/api/v1/events/{event_id}/replay", "q": { "$action": "replay", "exist": ["id"] }, "r": { "param": { "event_id": "id" } }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "events" }, { "var": "id" }, { "lit": "replay" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "create" }, "list": { "input": "data", "name": "list", "points": [{ "a": true, "co": { "id": "GET /api/v1/events/", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/api/v1/events/", "q": { "exist": ["application_id"] }, "r": {}, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "events" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "list" }, "load": { "input": "data", "name": "load", "points": [{ "a": true, "co": { "id": "GET /api/v1/events/{event_id}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "id", "or": "event_id", "r": true, "t": "`$STRING`", "index$": 0 }], "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/api/v1/events/{event_id}", "q": { "exist": ["application_id", "id"] }, "r": { "param": { "event_id": "id" } }, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "events" }, { "var": "id" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "event", "name__orig": "event", "Name": "Event", "name_": "event", "name-": "event", "NAME": "EVENT", "index$": 3 }, { "active": true, "entity": "event", "key$": "BasicEventFlow", "kind": "basic", "name": "BasicEventFlow", "param": {}, "step": [{ "a": false, "d": {}, "i": { "ref": "event_ref01" }, "m": { "event_id": "event01" }, "o": "create", "s": [], "v": [], "unreachable": true }, { "a": true, "d": {}, "i": {}, "m": {}, "o": "list", "s": [], "v": [{ "apply": "ItemExists", "def": { "ref": "event_ref01" } }], "index$": 0 }, { "a": true, "d": {}, "i": { "ref": "event_ref01", "srcdatavar": "event_ref01_data", "suffix": "_dt0" }, "m": { "id": "event01" }, "o": "load", "s": [], "v": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-event_ref01" } }], "index$": 1 }] }, 'Event', { "POST /api/v1/events/{event_id}/replay": { "protocol": "http", "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "application_id": { "type": "string", "format": "uuid" } }, "required": ["application_id"], "x-ref": "#/components/schemas/ReplayEvent" } } }, "required": true }, "parameters": [{ "in": "path", "name": "event_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "simple", "index$": 0 }] }, "GET /api/v1/events/": { "protocol": "http", "parameters": [{ "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 0 }] }, "GET /api/v1/events/{event_id}": { "protocol": "http", "parameters": [{ "in": "path", "name": "event_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "simple", "index$": 0 }, { "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 1 }] } }, { strict: LIVE_STRICT, t });
         }
         const client = setup.client;
         const struct = setup.struct;
         const isempty = struct.isempty;
         const select = struct.select;
-        // CREATE
-        const event_ref01_ent = client.Event();
-        let event_ref01_data = setup.data.new.event['event_ref01'];
-        event_ref01_data['event_id'] = setup.idmap['event01'];
-        event_ref01_data = (await event_ref01_ent.create(event_ref01_data)).data();
-        (0, node_assert_1.default)(null != event_ref01_data.id);
+        let event_ref01_data = Object.values(setup.data.existing.event)[0];
         // LIST
+        const event_ref01_ent = client.Event();
         const event_ref01_match = {};
         const event_ref01_list = (await event_ref01_ent.list(event_ref01_match)).map((e) => e.data());
-        (0, node_assert_1.default)(!isempty(select(event_ref01_list, { id: event_ref01_data.id })));
         // LOAD
         const event_ref01_match_dt0 = {};
         event_ref01_match_dt0.id = event_ref01_data.id;
@@ -85,6 +127,11 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)(event_ref01_data_dt0.id === event_ref01_data.id);
     });
 });
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true;
 function basicSetup(extra) {
     // TODO: fix test def options
     const options = {}; // null

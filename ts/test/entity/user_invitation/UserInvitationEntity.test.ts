@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('UserInvitationEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.UserInvitation().create({"organization_id":1,"email":"x","role":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
@@ -51,7 +63,7 @@ describe('UserInvitationEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"email":{"a":true,"h":"Email","n":"email","r":true,"t":"`$STRING`","key$":"email","index$":0},"role":{"a":true,"h":"Role","n":"role","r":true,"t":"`$STRING`","key$":"role","index$":1}},"name":"user_invitation","op":{"create":{"input":"data","name":"create","points":[{"a":true,"co":{"id":"POST /api/v1/organizations/{organization_id}/invite","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"organization_id","or":"organization_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"POST","o":"/api/v1/organizations/{organization_id}/invite","q":{"exist":["organization_id"]},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"organizations"},{"var":"organization_id"},{"lit":"invite"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"create"}},"relations":{"ancestors":[["$.main.kit.entity.organization"]]},"key$":"user_invitation","name__orig":"user_invitation","Name":"UserInvitation","name_":"user_invitation","name-":"user-invitation","NAME":"USER_INVITATION","index$":22}, {"active":true,"entity":"user_invitation","key$":"BasicUserInvitationFlow","kind":"basic","name":"BasicUserInvitationFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"user_invitation_ref01"},"m":{"organization_id":"organization01"},"o":"create","s":[],"v":[],"index$":0}]}, 'UserInvitation', {"POST /api/v1/organizations/{organization_id}/invite":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"email":{"type":"string","key$":"email"},"role":{"type":"string","key$":"role"}},"required":["email","role"],"x-ref":"#/components/schemas/UserInvitation","index$":1}}},"required":true},"parameters":[{"in":"path","name":"organization_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"email":{"a":true,"h":"Email","n":"email","r":true,"t":"`$STRING`","key$":"email","index$":0},"role":{"a":true,"h":"Role","n":"role","r":true,"t":"`$STRING`","key$":"role","index$":1}},"name":"user_invitation","op":{"create":{"input":"data","name":"create","points":[{"a":true,"bf":["email","role"],"co":{"id":"POST /api/v1/organizations/{organization_id}/invite","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"organization_id","or":"organization_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"POST","o":"/api/v1/organizations/{organization_id}/invite","q":{"exist":["organization_id"]},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"organizations"},{"var":"organization_id"},{"lit":"invite"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"create"}},"relations":{"ancestors":[["$.main.kit.entity.organization"]]},"key$":"user_invitation","name__orig":"user_invitation","Name":"UserInvitation","name_":"user_invitation","name-":"user-invitation","NAME":"USER_INVITATION","index$":22}, {"active":true,"entity":"user_invitation","key$":"BasicUserInvitationFlow","kind":"basic","name":"BasicUserInvitationFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"user_invitation_ref01"},"m":{"organization_id":"organization01"},"o":"create","s":[],"v":[],"index$":0}]}, 'UserInvitation', {"POST /api/v1/organizations/{organization_id}/invite":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"email":{"type":"string","key$":"email"},"role":{"type":"string","key$":"role"}},"required":["email","role"],"x-ref":"#/components/schemas/UserInvitation","index$":1}}},"required":true},"parameters":[{"in":"path","name":"organization_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -73,6 +85,12 @@ describe('UserInvitationEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

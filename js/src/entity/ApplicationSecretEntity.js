@@ -25,7 +25,7 @@ class ApplicationSecretEntity extends Hook0EntityBase {
   /**
    * @param {ApplicationSecretListMatch} [reqmatch]
    * @param {Object} [ctrl]
-   * @returns {Promise<ApplicationSecret[]>}
+   * @returns {Promise<ApplicationSecretEntity[]>}
    */
   async list(reqmatch, ctrl) {
 
@@ -118,9 +118,15 @@ class ApplicationSecretEntity extends Hook0EntityBase {
       return done(ctx)
     }
     catch (err) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -138,7 +144,7 @@ class ApplicationSecretEntity extends Hook0EntityBase {
   /**
    * @param {ApplicationSecretCreateData} [reqdata]
    * @param {Object} [ctrl]
-   * @returns {Promise<ApplicationSecret>}
+   * @returns {Promise<ApplicationSecretEntity>}
    */
   async create(reqdata, ctrl) {
 
@@ -238,9 +244,15 @@ class ApplicationSecretEntity extends Hook0EntityBase {
       return (ctx.result && ctx.result.ok) ? this : out
     }
     catch (err) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -258,7 +270,7 @@ class ApplicationSecretEntity extends Hook0EntityBase {
   /**
    * @param {ApplicationSecretUpdateData} [reqdata]
    * @param {Object} [ctrl]
-   * @returns {Promise<ApplicationSecret>}
+   * @returns {Promise<ApplicationSecretEntity>}
    */
   async update(reqdata, ctrl) {
 
@@ -364,9 +376,15 @@ class ApplicationSecretEntity extends Hook0EntityBase {
       return (ctx.result && ctx.result.ok) ? this : out
     }
     catch (err) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -378,6 +396,7 @@ class ApplicationSecretEntity extends Hook0EntityBase {
       }
     }
   }
+
 
 
 

@@ -54,6 +54,53 @@ const utility_1 = require("../../utility");
         const ent = testsdk.EventType();
         (0, node_assert_1.default)(null != ent);
     });
+    class FailHook extends __1.BaseFeature {
+        name = 'failhook';
+        version = '0.0.1';
+        active = true;
+        unexpected = 0;
+        init() { }
+        PreSpec() { throw new Error('event_type hook failed'); }
+        PreUnexpected() { this.unexpected++; }
+    }
+    (0, node_test_1.test)('stream-error', async () => {
+        const offline = { net: { offline: true } };
+        await node_assert_1.default.rejects(async () => {
+            for await (const _item of __1.Hook0SDK.test(offline).EventType().stream('list')) { }
+        }, /offline/);
+        for await (const _item of __1.Hook0SDK.test(offline).EventType()
+            .stream('list', undefined, { ctrl: { throw: false } })) { }
+        if (null != __1.config.feature?.rbac) {
+            const denied = __1.Hook0SDK.test(undefined, { feature: { rbac: { active: true, deny: true } } });
+            await node_assert_1.default.rejects(async () => {
+                for await (const _item of denied.EventType().stream('list')) { }
+            }, (err) => 'rbac_denied' === err.code);
+        }
+    });
+    (0, node_test_1.test)('stream-ctrl', async () => {
+        const explain = {};
+        const ctrl = { explain };
+        for await (const _item of __1.Hook0SDK.test().EventType().stream('list', undefined, { ctrl })) { }
+        node_assert_1.default.deepStrictEqual(Object.keys(ctrl), ['explain']);
+        (0, node_assert_1.default)(explain === ctrl.explain && 0 < Object.keys(explain).length);
+    });
+    (0, node_test_1.test)('unexpected', async () => {
+        const hook = new FailHook();
+        const client = new __1.Hook0SDK({ feature: { test: { active: true } }, extend: [hook] });
+        await node_assert_1.default.rejects(client.EventType().list(), /hook failed/);
+        (0, node_assert_1.default)(0 < hook.unexpected);
+        const fired = hook.unexpected;
+        node_assert_1.default.strictEqual(await client.EventType().list(undefined, { throw: false }), undefined);
+        (0, node_assert_1.default)(fired < hook.unexpected);
+    });
+    (0, node_test_1.test)('validate', async (t) => {
+        if (null == __1.config.feature?.validate) {
+            t.skip('feature not present in this SDK: validate');
+            return;
+        }
+        const client = __1.Hook0SDK.test(undefined, { feature: { validate: { active: true } } });
+        await node_assert_1.default.rejects(client.EventType().list({ "application_id": 1 }), (err) => 'validate_failed' === err.code);
+    });
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.HOOK0_TEST_LIVE;
         for (const op of ['create', 'list', 'load']) {
@@ -62,7 +109,7 @@ const utility_1 = require("../../utility");
         }
         const setup = basicSetup();
         if (setup.live) {
-            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "application_id": { "a": true, "fo": "uuid", "h": "Application Id", "n": "application_id", "r": true, "t": "`$STRING`", "key$": "application_id", "index$": 0 }, "event_type_name": { "a": true, "h": "Event Type Name", "n": "event_type_name", "r": true, "t": "`$STRING`", "key$": "event_type_name", "index$": 1 }, "id": { "a": true, "h": "Id", "n": "id", "r": false, "t": "`$STRING`", "key$": "id", "index$": 2 }, "resource_type": { "a": true, "h": "Resource Type", "n": "resource_type", "r": true, "t": "`$STRING`", "key$": "resource_type", "index$": 3 }, "resource_type_name": { "a": true, "h": "Resource Type Name", "n": "resource_type_name", "r": true, "t": "`$STRING`", "key$": "resource_type_name", "index$": 4 }, "service": { "a": true, "h": "Service", "n": "service", "r": true, "t": "`$STRING`", "key$": "service", "index$": 5 }, "service_name": { "a": true, "h": "Service Name", "n": "service_name", "r": true, "t": "`$STRING`", "key$": "service_name", "index$": 6 }, "verb": { "a": true, "h": "Verb", "n": "verb", "r": true, "t": "`$STRING`", "key$": "verb", "index$": 7 }, "verb_name": { "a": true, "h": "Verb Name", "n": "verb_name", "r": true, "t": "`$STRING`", "key$": "verb_name", "index$": 8 } }, "id": { "field": "id", "name": "id" }, "name": "event_type", "op": { "create": { "input": "data", "name": "create", "points": [{ "a": true, "co": { "id": "POST /api/v1/event_types/", "source": "openapi3", "version": 2 }, "g": {}, "k": "http", "m": "POST", "o": "/api/v1/event_types/", "q": {}, "r": {}, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "event_types" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "create" }, "list": { "input": "data", "name": "list", "points": [{ "a": true, "co": { "id": "GET /api/v1/event_types/", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/api/v1/event_types/", "q": { "exist": ["application_id"] }, "r": {}, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "event_types" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "list" }, "load": { "input": "data", "name": "load", "points": [{ "a": true, "co": { "id": "GET /api/v1/event_types/{event_type_name}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "id", "or": "event_type_name", "r": true, "t": "`$STRING`", "index$": 0 }], "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/api/v1/event_types/{event_type_name}", "q": { "exist": ["application_id", "id"] }, "r": { "param": { "event_type_name": "id" } }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "event_types" }, { "var": "id" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "event_type", "name__orig": "event_type", "Name": "EventType", "name_": "event_type", "name-": "event-type", "NAME": "EVENT_TYPE", "index$": 4 }, { "active": true, "entity": "event_type", "key$": "BasicEventTypeFlow", "kind": "basic", "name": "BasicEventTypeFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": { "ref": "event_type_ref01" }, "m": {}, "o": "create", "s": [], "v": [], "index$": 0 }, { "a": true, "d": {}, "i": {}, "m": {}, "o": "list", "s": [], "v": [{ "apply": "ItemExists", "def": { "ref": "event_type_ref01" } }], "index$": 1 }, { "a": true, "d": {}, "i": { "ref": "event_type_ref01", "srcdatavar": "event_type_ref01_data", "suffix": "_dt0" }, "m": { "id": "event_type01" }, "o": "load", "s": [], "v": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-event_type_ref01" } }], "index$": 2 }] }, 'EventType', { "POST /api/v1/event_types/": { "protocol": "http", "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "application_id": { "type": "string", "format": "uuid", "key$": "application_id" }, "resource_type": { "type": "string", "key$": "resource_type" }, "service": { "type": "string", "key$": "service" }, "verb": { "type": "string", "key$": "verb" } }, "required": ["application_id", "resource_type", "service", "verb"], "x-ref": "#/components/schemas/EventTypePost", "index$": 1 } } }, "required": true }, "parameters": [] }, "GET /api/v1/event_types/": { "protocol": "http", "parameters": [{ "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 0 }] }, "GET /api/v1/event_types/{event_type_name}": { "protocol": "http", "parameters": [{ "in": "path", "name": "event_type_name", "required": true, "schema": { "type": "string" }, "style": "simple", "index$": 0 }, { "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 1 }] } });
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "application_id": { "a": true, "fo": "uuid", "h": "Application Id", "n": "application_id", "r": true, "t": "`$STRING`", "key$": "application_id", "index$": 0 }, "event_type_name": { "a": true, "h": "Event Type Name", "n": "event_type_name", "r": true, "t": "`$STRING`", "key$": "event_type_name", "index$": 1 }, "id": { "a": true, "h": "Id", "n": "id", "r": false, "t": "`$STRING`", "key$": "id", "index$": 2 }, "resource_type": { "a": true, "h": "Resource Type", "n": "resource_type", "r": true, "t": "`$STRING`", "key$": "resource_type", "index$": 3 }, "resource_type_name": { "a": true, "h": "Resource Type Name", "n": "resource_type_name", "r": true, "t": "`$STRING`", "key$": "resource_type_name", "index$": 4 }, "service": { "a": true, "h": "Service", "n": "service", "r": true, "t": "`$STRING`", "key$": "service", "index$": 5 }, "service_name": { "a": true, "h": "Service Name", "n": "service_name", "r": true, "t": "`$STRING`", "key$": "service_name", "index$": 6 }, "verb": { "a": true, "h": "Verb", "n": "verb", "r": true, "t": "`$STRING`", "key$": "verb", "index$": 7 }, "verb_name": { "a": true, "h": "Verb Name", "n": "verb_name", "r": true, "t": "`$STRING`", "key$": "verb_name", "index$": 8 } }, "id": { "field": "id", "name": "id" }, "name": "event_type", "op": { "create": { "input": "data", "name": "create", "points": [{ "a": true, "bf": ["application_id", "resource_type", "service", "verb"], "co": { "id": "POST /api/v1/event_types/", "source": "openapi3", "version": 2 }, "g": {}, "k": "http", "m": "POST", "o": "/api/v1/event_types/", "q": {}, "r": {}, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "event_types" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "create" }, "list": { "input": "data", "name": "list", "points": [{ "a": true, "co": { "id": "GET /api/v1/event_types/", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/api/v1/event_types/", "q": { "exist": ["application_id"] }, "r": {}, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "event_types" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "list" }, "load": { "input": "data", "name": "load", "points": [{ "a": true, "co": { "id": "GET /api/v1/event_types/{event_type_name}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "id", "or": "event_type_name", "r": true, "t": "`$STRING`", "index$": 0 }], "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/api/v1/event_types/{event_type_name}", "q": { "exist": ["application_id", "id"] }, "r": { "param": { "event_type_name": "id" } }, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "event_types" }, { "var": "id" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "event_type", "name__orig": "event_type", "Name": "EventType", "name_": "event_type", "name-": "event-type", "NAME": "EVENT_TYPE", "index$": 4 }, { "active": true, "entity": "event_type", "key$": "BasicEventTypeFlow", "kind": "basic", "name": "BasicEventTypeFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": { "ref": "event_type_ref01" }, "m": {}, "o": "create", "s": [], "v": [], "index$": 0 }, { "a": true, "d": {}, "i": {}, "m": {}, "o": "list", "s": [], "v": [{ "apply": "ItemExists", "def": { "ref": "event_type_ref01" } }], "index$": 1 }, { "a": true, "d": {}, "i": { "ref": "event_type_ref01", "srcdatavar": "event_type_ref01_data", "suffix": "_dt0" }, "m": { "id": "event_type01" }, "o": "load", "s": [], "v": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-event_type_ref01" } }], "index$": 2 }] }, 'EventType', { "POST /api/v1/event_types/": { "protocol": "http", "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "application_id": { "type": "string", "format": "uuid", "key$": "application_id" }, "resource_type": { "type": "string", "key$": "resource_type" }, "service": { "type": "string", "key$": "service" }, "verb": { "type": "string", "key$": "verb" } }, "required": ["application_id", "resource_type", "service", "verb"], "x-ref": "#/components/schemas/EventTypePost", "index$": 1 } } }, "required": true }, "parameters": [] }, "GET /api/v1/event_types/": { "protocol": "http", "parameters": [{ "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 0 }] }, "GET /api/v1/event_types/{event_type_name}": { "protocol": "http", "parameters": [{ "in": "path", "name": "event_type_name", "required": true, "schema": { "type": "string" }, "style": "simple", "index$": 0 }, { "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 1 }] } }, { strict: LIVE_STRICT, t });
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -84,6 +131,11 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)(event_type_ref01_data_dt0.id === event_type_ref01_data.id);
     });
 });
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true;
 function basicSetup(extra) {
     // TODO: fix test def options
     const options = {}; // null

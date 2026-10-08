@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,64 @@ describe('Hook0Entity', async () => {
   })
 
 
+  class FailHook extends BaseFeature {
+    name = 'failhook'
+    version = '0.0.1'
+    active = true
+    unexpected = 0
+    init() { }
+    PreSpec() { throw new Error('hook0 hook failed') }
+    PreUnexpected() { this.unexpected++ }
+  }
+
+  test('stream-error', async () => {
+    const offline = { net: { offline: true } }
+    await assert.rejects(async () => {
+      for await (const _item of Hook0SDK.test(offline).Hook0().stream('list')) { }
+    }, /offline/)
+
+    for await (const _item of Hook0SDK.test(offline).Hook0()
+      .stream('list', undefined, { ctrl: { throw: false } })) { }
+
+    if (null != (config as any).feature?.rbac) {
+      const denied = Hook0SDK.test(undefined, { feature: { rbac: { active: true, deny: true } } })
+      await assert.rejects(async () => {
+        for await (const _item of denied.Hook0().stream('list')) { }
+      }, (err: any) => 'rbac_denied' === err.code)
+    }
+  })
+
+  test('stream-ctrl', async () => {
+    const explain: any = {}
+    const ctrl: any = { explain }
+    for await (const _item of Hook0SDK.test().Hook0().stream('list', undefined, { ctrl })) { }
+    assert.deepStrictEqual(Object.keys(ctrl), ['explain'])
+    assert(explain === ctrl.explain && 0 < Object.keys(explain).length)
+  })
+
+  test('unexpected', async () => {
+    const hook = new FailHook()
+    const client = new Hook0SDK({ feature: { test: { active: true } }, extend: [hook] })
+    await assert.rejects(client.Hook0().list(), /hook failed/)
+    assert(0 < hook.unexpected)
+
+    const fired = hook.unexpected
+    assert.strictEqual(await client.Hook0().list(undefined, { throw: false }), undefined)
+    assert(fired < hook.unexpected)
+  })
+
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Hook0().list({"default":1} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
@@ -51,7 +109,7 @@ describe('Hook0Entity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"default":{"a":true,"h":"Default","n":"default","r":false,"t":"`$STRING`","key$":"default","index$":0},"description":{"a":true,"h":"Description","n":"description","r":false,"t":"`$STRING`","key$":"description","index$":1},"env_var":{"a":true,"h":"Env Var","n":"env_var","r":true,"t":"`$STRING`","key$":"env_var","index$":2},"group":{"a":true,"h":"Group","n":"group","r":false,"t":"`$STRING`","key$":"group","index$":3},"name":{"a":true,"h":"Name","n":"name","r":true,"t":"`$STRING`","key$":"name","index$":4},"required":{"a":true,"h":"Required","n":"required","r":true,"t":"`$BOOLEAN`","key$":"required","index$":5},"sensitive":{"a":true,"h":"Sensitive","n":"sensitive","r":true,"t":"`$BOOLEAN`","key$":"sensitive","index$":6}},"name":"hook0","op":{"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /api/v1/environment_variables/","source":"openapi3","version":2},"g":{},"k":"http","m":"GET","o":"/api/v1/environment_variables/","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"environment_variables"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"}},"relations":{"ancestors":[]},"key$":"hook0","name__orig":"hook0","Name":"Hook0","name_":"hook0","name-":"hook0","NAME":"HOOK0","index$":7}, {"active":true,"entity":"hook0","key$":"BasicHook0Flow","kind":"basic","name":"BasicHook0Flow","param":{},"step":[{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"hook0_ref01"}}],"index$":0}]}, 'Hook0', {"GET /api/v1/environment_variables/":{"protocol":"http","parameters":[]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"default":{"a":true,"h":"Default","n":"default","r":false,"t":"`$STRING`","key$":"default","index$":0},"description":{"a":true,"h":"Description","n":"description","r":false,"t":"`$STRING`","key$":"description","index$":1},"env_var":{"a":true,"h":"Env Var","n":"env_var","r":true,"t":"`$STRING`","key$":"env_var","index$":2},"group":{"a":true,"h":"Group","n":"group","r":false,"t":"`$STRING`","key$":"group","index$":3},"name":{"a":true,"h":"Name","n":"name","r":true,"t":"`$STRING`","key$":"name","index$":4},"required":{"a":true,"h":"Required","n":"required","r":true,"t":"`$BOOLEAN`","key$":"required","index$":5},"sensitive":{"a":true,"h":"Sensitive","n":"sensitive","r":true,"t":"`$BOOLEAN`","key$":"sensitive","index$":6}},"name":"hook0","op":{"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /api/v1/environment_variables/","source":"openapi3","version":2},"g":{},"k":"http","m":"GET","o":"/api/v1/environment_variables/","q":{},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"environment_variables"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"}},"relations":{"ancestors":[]},"key$":"hook0","name__orig":"hook0","Name":"Hook0","name_":"hook0","name-":"hook0","NAME":"HOOK0","index$":7}, {"active":true,"entity":"hook0","key$":"BasicHook0Flow","kind":"basic","name":"BasicHook0Flow","param":{},"step":[{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"hook0_ref01"}}],"index$":0}]}, 'Hook0', {"GET /api/v1/environment_variables/":{"protocol":"http","parameters":[]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +130,12 @@ describe('Hook0Entity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

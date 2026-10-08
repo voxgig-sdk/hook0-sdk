@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,64 @@ describe('EventsManagementEntity', async () => {
   })
 
 
+  class FailHook extends BaseFeature {
+    name = 'failhook'
+    version = '0.0.1'
+    active = true
+    unexpected = 0
+    init() { }
+    PreSpec() { throw new Error('events_management hook failed') }
+    PreUnexpected() { this.unexpected++ }
+  }
+
+  test('stream-error', async () => {
+    const offline = { net: { offline: true } }
+    await assert.rejects(async () => {
+      for await (const _item of Hook0SDK.test(offline).EventsManagement().stream('list')) { }
+    }, /offline/)
+
+    for await (const _item of Hook0SDK.test(offline).EventsManagement()
+      .stream('list', undefined, { ctrl: { throw: false } })) { }
+
+    if (null != (config as any).feature?.rbac) {
+      const denied = Hook0SDK.test(undefined, { feature: { rbac: { active: true, deny: true } } })
+      await assert.rejects(async () => {
+        for await (const _item of denied.EventsManagement().stream('list')) { }
+      }, (err: any) => 'rbac_denied' === err.code)
+    }
+  })
+
+  test('stream-ctrl', async () => {
+    const explain: any = {}
+    const ctrl: any = { explain }
+    for await (const _item of Hook0SDK.test().EventsManagement().stream('list', undefined, { ctrl })) { }
+    assert.deepStrictEqual(Object.keys(ctrl), ['explain'])
+    assert(explain === ctrl.explain && 0 < Object.keys(explain).length)
+  })
+
+  test('unexpected', async () => {
+    const hook = new FailHook()
+    const client = new Hook0SDK({ feature: { test: { active: true } }, extend: [hook] })
+    await assert.rejects(client.EventsManagement().list(), /hook failed/)
+    assert(0 < hook.unexpected)
+
+    const fired = hook.unexpected
+    assert.strictEqual(await client.EventsManagement().list(undefined, { throw: false }), undefined)
+    assert(fired < hook.unexpected)
+  })
+
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.EventsManagement().remove({"event_type_name":1,"application_id":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
@@ -51,7 +109,7 @@ describe('EventsManagementEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{},"name":"events_management","op":{"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /api/v1/payload_content_types/","source":"openapi3","version":2},"g":{},"k":"http","m":"GET","o":"/api/v1/payload_content_types/","q":{},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"payload_content_types"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"},"remove":{"input":"data","name":"remove","points":[{"a":true,"co":{"id":"DELETE /api/v1/event_types/{event_type_name}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"event_type_name","or":"event_type_name","r":true,"t":"`$STRING`","index$":0}],"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"DELETE","o":"/api/v1/event_types/{event_type_name}","q":{"exist":["application_id","event_type_name"]},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"event_types"},{"var":"event_type_name"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"remove"}},"relations":{"ancestors":[["$.main.kit.entity.event_type"]]},"key$":"events_management","name__orig":"events_management","Name":"EventsManagement","name_":"events_management","name-":"events-management","NAME":"EVENTS_MANAGEMENT","index$":5}, {"active":true,"entity":"events_management","key$":"BasicEventsManagementFlow","kind":"basic","name":"BasicEventsManagementFlow","param":{},"step":[{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"events_management_ref01"}}],"index$":0}]}, 'EventsManagement', {"GET /api/v1/payload_content_types/":{"protocol":"http","parameters":[]},"DELETE /api/v1/event_types/{event_type_name}":{"protocol":"http","parameters":[{"in":"path","name":"event_type_name","required":true,"schema":{"type":"string"},"style":"simple","index$":0},{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":1}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{},"name":"events_management","op":{"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /api/v1/payload_content_types/","source":"openapi3","version":2},"g":{},"k":"http","m":"GET","o":"/api/v1/payload_content_types/","q":{},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"payload_content_types"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"},"remove":{"input":"data","name":"remove","points":[{"a":true,"co":{"id":"DELETE /api/v1/event_types/{event_type_name}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"event_type_name","or":"event_type_name","r":true,"t":"`$STRING`","index$":0}],"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"DELETE","o":"/api/v1/event_types/{event_type_name}","q":{"exist":["application_id","event_type_name"]},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"event_types"},{"var":"event_type_name"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"remove"}},"relations":{"ancestors":[["$.main.kit.entity.event_type"]]},"key$":"events_management","name__orig":"events_management","Name":"EventsManagement","name_":"events_management","name-":"events-management","NAME":"EVENTS_MANAGEMENT","index$":5}, {"active":true,"entity":"events_management","key$":"BasicEventsManagementFlow","kind":"basic","name":"BasicEventsManagementFlow","param":{},"step":[{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"events_management_ref01"}}],"index$":0}]}, 'EventsManagement', {"GET /api/v1/payload_content_types/":{"protocol":"http","parameters":[]},"DELETE /api/v1/event_types/{event_type_name}":{"protocol":"http","parameters":[{"in":"path","name":"event_type_name","required":true,"schema":{"type":"string"},"style":"simple","index$":0},{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":1}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +130,12 @@ describe('EventsManagementEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

@@ -25,7 +25,7 @@ class ProblemEntity extends Hook0EntityBase {
   /**
    * @param {ProblemListMatch} [reqmatch]
    * @param {Object} [ctrl]
-   * @returns {Promise<Problem[]>}
+   * @returns {Promise<ProblemEntity[]>}
    */
   async list(reqmatch, ctrl) {
 
@@ -118,9 +118,15 @@ class ProblemEntity extends Hook0EntityBase {
       return done(ctx)
     }
     catch (err) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -132,6 +138,7 @@ class ProblemEntity extends Hook0EntityBase {
       }
     }
   }
+
 
 
 

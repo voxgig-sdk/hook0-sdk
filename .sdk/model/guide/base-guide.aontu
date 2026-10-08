@@ -142,7 +142,6 @@ guide: {
   entity: quota: {
     path: "/api/v1/quotas/": {
       op: load: method: *GET
-      op: load: transform: res: *("`body.limits`")|top
     }
   }
 
@@ -166,7 +165,6 @@ guide: {
     path: "/api/v1/responses/{response_id}": {
       rename: param: "response_id": *"id"
       op: load: method: *GET
-      op: load: transform: res: *("`body.headers`")|top
     }
   }
 

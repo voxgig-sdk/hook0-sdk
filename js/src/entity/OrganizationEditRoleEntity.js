@@ -27,7 +27,7 @@ class OrganizationEditRoleEntity extends Hook0EntityBase {
   /**
    * @param {OrganizationEditRoleUpdateData} [reqdata]
    * @param {Object} [ctrl]
-   * @returns {Promise<OrganizationEditRole>}
+   * @returns {Promise<OrganizationEditRoleEntity>}
    */
   async update(reqdata, ctrl) {
 
@@ -133,9 +133,15 @@ class OrganizationEditRoleEntity extends Hook0EntityBase {
       return (ctx.result && ctx.result.ok) ? this : out
     }
     catch (err) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -147,6 +153,7 @@ class OrganizationEditRoleEntity extends Hook0EntityBase {
       }
     }
   }
+
 
 
 

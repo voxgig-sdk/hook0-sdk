@@ -54,6 +54,14 @@ const utility_1 = require("../../utility");
         const ent = testsdk.ApplicationsManagement();
         (0, node_assert_1.default)(null != ent);
     });
+    (0, node_test_1.test)('validate', async (t) => {
+        if (null == __1.config.feature?.validate) {
+            t.skip('feature not present in this SDK: validate');
+            return;
+        }
+        const client = __1.Hook0SDK.test(undefined, { feature: { validate: { active: true } } });
+        await node_assert_1.default.rejects(client.ApplicationsManagement().remove({ "application_secret_token": 1, "application_id": "x" }), (err) => 'validate_failed' === err.code);
+    });
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.HOOK0_TEST_LIVE;
         for (const op of []) {
@@ -62,7 +70,7 @@ const utility_1 = require("../../utility");
         }
         const setup = basicSetup();
         if (setup.live) {
-            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": {}, "name": "applications_management", "op": { "remove": { "input": "data", "name": "remove", "points": [{ "a": true, "co": { "id": "DELETE /api/v1/application_secrets/{application_secret_token}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "application_secret_token", "or": "application_secret_token", "r": true, "t": "`$STRING`", "index$": 0 }], "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "DELETE", "o": "/api/v1/application_secrets/{application_secret_token}", "q": { "exist": ["application_id", "application_secret_token"] }, "r": {}, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "application_secrets" }, { "var": "application_secret_token" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "remove" } }, "relations": { "ancestors": [["$.main.kit.entity.application_secret"]] }, "key$": "applications_management", "name__orig": "applications_management", "Name": "ApplicationsManagement", "name_": "applications_management", "name-": "applications-management", "NAME": "APPLICATIONS_MANAGEMENT", "index$": 2 }, { "active": true, "entity": "applications_management", "key$": "BasicApplicationsManagementFlow", "kind": "basic", "name": "BasicApplicationsManagementFlow", "param": {}, "step": [] }, 'ApplicationsManagement', { "DELETE /api/v1/application_secrets/{application_secret_token}": { "protocol": "http", "parameters": [{ "in": "path", "name": "application_secret_token", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "simple", "index$": 0 }, { "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 1 }] } });
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": {}, "name": "applications_management", "op": { "remove": { "input": "data", "name": "remove", "points": [{ "a": true, "co": { "id": "DELETE /api/v1/application_secrets/{application_secret_token}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "application_secret_token", "or": "application_secret_token", "r": true, "t": "`$STRING`", "index$": 0 }], "query": [{ "a": true, "k": "query", "n": "application_id", "or": "application_id", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "DELETE", "o": "/api/v1/application_secrets/{application_secret_token}", "q": { "exist": ["application_id", "application_secret_token"] }, "r": {}, "s": [{ "lit": "api" }, { "lit": "v1" }, { "lit": "application_secrets" }, { "var": "application_secret_token" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "remove" } }, "relations": { "ancestors": [["$.main.kit.entity.application_secret"]] }, "key$": "applications_management", "name__orig": "applications_management", "Name": "ApplicationsManagement", "name_": "applications_management", "name-": "applications-management", "NAME": "APPLICATIONS_MANAGEMENT", "index$": 2 }, { "active": true, "entity": "applications_management", "key$": "BasicApplicationsManagementFlow", "kind": "basic", "name": "BasicApplicationsManagementFlow", "param": {}, "step": [] }, 'ApplicationsManagement', { "DELETE /api/v1/application_secrets/{application_secret_token}": { "protocol": "http", "parameters": [{ "in": "path", "name": "application_secret_token", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "simple", "index$": 0 }, { "in": "query", "name": "application_id", "required": true, "schema": { "type": "string", "format": "uuid" }, "style": "form", "index$": 1 }] } }, { strict: LIVE_STRICT, t });
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -71,6 +79,11 @@ const utility_1 = require("../../utility");
         let applications_management_ref01_data = Object.values(setup.data.existing.applications_management)[0];
     });
 });
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true;
 function basicSetup(extra) {
     // TODO: fix test def options
     const options = {}; // null

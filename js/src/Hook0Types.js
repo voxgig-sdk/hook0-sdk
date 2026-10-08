@@ -417,22 +417,14 @@
 
 /**
  * @typedef {Object} Quota
- * @property {number} global_applications_per_organization_limit
- * @property {number} global_days_of_events_retention_limit
- * @property {number} global_event_types_per_application_limit
- * @property {number} global_events_per_day_limit
- * @property {number} global_members_per_organization_limit
- * @property {number} global_subscriptions_per_application_limit
+ * @property {boolean} enabled
+ * @property {Object} limits
  */
 
 /**
  * @typedef {Object} QuotaLoadMatch
- * @property {number} [global_applications_per_organization_limit]
- * @property {number} [global_days_of_events_retention_limit]
- * @property {number} [global_event_types_per_application_limit]
- * @property {number} [global_events_per_day_limit]
- * @property {number} [global_members_per_organization_limit]
- * @property {number} [global_subscriptions_per_application_limit]
+ * @property {boolean} [enabled]
+ * @property {Object} [limits]
  */
 
 /**
@@ -492,7 +484,13 @@
 
 /**
  * @typedef {Object} Response
+ * @property {string} [body]
+ * @property {number} [elapsed_time_ms]
+ * @property {Object} [headers]
+ * @property {number} [http_code]
  * @property {string} [id]
+ * @property {string} [response_error_name]
+ * @property {string} response_id
  */
 
 /**

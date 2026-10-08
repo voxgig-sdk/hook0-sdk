@@ -12,7 +12,7 @@ Learn more about Voxgig SDKs at [voxgig.com/sdk](https://voxgig.com/sdk/).
 
 > TypeScript, Python, PHP, Golang, Lua, Java, JavaScript, Zig SDKs, a CLI with an interactive REPL, and an MCP server for AI agents — all generated from one OpenAPI spec by [@voxgig/sdkgen](https://github.com/voxgig/sdkgen).
 
-> **Features:** `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined` — opt-in,
+> **Features:** `debug`, `idempotency`, `metrics`, `paging`, `ratelimit`, `retry`, `test`, `timeout` — opt-in,
 > inactive until switched on, and configured per client. See the Features
 > section of any SDK README below for what each one does.
 
@@ -44,23 +44,22 @@ network, and no credentials:
 // Shape: { entity: { <entity-name>: { <id>: <record> } } }
 const client = Hook0SDK.test({
   entity: {
-    event_type: {
-      test01: { id: 'test01', application_id: 'example_application_id', event_type_name: 'example_event_type_name', resource_type: 'example_resource_type' },
+    response: {
+      test01: { id: 'test01' },
     },
   },
 })
-const eventtypes = await client.EventType().list()
-// eventtypes is an array of EventType entities, populated with mock data
-// — call eventtypes[0].data() for the record itself
-console.log(eventtypes)
+const response = await client.Response().load({ id: 'test01', application_id: 'example_application_id' })
+// response is the Response entity; .data() reads its mock record
+console.log(response.data())
 ```
 
 ### Python
 
 ```python
 client = Hook0SDK.test()
-eventtypes = client.EventType().list()
-print(eventtypes)
+response = client.Response().load({"id": "test01", "application_id": "example"})
+print(response.data_get())
 ```
 
 ### PHP
@@ -68,17 +67,17 @@ print(eventtypes)
 ```php
 // Seed fixture data so offline calls resolve without a live server.
 $client = Hook0SDK::test([
-    "entity" => ["eventtype" => ["test01" => ["id" => "test01"]]],
+    "entity" => ["response" => ["test01" => ["id" => "test01"]]],
 ]);
-$eventtypes = $client->EventType()->list();
+$response = $client->Response()->load(["id" => "test01", "application_id" => "example"]);
 ```
 
 ### Golang
 
 ```go
 client := sdk.Test()
-result, err := client.EventType(nil).List(
-    nil, nil,
+result, err := client.Response(nil).Load(
+    map[string]any{"id": "test01"}, nil,
 )
 ```
 
@@ -86,25 +85,24 @@ result, err := client.EventType(nil).List(
 
 ```lua
 local client = sdk.test()
-local results, err = client:EventType():list()
+local result, err = client:Response():load({ id = "test01", application_id = "example" })
 ```
 
 ### Java
 
 ```java
 Hook0SDK client = Hook0SDK.testSDK(null, null);
-Object eventTypeList = client.eventType(null).list(null, null);
-System.out.println(eventTypeList);
+SdkEntity response = (SdkEntity) client.response(null).load(Map.of("id", "test01", "application_id", "example"), null);
+System.out.println(response.data());
 ```
 
 ### JavaScript
 
 ```js
 const client = Hook0SDK.test()
-const eventtypes = await client.EventType().list()
-// eventtypes is an array of entities, populated with mock data
-// — call eventtypes[0].data() for the record itself
-console.log(eventtypes)
+const response = await client.Response().load({ id: 'test01', application_id: 'example_application_id' })
+// response is the Response entity; .data() reads its mock record
+console.log(response.data())
 ```
 
 ### Zig
@@ -115,9 +113,9 @@ const sdk = @import("sdk");
 const h = sdk.h;
 
 const client = sdk.test_sdk(h.vnull(), h.vnull());
-switch (client.event_type(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |event_types| std.debug.print("{s}\n", .{h.stringify(event_types)}),
-    .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
+switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("test01") }, .{ "application_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |response| std.debug.print("{s}\n", .{h.stringify(response.asEntity().data(null))}),
+    .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -125,16 +123,16 @@ switch (client.event_type(h.vnull()).list(h.vnull(), h.vnull())) {
 
 | Language | Package | Install |
 | --- | --- | --- |
-| TypeScript | `@voxgig-sdk/hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
-| Python | `voxgig-sdk-hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
-| PHP | `voxgig-sdk/hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
+| TypeScript | `@voxgig-sdk/hook0-sdk` | publish pending — [install from source](ts/README.md#install) |
+| Python | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](py/README.md#install) |
+| PHP | `voxgig-sdk/hook0-sdk` | publish pending — [install from source](php/README.md#install) |
 | Golang | `github.com/voxgig-sdk/hook0-sdk/go` | `go get github.com/voxgig-sdk/hook0-sdk/go@latest` |
-| Lua | `voxgig-sdk-hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
-| Java | `voxgig-sdk-hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
-| JavaScript | `@voxgig-sdk/hook0-sdk-js` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
-| Zig | `voxgig-sdk-hook0-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/hook0-sdk/tags) |
-| Go CLI | `github.com/voxgig-sdk/hook0-sdk/go-cli` | `go install github.com/voxgig-sdk/hook0-sdk/go-cli/cmd/hook0@latest` |
-| Go MCP server | `github.com/voxgig-sdk/hook0-sdk/go-mcp` | `go get github.com/voxgig-sdk/hook0-sdk/go-mcp@latest` |
+| Lua | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](lua/README.md#install) |
+| Java | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](java/README.md#install) |
+| JavaScript | `@voxgig-sdk/hook0-sdk-js` | publish pending — [install from source](js/README.md#install) |
+| Zig | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](zig/README.md#install) |
+| Go CLI | `github.com/voxgig-sdk/hook0-sdk/go-cli` | build from source — [go-cli/README.md](go-cli/README.md) |
+| Go MCP server | `github.com/voxgig-sdk/hook0-sdk/go-mcp` | build from source — [go-mcp/README.md](go-mcp/README.md) |
 
 ## Quickstart
 
@@ -147,10 +145,10 @@ const client = new Hook0SDK({
   apikey: process.env.HOOK0_APIKEY,
 })
 
-// List all applications (returns ApplicationEntity[] — .data() for the record)
+// List all applications (returns ApplicationEntity[], one entity per record)
 const applications = await client.Application().list({ organization_id: "example" })
 for (const application of applications) {
-  console.log(application)
+  console.log(application.data())
 }
 ```
 
@@ -166,9 +164,10 @@ See the [TypeScript README](ts/README.md) for the full guide.
 
 ## Use it from an AI agent (MCP)
 
-The generated MCP server exposes every operation in this SDK as an
-[MCP](https://modelcontextprotocol.io) tool that Claude, Cursor or Cline
-can call directly. Build and register it:
+The generated MCP server exposes this SDK's list and load operations as
+[MCP](https://modelcontextprotocol.io) tools that Claude, Cursor or Cline
+can call directly. It only reads: create, update, patch and remove become tools when the SDK's model sets
+`main: kit: target: 'go-mcp': tool: write: true`. Build and register it:
 
 ```bash
 cd go-mcp && go build -o hook0-mcp .
@@ -231,14 +230,14 @@ client = Hook0SDK({
     "apikey": os.environ.get("HOOK0_APIKEY"),
 })
 
-# List all applications (returns a list, raises on error)
+# List all applications (a list of entities, one per record; raises on error)
 applications = client.Application().list({"organization_id": "example"})
 for application in applications:
-    print(application)
+    print(application.data_get())
 
-# Load a specific application (returns the record, raises on error)
+# Load a specific application (returns the entity, raises on error)
 application = client.Application().load({"id": "example_id"})
-print(application)
+print(application.data_get())
 ```
 
 ### PHP
@@ -251,11 +250,11 @@ $client = new Hook0SDK([
     "apikey" => getenv("HOOK0_APIKEY"),
 ]);
 
-// List all applications (returns an array; throws on error)
-$applications = $client->Application()->list();
+// List all applications (an array of entities, one per record; throws on error)
+$applications = $client->Application()->list(["organization_id" => "example"]);
 print_r(array_map(fn($item) => $item->data_get(), $applications));
 
-// Load a specific application (returns the ENTITY; call data_get() for the record; throws on error)
+// Load a specific application (returns the entity; data_get() reads its record; throws on error)
 $application = $client->Application()->load(["id" => "example_id"]);
 print_r($application->data_get());
 ```
@@ -269,48 +268,60 @@ client := sdk.NewHook0SDK(map[string]any{
     "apikey": os.Getenv("HOOK0_APIKEY"),
 })
 
-// List all applications
-applications, err := client.Application(nil).List(nil, nil)
+// List all applications (one entity per record; err is non-nil on failure)
+applications, err := client.Application(nil).List(map[string]any{"organization_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(applications)
+for _, application := range applications.([]any) {
+    fmt.Println(application.(sdk.Entity).Data())
+}
 ```
 
 ### Lua
 
 ```lua
 local sdk = require("hook0_sdk")
+local json = require("dkjson")
 
 local client = sdk.new({
   apikey = os.getenv("HOOK0_APIKEY"),
 })
 
--- List all applications
-local applications, err = client:Application():list()
-print(applications)
+-- List all applications (an array of entities, one per record; err on failure)
+local applications, err = client:Application():list({ organization_id = "example" })
+if err then error(err) end
+for _, application in ipairs(applications) do
+  print(json.encode(application:data_get()))
+end
 
--- Load a specific application
+-- Load a specific application (returns the entity; err on failure)
 local application, err = client:Application():load({ id = "example_id" })
-print(application)
+if err then error(err) end
+print(json.encode(application:data_get()))
 ```
 
 ### Java
 
 ```java
+import java.util.List;
+import java.util.Map;
 import voxgig.hook0sdk.core.Hook0SDK;
+import voxgig.hook0sdk.core.SdkEntity;
 
 Map<String, Object> options = new java.util.LinkedHashMap<>();
 options.put("apikey", System.getenv("HOOK0_APIKEY"));
 Hook0SDK client = new Hook0SDK(options);
 
-// List all applications (returns Object, an aggregate list; raises on error)
-Object applicationList = client.application(null).list(null, null);
-System.out.println(applicationList);
+// List all applications (a list of entities, one per record; raises on error)
+List<?> applicationList = (List<?>) client.application(null).list(Map.of("organization_id", "example"), null);
+for (Object applicationItem : applicationList) {
+    System.out.println(((SdkEntity) applicationItem).data());
+}
 
-// Load a specific application (returns the record, raises on error)
-Object application = client.application(null).load(Map.of("id", "example_id"), null);
-System.out.println(application);
+// Load a specific application (returns the entity, raises on error)
+SdkEntity application = (SdkEntity) client.application(null).load(Map.of("id", "example_id"), null);
+System.out.println(application.data());
 ```
 
 ### JavaScript
@@ -322,10 +333,10 @@ const client = new Hook0SDK({
   apikey: process.env.HOOK0_APIKEY,
 })
 
-// List all applications (returns an array)
+// List all applications (an array of entities, one per record)
 const applications = await client.Application().list({ organization_id: "example" })
 for (const application of applications) {
-  console.log(application)
+  console.log(application.data())
 }
 ```
 
@@ -340,15 +351,19 @@ const client = sdk.Hook0SDK.new(h.jo(&.{
     .{ "apikey", h.vstr(std.posix.getenv("HOOK0_APIKEY") orelse "") },
 }));
 
-// List all applications (Ok is a Value array, .err on failure)
-switch (client.application(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |applications| std.debug.print("{s}\n", .{h.stringify(applications)}),
+// List all applications (one entity per record, .err on failure)
+switch (client.application(h.vnull()).list(h.jo(&.{.{ "organization_id", h.vstr("example") }}), h.vnull())) {
+    .ok => |applications| {
+        for (applications) |application| {
+            std.debug.print("{s}\n", .{h.stringify(application.asEntity().data(null))});
+        }
+    },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 
-// Load a specific application (Ok is the record, .err on failure)
+// Load a specific application (.ok is the entity, .err on failure)
 switch (client.application(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("example_id") }}), h.vnull())) {
-    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application)}),
+    .ok => |application| std.debug.print("{s}\n", .{h.stringify(application.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
 ```
@@ -376,10 +391,9 @@ const result = await client.direct({
   method: 'GET',
   params: { id: 'example' },
 })
-if (result instanceof Error) {
-  throw result
+if (result.ok) {
+  console.log(result.data)
 }
-console.log(result.data)
 ```
 
 **Python:**
@@ -437,10 +451,9 @@ const result = await client.direct({
   method: 'GET',
   params: { id: 'example' },
 })
-if (result instanceof Error) {
-  throw result
+if (result.ok) {
+  console.log(result.data)
 }
-console.log(result.data)
 ```
 
 **Zig:**
@@ -498,10 +511,12 @@ customizable without forking any upstream tool:
 - **Templates** (`.sdk/tm/`) and **components** (`.sdk/src/cmp/`) are
   the two layers of generation, copied into this repo: templates are the
   literal per-language source, components generate the API-shaped parts.
-- **Regeneration merges.** By default, newly generated content is
-  three-way merged into existing files, so generator updates and local
-  edits usually converge without manual conflict handling. A project can
-  opt for plain overwrite instead.
+- **Regeneration overwrites.** Each run rewrites every generated file from
+  the model, the templates and the components, so an edit made to
+  generated output is lost. Say what this project needs in its own model
+  (`.sdk/model/sdk.aontu`), or extend a target with a component of its
+  own in `.sdk/src/cmp/<target>/`, registered with `registerComponent`,
+  which `voxgig-sdkgen doctor` reports as an addition rather than drift.
 - **Custom features and entire custom targets** arrive through sdkgen
   packages (`voxgig-sdkgen package add`), on the same rails as the
   bundled languages, and `voxgig-sdkgen doctor` reports any drift from

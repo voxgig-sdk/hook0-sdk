@@ -467,23 +467,15 @@ class ProblemListMatch
 /** Quota entity data model. */
 class Quota
 {
-    public int $global_applications_per_organization_limit;
-    public int $global_days_of_events_retention_limit;
-    public int $global_event_types_per_application_limit;
-    public int $global_events_per_day_limit;
-    public int $global_members_per_organization_limit;
-    public int $global_subscriptions_per_application_limit;
+    public bool $enabled;
+    public array $limits;
 }
 
 /** Request payload for Quota#load. */
 class QuotaLoadMatch
 {
-    public ?int $global_applications_per_organization_limit = null;
-    public ?int $global_days_of_events_retention_limit = null;
-    public ?int $global_event_types_per_application_limit = null;
-    public ?int $global_events_per_day_limit = null;
-    public ?int $global_members_per_organization_limit = null;
-    public ?int $global_subscriptions_per_application_limit = null;
+    public ?bool $enabled = null;
+    public ?array $limits = null;
 }
 
 /** Registration entity data model. */
@@ -549,7 +541,13 @@ class RequestAttemptListMatch
 /** Response entity data model. */
 class Response
 {
+    public ?string $body = null;
+    public ?int $elapsed_time_ms = null;
+    public ?array $headers = null;
+    public ?int $http_code = null;
     public ?string $id = null;
+    public ?string $response_error_name = null;
+    public string $response_id;
 }
 
 /** Request payload for Response#load. */

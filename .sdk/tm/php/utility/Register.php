@@ -37,6 +37,8 @@ require_once __DIR__ . '/TransformResponse.php';
 
 Hook0Utility::setRegistrar(function (Hook0Utility $u): void {
     $u->clean = [Hook0Clean::class, 'call'];
+    $u->clean_add = [Hook0Clean::class, 'add'];
+    $u->clean_explain = [Hook0Done::class, 'clean_explain'];
     $u->done = [Hook0Done::class, 'call'];
     $u->make_error = [Hook0MakeError::class, 'call'];
     $u->feature_add = [Hook0FeatureAdd::class, 'call'];

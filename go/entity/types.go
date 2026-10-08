@@ -336,12 +336,8 @@ type Quota struct {
 
 // QuotaLoadMatch is the typed request payload for Quota.LoadTyped.
 type QuotaLoadMatch struct {
-	GlobalApplicationsPerOrganizationLimit *int `json:"global_applications_per_organization_limit,omitempty"`
-	GlobalDaysOfEventsRetentionLimit *int `json:"global_days_of_events_retention_limit,omitempty"`
-	GlobalEventTypesPerApplicationLimit *int `json:"global_event_types_per_application_limit,omitempty"`
-	GlobalEventsPerDayLimit *int `json:"global_events_per_day_limit,omitempty"`
-	GlobalMembersPerOrganizationLimit *int `json:"global_members_per_organization_limit,omitempty"`
-	GlobalSubscriptionsPerApplicationLimit *int `json:"global_subscriptions_per_application_limit,omitempty"`
+	Enabled *bool `json:"enabled,omitempty"`
+	Limits *map[string]any `json:"limits,omitempty"`
 }
 
 // Registration is the typed data model for the registration entity.

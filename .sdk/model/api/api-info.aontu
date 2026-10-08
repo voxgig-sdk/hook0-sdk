@@ -6,6 +6,26 @@ main: {
     info: {
       description: "Core REST API of Hook0 — Open-Source Webhooks as a service for SaaS"
       security: {
+        alternatives: [
+          [
+            {
+              in: "header"
+              name: "Authorization"
+              prefix: ""
+              scheme: "biscuit_user_access"
+              type: "apiKey"
+            }
+          ]
+          [
+            {
+              in: "header"
+              name: "Authorization"
+              prefix: ""
+              scheme: "biscuit_refresh"
+              type: "apiKey"
+            }
+          ]
+        ]
         in: "header"
         name: "Authorization"
         prefix: ""

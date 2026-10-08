@@ -197,7 +197,7 @@ $application = $client->Application();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->Application()->create([
@@ -216,15 +216,15 @@ $result = $client->Application()->create([
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->Application()->list();
+$results = $client->Application()->list(["organization_id" => "example"]);
 ```
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Application()->load(["id" => "application_id"]);
@@ -232,7 +232,7 @@ $result = $client->Application()->load(["id" => "application_id"]);
 
 #### `remove(array $reqmatch, ?array $ctrl = null): mixed`
 
-Remove the entity matching the given criteria. Throws on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
 
 ```php
 $result = $client->Application()->remove(["id" => "application_id"]);
@@ -240,7 +240,7 @@ $result = $client->Application()->remove(["id" => "application_id"]);
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
-Update an existing entity. The data must include the entity `id`. Throws on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and throws on error.
 
 ```php
 $result = $client->Application()->update([
@@ -300,7 +300,7 @@ $application_secret = $client->ApplicationSecret();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->ApplicationSecret()->create([
@@ -312,15 +312,15 @@ $result = $client->ApplicationSecret()->create([
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->ApplicationSecret()->list();
+$results = $client->ApplicationSecret()->list(["application_id" => "example"]);
 ```
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
-Update an existing entity. The data must include the entity `id`. Throws on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and throws on error.
 
 ```php
 $result = $client->ApplicationSecret()->update([
@@ -369,7 +369,7 @@ $applications_management = $client->ApplicationsManagement();
 
 #### `remove(array $reqmatch, ?array $ctrl = null): mixed`
 
-Remove the entity matching the given criteria. Throws on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
 
 ```php
 $result = $client->ApplicationsManagement()->remove(["application_secret_token" => "application_secret_token", "application_id" => "application_id"]);
@@ -430,7 +430,7 @@ $event = $client->Event();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->Event()->create([
@@ -448,15 +448,15 @@ $result = $client->Event()->create([
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->Event()->list();
+$results = $client->Event()->list(["application_id" => "example"]);
 ```
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Event()->load(["id" => "event_id", "application_id" => "application_id"]);
@@ -516,7 +516,7 @@ $event_type = $client->EventType();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->EventType()->create([
@@ -533,15 +533,15 @@ $result = $client->EventType()->create([
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->EventType()->list();
+$results = $client->EventType()->list(["application_id" => "example"]);
 ```
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->EventType()->load(["id" => "event_type_id", "application_id" => "application_id"]);
@@ -587,7 +587,7 @@ $events_management = $client->EventsManagement();
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
 $results = $client->EventsManagement()->list();
@@ -595,7 +595,7 @@ $results = $client->EventsManagement()->list();
 
 #### `remove(array $reqmatch, ?array $ctrl = null): mixed`
 
-Remove the entity matching the given criteria. Throws on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
 
 ```php
 $result = $client->EventsManagement()->remove(["event_type_name" => "event_type_name", "application_id" => "application_id"]);
@@ -653,7 +653,7 @@ $health = $client->Health();
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Health()->load();
@@ -711,7 +711,7 @@ $hook0 = $client->Hook0();
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
 $results = $client->Hook0()->list();
@@ -770,7 +770,7 @@ $ingested_event = $client->IngestedEvent();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->IngestedEvent()->create([
@@ -838,7 +838,7 @@ $instance = $client->Instance();
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Instance()->load();
@@ -891,7 +891,7 @@ $login = $client->Login();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->Login()->create([
@@ -959,7 +959,7 @@ $organization = $client->Organization();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->Organization()->create([
@@ -981,7 +981,7 @@ $result = $client->Organization()->create([
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
 $results = $client->Organization()->list();
@@ -989,7 +989,7 @@ $results = $client->Organization()->list();
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Organization()->load(["id" => "organization_id"]);
@@ -997,7 +997,7 @@ $result = $client->Organization()->load(["id" => "organization_id"]);
 
 #### `remove(array $reqmatch, ?array $ctrl = null): mixed`
 
-Remove the entity matching the given criteria. Throws on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
 
 ```php
 $result = $client->Organization()->remove(["id" => "organization_id"]);
@@ -1005,7 +1005,7 @@ $result = $client->Organization()->remove(["id" => "organization_id"]);
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
-Update an existing entity. The data must include the entity `id`. Throws on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and throws on error.
 
 ```php
 $result = $client->Organization()->update([
@@ -1062,7 +1062,7 @@ $organization_edit_role = $client->OrganizationEditRole();
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
-Update an existing entity. The data must include the entity `id`. Throws on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and throws on error.
 
 ```php
 $result = $client->OrganizationEditRole()->update([
@@ -1120,7 +1120,7 @@ $problem = $client->Problem();
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
 $results = $client->Problem()->list();
@@ -1166,18 +1166,14 @@ $quota = $client->Quota();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `global_applications_per_organization_limit` | `int` | Yes |  |
-| `global_days_of_events_retention_limit` | `int` | Yes |  |
-| `global_event_types_per_application_limit` | `int` | Yes |  |
-| `global_events_per_day_limit` | `int` | Yes |  |
-| `global_members_per_organization_limit` | `int` | Yes |  |
-| `global_subscriptions_per_application_limit` | `int` | Yes |  |
+| `enabled` | `bool` | Yes |  |
+| `limits` | `array` | Yes |  |
 
 ### Operations
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Quota()->load();
@@ -1234,7 +1230,7 @@ $registration = $client->Registration();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->Registration()->create([
@@ -1304,15 +1300,15 @@ $request_attempt = $client->RequestAttempt();
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->RequestAttempt()->list();
+$results = $client->RequestAttempt()->list(["application_id" => "example"]);
 ```
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->RequestAttempt()->load(["id" => "request_attempt_id", "application_id" => "application_id"]);
@@ -1358,13 +1354,19 @@ $response = $client->Response();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `body` | `string` | No |  |
+| `elapsed_time_ms` | `int` | No |  |
+| `headers` | `array` | No |  |
+| `http_code` | `int` | No |  |
 | `id` | `string` | No |  |
+| `response_error_name` | `string` | No |  |
+| `response_id` | `string` | Yes |  |
 
 ### Operations
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Response()->load(["id" => "response_id", "application_id" => "application_id"]);
@@ -1410,7 +1412,7 @@ $revoke = $client->Revoke();
 
 #### `remove(array $reqmatch, ?array $ctrl = null): mixed`
 
-Remove the entity matching the given criteria. Throws on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
 
 ```php
 $result = $client->Revoke()->remove(["organization_id" => "organization_id"]);
@@ -1467,7 +1469,7 @@ $service_token = $client->ServiceToken();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->ServiceToken()->create([
@@ -1481,15 +1483,15 @@ $result = $client->ServiceToken()->create([
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->ServiceToken()->list();
+$results = $client->ServiceToken()->list(["organization_id" => "example"]);
 ```
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->ServiceToken()->load(["id" => "service_token_id", "organization_id" => "organization_id"]);
@@ -1497,7 +1499,7 @@ $result = $client->ServiceToken()->load(["id" => "service_token_id", "organizati
 
 #### `remove(array $reqmatch, ?array $ctrl = null): mixed`
 
-Remove the entity matching the given criteria. Throws on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
 
 ```php
 $result = $client->ServiceToken()->remove(["id" => "service_token_id", "organization_id" => "organization_id"]);
@@ -1505,7 +1507,7 @@ $result = $client->ServiceToken()->remove(["id" => "service_token_id", "organiza
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
-Update an existing entity. The data must include the entity `id`. Throws on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and throws on error.
 
 ```php
 $result = $client->ServiceToken()->update([
@@ -1594,7 +1596,7 @@ $subscription = $client->Subscription();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->Subscription()->create([
@@ -1616,15 +1618,15 @@ $result = $client->Subscription()->create([
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->Subscription()->list();
+$results = $client->Subscription()->list(["application_id" => "example"]);
 ```
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Subscription()->load(["id" => "subscription_id"]);
@@ -1632,7 +1634,7 @@ $result = $client->Subscription()->load(["id" => "subscription_id"]);
 
 #### `remove(array $reqmatch, ?array $ctrl = null): mixed`
 
-Remove the entity matching the given criteria. Throws on error.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
 
 ```php
 $result = $client->Subscription()->remove(["id" => "subscription_id", "application_id" => "application_id"]);
@@ -1640,7 +1642,7 @@ $result = $client->Subscription()->remove(["id" => "subscription_id", "applicati
 
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
-Update an existing entity. The data must include the entity `id`. Throws on error.
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and throws on error.
 
 ```php
 $result = $client->Subscription()->update([
@@ -1697,7 +1699,7 @@ $user_authentication = $client->UserAuthentication();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->UserAuthentication()->create([
@@ -1754,7 +1756,7 @@ $user_invitation = $client->UserInvitation();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->UserInvitation()->create([
@@ -2084,6 +2086,7 @@ Timeout.
 | Option | Type |
 |---|---|
 | `clearTimer` | function |
+| `now` | function |
 | `setTimer` | function |
 
 These take no default: the feature behaves one way when you supply them and

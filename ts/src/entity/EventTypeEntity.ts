@@ -134,9 +134,15 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
       return (ctx.result && ctx.result.ok) ? this : out
     }
     catch (err: any) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr: any) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -145,7 +151,7 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
       }
       else {
         // Off-happy-path (throw disabled): typed as any so the method's
-        // Promise<EventType> return stays clean under strict null checks.
+        // Promise<EventTypeEntity> return stays clean under strict null checks.
         return undefined as any
       }
     }
@@ -244,9 +250,15 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
       return done(ctx)
     }
     catch (err: any) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr: any) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -255,7 +267,7 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
       }
       else {
         // Off-happy-path (throw disabled): typed as any so the method's
-        // Promise<EventType[]> return stays clean under strict null checks.
+        // Promise<EventTypeEntity[]> return stays clean under strict null checks.
         return undefined as any
       }
     }
@@ -355,9 +367,15 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
       return (ctx.result && ctx.result.ok) ? this : out
     }
     catch (err: any) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr: any) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 
@@ -366,11 +384,12 @@ class EventTypeEntity extends Hook0EntityBase<EventType> {
       }
       else {
         // Off-happy-path (throw disabled): typed as any so the method's
-        // Promise<EventType> return stays clean under strict null checks.
+        // Promise<EventTypeEntity> return stays clean under strict null checks.
         return undefined as any
       }
     }
   }
+
 
 
 

@@ -53,7 +53,7 @@
         },
         "edition": {
           "github-pages": {
-            "active": true,
+            "active": false,
             "base": "node_modules/@voxgig/docgen/project/.sdk",
             "brand": {},
             "filter": {
@@ -229,6 +229,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "name",
+                    "organization_id"
+                  ],
                   "co": {
                     "id": "POST /api/v1/applications/",
                     "source": "openapi3",
@@ -240,6 +244,10 @@
                   "o": "/api/v1/applications/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -302,12 +310,14 @@
                   "o": "/api/v1/events_per_day/application",
                   "q": {
                     "exist": [
-                      "application_id",
-                      "from",
-                      "to"
+                      "application_id"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -355,6 +365,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -408,6 +422,10 @@
                     "param": {
                       "application_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -493,6 +511,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "name",
+                    "organization_id"
+                  ],
                   "co": {
                     "id": "PUT /api/v1/applications/{application_id}",
                     "source": "openapi3",
@@ -522,6 +544,10 @@
                     "param": {
                       "application_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -614,6 +640,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "application_id",
+                    "name"
+                  ],
                   "co": {
                     "id": "POST /api/v1/application_secrets/",
                     "source": "openapi3",
@@ -625,6 +655,10 @@
                   "o": "/api/v1/application_secrets/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -675,6 +709,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -699,6 +737,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "application_id",
+                    "name"
+                  ],
                   "co": {
                     "id": "PUT /api/v1/application_secrets/{application_secret_token}",
                     "source": "openapi3",
@@ -728,6 +770,10 @@
                     "param": {
                       "application_secret_token": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -928,6 +974,9 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "application_id"
+                  ],
                   "co": {
                     "id": "POST /api/v1/events/{event_id}/replay",
                     "source": "openapi3",
@@ -1015,6 +1064,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1079,6 +1132,10 @@
                     "param": {
                       "event_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -1189,6 +1246,12 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "application_id",
+                    "resource_type",
+                    "service",
+                    "verb"
+                  ],
                   "co": {
                     "id": "POST /api/v1/event_types/",
                     "source": "openapi3",
@@ -1200,6 +1263,10 @@
                   "o": "/api/v1/event_types/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1250,6 +1317,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1315,6 +1386,10 @@
                       "event_type_name": "id"
                     }
                   },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1366,6 +1441,10 @@
                   "o": "/api/v1/payload_content_types/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1545,12 +1624,12 @@
                   "k": "http",
                   "m": "GET",
                   "o": "/api/v1/health/",
-                  "q": {
-                    "exist": [
-                      "key"
-                    ]
-                  },
+                  "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1649,6 +1728,10 @@
                   "o": "/api/v1/environment_variables/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1754,6 +1837,16 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "application_id",
+                    "event_id",
+                    "event_type",
+                    "labels",
+                    "metadata",
+                    "occurred_at",
+                    "payload",
+                    "payload_content_type"
+                  ],
                   "co": {
                     "id": "POST /api/v1/event/",
                     "source": "openapi3",
@@ -1765,6 +1858,10 @@
                   "o": "/api/v1/event/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1885,6 +1982,10 @@
                   "o": "/api/v1/instance/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1937,6 +2038,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "email",
+                    "password"
+                  ],
                   "co": {
                     "id": "POST /api/v1/auth/login",
                     "source": "openapi3",
@@ -1948,6 +2053,10 @@
                   "o": "/api/v1/auth/login",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -1980,6 +2089,10 @@
                   "o": "/api/v1/auth/refresh",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -2127,6 +2240,9 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "name"
+                  ],
                   "co": {
                     "id": "POST /api/v1/organizations/",
                     "source": "openapi3",
@@ -2138,6 +2254,10 @@
                   "o": "/api/v1/organizations/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -2200,12 +2320,14 @@
                   "o": "/api/v1/events_per_day/organization",
                   "q": {
                     "exist": [
-                      "from",
-                      "organization_id",
-                      "to"
+                      "organization_id"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -2238,6 +2360,10 @@
                   "o": "/api/v1/organizations/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -2291,6 +2417,10 @@
                     "param": {
                       "organization_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -2376,6 +2506,9 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "name"
+                  ],
                   "co": {
                     "id": "PUT /api/v1/organizations/{organization_id}/",
                     "source": "openapi3",
@@ -2405,6 +2538,10 @@
                     "param": {
                       "organization_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -2473,6 +2610,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "role",
+                    "user_id"
+                  ],
                   "co": {
                     "id": "PUT /api/v1/organizations/{organization_id}/invite",
                     "source": "openapi3",
@@ -2503,6 +2644,10 @@
                     "param": {
                       "organization_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -2592,6 +2737,10 @@
                   "o": "/api/v1/errors/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -2621,53 +2770,19 @@
             "field": {}
           },
           "fields": {
-            "global_applications_per_organization_limit": {
+            "enabled": {
               "a": true,
-              "fo": "int32",
-              "h": "Global Applications Per Organization Limit",
-              "n": "global_applications_per_organization_limit",
+              "h": "Enabled",
+              "n": "enabled",
               "r": true,
-              "t": "`$INTEGER`"
+              "t": "`$BOOLEAN`"
             },
-            "global_days_of_events_retention_limit": {
+            "limits": {
               "a": true,
-              "fo": "int32",
-              "h": "Global Days Of Events Retention Limit",
-              "n": "global_days_of_events_retention_limit",
+              "h": "Limits",
+              "n": "limits",
               "r": true,
-              "t": "`$INTEGER`"
-            },
-            "global_event_types_per_application_limit": {
-              "a": true,
-              "fo": "int32",
-              "h": "Global Event Types Per Application Limit",
-              "n": "global_event_types_per_application_limit",
-              "r": true,
-              "t": "`$INTEGER`"
-            },
-            "global_events_per_day_limit": {
-              "a": true,
-              "fo": "int32",
-              "h": "Global Events Per Day Limit",
-              "n": "global_events_per_day_limit",
-              "r": true,
-              "t": "`$INTEGER`"
-            },
-            "global_members_per_organization_limit": {
-              "a": true,
-              "fo": "int32",
-              "h": "Global Members Per Organization Limit",
-              "n": "global_members_per_organization_limit",
-              "r": true,
-              "t": "`$INTEGER`"
-            },
-            "global_subscriptions_per_application_limit": {
-              "a": true,
-              "fo": "int32",
-              "h": "Global Subscriptions Per Application Limit",
-              "n": "global_subscriptions_per_application_limit",
-              "r": true,
-              "t": "`$INTEGER`"
+              "t": "`$OBJECT`"
             }
           },
           "name": "quota",
@@ -2689,6 +2804,10 @@
                   "o": "/api/v1/quotas/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -2702,7 +2821,7 @@
                   ],
                   "t": {
                     "req": "`reqdata`",
-                    "res": "`body.limits`"
+                    "res": "`body`"
                   }
                 }
               ]
@@ -2770,6 +2889,14 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "email",
+                    "first_name",
+                    "gclid",
+                    "last_name",
+                    "password",
+                    "turnstile_token"
+                  ],
                   "co": {
                     "id": "POST /api/v1/register/",
                     "source": "openapi3",
@@ -2781,6 +2908,10 @@
                   "o": "/api/v1/register/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -2951,7 +3082,7 @@
                         "a": true,
                         "k": "query",
                         "n": "event_event_type_name",
-                        "or": "event_event_type_name",
+                        "or": "event.event_type_names",
                         "r": false,
                         "t": "`$STRING`"
                       },
@@ -3002,16 +3133,14 @@
                   "o": "/api/v1/request_attempts/",
                   "q": {
                     "exist": [
-                      "application_id",
-                      "event_event_type_name",
-                      "event_id",
-                      "max_created_at",
-                      "min_created_at",
-                      "pagination_cursor",
-                      "subscription_id"
+                      "application_id"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -3077,6 +3206,10 @@
                       "request_attempt_id": "id"
                     }
                   },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -3109,11 +3242,56 @@
             "field": {}
           },
           "fields": {
+            "body": {
+              "a": true,
+              "h": "Body",
+              "n": "body",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "elapsed_time_ms": {
+              "a": true,
+              "fo": "int32",
+              "h": "Elapsed Time Ms",
+              "n": "elapsed_time_ms",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "headers": {
+              "a": true,
+              "h": "Headers",
+              "n": "headers",
+              "r": false,
+              "t": "`$OBJECT`"
+            },
+            "http_code": {
+              "a": true,
+              "fo": "int32",
+              "h": "Http Code",
+              "n": "http_code",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
             "id": {
               "a": true,
               "h": "Id",
               "n": "id",
               "r": false,
+              "t": "`$STRING`"
+            },
+            "response_error_name": {
+              "a": true,
+              "h": "Response Error Name",
+              "n": "response_error_name",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "response_id": {
+              "a": true,
+              "fo": "uuid",
+              "h": "Response Id",
+              "n": "response_id",
+              "r": true,
               "t": "`$STRING`"
             }
           },
@@ -3170,6 +3348,10 @@
                       "response_id": "id"
                     }
                   },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -3186,7 +3368,7 @@
                   ],
                   "t": {
                     "req": "`reqdata`",
-                    "res": "`body.headers`"
+                    "res": "`body`"
                   }
                 }
               ]
@@ -3210,6 +3392,9 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "user_id"
+                  ],
                   "co": {
                     "id": "DELETE /api/v1/organizations/{organization_id}/invite",
                     "source": "openapi3",
@@ -3236,6 +3421,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -3333,6 +3522,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "name",
+                    "organization_id"
+                  ],
                   "co": {
                     "id": "POST /api/v1/service_token/",
                     "source": "openapi3",
@@ -3344,6 +3537,10 @@
                   "o": "/api/v1/service_token/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -3394,6 +3591,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -3458,6 +3659,10 @@
                     "param": {
                       "service_token_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -3554,6 +3759,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "name",
+                    "organization_id"
+                  ],
                   "co": {
                     "id": "PUT /api/v1/service_token/{service_token_id}",
                     "source": "openapi3",
@@ -3583,6 +3792,10 @@
                     "param": {
                       "service_token_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -3791,6 +4004,18 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "application_id",
+                    "dedicated_workers",
+                    "description",
+                    "event_types",
+                    "is_enabled",
+                    "label_key",
+                    "label_value",
+                    "labels",
+                    "metadata",
+                    "target"
+                  ],
                   "co": {
                     "id": "POST /api/v1/subscriptions/",
                     "source": "openapi3",
@@ -3802,6 +4027,10 @@
                   "o": "/api/v1/subscriptions/",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -3852,6 +4081,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -3905,6 +4138,10 @@
                     "param": {
                       "subscription_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -4001,6 +4238,18 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "application_id",
+                    "dedicated_workers",
+                    "description",
+                    "event_types",
+                    "is_enabled",
+                    "label_key",
+                    "label_value",
+                    "labels",
+                    "metadata",
+                    "target"
+                  ],
                   "co": {
                     "id": "PUT /api/v1/subscriptions/{subscription_id}",
                     "source": "openapi3",
@@ -4030,6 +4279,10 @@
                     "param": {
                       "subscription_id": "id"
                     }
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
                   },
                   "s": [
                     {
@@ -4093,6 +4346,9 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "email"
+                  ],
                   "co": {
                     "id": "POST /api/v1/auth/begin-reset-password",
                     "source": "openapi3",
@@ -4157,6 +4413,9 @@
                 },
                 {
                   "a": true,
+                  "bf": [
+                    "new_password"
+                  ],
                   "co": {
                     "id": "POST /api/v1/auth/password",
                     "source": "openapi3",
@@ -4189,6 +4448,10 @@
                 },
                 {
                   "a": true,
+                  "bf": [
+                    "new_password",
+                    "token"
+                  ],
                   "co": {
                     "id": "POST /api/v1/auth/reset-password",
                     "source": "openapi3",
@@ -4221,6 +4484,9 @@
                 },
                 {
                   "a": true,
+                  "bf": [
+                    "token"
+                  ],
                   "co": {
                     "id": "POST /api/v1/auth/verify-email",
                     "source": "openapi3",
@@ -4287,6 +4553,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "email",
+                    "role"
+                  ],
                   "co": {
                     "id": "POST /api/v1/organizations/{organization_id}/invite",
                     "source": "openapi3",
@@ -4313,6 +4583,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "api"
@@ -5141,6 +5415,7 @@
             },
             "optspec": {
               "clearTimer": "`$FUNCTION`",
+              "now": "`$FUNCTION`",
               "setTimer": "`$FUNCTION`"
             },
             "strict": false
@@ -6270,6 +6545,26 @@
       "info": {
         "description": "Core REST API of Hook0 — Open-Source Webhooks as a service for SaaS",
         "security": {
+          "alternatives": [
+            [
+              {
+                "in": "header",
+                "name": "Authorization",
+                "prefix": "",
+                "scheme": "biscuit_user_access",
+                "type": "apiKey"
+              }
+            ],
+            [
+              {
+                "in": "header",
+                "name": "Authorization",
+                "prefix": "",
+                "scheme": "biscuit_refresh",
+                "type": "apiKey"
+              }
+            ]
+          ],
           "in": "header",
           "name": "Authorization",
           "prefix": "",
@@ -6290,7 +6585,7 @@
       "optspec": {
         "allow": {
           "method": "GET,PUT,POST,PATCH,DELETE,OPTIONS",
-          "op": "create,update,load,list,remove,command,direct,graphql"
+          "op": "create,update,patch,load,list,remove,command,direct,graphql"
         },
         "apikey": "",
         "auth": {
@@ -6301,7 +6596,12 @@
         },
         "base": "http://localhost:8000",
         "clean": {
-          "keys": "key,token,id"
+          "active": true,
+          "hint": "0",
+          "keys": "key,secret,token,password,passwd,authorization,cookie,credential,signature",
+          "mask": "[redacted]",
+          "min": "4",
+          "values": ""
         },
         "entity": {
           "`$CHILD`": {
@@ -6338,6 +6638,11 @@
         "top": {
           "active": true
         }
+      },
+      "publisher": {
+        "name": "",
+        "security": "",
+        "url": ""
       },
       "repo": {
         "host": "github.com",
@@ -6568,7 +6873,10 @@
             "version": "0.1.1"
           },
           "superseded": [],
-          "title": "Go MCP server"
+          "title": "Go MCP server",
+          "tool": {
+            "write": false
+          }
         },
         "java": {
           "active": true,
@@ -7080,6 +7388,17 @@
           "base": "",
           "strict": true
         }
+      },
+      "text": {
+        "about_md": "",
+        "docs_url": "",
+        "entity_desc": {},
+        "homepage": "",
+        "meta_source": "",
+        "summary": "",
+        "tagline": "",
+        "title": "",
+        "website": ""
       }
     }
   },

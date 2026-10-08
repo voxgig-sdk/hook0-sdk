@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,17 +41,75 @@ describe('EventEntity', async () => {
   })
 
 
+  class FailHook extends BaseFeature {
+    name = 'failhook'
+    version = '0.0.1'
+    active = true
+    unexpected = 0
+    init() { }
+    PreSpec() { throw new Error('event hook failed') }
+    PreUnexpected() { this.unexpected++ }
+  }
+
+  test('stream-error', async () => {
+    const offline = { net: { offline: true } }
+    await assert.rejects(async () => {
+      for await (const _item of Hook0SDK.test(offline).Event().stream('list')) { }
+    }, /offline/)
+
+    for await (const _item of Hook0SDK.test(offline).Event()
+      .stream('list', undefined, { ctrl: { throw: false } })) { }
+
+    if (null != (config as any).feature?.rbac) {
+      const denied = Hook0SDK.test(undefined, { feature: { rbac: { active: true, deny: true } } })
+      await assert.rejects(async () => {
+        for await (const _item of denied.Event().stream('list')) { }
+      }, (err: any) => 'rbac_denied' === err.code)
+    }
+  })
+
+  test('stream-ctrl', async () => {
+    const explain: any = {}
+    const ctrl: any = { explain }
+    for await (const _item of Hook0SDK.test().Event().stream('list', undefined, { ctrl })) { }
+    assert.deepStrictEqual(Object.keys(ctrl), ['explain'])
+    assert(explain === ctrl.explain && 0 < Object.keys(explain).length)
+  })
+
+  test('unexpected', async () => {
+    const hook = new FailHook()
+    const client = new Hook0SDK({ feature: { test: { active: true } }, extend: [hook] })
+    await assert.rejects(client.Event().list(), /hook failed/)
+    assert(0 < hook.unexpected)
+
+    const fired = hook.unexpected
+    assert.strictEqual(await client.Event().list(undefined, { throw: false }), undefined)
+    assert(fired < hook.unexpected)
+  })
+
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Event().list({"application_id":1} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
-    for (const op of ['create', 'list', 'load']) {
+    for (const op of ['list', 'load']) {
       if (!live && maybeSkipControl(t, 'entityOp', 'event.' + op, live)) return
     }
 
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"event_id":{"a":true,"fo":"uuid","h":"Event Id","n":"event_id","r":true,"t":"`$STRING`","key$":"event_id","index$":0},"event_type_name":{"a":true,"h":"Event Type Name","n":"event_type_name","r":true,"t":"`$STRING`","key$":"event_type_name","index$":1},"id":{"a":true,"h":"Id","n":"id","r":false,"t":"`$STRING`","key$":"id","index$":2},"ip":{"a":true,"h":"Ip","n":"ip","r":true,"t":"`$STRING`","key$":"ip","index$":3},"labels":{"a":true,"h":"Labels","n":"labels","r":true,"t":"`$OBJECT`","key$":"labels","index$":4},"metadata":{"a":true,"h":"Metadata","n":"metadata","r":false,"t":"`$OBJECT`","key$":"metadata","index$":5},"occurred_at":{"a":true,"fo":"date-time","h":"Occurred At","n":"occurred_at","r":true,"t":"`$STRING`","key$":"occurred_at","index$":6},"payload":{"a":true,"h":"Payload","n":"payload","r":true,"t":"`$STRING`","key$":"payload","index$":7},"payload_content_type":{"a":true,"h":"Payload Content Type","n":"payload_content_type","r":true,"t":"`$STRING`","key$":"payload_content_type","index$":8},"received_at":{"a":true,"fo":"date-time","h":"Received At","n":"received_at","r":true,"t":"`$STRING`","key$":"received_at","index$":9}},"id":{"field":"id","name":"id"},"name":"event","op":{"create":{"input":"data","name":"create","points":[{"a":true,"co":{"id":"POST /api/v1/events/{event_id}/replay","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"event_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"POST","o":"/api/v1/events/{event_id}/replay","q":{"$action":"replay","exist":["id"]},"r":{"param":{"event_id":"id"}},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"events"},{"var":"id"},{"lit":"replay"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"create"},"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /api/v1/events/","source":"openapi3","version":2},"g":{"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/api/v1/events/","q":{"exist":["application_id"]},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"events"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"},"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /api/v1/events/{event_id}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"event_id","r":true,"t":"`$STRING`","index$":0}],"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/api/v1/events/{event_id}","q":{"exist":["application_id","id"]},"r":{"param":{"event_id":"id"}},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"events"},{"var":"id"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"event","name__orig":"event","Name":"Event","name_":"event","name-":"event","NAME":"EVENT","index$":3}, {"active":true,"entity":"event","key$":"BasicEventFlow","kind":"basic","name":"BasicEventFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"event_ref01"},"m":{"event_id":"event01"},"o":"create","s":[],"v":[],"index$":0},{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"event_ref01"}}],"index$":1},{"a":true,"d":{},"i":{"ref":"event_ref01","srcdatavar":"event_ref01_data","suffix":"_dt0"},"m":{"id":"event01"},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-event_ref01"}}],"index$":2}]}, 'Event', {"POST /api/v1/events/{event_id}/replay":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"application_id":{"type":"string","format":"uuid"}},"required":["application_id"],"x-ref":"#/components/schemas/ReplayEvent"}}},"required":true},"parameters":[{"in":"path","name":"event_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0}]},"GET /api/v1/events/":{"protocol":"http","parameters":[{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":0}]},"GET /api/v1/events/{event_id}":{"protocol":"http","parameters":[{"in":"path","name":"event_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0},{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":1}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"event_id":{"a":true,"fo":"uuid","h":"Event Id","n":"event_id","r":true,"t":"`$STRING`","key$":"event_id","index$":0},"event_type_name":{"a":true,"h":"Event Type Name","n":"event_type_name","r":true,"t":"`$STRING`","key$":"event_type_name","index$":1},"id":{"a":true,"h":"Id","n":"id","r":false,"t":"`$STRING`","key$":"id","index$":2},"ip":{"a":true,"h":"Ip","n":"ip","r":true,"t":"`$STRING`","key$":"ip","index$":3},"labels":{"a":true,"h":"Labels","n":"labels","r":true,"t":"`$OBJECT`","key$":"labels","index$":4},"metadata":{"a":true,"h":"Metadata","n":"metadata","r":false,"t":"`$OBJECT`","key$":"metadata","index$":5},"occurred_at":{"a":true,"fo":"date-time","h":"Occurred At","n":"occurred_at","r":true,"t":"`$STRING`","key$":"occurred_at","index$":6},"payload":{"a":true,"h":"Payload","n":"payload","r":true,"t":"`$STRING`","key$":"payload","index$":7},"payload_content_type":{"a":true,"h":"Payload Content Type","n":"payload_content_type","r":true,"t":"`$STRING`","key$":"payload_content_type","index$":8},"received_at":{"a":true,"fo":"date-time","h":"Received At","n":"received_at","r":true,"t":"`$STRING`","key$":"received_at","index$":9}},"id":{"field":"id","name":"id"},"name":"event","op":{"create":{"input":"data","name":"create","points":[{"a":true,"bf":["application_id"],"co":{"id":"POST /api/v1/events/{event_id}/replay","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"event_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"POST","o":"/api/v1/events/{event_id}/replay","q":{"$action":"replay","exist":["id"]},"r":{"param":{"event_id":"id"}},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"events"},{"var":"id"},{"lit":"replay"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"create"},"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /api/v1/events/","source":"openapi3","version":2},"g":{"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/api/v1/events/","q":{"exist":["application_id"]},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"events"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"},"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /api/v1/events/{event_id}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"event_id","r":true,"t":"`$STRING`","index$":0}],"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/api/v1/events/{event_id}","q":{"exist":["application_id","id"]},"r":{"param":{"event_id":"id"}},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"events"},{"var":"id"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"event","name__orig":"event","Name":"Event","name_":"event","name-":"event","NAME":"EVENT","index$":3}, {"active":true,"entity":"event","key$":"BasicEventFlow","kind":"basic","name":"BasicEventFlow","param":{},"step":[{"a":false,"d":{},"i":{"ref":"event_ref01"},"m":{"event_id":"event01"},"o":"create","s":[],"v":[],"unreachable":true},{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"event_ref01"}}],"index$":0},{"a":true,"d":{},"i":{"ref":"event_ref01","srcdatavar":"event_ref01_data","suffix":"_dt0"},"m":{"id":"event01"},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-event_ref01"}}],"index$":1}]}, 'Event', {"POST /api/v1/events/{event_id}/replay":{"protocol":"http","requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"application_id":{"type":"string","format":"uuid"}},"required":["application_id"],"x-ref":"#/components/schemas/ReplayEvent"}}},"required":true},"parameters":[{"in":"path","name":"event_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0}]},"GET /api/v1/events/":{"protocol":"http","parameters":[{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":0}]},"GET /api/v1/events/{event_id}":{"protocol":"http","parameters":[{"in":"path","name":"event_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":0},{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":1}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -59,22 +117,13 @@ describe('EventEntity', async () => {
     const isempty = struct.isempty
     const select = struct.select
 
-
-    // CREATE
-    const event_ref01_ent = client.Event()
-    let event_ref01_data = setup.data.new.event['event_ref01']
-    event_ref01_data['event_id'] = setup.idmap['event01']
-
-    event_ref01_data = (await event_ref01_ent.create(event_ref01_data)).data()
-    assert(null != event_ref01_data.id)
-
+    let event_ref01_data = Object.values(setup.data.existing.event)[0] as any
 
     // LIST
+    const event_ref01_ent = client.Event()
     const event_ref01_match: any = {}
 
     const event_ref01_list = (await event_ref01_ent.list(event_ref01_match)).map((e: any) => e.data())
-
-    assert(!isempty(select(event_ref01_list, { id: event_ref01_data.id })))
 
 
     // LOAD
@@ -88,6 +137,12 @@ describe('EventEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('HealthEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Health().load({"key":1} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
@@ -51,7 +63,7 @@ describe('HealthEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"database":{"a":true,"h":"Database","n":"database","r":true,"t":"`$BOOLEAN`","key$":"database","index$":0},"database_duration_ms":{"a":true,"fo":"int64","h":"Database Duration Ms","n":"database_duration_ms","r":true,"t":"`$INTEGER`","key$":"database_duration_ms","index$":1},"object_storage":{"a":true,"h":"Object Storage","n":"object_storage","r":false,"t":"`$BOOLEAN`","key$":"object_storage","index$":2},"object_storage_duration_ms":{"a":true,"fo":"int64","h":"Object Storage Duration Ms","n":"object_storage_duration_ms","r":false,"t":"`$INTEGER`","key$":"object_storage_duration_ms","index$":3},"pulsar":{"a":true,"h":"Pulsar","n":"pulsar","r":false,"t":"`$BOOLEAN`","key$":"pulsar","index$":4},"pulsar_duration_ms":{"a":true,"fo":"int64","h":"Pulsar Duration Ms","n":"pulsar_duration_ms","r":false,"t":"`$INTEGER`","key$":"pulsar_duration_ms","index$":5},"total_duration_ms":{"a":true,"fo":"int64","h":"Total Duration Ms","n":"total_duration_ms","r":true,"t":"`$INTEGER`","key$":"total_duration_ms","index$":6}},"name":"health","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /api/v1/health/","source":"openapi3","version":2},"g":{"query":[{"a":true,"k":"query","n":"key","or":"key","r":false,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/api/v1/health/","q":{"exist":["key"]},"r":{},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"health"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"health","name__orig":"health","Name":"Health","name_":"health","name-":"health","NAME":"HEALTH","index$":6}, {"active":true,"entity":"health","key$":"BasicHealthFlow","kind":"basic","name":"BasicHealthFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"health_ref01","srcdatavar":"health_ref01_data","suffix":"_dt0"},"m":{},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-health_ref01"}}],"index$":0}]}, 'Health', {"GET /api/v1/health/":{"protocol":"http","parameters":[{"in":"query","name":"key","schema":{"type":"string"},"style":"form","index$":0}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"database":{"a":true,"h":"Database","n":"database","r":true,"t":"`$BOOLEAN`","key$":"database","index$":0},"database_duration_ms":{"a":true,"fo":"int64","h":"Database Duration Ms","n":"database_duration_ms","r":true,"t":"`$INTEGER`","key$":"database_duration_ms","index$":1},"object_storage":{"a":true,"h":"Object Storage","n":"object_storage","r":false,"t":"`$BOOLEAN`","key$":"object_storage","index$":2},"object_storage_duration_ms":{"a":true,"fo":"int64","h":"Object Storage Duration Ms","n":"object_storage_duration_ms","r":false,"t":"`$INTEGER`","key$":"object_storage_duration_ms","index$":3},"pulsar":{"a":true,"h":"Pulsar","n":"pulsar","r":false,"t":"`$BOOLEAN`","key$":"pulsar","index$":4},"pulsar_duration_ms":{"a":true,"fo":"int64","h":"Pulsar Duration Ms","n":"pulsar_duration_ms","r":false,"t":"`$INTEGER`","key$":"pulsar_duration_ms","index$":5},"total_duration_ms":{"a":true,"fo":"int64","h":"Total Duration Ms","n":"total_duration_ms","r":true,"t":"`$INTEGER`","key$":"total_duration_ms","index$":6}},"name":"health","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /api/v1/health/","source":"openapi3","version":2},"g":{"query":[{"a":true,"k":"query","n":"key","or":"key","r":false,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/api/v1/health/","q":{},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"health"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"health","name__orig":"health","Name":"Health","name_":"health","name-":"health","NAME":"HEALTH","index$":6}, {"active":true,"entity":"health","key$":"BasicHealthFlow","kind":"basic","name":"BasicHealthFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"health_ref01","srcdatavar":"health_ref01_data","suffix":"_dt0"},"m":{},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-health_ref01"}}],"index$":0}]}, 'Health', {"GET /api/v1/health/":{"protocol":"http","parameters":[{"in":"query","name":"key","schema":{"type":"string"},"style":"form","index$":0}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +84,12 @@ describe('HealthEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

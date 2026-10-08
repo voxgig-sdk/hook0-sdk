@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { Hook0SDK, BaseFeature, stdutil } from '../../..'
+import { Hook0SDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('ResponseEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = Hook0SDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Response().load({"id":1,"application_id":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.HOOK0_TEST_LIVE
@@ -51,7 +63,7 @@ describe('ResponseEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"id":{"a":true,"h":"Id","n":"id","r":false,"t":"`$STRING`","key$":"id","index$":0}},"id":{"field":"id","name":"id"},"name":"response","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /api/v1/responses/{response_id}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"response_id","r":true,"t":"`$STRING`","index$":0}],"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/api/v1/responses/{response_id}","q":{"exist":["application_id","id"]},"r":{"param":{"response_id":"id"}},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"responses"},{"var":"id"}],"t":{"req":"`reqdata`","res":"`body.headers`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"response","name__orig":"response","Name":"Response","name_":"response","name-":"response","NAME":"RESPONSE","index$":17}, {"active":true,"entity":"response","key$":"BasicResponseFlow","kind":"basic","name":"BasicResponseFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"response_ref01","srcdatavar":"response_ref01_data","suffix":"_dt0"},"m":{"id":"response01"},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-response_ref01"}}],"index$":0}]}, 'Response', {"GET /api/v1/responses/{response_id}":{"protocol":"http","parameters":[{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":0},{"in":"path","name":"response_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":1}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"body":{"a":true,"h":"Body","n":"body","r":false,"t":"`$STRING`","key$":"body","index$":0},"elapsed_time_ms":{"a":true,"fo":"int32","h":"Elapsed Time Ms","n":"elapsed_time_ms","r":false,"t":"`$INTEGER`","key$":"elapsed_time_ms","index$":1},"headers":{"a":true,"h":"Headers","n":"headers","r":false,"t":"`$OBJECT`","key$":"headers","index$":2},"http_code":{"a":true,"fo":"int32","h":"Http Code","n":"http_code","r":false,"t":"`$INTEGER`","key$":"http_code","index$":3},"id":{"a":true,"h":"Id","n":"id","r":false,"t":"`$STRING`","key$":"id","index$":4},"response_error_name":{"a":true,"h":"Response Error Name","n":"response_error_name","r":false,"t":"`$STRING`","key$":"response_error_name","index$":5},"response_id":{"a":true,"fo":"uuid","h":"Response Id","n":"response_id","r":true,"t":"`$STRING`","key$":"response_id","index$":6}},"id":{"field":"id","name":"id"},"name":"response","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /api/v1/responses/{response_id}","source":"openapi3","version":2},"g":{"params":[{"a":true,"k":"param","n":"id","or":"response_id","r":true,"t":"`$STRING`","index$":0}],"query":[{"a":true,"k":"query","n":"application_id","or":"application_id","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/api/v1/responses/{response_id}","q":{"exist":["application_id","id"]},"r":{"param":{"response_id":"id"}},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"api"},{"lit":"v1"},{"lit":"responses"},{"var":"id"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"response","name__orig":"response","Name":"Response","name_":"response","name-":"response","NAME":"RESPONSE","index$":17}, {"active":true,"entity":"response","key$":"BasicResponseFlow","kind":"basic","name":"BasicResponseFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"response_ref01","srcdatavar":"response_ref01_data","suffix":"_dt0"},"m":{"id":"response01"},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-response_ref01"}}],"index$":0}]}, 'Response', {"GET /api/v1/responses/{response_id}":{"protocol":"http","parameters":[{"in":"query","name":"application_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"form","index$":0},{"in":"path","name":"response_id","required":true,"schema":{"type":"string","format":"uuid"},"style":"simple","index$":1}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -73,6 +85,12 @@ describe('ResponseEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

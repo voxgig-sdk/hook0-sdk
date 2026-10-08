@@ -77,10 +77,9 @@ main: kit: entity: health: {
           }
           m: "GET"
           o: "/api/v1/health/"
-          q: {
-            exist: [
-              "key"
-            ]
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

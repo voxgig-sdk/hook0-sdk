@@ -39,6 +39,7 @@ class RevokeEntity extends Hook0EntityBase<Revoke> {
 
 
 
+
   async remove(
     this: any, reqmatch?: RevokeRemoveMatch, ctrl?: Control,
   ): Promise<RevokeEntity> {
@@ -144,9 +145,15 @@ class RevokeEntity extends Hook0EntityBase<Revoke> {
       return out
     }
     catch (err: any) {
+      // What a hook throws here must not escape the cleaning below.
+      try {
 
-      fres = featureHook(ctx, 'PreUnexpected')
-      if (fres instanceof Promise) { await fres }
+        fres = featureHook(ctx, 'PreUnexpected')
+        if (fres instanceof Promise) { await fres }
+      }
+      catch (hookerr: any) {
+        err = hookerr
+      }
 
       err = this._unexpected(ctx, err)
 

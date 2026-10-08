@@ -12,9 +12,14 @@ The SDK exposes the API as capitalised, semantic **Entities** — for example `$
 
 ## Install
 This package is not yet published to Packagist. Install it from the
-GitHub release tag (`php/vX.Y.Z`):
+GitHub release tag (`php/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/hook0-sdk/tags)), or
+from a clone as a Composer path repository:
 
-- Releases: [https://github.com/voxgig-sdk/hook0-sdk/releases](https://github.com/voxgig-sdk/hook0-sdk/releases)
+```bash
+git clone https://github.com/voxgig-sdk/hook0-sdk
+composer config repositories.hook0-sdk path ./hook0-sdk/php
+composer require voxgig-sdk/hook0-sdk:@dev
+```
 
 
 ## Tutorial: your first API call
@@ -38,7 +43,7 @@ $client = new Hook0SDK([
 ```php
 try {
     // list() returns entity instances; data_get() reads each record.
-    $applications = $client->Application()->list();
+    $applications = $client->Application()->list(["organization_id" => "example"]);
     foreach ($applications as $record) {
         $item = $record->data_get();
         echo $item["id"] . " " . $item["amount"] . "\n";
@@ -81,7 +86,7 @@ Entity operations throw a `\Throwable` on failure, so wrap them in
 
 ```php
 try {
-    $eventtypes = $client->EventType()->list();
+    $response = $client->Response()->load(["id" => "example_id", "application_id" => "example"]);
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
@@ -153,12 +158,12 @@ data via the `entity` option so offline calls resolve without a live server:
 
 ```php
 $client = Hook0SDK::test([
-    "entity" => ["application" => ["test01" => ["id" => "test01"]]],
+    "entity" => ["application" => ["test01" => ["id" => "test01", "organization_id" => "example"]]],
 ]);
 
 // list() returns entity instances (throws on error);
 // call data_get() for the mock record.
-$application = $client->Application()->list();
+$application = $client->Application()->list(["organization_id" => "example"]);
 print_r(array_map(fn($item) => $item->data_get(), $application));
 ```
 
@@ -270,11 +275,11 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `($reqmatch, $ctrl): array` | Load a single entity by match criteria. |
-| `list` | `(?array $reqmatch = null, $ctrl): array` | List entities matching the criteria (call with no argument to list all). |
-| `create` | `($reqdata, $ctrl): array` | Create a new entity. |
-| `update` | `($reqdata, $ctrl): array` | Update an existing entity. |
-| `remove` | `($reqmatch, $ctrl): array` | Remove an entity. |
+| `load` | `($reqmatch, $ctrl): mixed` | Load a single entity by match criteria, and return it. |
+| `list` | `(?array $reqmatch = null, $ctrl): mixed` | List entities matching the criteria (call with no argument to list all), one per record. |
+| `create` | `($reqdata, $ctrl): mixed` | Create a new entity, and return it. |
+| `update` | `($reqdata, $ctrl): mixed` | Update an existing entity, and return it. |
+| `remove` | `($reqmatch, $ctrl): mixed` | Remove an entity, and return it marked as deleted. |
 | `data_get` | `(): array` | Get entity data. |
 | `data_set` | `($data): void` | Set entity data. |
 | `match_get` | `(): array` | Get entity match criteria. |
@@ -284,9 +289,9 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the ENTITY (call data_get() for the record) (an `array` for single-entity
-ops, a `list` for `list`) and throw on error. Wrap calls in
-`try`/`catch` to handle failures.
+Entity operations return the entity, and `list` an `array` of entities, one
+per record; an entity's `data_get()` reads its record (an `array`). They
+throw on error, so wrap calls in `try`/`catch` to handle failures.
 
 The `direct()` escape hatch never throws — it returns a result `array`
 you branch on via `$result["ok"]`:
@@ -523,12 +528,8 @@ API path: `/api/v1/errors/`
 
 | Field | Description |
 | --- | --- |
-| `global_applications_per_organization_limit` |  |
-| `global_days_of_events_retention_limit` |  |
-| `global_event_types_per_application_limit` |  |
-| `global_events_per_day_limit` |  |
-| `global_members_per_organization_limit` |  |
-| `global_subscriptions_per_application_limit` |  |
+| `enabled` |  |
+| `limits` |  |
 
 Operations: Load.
 
@@ -576,7 +577,13 @@ API path: `/api/v1/request_attempts/`
 
 | Field | Description |
 | --- | --- |
+| `body` |  |
+| `elapsed_time_ms` |  |
+| `headers` |  |
+| `http_code` |  |
 | `id` |  |
+| `response_error_name` |  |
+| `response_id` |  |
 
 Operations: Load.
 
@@ -698,8 +705,8 @@ $application = $client->Application()->load(["id" => "application_id"]);
 #### Example: List
 
 ```php
-// list() returns an array of Application records (throws on error).
-$applications = $client->Application()->list();
+// list() returns an array of Application entities, one per record (throws on error).
+$applications = $client->Application()->list(["organization_id" => "example"]);
 ```
 
 #### Example: Create
@@ -746,8 +753,8 @@ Create an instance: `$application_secret = $client->ApplicationSecret();`
 #### Example: List
 
 ```php
-// list() returns an array of ApplicationSecret records (throws on error).
-$application_secrets = $client->ApplicationSecret()->list();
+// list() returns an array of ApplicationSecret entities, one per record (throws on error).
+$application_secrets = $client->ApplicationSecret()->list(["application_id" => "example"]);
 ```
 
 #### Example: Create
@@ -809,8 +816,8 @@ $event = $client->Event()->load(["id" => "event_id", "application_id" => "applic
 #### Example: List
 
 ```php
-// list() returns an array of Event records (throws on error).
-$events = $client->Event()->list();
+// list() returns an array of Event entities, one per record (throws on error).
+$events = $client->Event()->list(["application_id" => "example"]);
 ```
 
 #### Example: Create
@@ -866,8 +873,8 @@ $event_type = $client->EventType()->load(["id" => "event_type_id", "application_
 #### Example: List
 
 ```php
-// list() returns an array of EventType records (throws on error).
-$event_types = $client->EventType()->list();
+// list() returns an array of EventType entities, one per record (throws on error).
+$event_types = $client->EventType()->list(["application_id" => "example"]);
 ```
 
 #### Example: Create
@@ -900,7 +907,7 @@ Create an instance: `$events_management = $client->EventsManagement();`
 #### Example: List
 
 ```php
-// list() returns an array of EventsManagement records (throws on error).
+// list() returns an array of EventsManagement entities, one per record (throws on error).
 $events_managements = $client->EventsManagement()->list();
 ```
 
@@ -960,7 +967,7 @@ Create an instance: `$hook0 = $client->Hook0();`
 #### Example: List
 
 ```php
-// list() returns an array of Hook0 records (throws on error).
+// list() returns an array of Hook0 entities, one per record (throws on error).
 $hook0s = $client->Hook0()->list();
 ```
 
@@ -1105,7 +1112,7 @@ $organization = $client->Organization()->load(["id" => "organization_id"]);
 #### Example: List
 
 ```php
-// list() returns an array of Organization records (throws on error).
+// list() returns an array of Organization entities, one per record (throws on error).
 $organizations = $client->Organization()->list();
 ```
 
@@ -1171,7 +1178,7 @@ Create an instance: `$problem = $client->Problem();`
 #### Example: List
 
 ```php
-// list() returns an array of Problem records (throws on error).
+// list() returns an array of Problem entities, one per record (throws on error).
 $problems = $client->Problem()->list();
 ```
 
@@ -1190,12 +1197,8 @@ Create an instance: `$quota = $client->Quota();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `global_applications_per_organization_limit` | `int` |  |
-| `global_days_of_events_retention_limit` | `int` |  |
-| `global_event_types_per_application_limit` | `int` |  |
-| `global_events_per_day_limit` | `int` |  |
-| `global_members_per_organization_limit` | `int` |  |
-| `global_subscriptions_per_application_limit` | `int` |  |
+| `enabled` | `bool` |  |
+| `limits` | `array` |  |
 
 #### Example: Load
 
@@ -1278,8 +1281,8 @@ $request_attempt = $client->RequestAttempt()->load(["id" => "request_attempt_id"
 #### Example: List
 
 ```php
-// list() returns an array of RequestAttempt records (throws on error).
-$request_attempts = $client->RequestAttempt()->list();
+// list() returns an array of RequestAttempt entities, one per record (throws on error).
+$request_attempts = $client->RequestAttempt()->list(["application_id" => "example"]);
 ```
 
 
@@ -1297,7 +1300,13 @@ Create an instance: `$response = $client->Response();`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `body` | `string` |  |
+| `elapsed_time_ms` | `int` |  |
+| `headers` | `array` |  |
+| `http_code` | `int` |  |
 | `id` | `string` |  |
+| `response_error_name` | `string` |  |
+| `response_id` | `string` |  |
 
 #### Example: Load
 
@@ -1353,8 +1362,8 @@ $service_token = $client->ServiceToken()->load(["id" => "service_token_id", "org
 #### Example: List
 
 ```php
-// list() returns an array of ServiceToken records (throws on error).
-$service_tokens = $client->ServiceToken()->list();
+// list() returns an array of ServiceToken entities, one per record (throws on error).
+$service_tokens = $client->ServiceToken()->list(["organization_id" => "example"]);
 ```
 
 #### Example: Create
@@ -1414,8 +1423,8 @@ $subscription = $client->Subscription()->load(["id" => "subscription_id"]);
 #### Example: List
 
 ```php
-// list() returns an array of Subscription records (throws on error).
-$subscriptions = $client->Subscription()->list();
+// list() returns an array of Subscription entities, one per record (throws on error).
+$subscriptions = $client->Subscription()->list(["application_id" => "example"]);
 ```
 
 #### Example: Create
@@ -1712,15 +1721,15 @@ when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```php
-$eventtype = $client->EventType();
-$eventtype->list();
+$response = $client->Response();
+$response->load(["id" => "example_id", "application_id" => "example"]);
 
-// $eventtype->data_get() now returns the eventtype data from the last list
-// $eventtype->match_get() returns the last match criteria
+// $response->data_get() now returns the response data from the last load
+// $response->match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration
