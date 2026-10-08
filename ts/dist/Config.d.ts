@@ -129,6 +129,8 @@ declare class Config {
             application: {};
             application_secret: {};
             applications_management: {};
+            email_preference: {};
+            error: {};
             event: {};
             event_type: {};
             events_management: {};
@@ -139,7 +141,6 @@ declare class Config {
             login: {};
             organization: {};
             organization_edit_role: {};
-            problem: {};
             quota: {};
             registration: {};
             request_attempt: {};
@@ -568,6 +569,102 @@ declare class Config {
             };
             relations: {
                 ancestors: string[][];
+            };
+        };
+        email_preference: {
+            fields: never[];
+            name: string;
+            op: {
+                create: {
+                    input: string;
+                    name: string;
+                    points: {
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        parts: string[];
+                        rename: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        args: {};
+                        select: {
+                            $action: string;
+                        };
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        error: {
+            fields: ({
+                name: string;
+                title: string;
+                type: string;
+                req: boolean;
+                short?: undefined;
+                format?: undefined;
+            } | {
+                name: string;
+                title: string;
+                type: string;
+                req: boolean;
+                short: string;
+                format?: undefined;
+            } | {
+                name: string;
+                title: string;
+                type: string;
+                req: boolean;
+                format: string;
+                short?: undefined;
+            } | {
+                name: string;
+                title: string;
+                type: string;
+                short: string;
+                req?: undefined;
+                format?: undefined;
+            })[];
+            id: {
+                field: string;
+                name: string;
+            };
+            name: string;
+            op: {
+                list: {
+                    input: string;
+                    name: string;
+                    points: {
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        parts: string[];
+                        rename: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        args: {};
+                        select: {};
+                        response: {
+                            kind: string;
+                            media: string;
+                        };
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
             };
         };
         event: {
@@ -1499,55 +1596,6 @@ declare class Config {
                             $action: string;
                             exist: string[];
                         };
-                        response: {
-                            kind: string;
-                            media: string;
-                        };
-                    }[];
-                };
-            };
-            relations: {
-                ancestors: never[];
-            };
-        };
-        problem: {
-            fields: ({
-                name: string;
-                title: string;
-                type: string;
-                req: boolean;
-                format?: undefined;
-            } | {
-                name: string;
-                title: string;
-                type: string;
-                req: boolean;
-                format: string;
-            })[];
-            id: {
-                field: string;
-                name: string;
-            };
-            name: string;
-            op: {
-                list: {
-                    input: string;
-                    name: string;
-                    points: {
-                        kind: string;
-                        method: string;
-                        orig: string;
-                        segments: {
-                            lit: string;
-                        }[];
-                        parts: string[];
-                        rename: {};
-                        transform: {
-                            req: string;
-                            res: string;
-                        };
-                        args: {};
-                        select: {};
                         response: {
                             kind: string;
                             media: string;

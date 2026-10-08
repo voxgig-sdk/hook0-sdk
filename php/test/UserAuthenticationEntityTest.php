@@ -33,7 +33,7 @@ class UserAuthenticationEntityTest extends TestCase
         $client = Hook0SDK::test(null, ["feature" => ["validate" => ["active" => true]]]);
         $err = null;
         try {
-            $client->UserAuthentication(null)->create(["email" => 1, "new_password" => 'x', "token" => 'x'], null);
+            $client->UserAuthentication(null)->create(["current_password" => 1, "email" => 'x', "new_password" => 'x', "token" => 'x'], null);
         } catch (\Throwable $e) {
             $err = $e;
         }

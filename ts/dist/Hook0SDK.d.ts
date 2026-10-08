@@ -1,6 +1,8 @@
 import { ApplicationEntity } from './entity/ApplicationEntity';
 import { ApplicationSecretEntity } from './entity/ApplicationSecretEntity';
 import { ApplicationsManagementEntity } from './entity/ApplicationsManagementEntity';
+import { EmailPreferenceEntity } from './entity/EmailPreferenceEntity';
+import { ErrorEntity } from './entity/ErrorEntity';
 import { EventEntity } from './entity/EventEntity';
 import { EventTypeEntity } from './entity/EventTypeEntity';
 import { EventsManagementEntity } from './entity/EventsManagementEntity';
@@ -11,7 +13,6 @@ import { InstanceEntity } from './entity/InstanceEntity';
 import { LoginEntity } from './entity/LoginEntity';
 import { OrganizationEntity } from './entity/OrganizationEntity';
 import { OrganizationEditRoleEntity } from './entity/OrganizationEditRoleEntity';
-import { ProblemEntity } from './entity/ProblemEntity';
 import { QuotaEntity } from './entity/QuotaEntity';
 import { RegistrationEntity } from './entity/RegistrationEntity';
 import { RequestAttemptEntity } from './entity/RequestAttemptEntity';
@@ -58,6 +59,8 @@ declare class Hook0SDK {
     Application(entopts?: Record<string, any>): ApplicationEntity;
     ApplicationSecret(entopts?: Record<string, any>): ApplicationSecretEntity;
     ApplicationsManagement(entopts?: Record<string, any>): ApplicationsManagementEntity;
+    EmailPreference(entopts?: Record<string, any>): EmailPreferenceEntity;
+    Error(entopts?: Record<string, any>): ErrorEntity;
     Event(entopts?: Record<string, any>): EventEntity;
     EventType(entopts?: Record<string, any>): EventTypeEntity;
     EventsManagement(entopts?: Record<string, any>): EventsManagementEntity;
@@ -68,7 +71,6 @@ declare class Hook0SDK {
     Login(entopts?: Record<string, any>): LoginEntity;
     Organization(entopts?: Record<string, any>): OrganizationEntity;
     OrganizationEditRole(entopts?: Record<string, any>): OrganizationEditRoleEntity;
-    Problem(entopts?: Record<string, any>): ProblemEntity;
     Quota(entopts?: Record<string, any>): QuotaEntity;
     Registration(entopts?: Record<string, any>): RegistrationEntity;
     RequestAttempt(entopts?: Record<string, any>): RequestAttemptEntity;

@@ -396,6 +396,22 @@ func (sdk *Hook0SDK) ApplicationsManagement(data map[string]any) Hook0Entity {
 }
 
 
+// EmailPreference returns a EmailPreference entity bound to this client.
+// Idiomatic usage: client.EmailPreference(nil).List(nil, nil) or
+// client.EmailPreference(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *Hook0SDK) EmailPreference(data map[string]any) Hook0Entity {
+	return NewEmailPreferenceEntityFunc(sdk, data)
+}
+
+
+// Error returns a Error entity bound to this client.
+// Idiomatic usage: client.Error(nil).List(nil, nil) or
+// client.Error(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *Hook0SDK) Error(data map[string]any) Hook0Entity {
+	return NewErrorEntityFunc(sdk, data)
+}
+
+
 // Event returns a Event entity bound to this client.
 // Idiomatic usage: client.Event(nil).List(nil, nil) or
 // client.Event(nil).Load(map[string]any{"id": ...}, nil).
@@ -473,14 +489,6 @@ func (sdk *Hook0SDK) Organization(data map[string]any) Hook0Entity {
 // client.OrganizationEditRole(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *Hook0SDK) OrganizationEditRole(data map[string]any) Hook0Entity {
 	return NewOrganizationEditRoleEntityFunc(sdk, data)
-}
-
-
-// Problem returns a Problem entity bound to this client.
-// Idiomatic usage: client.Problem(nil).List(nil, nil) or
-// client.Problem(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Problem(data map[string]any) Hook0Entity {
-	return NewProblemEntityFunc(sdk, data)
 }
 
 

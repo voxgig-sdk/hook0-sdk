@@ -37,7 +37,7 @@ class TestUserAuthenticationEntity:
         client = Hook0SDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.UserAuthentication(None).create({"email": 1, "new_password": "x", "token": "x"}, None)
+            client.UserAuthentication(None).create({"current_password": 1, "email": "x", "new_password": "x", "token": "x"}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):

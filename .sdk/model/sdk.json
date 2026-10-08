@@ -882,6 +882,165 @@
             ]
           }
         },
+        "email_preference": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": {},
+          "name": "email_preference",
+          "op": {
+            "create": {
+              "input": "data",
+              "name": "create",
+              "points": [
+                {
+                  "a": true,
+                  "bf": [
+                    "token"
+                  ],
+                  "co": {
+                    "id": "POST /api/v1/email-preferences/unsubscribe-reactivation",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {},
+                  "k": "http",
+                  "m": "POST",
+                  "o": "/api/v1/email-preferences/unsubscribe-reactivation",
+                  "q": {
+                    "$action": "unsubscribe_reactivation"
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "api"
+                    },
+                    {
+                      "lit": "v1"
+                    },
+                    {
+                      "lit": "email-preferences"
+                    },
+                    {
+                      "lit": "unsubscribe-reactivation"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
+        "error": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": {
+            "detail": {
+              "a": true,
+              "h": "Detail",
+              "n": "detail",
+              "r": true,
+              "t": "`$STRING`"
+            },
+            "id": {
+              "a": true,
+              "h": "Id",
+              "n": "id",
+              "r": true,
+              "sh": "Identifier of the problem that occurred, stable across releases",
+              "t": "`$STRING`"
+            },
+            "status": {
+              "a": true,
+              "fo": "int32",
+              "h": "Status",
+              "n": "status",
+              "r": true,
+              "t": "`$INTEGER`"
+            },
+            "title": {
+              "a": true,
+              "h": "Title",
+              "n": "title",
+              "r": true,
+              "t": "`$STRING`"
+            },
+            "type": {
+              "a": true,
+              "h": "Type",
+              "n": "type",
+              "r": true,
+              "sh": "Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks.",
+              "t": "`$STRING`"
+            },
+            "validation": {
+              "a": true,
+              "h": "Validation",
+              "n": "validation",
+              "r": false,
+              "sh": "Which submitted values were rejected and why, keyed by the name of the field they were submitted under.",
+              "t": "`$OBJECT`"
+            }
+          },
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "error",
+          "op": {
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "GET /api/v1/errors/",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {},
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/api/v1/errors/",
+                  "q": {},
+                  "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
+                  "s": [
+                    {
+                      "lit": "api"
+                    },
+                    {
+                      "lit": "v1"
+                    },
+                    {
+                      "lit": "errors"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
         "event": {
           "active": true,
           "alias": {
@@ -2028,6 +2187,13 @@
               "n": "password",
               "r": true,
               "t": "`$STRING`"
+            },
+            "token": {
+              "a": true,
+              "h": "Token",
+              "n": "token",
+              "r": true,
+              "t": "`$STRING`"
             }
           },
           "name": "login",
@@ -2105,6 +2271,45 @@
                     },
                     {
                       "lit": "refresh"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                },
+                {
+                  "a": true,
+                  "bf": [
+                    "token"
+                  ],
+                  "co": {
+                    "id": "POST /api/v1/auth/verify-email",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {},
+                  "k": "http",
+                  "m": "POST",
+                  "o": "/api/v1/auth/verify-email",
+                  "q": {},
+                  "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
+                  "s": [
+                    {
+                      "lit": "api"
+                    },
+                    {
+                      "lit": "v1"
+                    },
+                    {
+                      "lit": "auth"
+                    },
+                    {
+                      "lit": "verify-email"
                     }
                   ],
                   "t": {
@@ -2678,92 +2883,6 @@
             "ancestors": []
           }
         },
-        "problem": {
-          "active": true,
-          "alias": {
-            "field": {}
-          },
-          "fields": {
-            "detail": {
-              "a": true,
-              "h": "Detail",
-              "n": "detail",
-              "r": true,
-              "t": "`$STRING`"
-            },
-            "id": {
-              "a": true,
-              "h": "Id",
-              "n": "id",
-              "r": true,
-              "t": "`$STRING`"
-            },
-            "status": {
-              "a": true,
-              "fo": "int32",
-              "h": "Status",
-              "n": "status",
-              "r": true,
-              "t": "`$INTEGER`"
-            },
-            "title": {
-              "a": true,
-              "h": "Title",
-              "n": "title",
-              "r": true,
-              "t": "`$STRING`"
-            }
-          },
-          "id": {
-            "field": "id",
-            "name": "id"
-          },
-          "name": "problem",
-          "op": {
-            "list": {
-              "input": "data",
-              "name": "list",
-              "points": [
-                {
-                  "a": true,
-                  "co": {
-                    "id": "GET /api/v1/errors/",
-                    "source": "openapi3",
-                    "version": 2
-                  },
-                  "g": {},
-                  "k": "http",
-                  "m": "GET",
-                  "o": "/api/v1/errors/",
-                  "q": {},
-                  "r": {},
-                  "rs": {
-                    "kind": "json",
-                    "media": "application/json"
-                  },
-                  "s": [
-                    {
-                      "lit": "api"
-                    },
-                    {
-                      "lit": "v1"
-                    },
-                    {
-                      "lit": "errors"
-                    }
-                  ],
-                  "t": {
-                    "req": "`reqdata`",
-                    "res": "`body`"
-                  }
-                }
-              ]
-            }
-          },
-          "relations": {
-            "ancestors": []
-          }
-        },
         "quota": {
           "active": true,
           "alias": {
@@ -2873,6 +2992,14 @@
               "r": true,
               "t": "`$STRING`"
             },
+            "signup_channel": {
+              "a": true,
+              "h": "Signup Channel",
+              "n": "signup_channel",
+              "r": false,
+              "sh": "Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters.",
+              "t": "`$STRING`"
+            },
             "turnstile_token": {
               "a": true,
               "h": "Turnstile Token",
@@ -2895,6 +3022,7 @@
                     "gclid",
                     "last_name",
                     "password",
+                    "signup_channel",
                     "turnstile_token"
                   ],
                   "co": {
@@ -4316,6 +4444,13 @@
             "field": {}
           },
           "fields": {
+            "current_password": {
+              "a": true,
+              "h": "Current Password",
+              "n": "current_password",
+              "r": true,
+              "t": "`$STRING`"
+            },
             "email": {
               "a": true,
               "h": "Email",
@@ -4414,6 +4549,7 @@
                 {
                   "a": true,
                   "bf": [
+                    "current_password",
                     "new_password"
                   ],
                   "co": {
@@ -4439,6 +4575,41 @@
                     },
                     {
                       "lit": "password"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                },
+                {
+                  "a": true,
+                  "bf": [
+                    "email"
+                  ],
+                  "co": {
+                    "id": "POST /api/v1/auth/resend-verification-email",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {},
+                  "k": "http",
+                  "m": "POST",
+                  "o": "/api/v1/auth/resend-verification-email",
+                  "q": {},
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "api"
+                    },
+                    {
+                      "lit": "v1"
+                    },
+                    {
+                      "lit": "auth"
+                    },
+                    {
+                      "lit": "resend-verification-email"
                     }
                   ],
                   "t": {
@@ -4475,41 +4646,6 @@
                     },
                     {
                       "lit": "reset-password"
-                    }
-                  ],
-                  "t": {
-                    "req": "`reqdata`",
-                    "res": "`body`"
-                  }
-                },
-                {
-                  "a": true,
-                  "bf": [
-                    "token"
-                  ],
-                  "co": {
-                    "id": "POST /api/v1/auth/verify-email",
-                    "source": "openapi3",
-                    "version": 2
-                  },
-                  "g": {},
-                  "k": "http",
-                  "m": "POST",
-                  "o": "/api/v1/auth/verify-email",
-                  "q": {},
-                  "r": {},
-                  "s": [
-                    {
-                      "lit": "api"
-                    },
-                    {
-                      "lit": "v1"
-                    },
-                    {
-                      "lit": "auth"
-                    },
-                    {
-                      "lit": "verify-email"
                     }
                   ],
                   "t": {
@@ -5690,6 +5826,53 @@
           "param": {},
           "step": []
         },
+        "BasicEmailPreferenceFlow": {
+          "active": true,
+          "entity": "email_preference",
+          "key$": "BasicEmailPreferenceFlow",
+          "kind": "basic",
+          "name": "BasicEmailPreferenceFlow",
+          "param": {},
+          "step": [
+            {
+              "a": true,
+              "d": {},
+              "i": {
+                "ref": "email_preference_ref01"
+              },
+              "m": {},
+              "o": "create",
+              "s": [],
+              "v": []
+            }
+          ]
+        },
+        "BasicErrorFlow": {
+          "active": true,
+          "entity": "error",
+          "key$": "BasicErrorFlow",
+          "kind": "basic",
+          "name": "BasicErrorFlow",
+          "param": {},
+          "step": [
+            {
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "error_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        },
         "BasicEventFlow": {
           "active": true,
           "entity": "event",
@@ -6101,32 +6284,6 @@
                   "apply": "ItemNotExists",
                   "def": {
                     "ref": "organization_ref01"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "BasicProblemFlow": {
-          "active": true,
-          "entity": "problem",
-          "key$": "BasicProblemFlow",
-          "kind": "basic",
-          "name": "BasicProblemFlow",
-          "param": {},
-          "step": [
-            {
-              "a": true,
-              "d": {},
-              "i": {},
-              "m": {},
-              "o": "list",
-              "s": [],
-              "v": [
-                {
-                  "apply": "ItemExists",
-                  "def": {
-                    "ref": "problem_ref01"
                   }
                 }
               ]

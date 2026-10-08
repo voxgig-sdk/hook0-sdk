@@ -429,6 +429,42 @@ class Hook0SDK implements \JsonSerializable
     }
 
 
+    private $_email_preference = null;
+
+    // Canonical facade: $client->EmailPreference()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->email_preference()
+    // resolves here too.
+    public function EmailPreference($data = null)
+    {
+        require_once __DIR__ . '/entity/email_preference_entity.php';
+        if ($data === null) {
+            if ($this->_email_preference === null) {
+                $this->_email_preference = new EmailPreferenceEntity($this, null);
+            }
+            return $this->_email_preference;
+        }
+        return new EmailPreferenceEntity($this, $data);
+    }
+
+
+    private $_error = null;
+
+    // Canonical facade: $client->Error()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->error()
+    // resolves here too.
+    public function Error($data = null)
+    {
+        require_once __DIR__ . '/entity/error_entity.php';
+        if ($data === null) {
+            if ($this->_error === null) {
+                $this->_error = new ErrorEntity($this, null);
+            }
+            return $this->_error;
+        }
+        return new ErrorEntity($this, $data);
+    }
+
+
     private $_event = null;
 
     // Canonical facade: $client->Event()->list() / ->load(["id" => ...]).
@@ -606,24 +642,6 @@ class Hook0SDK implements \JsonSerializable
             return $this->_organization_edit_role;
         }
         return new OrganizationEditRoleEntity($this, $data);
-    }
-
-
-    private $_problem = null;
-
-    // Canonical facade: $client->Problem()->list() / ->load(["id" => ...]).
-    // PHP method names are case-insensitive, so lowercase $client->problem()
-    // resolves here too.
-    public function Problem($data = null)
-    {
-        require_once __DIR__ . '/entity/problem_entity.php';
-        if ($data === null) {
-            if ($this->_problem === null) {
-                $this->_problem = new ProblemEntity($this, null);
-            }
-            return $this->_problem;
-        }
-        return new ProblemEntity($this, $data);
     }
 
 

@@ -257,6 +257,8 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Application` | `(data map[string]any) Hook0Entity` | Create an Application entity instance. |
 | `ApplicationSecret` | `(data map[string]any) Hook0Entity` | Create an ApplicationSecret entity instance. |
 | `ApplicationsManagement` | `(data map[string]any) Hook0Entity` | Create an ApplicationsManagement entity instance. |
+| `EmailPreference` | `(data map[string]any) Hook0Entity` | Create an EmailPreference entity instance. |
+| `Error` | `(data map[string]any) Hook0Entity` | Create an Error entity instance. |
 | `Event` | `(data map[string]any) Hook0Entity` | Create an Event entity instance. |
 | `EventType` | `(data map[string]any) Hook0Entity` | Create an EventType entity instance. |
 | `EventsManagement` | `(data map[string]any) Hook0Entity` | Create an EventsManagement entity instance. |
@@ -267,7 +269,6 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Login` | `(data map[string]any) Hook0Entity` | Create a Login entity instance. |
 | `Organization` | `(data map[string]any) Hook0Entity` | Create an Organization entity instance. |
 | `OrganizationEditRole` | `(data map[string]any) Hook0Entity` | Create an OrganizationEditRole entity instance. |
-| `Problem` | `(data map[string]any) Hook0Entity` | Create a Problem entity instance. |
 | `Quota` | `(data map[string]any) Hook0Entity` | Create a Quota entity instance. |
 | `Registration` | `(data map[string]any) Hook0Entity` | Create a Registration entity instance. |
 | `RequestAttempt` | `(data map[string]any) Hook0Entity` | Create a RequestAttempt entity instance. |
@@ -360,6 +361,30 @@ API path: `/api/v1/application_secrets/`
 Operations: Remove.
 
 API path: `/api/v1/application_secrets/{application_secret_token}`
+
+#### EmailPreference
+
+| Field | Description |
+| --- | --- |
+
+Operations: Create.
+
+API path: `/api/v1/email-preferences/unsubscribe-reactivation`
+
+#### Error
+
+| Field | Description |
+| --- | --- |
+| `"detail"` |  |
+| `"id"` | Identifier of the problem that occurred, stable across releases |
+| `"status"` |  |
+| `"title"` |  |
+| `"type"` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `"validation"` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+Operations: List.
+
+API path: `/api/v1/errors/`
 
 #### Event
 
@@ -481,6 +506,7 @@ API path: `/api/v1/instance/`
 | --- | --- |
 | `"email"` |  |
 | `"password"` |  |
+| `"token"` |  |
 
 Operations: Create.
 
@@ -521,19 +547,6 @@ Operations: Update.
 
 API path: `/api/v1/organizations/{organization_id}/invite`
 
-#### Problem
-
-| Field | Description |
-| --- | --- |
-| `"detail"` |  |
-| `"id"` |  |
-| `"status"` |  |
-| `"title"` |  |
-
-Operations: List.
-
-API path: `/api/v1/errors/`
-
 #### Quota
 
 | Field | Description |
@@ -554,6 +567,7 @@ API path: `/api/v1/quotas/`
 | `"gclid"` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `"last_name"` |  |
 | `"password"` |  |
+| `"signup_channel"` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `"turnstile_token"` |  |
 
 Operations: Create.
@@ -651,6 +665,7 @@ API path: `/api/v1/subscriptions/`
 
 | Field | Description |
 | --- | --- |
+| `"current_password"` |  |
 | `"email"` |  |
 | `"new_password"` |  |
 | `"token"` |  |
@@ -810,6 +825,63 @@ Create an instance: `applicationsManagement := client.ApplicationsManagement(nil
 | Method | Description |
 | --- | --- |
 | `Remove(match, ctrl)` | Remove the matching entity. |
+
+
+### EmailPreference
+
+Create an instance: `emailPreference := client.EmailPreference(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+
+#### Example: Create
+
+```go
+result, err := client.EmailPreference(nil).Create(map[string]any{
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
+```
+
+
+### Error
+
+Create an instance: `error := client.Error(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `detail` | `string` |  |
+| `id` | `string` | Identifier of the problem that occurred, stable across releases |
+| `status` | `int` |  |
+| `title` | `string` |  |
+| `type` | `string` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `map[string]any` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+#### Example: List
+
+```go
+errors, err := client.Error(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range errors.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
 
 
 ### Event
@@ -1139,6 +1211,7 @@ Create an instance: `login := client.Login(nil)`
 | --- | --- | --- |
 | `email` | `string` |  |
 | `password` | `string` |  |
+| `token` | `string` |  |
 
 #### Example: Create
 
@@ -1146,6 +1219,7 @@ Create an instance: `login := client.Login(nil)`
 result, err := client.Login(nil).Create(map[string]any{
     "email": "example_email",
     "password": "example_password",
+    "token": "example_token",
 }, nil)
 if err != nil {
     panic(err)
@@ -1254,39 +1328,6 @@ Create an instance: `organizationEditRole := client.OrganizationEditRole(nil)`
 | `user_id` | `string` |  |
 
 
-### Problem
-
-Create an instance: `problem := client.Problem(nil)`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `List(match, ctrl)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `detail` | `string` |  |
-| `id` | `string` |  |
-| `status` | `int` |  |
-| `title` | `string` |  |
-
-#### Example: List
-
-```go
-problems, err := client.Problem(nil).List(nil, nil)
-if err != nil {
-    panic(err)
-}
-// A []any of entities, one per record.
-for _, item := range problems.([]any) {
-    fmt.Println(item.(sdk.Entity).Data())
-}
-```
-
-
 ### Quota
 
 Create an instance: `quota := client.Quota(nil)`
@@ -1334,6 +1375,7 @@ Create an instance: `registration := client.Registration(nil)`
 | `gclid` | `string` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` |  |
 | `password` | `string` |  |
+| `signup_channel` | `string` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `string` |  |
 
 #### Example: Create
@@ -1611,6 +1653,7 @@ Create an instance: `userAuthentication := client.UserAuthentication(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `current_password` | `string` |  |
 | `email` | `string` |  |
 | `new_password` | `string` |  |
 | `token` | `string` |  |
@@ -1619,6 +1662,7 @@ Create an instance: `userAuthentication := client.UserAuthentication(nil)`
 
 ```go
 result, err := client.UserAuthentication(nil).Create(map[string]any{
+    "current_password": "example_current_password",
     "email": "example_email",
     "new_password": "example_new_password",
     "token": "example_token",

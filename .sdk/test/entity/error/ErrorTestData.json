@@ -1,0 +1,48 @@
+{
+  "existing": {
+    "error": {
+      "ERROR00": {
+        "detail": "s3c",
+        "id": "ERROR00",
+        "status": 62,
+        "title": "s3f",
+        "type": "s40",
+        "validation": {}
+      },
+      "ERROR01": {
+        "detail": "s78",
+        "id": "ERROR01",
+        "status": 122,
+        "title": "s7b",
+        "type": "s7c",
+        "validation": {}
+      },
+      "ERROR02": {
+        "detail": "sb4",
+        "id": "ERROR02",
+        "status": 182,
+        "title": "sb7",
+        "type": "sb8",
+        "validation": {}
+      }
+    }
+  },
+  "new": {
+    "error": {
+      "error_ref01": {
+        "detail": "sf0",
+        "status": 242,
+        "title": "sf3",
+        "type": "sf4",
+        "validation": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/errors/": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

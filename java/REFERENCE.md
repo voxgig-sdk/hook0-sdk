@@ -55,6 +55,16 @@ Create a new `ApplicationSecret` entity instance (returns `SdkEntity`). Pass
 Create a new `ApplicationsManagement` entity instance (returns `SdkEntity`). Pass
 `null` for no initial options.
 
+#### `emailPreference(entopts)`
+
+Create a new `EmailPreference` entity instance (returns `SdkEntity`). Pass
+`null` for no initial options.
+
+#### `error(entopts)`
+
+Create a new `Error` entity instance (returns `SdkEntity`). Pass
+`null` for no initial options.
+
 #### `event(entopts)`
 
 Create a new `Event` entity instance (returns `SdkEntity`). Pass
@@ -103,11 +113,6 @@ Create a new `Organization` entity instance (returns `SdkEntity`). Pass
 #### `organizationEditRole(entopts)`
 
 Create a new `OrganizationEditRole` entity instance (returns `SdkEntity`). Pass
-`null` for no initial options.
-
-#### `problem(entopts)`
-
-Create a new `Problem` entity instance (returns `SdkEntity`). Pass
 `null` for no initial options.
 
 #### `quota(entopts)`
@@ -393,6 +398,95 @@ Get or set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `ApplicationsManagement` entity instance with the same options.
+
+#### `getName() -> String`
+
+Return the entity name.
+
+
+---
+
+## EmailPreference
+
+```java
+SdkEntity emailPreference = client.emailPreference(null);
+```
+
+### Operations
+
+#### `create(reqdata, ctrl) -> Object`
+
+Create a new entity with the given data. Returns the created entity and raises on error.
+
+```java
+Object result = client.emailPreference(null).create(Map.of(
+), null);
+```
+
+### Common Methods
+
+#### `data(newdata...) -> Object`
+
+Get or set the entity data.
+
+#### `match(newmatch...) -> Object`
+
+Get or set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `EmailPreference` entity instance with the same options.
+
+#### `getName() -> String`
+
+Return the entity name.
+
+
+---
+
+## Error
+
+```java
+SdkEntity error = client.error(null);
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `detail` | `String` | Yes |  |
+| `id` | `String` | Yes | Identifier of the problem that occurred, stable across releases |
+| `status` | `Long` | Yes |  |
+| `title` | `String` | Yes |  |
+| `type` | `String` | Yes | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `Map<String, Object>` | No | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+### Operations
+
+#### `list(reqmatch, ctrl) -> Object`
+
+List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
+
+```java
+List<?> results = (List<?>) client.error(null).list(null, null);
+for (Object item : results) {
+    System.out.println(((SdkEntity) item).data());
+}
+```
+
+### Common Methods
+
+#### `data(newdata...) -> Object`
+
+Get or set the entity data.
+
+#### `match(newmatch...) -> Object`
+
+Get or set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `Error` entity instance with the same options.
 
 #### `getName() -> String`
 
@@ -831,6 +925,7 @@ SdkEntity login = client.login(null);
 | --- | --- | --- | --- |
 | `email` | `String` | Yes |  |
 | `password` | `String` | Yes |  |
+| `token` | `String` | Yes |  |
 
 ### Operations
 
@@ -841,7 +936,8 @@ Create a new entity with the given data. Returns the created entity and raises o
 ```java
 Object result = client.login(null).create(Map.of(
     "email", "example_email",  // String
-    "password", "example_password"  // String
+    "password", "example_password",  // String
+    "token", "example_token"  // String
 ), null);
 ```
 
@@ -1020,55 +1116,6 @@ Return the entity name.
 
 ---
 
-## Problem
-
-```java
-SdkEntity problem = client.problem(null);
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `detail` | `String` | Yes |  |
-| `id` | `String` | Yes |  |
-| `status` | `Long` | Yes |  |
-| `title` | `String` | Yes |  |
-
-### Operations
-
-#### `list(reqmatch, ctrl) -> Object`
-
-List entities matching the given criteria. The match is optional — call `list(null, null)` to list all records. Returns a list of entities, one per record, and raises on error.
-
-```java
-List<?> results = (List<?>) client.problem(null).list(null, null);
-for (Object item : results) {
-    System.out.println(((SdkEntity) item).data());
-}
-```
-
-### Common Methods
-
-#### `data(newdata...) -> Object`
-
-Get or set the entity data.
-
-#### `match(newmatch...) -> Object`
-
-Get or set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `Problem` entity instance with the same options.
-
-#### `getName() -> String`
-
-Return the entity name.
-
-
----
-
 ## Quota
 
 ```java
@@ -1128,6 +1175,7 @@ SdkEntity registration = client.registration(null);
 | `gclid` | `String` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `String` | Yes |  |
 | `password` | `String` | Yes |  |
+| `signup_channel` | `String` | No | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `String` | No |  |
 
 ### Operations
@@ -1548,6 +1596,7 @@ SdkEntity userAuthentication = client.userAuthentication(null);
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `current_password` | `String` | Yes |  |
 | `email` | `String` | Yes |  |
 | `new_password` | `String` | Yes |  |
 | `token` | `String` | Yes |  |
@@ -1560,6 +1609,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```java
 Object result = client.userAuthentication(null).create(Map.of(
+    "current_password", "example_current_password",  // String
     "email", "example_email",  // String
     "new_password", "example_new_password",  // String
     "token", "example_token"  // String

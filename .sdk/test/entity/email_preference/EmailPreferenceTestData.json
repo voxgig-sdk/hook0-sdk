@@ -1,0 +1,27 @@
+{
+  "existing": {
+    "email_preference": {
+      "EMAIL_PREFERENCE00": {
+        "id": "EMAIL_PREFERENCE00"
+      },
+      "EMAIL_PREFERENCE01": {
+        "id": "EMAIL_PREFERENCE01"
+      },
+      "EMAIL_PREFERENCE02": {
+        "id": "EMAIL_PREFERENCE02"
+      }
+    }
+  },
+  "new": {
+    "email_preference": {
+      "email_preference_ref01": {}
+    }
+  },
+  "requests": {
+    "POST /api/v1/email-preferences/unsubscribe-reactivation": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

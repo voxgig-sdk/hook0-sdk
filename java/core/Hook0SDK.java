@@ -46,6 +46,24 @@ public class Hook0SDK extends SdkClient {
   }
 
   /**
+   * Returns a email_preference entity bound to this client.
+   * Idiomatic usage: client.emailPreference(null).list(null, null) or
+   * client.emailPreference(null).load(Map.of("id", ...), null).
+   */
+  public SdkEntity emailPreference(Map<String, Object> entopts) {
+    return new voxgig.hook0sdk.entity.EmailPreferenceEntity(this, entopts);
+  }
+
+  /**
+   * Returns a error entity bound to this client.
+   * Idiomatic usage: client.error(null).list(null, null) or
+   * client.error(null).load(Map.of("id", ...), null).
+   */
+  public SdkEntity error(Map<String, Object> entopts) {
+    return new voxgig.hook0sdk.entity.ErrorEntity(this, entopts);
+  }
+
+  /**
    * Returns a event entity bound to this client.
    * Idiomatic usage: client.event(null).list(null, null) or
    * client.event(null).load(Map.of("id", ...), null).
@@ -133,15 +151,6 @@ public class Hook0SDK extends SdkClient {
    */
   public SdkEntity organizationEditRole(Map<String, Object> entopts) {
     return new voxgig.hook0sdk.entity.OrganizationEditRoleEntity(this, entopts);
-  }
-
-  /**
-   * Returns a problem entity bound to this client.
-   * Idiomatic usage: client.problem(null).list(null, null) or
-   * client.problem(null).load(Map.of("id", ...), null).
-   */
-  public SdkEntity problem(Map<String, Object> entopts) {
-    return new voxgig.hook0sdk.entity.ProblemEntity(this, entopts);
   }
 
   /**

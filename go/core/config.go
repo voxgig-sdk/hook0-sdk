@@ -160,6 +160,8 @@ func MakeConfig() map[string]any {
 				"application": map[string]any{},
 				"application_secret": map[string]any{},
 				"applications_management": map[string]any{},
+				"email_preference": map[string]any{},
+				"error": map[string]any{},
 				"event": map[string]any{},
 				"event_type": map[string]any{},
 				"events_management": map[string]any{},
@@ -170,7 +172,6 @@ func MakeConfig() map[string]any {
 				"login": map[string]any{},
 				"organization": map[string]any{},
 				"organization_edit_role": map[string]any{},
-				"problem": map[string]any{},
 				"quota": map[string]any{},
 				"registration": map[string]any{},
 				"request_attempt": map[string]any{},
@@ -877,6 +878,146 @@ func MakeConfig() map[string]any {
 							"$.main.kit.entity.application_secret",
 						},
 					},
+				},
+			},
+			"email_preference": map[string]any{
+				"fields": []any{},
+				"name": "email_preference",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "POST",
+								"orig": "/api/v1/email-preferences/unsubscribe-reactivation",
+								"segments": []any{
+									map[string]any{
+										"lit": "api",
+									},
+									map[string]any{
+										"lit": "v1",
+									},
+									map[string]any{
+										"lit": "email-preferences",
+									},
+									map[string]any{
+										"lit": "unsubscribe-reactivation",
+									},
+								},
+								"parts": []any{
+									"api",
+									"v1",
+									"email-preferences",
+									"unsubscribe-reactivation",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{},
+								"select": map[string]any{
+									"$action": "unsubscribe_reactivation",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"error": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "detail",
+						"title": "Detail",
+						"type": "`$STRING`",
+						"req": true,
+					},
+					map[string]any{
+						"name": "id",
+						"title": "Id",
+						"type": "`$STRING`",
+						"req": true,
+						"short": "Identifier of the problem that occurred, stable across releases",
+					},
+					map[string]any{
+						"name": "status",
+						"title": "Status",
+						"type": "`$INTEGER`",
+						"req": true,
+						"format": "int32",
+					},
+					map[string]any{
+						"name": "title",
+						"title": "Title",
+						"type": "`$STRING`",
+						"req": true,
+					},
+					map[string]any{
+						"name": "type",
+						"title": "Type",
+						"type": "`$STRING`",
+						"req": true,
+						"short": "Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks.",
+					},
+					map[string]any{
+						"name": "validation",
+						"title": "Validation",
+						"type": "`$OBJECT`",
+						"short": "Which submitted values were rejected and why, keyed by the name of the field they were submitted under.",
+					},
+				},
+				"id": map[string]any{
+					"field": "id",
+					"name": "id",
+				},
+				"name": "error",
+				"op": map[string]any{
+					"list": map[string]any{
+						"input": "data",
+						"name": "list",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/api/v1/errors/",
+								"segments": []any{
+									map[string]any{
+										"lit": "api",
+									},
+									map[string]any{
+										"lit": "v1",
+									},
+									map[string]any{
+										"lit": "errors",
+									},
+								},
+								"parts": []any{
+									"api",
+									"v1",
+									"errors",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{},
+								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
 				},
 			},
 			"event": map[string]any{
@@ -1893,6 +2034,12 @@ func MakeConfig() map[string]any {
 						"type": "`$STRING`",
 						"req": true,
 					},
+					map[string]any{
+						"name": "token",
+						"title": "Token",
+						"type": "`$STRING`",
+						"req": true,
+					},
 				},
 				"name": "login",
 				"op": map[string]any{
@@ -1959,6 +2106,42 @@ func MakeConfig() map[string]any {
 									"v1",
 									"auth",
 									"refresh",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{},
+								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+							map[string]any{
+								"kind": "http",
+								"method": "POST",
+								"orig": "/api/v1/auth/verify-email",
+								"segments": []any{
+									map[string]any{
+										"lit": "api",
+									},
+									map[string]any{
+										"lit": "v1",
+									},
+									map[string]any{
+										"lit": "auth",
+									},
+									map[string]any{
+										"lit": "verify-email",
+									},
+								},
+								"parts": []any{
+									"api",
+									"v1",
+									"auth",
+									"verify-email",
 								},
 								"rename": map[string]any{},
 								"transform": map[string]any{
@@ -2492,83 +2675,6 @@ func MakeConfig() map[string]any {
 					"ancestors": []any{},
 				},
 			},
-			"problem": map[string]any{
-				"fields": []any{
-					map[string]any{
-						"name": "detail",
-						"title": "Detail",
-						"type": "`$STRING`",
-						"req": true,
-					},
-					map[string]any{
-						"name": "id",
-						"title": "Id",
-						"type": "`$STRING`",
-						"req": true,
-					},
-					map[string]any{
-						"name": "status",
-						"title": "Status",
-						"type": "`$INTEGER`",
-						"req": true,
-						"format": "int32",
-					},
-					map[string]any{
-						"name": "title",
-						"title": "Title",
-						"type": "`$STRING`",
-						"req": true,
-					},
-				},
-				"id": map[string]any{
-					"field": "id",
-					"name": "id",
-				},
-				"name": "problem",
-				"op": map[string]any{
-					"list": map[string]any{
-						"input": "data",
-						"name": "list",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/api/v1/errors/",
-								"segments": []any{
-									map[string]any{
-										"lit": "api",
-									},
-									map[string]any{
-										"lit": "v1",
-									},
-									map[string]any{
-										"lit": "errors",
-									},
-								},
-								"parts": []any{
-									"api",
-									"v1",
-									"errors",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{},
-								"select": map[string]any{},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
-						},
-					},
-				},
-				"relations": map[string]any{
-					"ancestors": []any{},
-				},
-			},
 			"quota": map[string]any{
 				"fields": []any{
 					map[string]any{
@@ -2660,6 +2766,12 @@ func MakeConfig() map[string]any {
 						"title": "Password",
 						"type": "`$STRING`",
 						"req": true,
+					},
+					map[string]any{
+						"name": "signup_channel",
+						"title": "Signup Channel",
+						"type": "`$STRING`",
+						"short": "Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters.",
 					},
 					map[string]any{
 						"name": "turnstile_token",
@@ -3940,6 +4052,12 @@ func MakeConfig() map[string]any {
 			"user_authentication": map[string]any{
 				"fields": []any{
 					map[string]any{
+						"name": "current_password",
+						"title": "Current Password",
+						"type": "`$STRING`",
+						"req": true,
+					},
+					map[string]any{
 						"name": "email",
 						"title": "Email",
 						"type": "`$STRING`",
@@ -4063,6 +4181,38 @@ func MakeConfig() map[string]any {
 							map[string]any{
 								"kind": "http",
 								"method": "POST",
+								"orig": "/api/v1/auth/resend-verification-email",
+								"segments": []any{
+									map[string]any{
+										"lit": "api",
+									},
+									map[string]any{
+										"lit": "v1",
+									},
+									map[string]any{
+										"lit": "auth",
+									},
+									map[string]any{
+										"lit": "resend-verification-email",
+									},
+								},
+								"parts": []any{
+									"api",
+									"v1",
+									"auth",
+									"resend-verification-email",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{},
+								"select": map[string]any{},
+							},
+							map[string]any{
+								"kind": "http",
+								"method": "POST",
 								"orig": "/api/v1/auth/reset-password",
 								"segments": []any{
 									map[string]any{
@@ -4083,38 +4233,6 @@ func MakeConfig() map[string]any {
 									"v1",
 									"auth",
 									"reset-password",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{},
-								"select": map[string]any{},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "POST",
-								"orig": "/api/v1/auth/verify-email",
-								"segments": []any{
-									map[string]any{
-										"lit": "api",
-									},
-									map[string]any{
-										"lit": "v1",
-									},
-									map[string]any{
-										"lit": "auth",
-									},
-									map[string]any{
-										"lit": "verify-email",
-									},
-								},
-								"parts": []any{
-									"api",
-									"v1",
-									"auth",
-									"verify-email",
 								},
 								"rename": map[string]any{},
 								"transform": map[string]any{

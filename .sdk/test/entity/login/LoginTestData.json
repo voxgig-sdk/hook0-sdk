@@ -2,18 +2,21 @@
   "existing": {
     "login": {
       "LOGIN00": {
-        "email": "s14",
-        "password": "s15",
+        "email": "s1e",
+        "password": "s1f",
+        "token": "s20",
         "id": "LOGIN00"
       },
       "LOGIN01": {
-        "email": "s28",
-        "password": "s29",
+        "email": "s3c",
+        "password": "s3d",
+        "token": "s3e",
         "id": "LOGIN01"
       },
       "LOGIN02": {
-        "email": "s3c",
-        "password": "s3d",
+        "email": "s5a",
+        "password": "s5b",
+        "token": "s5c",
         "id": "LOGIN02"
       }
     }
@@ -21,8 +24,9 @@
   "new": {
     "login": {
       "login_ref01": {
-        "email": "s50",
-        "password": "s51"
+        "email": "s78",
+        "password": "s79",
+        "token": "s7a"
       }
     }
   },
@@ -33,6 +37,11 @@
       "source": "openapi3"
     },
     "POST /api/v1/auth/refresh": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "POST /api/v1/auth/verify-email": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

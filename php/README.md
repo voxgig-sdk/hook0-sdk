@@ -248,6 +248,8 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `Application` | `($data): ApplicationEntity` | Create an Application entity instance. |
 | `ApplicationSecret` | `($data): ApplicationSecretEntity` | Create an ApplicationSecret entity instance. |
 | `ApplicationsManagement` | `($data): ApplicationsManagementEntity` | Create an ApplicationsManagement entity instance. |
+| `EmailPreference` | `($data): EmailPreferenceEntity` | Create an EmailPreference entity instance. |
+| `Error` | `($data): ErrorEntity` | Create an Error entity instance. |
 | `Event` | `($data): EventEntity` | Create an Event entity instance. |
 | `EventType` | `($data): EventTypeEntity` | Create an EventType entity instance. |
 | `EventsManagement` | `($data): EventsManagementEntity` | Create an EventsManagement entity instance. |
@@ -258,7 +260,6 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `Login` | `($data): LoginEntity` | Create a Login entity instance. |
 | `Organization` | `($data): OrganizationEntity` | Create an Organization entity instance. |
 | `OrganizationEditRole` | `($data): OrganizationEditRoleEntity` | Create an OrganizationEditRole entity instance. |
-| `Problem` | `($data): ProblemEntity` | Create a Problem entity instance. |
 | `Quota` | `($data): QuotaEntity` | Create a Quota entity instance. |
 | `Registration` | `($data): RegistrationEntity` | Create a Registration entity instance. |
 | `RequestAttempt` | `($data): RequestAttemptEntity` | Create a RequestAttempt entity instance. |
@@ -350,6 +351,30 @@ API path: `/api/v1/application_secrets/`
 Operations: Remove.
 
 API path: `/api/v1/application_secrets/{application_secret_token}`
+
+#### EmailPreference
+
+| Field | Description |
+| --- | --- |
+
+Operations: Create.
+
+API path: `/api/v1/email-preferences/unsubscribe-reactivation`
+
+#### Error
+
+| Field | Description |
+| --- | --- |
+| `detail` |  |
+| `id` | Identifier of the problem that occurred, stable across releases |
+| `status` |  |
+| `title` |  |
+| `type` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+Operations: List.
+
+API path: `/api/v1/errors/`
 
 #### Event
 
@@ -471,6 +496,7 @@ API path: `/api/v1/instance/`
 | --- | --- |
 | `email` |  |
 | `password` |  |
+| `token` |  |
 
 Operations: Create.
 
@@ -511,19 +537,6 @@ Operations: Update.
 
 API path: `/api/v1/organizations/{organization_id}/invite`
 
-#### Problem
-
-| Field | Description |
-| --- | --- |
-| `detail` |  |
-| `id` |  |
-| `status` |  |
-| `title` |  |
-
-Operations: List.
-
-API path: `/api/v1/errors/`
-
 #### Quota
 
 | Field | Description |
@@ -544,6 +557,7 @@ API path: `/api/v1/quotas/`
 | `gclid` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` |  |
 | `password` |  |
+| `signup_channel` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` |  |
 
 Operations: Create.
@@ -641,6 +655,7 @@ API path: `/api/v1/subscriptions/`
 
 | Field | Description |
 | --- | --- |
+| `current_password` |  |
 | `email` |  |
 | `new_password` |  |
 | `token` |  |
@@ -777,6 +792,53 @@ Create an instance: `$applications_management = $client->ApplicationsManagement(
 | Method | Description |
 | --- | --- |
 | `remove(match)` | Remove the matching entity. |
+
+
+### EmailPreference
+
+Create an instance: `$email_preference = $client->EmailPreference();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Example: Create
+
+```php
+$email_preference = $client->EmailPreference()->create([
+]);
+```
+
+
+### Error
+
+Create an instance: `$error = $client->Error();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `detail` | `string` |  |
+| `id` | `string` | Identifier of the problem that occurred, stable across releases |
+| `status` | `int` |  |
+| `title` | `string` |  |
+| `type` | `string` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `array` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+#### Example: List
+
+```php
+// list() returns an array of Error entities, one per record (throws on error).
+$errors = $client->Error()->list();
+```
 
 
 ### Event
@@ -1058,6 +1120,7 @@ Create an instance: `$login = $client->Login();`
 | --- | --- | --- |
 | `email` | `string` |  |
 | `password` | `string` |  |
+| `token` | `string` |  |
 
 #### Example: Create
 
@@ -1065,6 +1128,7 @@ Create an instance: `$login = $client->Login();`
 $login = $client->Login()->create([
     "email" => null, // string
     "password" => null, // string
+    "token" => null, // string
 ]);
 ```
 
@@ -1156,33 +1220,6 @@ Create an instance: `$organization_edit_role = $client->OrganizationEditRole();`
 | `user_id` | `string` |  |
 
 
-### Problem
-
-Create an instance: `$problem = $client->Problem();`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(match)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `detail` | `string` |  |
-| `id` | `string` |  |
-| `status` | `int` |  |
-| `title` | `string` |  |
-
-#### Example: List
-
-```php
-// list() returns an array of Problem entities, one per record (throws on error).
-$problems = $client->Problem()->list();
-```
-
-
 ### Quota
 
 Create an instance: `$quota = $client->Quota();`
@@ -1227,6 +1264,7 @@ Create an instance: `$registration = $client->Registration();`
 | `gclid` | `string` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` |  |
 | `password` | `string` |  |
+| `signup_channel` | `string` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `string` |  |
 
 #### Example: Create
@@ -1462,6 +1500,7 @@ Create an instance: `$user_authentication = $client->UserAuthentication();`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `current_password` | `string` |  |
 | `email` | `string` |  |
 | `new_password` | `string` |  |
 | `token` | `string` |  |
@@ -1470,6 +1509,7 @@ Create an instance: `$user_authentication = $client->UserAuthentication();`
 
 ```php
 $user_authentication = $client->UserAuthentication()->create([
+    "current_password" => null, // string
     "email" => null, // string
     "new_password" => null, // string
     "token" => null, // string

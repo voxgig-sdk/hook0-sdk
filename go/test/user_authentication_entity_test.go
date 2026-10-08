@@ -38,7 +38,7 @@ func TestUserAuthenticationEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.UserAuthentication(nil).Create(map[string]any{"email": 1, "new_password": "x", "token": "x"}, nil)
+		_, err := client.UserAuthentication(nil).Create(map[string]any{"current_password": 1, "email": "x", "new_password": "x", "token": "x"}, nil)
 		if sdkerr, ok := err.(*core.Hook0Error); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}

@@ -33,7 +33,7 @@ Each feature is generated into every SDK target — as a directory
 `<lang>/src/feature/<name>/` (ts/js) or a flat file in the `<lang>/feature/`
 package (other languages). Each target's guide documents its features.
 
-**Entities** (23): `Application`, `ApplicationSecret`, `ApplicationsManagement`, `Event`, `EventType`, `EventsManagement`, `Health`, `Hook0`, `IngestedEvent`, `Instance`, `Login`, `Organization`, `OrganizationEditRole`, `Problem`, `Quota`, `Registration`, `RequestAttempt`, `Response`, `Revoke`, `ServiceToken`, `Subscription`, `UserAuthentication`, `UserInvitation`.
+**Entities** (24): `Application`, `ApplicationSecret`, `ApplicationsManagement`, `EmailPreference`, `Error`, `Event`, `EventType`, `EventsManagement`, `Health`, `Hook0`, `IngestedEvent`, `Instance`, `Login`, `Organization`, `OrganizationEditRole`, `Quota`, `Registration`, `RequestAttempt`, `Response`, `Revoke`, `ServiceToken`, `Subscription`, `UserAuthentication`, `UserInvitation`.
 
 ## Generating and updating the SDK
 

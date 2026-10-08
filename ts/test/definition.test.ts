@@ -406,6 +406,53 @@ const PLAN: any[] = [
     "idField": "id"
   },
   {
+    "entity": "email_preference",
+    "accessor": "EmailPreference",
+    "op": "create",
+    "method": "POST",
+    "path": "/api/v1/email-preferences/unsubscribe-reactivation",
+    "action": "unsubscribe_reactivation",
+    "args": [],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "query": [],
+    "queryArgs": [],
+    "auth": [],
+    "status": 204,
+    "sample": null,
+    "idField": "id"
+  },
+  {
+    "entity": "error",
+    "accessor": "Error",
+    "op": "list",
+    "method": "GET",
+    "path": "/api/v1/errors/",
+    "args": [],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
+    "query": [],
+    "queryArgs": [],
+    "auth": [],
+    "status": 200,
+    "sample": [
+      {
+        "detail": "x",
+        "id": "OrganizationNameMissing",
+        "status": 1,
+        "title": "x",
+        "type": "x",
+        "validation": {}
+      }
+    ],
+    "idField": "id"
+  },
+  {
     "entity": "event",
     "accessor": "Event",
     "op": "create",
@@ -1199,33 +1246,6 @@ const PLAN: any[] = [
     "idField": "id"
   },
   {
-    "entity": "problem",
-    "accessor": "Problem",
-    "op": "list",
-    "method": "GET",
-    "path": "/api/v1/errors/",
-    "args": [],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/json"
-    ],
-    "query": [],
-    "queryArgs": [],
-    "auth": [],
-    "status": 200,
-    "sample": [
-      {
-        "detail": "x",
-        "id": "x",
-        "status": 1,
-        "title": "x"
-      }
-    ],
-    "idField": "id"
-  },
-  {
     "entity": "quota",
     "accessor": "Quota",
     "op": "load",
@@ -1249,6 +1269,7 @@ const PLAN: any[] = [
         "global_days_of_events_retention_limit": 1,
         "global_event_types_per_application_limit": 1,
         "global_events_per_day_limit": 1,
+        "global_free_organizations_per_user_limit": 1,
         "global_members_per_organization_limit": 1,
         "global_subscriptions_per_application_limit": 1
       }

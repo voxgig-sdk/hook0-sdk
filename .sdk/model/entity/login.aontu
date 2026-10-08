@@ -17,6 +17,12 @@ main: kit: entity: login: {
       r: true
       t: "`$STRING`"
     }
+    token: {
+      h: "Token"
+      n: "token"
+      r: true
+      t: "`$STRING`"
+    }
   }
 
   name: "login"
@@ -83,6 +89,40 @@ main: kit: entity: login: {
             }
             {
               lit: "refresh"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          bf: [
+            "token"
+          ]
+          co: {
+            id: "POST /api/v1/auth/verify-email"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/api/v1/auth/verify-email"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "verify-email"
             }
           ]
           t: {

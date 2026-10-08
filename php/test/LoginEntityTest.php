@@ -33,7 +33,7 @@ class LoginEntityTest extends TestCase
         $client = Hook0SDK::test(null, ["feature" => ["validate" => ["active" => true]]]);
         $err = null;
         try {
-            $client->Login(null)->create(["email" => 1, "password" => 'x'], null);
+            $client->Login(null)->create(["email" => 1, "password" => 'x', "token" => 'x'], null);
         } catch (\Throwable $e) {
             $err = $e;
         }

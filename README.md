@@ -18,7 +18,7 @@ Learn more about Voxgig SDKs at [voxgig.com/sdk](https://voxgig.com/sdk/).
 
 ## Entities, not endpoints
 
-This SDK exposes the API as **23 semantic entities** that you
+This SDK exposes the API as **24 semantic entities** that you
 call directly, instead of assembling URL paths and query strings. See the [Entities](#entities) table below for the full list. Entities are
 **Capitalised** to mark them as the primary surface, each with the operations they
 support (`list`, `load`, `create`, `update`, `remove`):
@@ -187,13 +187,15 @@ Then add it to your agent's MCP config (Claude Desktop, Cursor, etc.):
 
 ## Entities
 
-The API exposes 23 entities:
+The API exposes 24 entities:
 
 | Entity | Description | API path |
 | --- | --- | --- |
 | **Application** | The Application entity (create, list, load, remove, update). | `/api/v1/events_per_day/application` |
 | **ApplicationSecret** | The ApplicationSecret entity (create, list, update). | `/api/v1/application_secrets/` |
 | **ApplicationsManagement** | The ApplicationsManagement entity (remove). | `/api/v1/application_secrets/{application_secret_token}` |
+| **EmailPreference** | The EmailPreference entity (create). | `/api/v1/email-preferences/unsubscribe-reactivation` |
+| **Error** | The Error entity (list). | `/api/v1/errors/` |
 | **Event** | The Event entity (create, list, load). | `/api/v1/events/` |
 | **EventType** | The EventType entity (create, list, load). | `/api/v1/event_types/` |
 | **EventsManagement** | The EventsManagement entity (list, remove). | `/api/v1/payload_content_types/` |
@@ -204,7 +206,6 @@ The API exposes 23 entities:
 | **Login** | The Login entity (create). | `/api/v1/auth/login` |
 | **Organization** | The Organization entity (create, list, load, remove, update). | `/api/v1/events_per_day/organization` |
 | **OrganizationEditRole** | The OrganizationEditRole entity (update). | `/api/v1/organizations/{organization_id}/invite` |
-| **Problem** | The Problem entity (list). | `/api/v1/errors/` |
 | **Quota** | The Quota entity (load). | `/api/v1/quotas/` |
 | **Registration** | The Registration entity (create). | `/api/v1/register/` |
 | **RequestAttempt** | The RequestAttempt entity (list, load). | `/api/v1/request_attempts/` |

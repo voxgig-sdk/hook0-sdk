@@ -3,6 +3,8 @@
 const { ApplicationEntity } = require('./entity/ApplicationEntity')
 const { ApplicationSecretEntity } = require('./entity/ApplicationSecretEntity')
 const { ApplicationsManagementEntity } = require('./entity/ApplicationsManagementEntity')
+const { EmailPreferenceEntity } = require('./entity/EmailPreferenceEntity')
+const { ErrorEntity } = require('./entity/ErrorEntity')
 const { EventEntity } = require('./entity/EventEntity')
 const { EventTypeEntity } = require('./entity/EventTypeEntity')
 const { EventsManagementEntity } = require('./entity/EventsManagementEntity')
@@ -13,7 +15,6 @@ const { InstanceEntity } = require('./entity/InstanceEntity')
 const { LoginEntity } = require('./entity/LoginEntity')
 const { OrganizationEntity } = require('./entity/OrganizationEntity')
 const { OrganizationEditRoleEntity } = require('./entity/OrganizationEditRoleEntity')
-const { ProblemEntity } = require('./entity/ProblemEntity')
 const { QuotaEntity } = require('./entity/QuotaEntity')
 const { RegistrationEntity } = require('./entity/RegistrationEntity')
 const { RequestAttemptEntity } = require('./entity/RequestAttemptEntity')
@@ -375,6 +376,24 @@ class Hook0SDK {
   }
 
 
+  // Entity access: `client.EmailPreference().list()` / `client.EmailPreference().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  EmailPreference(entopts) {
+    const self = this
+    return new EmailPreferenceEntity(self, entopts)
+  }
+
+
+  // Entity access: `client.Error().list()` / `client.Error().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  Error(entopts) {
+    const self = this
+    return new ErrorEntity(self, entopts)
+  }
+
+
   // Entity access: `client.Event().list()` / `client.Event().load({ id })`.
   // The argument is the entity OPTIONS object (passed to the entity
   // constructor as entopts), not initial entity data.
@@ -462,15 +481,6 @@ class Hook0SDK {
   OrganizationEditRole(entopts) {
     const self = this
     return new OrganizationEditRoleEntity(self, entopts)
-  }
-
-
-  // Entity access: `client.Problem().list()` / `client.Problem().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  Problem(entopts) {
-    const self = this
-    return new ProblemEntity(self, entopts)
   }
 
 

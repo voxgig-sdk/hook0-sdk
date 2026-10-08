@@ -54,6 +54,14 @@ Create a new `ApplicationSecretEntity` instance. Pass `None` for no initial data
 
 Create a new `ApplicationsManagementEntity` instance. Pass `None` for no initial data.
 
+#### `EmailPreference(data=None)`
+
+Create a new `EmailPreferenceEntity` instance. Pass `None` for no initial data.
+
+#### `Error(data=None)`
+
+Create a new `ErrorEntity` instance. Pass `None` for no initial data.
+
 #### `Event(data=None)`
 
 Create a new `EventEntity` instance. Pass `None` for no initial data.
@@ -93,10 +101,6 @@ Create a new `OrganizationEntity` instance. Pass `None` for no initial data.
 #### `OrganizationEditRole(data=None)`
 
 Create a new `OrganizationEditRoleEntity` instance. Pass `None` for no initial data.
-
-#### `Problem(data=None)`
-
-Create a new `ProblemEntity` instance. Pass `None` for no initial data.
 
 #### `Quota(data=None)`
 
@@ -393,6 +397,110 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `ApplicationsManagementEntity` instance with the same options.
+
+#### `get_name() -> str`
+
+Return the entity name.
+
+
+---
+
+## EmailPreferenceEntity
+
+```python
+email_preference = client.EmailPreference()
+```
+
+### Operations
+
+#### `create(reqdata, ctrl=None) -> EmailPreferenceEntity`
+
+Create a new entity with the given data. Returns the created entity and raises on error.
+
+```python
+result = client.EmailPreference().create({
+})
+```
+
+### Common Methods
+
+#### `data_get() -> dict`
+
+Get the entity data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> dict`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `EmailPreferenceEntity` instance with the same options.
+
+#### `get_name() -> str`
+
+Return the entity name.
+
+
+---
+
+## ErrorEntity
+
+```python
+error = client.Error()
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `detail` | `str` | Yes |  |
+| `id` | `str` | Yes | Identifier of the problem that occurred, stable across releases |
+| `status` | `int` | Yes |  |
+| `title` | `str` | Yes |  |
+| `type` | `str` | Yes | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `dict` | No | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+### Operations
+
+#### `list(reqmatch=None, ctrl=None) -> list[ErrorEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.Error().list()
+for error in results:
+    print(error.data_get())
+```
+
+### Common Methods
+
+#### `data_get() -> dict`
+
+Get the entity data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> dict`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `ErrorEntity` instance with the same options.
 
 #### `get_name() -> str`
 
@@ -883,6 +991,7 @@ login = client.Login()
 | --- | --- | --- | --- |
 | `email` | `str` | Yes |  |
 | `password` | `str` | Yes |  |
+| `token` | `str` | Yes |  |
 
 ### Operations
 
@@ -894,6 +1003,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 result = client.Login().create({
     "email": "example_email",  # str
     "password": "example_password",  # str
+    "token": "example_token",  # str
 })
 ```
 
@@ -1097,62 +1207,6 @@ Return the entity name.
 
 ---
 
-## ProblemEntity
-
-```python
-problem = client.Problem()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `detail` | `str` | Yes |  |
-| `id` | `str` | Yes |  |
-| `status` | `int` | Yes |  |
-| `title` | `str` | Yes |  |
-
-### Operations
-
-#### `list(reqmatch=None, ctrl=None) -> list[ProblemEntity]`
-
-List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
-
-```python
-results = client.Problem().list()
-for problem in results:
-    print(problem.data_get())
-```
-
-### Common Methods
-
-#### `data_get() -> dict`
-
-Get the entity data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> dict`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `ProblemEntity` instance with the same options.
-
-#### `get_name() -> str`
-
-Return the entity name.
-
-
----
-
 ## QuotaEntity
 
 ```python
@@ -1220,6 +1274,7 @@ registration = client.Registration()
 | `gclid` | `str` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `str` | Yes |  |
 | `password` | `str` | Yes |  |
+| `signup_channel` | `str` | No | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `str` | No |  |
 
 ### Operations
@@ -1687,6 +1742,7 @@ user_authentication = client.UserAuthentication()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `current_password` | `str` | Yes |  |
 | `email` | `str` | Yes |  |
 | `new_password` | `str` | Yes |  |
 | `token` | `str` | Yes |  |
@@ -1699,6 +1755,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.UserAuthentication().create({
+    "current_password": "example_current_password",  # str
     "email": "example_email",  # str
     "new_password": "example_new_password",  # str
     "token": "example_token",  # str

@@ -254,6 +254,8 @@ Creates a test-mode client with mock transport. Both arguments may be
 | `application` | `(entopts: Value) *ApplicationEntity` | Create an Application entity instance. |
 | `application_secret` | `(entopts: Value) *ApplicationSecretEntity` | Create an ApplicationSecret entity instance. |
 | `applications_management` | `(entopts: Value) *ApplicationsManagementEntity` | Create an ApplicationsManagement entity instance. |
+| `email_preference` | `(entopts: Value) *EmailPreferenceEntity` | Create an EmailPreference entity instance. |
+| `error_` | `(entopts: Value) *ErrorEntity` | Create an Error entity instance. |
 | `event` | `(entopts: Value) *EventEntity` | Create an Event entity instance. |
 | `event_type` | `(entopts: Value) *EventTypeEntity` | Create an EventType entity instance. |
 | `events_management` | `(entopts: Value) *EventsManagementEntity` | Create an EventsManagement entity instance. |
@@ -264,7 +266,6 @@ Creates a test-mode client with mock transport. Both arguments may be
 | `login` | `(entopts: Value) *LoginEntity` | Create a Login entity instance. |
 | `organization` | `(entopts: Value) *OrganizationEntity` | Create an Organization entity instance. |
 | `organization_edit_role` | `(entopts: Value) *OrganizationEditRoleEntity` | Create an OrganizationEditRole entity instance. |
-| `problem` | `(entopts: Value) *ProblemEntity` | Create a Problem entity instance. |
 | `quota` | `(entopts: Value) *QuotaEntity` | Create a Quota entity instance. |
 | `registration` | `(entopts: Value) *RegistrationEntity` | Create a Registration entity instance. |
 | `request_attempt` | `(entopts: Value) *RequestAttemptEntity` | Create a RequestAttempt entity instance. |
@@ -356,6 +357,30 @@ API path: `/api/v1/application_secrets/`
 Operations: Remove.
 
 API path: `/api/v1/application_secrets/{application_secret_token}`
+
+#### EmailPreference
+
+| Field | Description |
+| --- | --- |
+
+Operations: Create.
+
+API path: `/api/v1/email-preferences/unsubscribe-reactivation`
+
+#### Error
+
+| Field | Description |
+| --- | --- |
+| `detail` |  |
+| `id` | Identifier of the problem that occurred, stable across releases |
+| `status` |  |
+| `title` |  |
+| `type` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+Operations: List.
+
+API path: `/api/v1/errors/`
 
 #### Event
 
@@ -477,6 +502,7 @@ API path: `/api/v1/instance/`
 | --- | --- |
 | `email` |  |
 | `password` |  |
+| `token` |  |
 
 Operations: Create.
 
@@ -517,19 +543,6 @@ Operations: Update.
 
 API path: `/api/v1/organizations/{organization_id}/invite`
 
-#### Problem
-
-| Field | Description |
-| --- | --- |
-| `detail` |  |
-| `id` |  |
-| `status` |  |
-| `title` |  |
-
-Operations: List.
-
-API path: `/api/v1/errors/`
-
 #### Quota
 
 | Field | Description |
@@ -550,6 +563,7 @@ API path: `/api/v1/quotas/`
 | `gclid` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` |  |
 | `password` |  |
+| `signup_channel` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` |  |
 
 Operations: Create.
@@ -647,6 +661,7 @@ API path: `/api/v1/subscriptions/`
 
 | Field | Description |
 | --- | --- |
+| `current_password` |  |
 | `email` |  |
 | `new_password` |  |
 | `token` |  |
@@ -815,6 +830,70 @@ Create an instance: `const applications_management = client.applications_managem
 Each operation returns a result union — `switch` on it: `.ok` carries the
 entity (for `list`, a slice of entities, one per record), whose record
 `asEntity().data(null)` reads, and `.err => |e|` the branded error.
+
+
+### EmailPreference
+
+Create an instance: `const email_preference = client.email_preference(h.vnull());`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(reqdata, ctrl)` | Create a new entity with the given data. |
+
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
+
+#### Example: Create
+
+```zig
+switch (client.email_preference(h.vnull()).create(h.jo(&.{
+}), h.vnull())) {
+    .ok => |email_preference| std.debug.print("{s}\n", .{h.stringify(email_preference.asEntity().data(null))}),
+    .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
+}
+```
+
+
+### Error
+
+Create an instance: `const error_ = client.error_(h.vnull());`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
+
+Each operation returns a result union — `switch` on it: `.ok` carries the
+entity (for `list`, a slice of entities, one per record), whose record
+`asEntity().data(null)` reads, and `.err => |e|` the branded error.
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `detail` | `[]const u8` |  |
+| `id` | `[]const u8` | Identifier of the problem that occurred, stable across releases |
+| `status` | `i64` |  |
+| `title` | `[]const u8` |  |
+| `type` | `[]const u8` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `Value (object)` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+#### Example: List
+
+```zig
+switch (client.error_(h.vnull()).list(h.vnull(), h.vnull())) {
+    .ok => |error_s| {
+        for (error_s) |error_| {
+            std.debug.print("{s}\n", .{h.stringify(error_.asEntity().data(null))});
+        }
+    },
+    .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
+}
+```
 
 
 ### Event
@@ -1169,6 +1248,7 @@ entity (for `list`, a slice of entities, one per record), whose record
 | --- | --- | --- |
 | `email` | `[]const u8` |  |
 | `password` | `[]const u8` |  |
+| `token` | `[]const u8` |  |
 
 #### Example: Create
 
@@ -1176,6 +1256,7 @@ entity (for `list`, a slice of entities, one per record), whose record
 switch (client.login(h.vnull()).create(h.jo(&.{
     .{ "email", h.vstr("example_email") }, // []const u8
     .{ "password", h.vstr("example_password") }, // []const u8
+    .{ "token", h.vstr("example_token") }, // []const u8
 }), h.vnull())) {
     .ok => |login| std.debug.print("{s}\n", .{h.stringify(login.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1289,43 +1370,6 @@ entity (for `list`, a slice of entities, one per record), whose record
 | `user_id` | `[]const u8` |  |
 
 
-### Problem
-
-Create an instance: `const problem = client.problem(h.vnull());`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
-
-Each operation returns a result union — `switch` on it: `.ok` carries the
-entity (for `list`, a slice of entities, one per record), whose record
-`asEntity().data(null)` reads, and `.err => |e|` the branded error.
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `detail` | `[]const u8` |  |
-| `id` | `[]const u8` |  |
-| `status` | `i64` |  |
-| `title` | `[]const u8` |  |
-
-#### Example: List
-
-```zig
-switch (client.problem(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |problems| {
-        for (problems) |problem| {
-            std.debug.print("{s}\n", .{h.stringify(problem.asEntity().data(null))});
-        }
-    },
-    .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
-}
-```
-
-
 ### Quota
 
 Create an instance: `const quota = client.quota(h.vnull());`
@@ -1380,6 +1424,7 @@ entity (for `list`, a slice of entities, one per record), whose record
 | `gclid` | `[]const u8` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `[]const u8` |  |
 | `password` | `[]const u8` |  |
+| `signup_channel` | `[]const u8` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `[]const u8` |  |
 
 #### Example: Create
@@ -1674,6 +1719,7 @@ entity (for `list`, a slice of entities, one per record), whose record
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `current_password` | `[]const u8` |  |
 | `email` | `[]const u8` |  |
 | `new_password` | `[]const u8` |  |
 | `token` | `[]const u8` |  |
@@ -1682,6 +1728,7 @@ entity (for `list`, a slice of entities, one per record), whose record
 
 ```zig
 switch (client.user_authentication(h.vnull()).create(h.jo(&.{
+    .{ "current_password", h.vstr("example_current_password") }, // []const u8
     .{ "email", h.vstr("example_email") }, // []const u8
     .{ "new_password", h.vstr("example_new_password") }, // []const u8
     .{ "token", h.vstr("example_token") }, // []const u8

@@ -85,6 +85,30 @@ Create a new `ApplicationsManagement` entity instance.
 
 **Returns:** `ApplicationsManagementEntity` instance.
 
+#### `EmailPreference(data?: object)`
+
+Create a new `EmailPreference` entity instance.
+
+**Parameters:**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `data` | `object` | Initial entity data. |
+
+**Returns:** `EmailPreferenceEntity` instance.
+
+#### `Error(data?: object)`
+
+Create a new `Error` entity instance.
+
+**Parameters:**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `data` | `object` | Initial entity data. |
+
+**Returns:** `ErrorEntity` instance.
+
 #### `Event(data?: object)`
 
 Create a new `Event` entity instance.
@@ -204,18 +228,6 @@ Create a new `OrganizationEditRole` entity instance.
 | `data` | `object` | Initial entity data. |
 
 **Returns:** `OrganizationEditRoleEntity` instance.
-
-#### `Problem(data?: object)`
-
-Create a new `Problem` entity instance.
-
-**Parameters:**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| `data` | `object` | Initial entity data. |
-
-**Returns:** `ProblemEntity` instance.
 
 #### `Quota(data?: object)`
 
@@ -597,6 +609,106 @@ Get or set the entity match criteria. Works the same as `data()`.
 #### `make()`
 
 Create a new `ApplicationsManagementEntity` instance with the same client and
+options.
+
+#### `client()`
+
+Return the parent `Hook0SDK` instance.
+
+#### `entopts()`
+
+Return a copy of the entity options.
+
+
+---
+
+## EmailPreferenceEntity
+
+```ts
+const email_preference = client.EmailPreference()
+```
+
+### Operations
+
+#### `create(data: object, ctrl?: object)`
+
+Create a new entity with the given data. Resolves to the created entity.
+
+```ts
+const result = await client.EmailPreference().create({
+})
+```
+
+### Common Methods
+
+#### `data(data?: object)`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `match(match?: object)`
+
+Get or set the entity match criteria. Works the same as `data()`.
+
+#### `make()`
+
+Create a new `EmailPreferenceEntity` instance with the same client and
+options.
+
+#### `client()`
+
+Return the parent `Hook0SDK` instance.
+
+#### `entopts()`
+
+Return a copy of the entity options.
+
+
+---
+
+## ErrorEntity
+
+```ts
+const error = client.Error()
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `detail` | `string` | Yes |  |
+| `id` | `string` | Yes | Identifier of the problem that occurred, stable across releases |
+| `status` | `number` | Yes |  |
+| `title` | `string` | Yes |  |
+| `type` | `string` | Yes | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `Object` | No | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+### Operations
+
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.Error().list()
+```
+
+### Common Methods
+
+#### `data(data?: object)`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `match(match?: object)`
+
+Get or set the entity match criteria. Works the same as `data()`.
+
+#### `make()`
+
+Create a new `ErrorEntity` instance with the same client and
 options.
 
 #### `client()`
@@ -1077,6 +1189,7 @@ const login = client.Login()
 | --- | --- | --- | --- |
 | `email` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
+| `token` | `string` | Yes |  |
 
 ### Operations
 
@@ -1088,6 +1201,7 @@ Create a new entity with the given data. Resolves to the created entity.
 const result = await client.Login().create({
   email: 'example_email',
   password: 'example_password',
+  token: 'example_token',
 })
 ```
 
@@ -1286,59 +1400,6 @@ Return a copy of the entity options.
 
 ---
 
-## ProblemEntity
-
-```ts
-const problem = client.Problem()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `detail` | `string` | Yes |  |
-| `id` | `string` | Yes |  |
-| `status` | `number` | Yes |  |
-| `title` | `string` | Yes |  |
-
-### Operations
-
-#### `list(match: object, ctrl?: object)`
-
-List entities matching the given criteria. Resolves to an array of entities, one per record.
-
-```ts
-const results = await client.Problem().list()
-```
-
-### Common Methods
-
-#### `data(data?: object)`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `match(match?: object)`
-
-Get or set the entity match criteria. Works the same as `data()`.
-
-#### `make()`
-
-Create a new `ProblemEntity` instance with the same client and
-options.
-
-#### `client()`
-
-Return the parent `Hook0SDK` instance.
-
-#### `entopts()`
-
-Return a copy of the entity options.
-
-
----
-
 ## QuotaEntity
 
 ```ts
@@ -1405,6 +1466,7 @@ const registration = client.Registration()
 | `gclid` | `string` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
+| `signup_channel` | `string` | No | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `string` | No |  |
 
 ### Operations
@@ -1860,6 +1922,7 @@ const user_authentication = client.UserAuthentication()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `current_password` | `string` | Yes |  |
 | `email` | `string` | Yes |  |
 | `new_password` | `string` | Yes |  |
 | `token` | `string` | Yes |  |
@@ -1872,6 +1935,7 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.UserAuthentication().create({
+  current_password: 'example_current_password',
   email: 'example_email',
   new_password: 'example_new_password',
   token: 'example_token',

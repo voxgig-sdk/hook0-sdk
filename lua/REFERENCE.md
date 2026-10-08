@@ -53,6 +53,14 @@ Create a new `ApplicationSecret` entity instance. Pass `nil` for no initial data
 
 Create a new `ApplicationsManagement` entity instance. Pass `nil` for no initial data.
 
+#### `EmailPreference(data)`
+
+Create a new `EmailPreference` entity instance. Pass `nil` for no initial data.
+
+#### `Error(data)`
+
+Create a new `Error` entity instance. Pass `nil` for no initial data.
+
 #### `Event(data)`
 
 Create a new `Event` entity instance. Pass `nil` for no initial data.
@@ -92,10 +100,6 @@ Create a new `Organization` entity instance. Pass `nil` for no initial data.
 #### `OrganizationEditRole(data)`
 
 Create a new `OrganizationEditRole` entity instance. Pass `nil` for no initial data.
-
-#### `Problem(data)`
-
-Create a new `Problem` entity instance. Pass `nil` for no initial data.
 
 #### `Quota(data)`
 
@@ -394,6 +398,110 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `ApplicationsManagementEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## EmailPreferenceEntity
+
+```lua
+local email_preference = client:EmailPreference(nil)
+```
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
+
+```lua
+local result, err = client:EmailPreference():create({
+})
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `EmailPreferenceEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## ErrorEntity
+
+```lua
+local error = client:Error(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `detail` | `string` | Yes |  |
+| `id` | `string` | Yes | Identifier of the problem that occurred, stable across releases |
+| `status` | `number` | Yes |  |
+| `title` | `string` | Yes |  |
+| `type` | `string` | Yes | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `table` | No | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+### Operations
+
+#### `list(reqmatch, ctrl) -> any, err`
+
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
+
+```lua
+local results, err = client:Error():list()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `ErrorEntity` instance with the same client and
 options.
 
 #### `get_name() -> string`
@@ -884,6 +992,7 @@ local login = client:Login(nil)
 | --- | --- | --- | --- |
 | `email` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
+| `token` | `string` | Yes |  |
 
 ### Operations
 
@@ -895,6 +1004,7 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 local result, err = client:Login():create({
   email = --[[ string ]],
   password = --[[ string ]],
+  token = --[[ string ]],
 })
 ```
 
@@ -1099,61 +1209,6 @@ Return the entity name.
 
 ---
 
-## ProblemEntity
-
-```lua
-local problem = client:Problem(nil)
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `detail` | `string` | Yes |  |
-| `id` | `string` | Yes |  |
-| `status` | `number` | Yes |  |
-| `title` | `string` | Yes |  |
-
-### Operations
-
-#### `list(reqmatch, ctrl) -> any, err`
-
-List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
-
-```lua
-local results, err = client:Problem():list()
-```
-
-### Common Methods
-
-#### `data_get() -> table`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> table`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `ProblemEntity` instance with the same client and
-options.
-
-#### `get_name() -> string`
-
-Return the entity name.
-
-
----
-
 ## QuotaEntity
 
 ```lua
@@ -1222,6 +1277,7 @@ local registration = client:Registration(nil)
 | `gclid` | `string` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
+| `signup_channel` | `string` | No | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `string` | No |  |
 
 ### Operations
@@ -1689,6 +1745,7 @@ local user_authentication = client:UserAuthentication(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `current_password` | `string` | Yes |  |
 | `email` | `string` | Yes |  |
 | `new_password` | `string` | Yes |  |
 | `token` | `string` | Yes |  |
@@ -1701,6 +1758,7 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 
 ```lua
 local result, err = client:UserAuthentication():create({
+  current_password = --[[ string ]],
   email = --[[ string ]],
   new_password = --[[ string ]],
   token = --[[ string ]],

@@ -1,0 +1,149 @@
+package voxgig.hook0sdk.sdktest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
+
+import voxgig.hook0sdk.core.Helpers;
+import voxgig.hook0sdk.core.Hook0SDK;
+import voxgig.hook0sdk.utility.Json;
+
+@SuppressWarnings({"unchecked", "unused"})
+public class ErrorDirectTest {
+
+  // main.kit.test.live.strict is true (the default is true): a live
+  // request that fails, or a live test missing an input it needs,
+  // fails the test.
+  // An account with no record for a test to read skips it either way.
+  static final boolean LIVE_STRICT = true;
+
+  static boolean liveOk(Map<String, Object> result) {
+    int status = Helpers.toInt(result.get("status"));
+    return result.get("err") == null && Boolean.TRUE.equals(result.get("ok"))
+        && status >= 200 && status < 300;
+  }
+
+  static Map<String, Object> jm(Object... kv) {
+    Map<String, Object> out = new LinkedHashMap<>();
+    for (int i = 0; i < kv.length - 1; i += 2) {
+      out.put(String.valueOf(kv[i]), kv[i + 1]);
+    }
+    return out;
+  }
+
+  @Test
+  public void directListError() {
+    List<Object> mockres = new ArrayList<>();
+    mockres.add(jm("id", "direct01"));
+    mockres.add(jm("id", "direct02"));
+    DirectSetup setup = directSetup(mockres);
+    String mode = setup.live ? "live" : "unit";
+    String reason = RunnerSupport.skipReason("direct", "direct-list-error", mode);
+    Assumptions.assumeTrue(reason == null,
+        reason == null || "".equals(reason)
+            ? "skipped via sdk-test-control.json" : reason);
+    Hook0SDK client = setup.client;
+
+
+    Map<String, Object> result = client.direct(jm(
+        "path", "api/v1/errors",
+        "method", "GET",
+        "params", new LinkedHashMap<>()));
+    if (setup.live) {
+      if (!liveOk(result)) {
+        RunnerSupport.liveMiss(LIVE_STRICT, "Live list failed: " + RunnerSupport.liveDescribe(result));
+      }
+      if (RunnerSupport.liveList(result.get("data")) == null) {
+        RunnerSupport.liveMiss(LIVE_STRICT, "Live list returned no list: " + RunnerSupport.liveDescribe(result));
+      }
+    }
+    else {
+      assertEquals(true, result.get("ok"), "expected ok to be true");
+      assertEquals(200, Helpers.toInt(result.get("status")), "expected status 200");
+    }
+
+    if (!setup.live) {
+      assertTrue(result.get("data") instanceof List,
+          "expected data to be an array, got " + result.get("data"));
+      assertEquals(2, ((List<Object>) result.get("data")).size(), "expected 2 items");
+
+      assertEquals(1, setup.calls.size(), "expected 1 call");
+    }
+  }
+
+  static class DirectSetup {
+    Hook0SDK client;
+    List<Map<String, Object>> calls;
+    boolean live;
+    Map<String, Object> idmap;
+  }
+
+  static DirectSetup directSetup(Object mockres) {
+    RunnerSupport.loadEnvLocal();
+
+    final List<Map<String, Object>> calls = new ArrayList<>();
+
+    Map<String, Object> envm = new LinkedHashMap<>();
+    envm.put("HOOK0_TEST_ERROR_ENTID", new LinkedHashMap<>());
+    envm.put("HOOK0_TEST_LIVE", "FALSE");
+    envm.put("HOOK0_APIKEY", "");
+    Map<String, Object> env = RunnerSupport.envOverride(envm);
+
+    boolean live = "TRUE".equals(env.get("HOOK0_TEST_LIVE"));
+
+    DirectSetup setup = new DirectSetup();
+    setup.calls = calls;
+
+    if (live) {
+      // sdk-test-control.json's test.client.options seeds the live
+      // client; the generated fields below overwrite anything they name.
+      Map<String, Object> mergedOpts =
+          new LinkedHashMap<>(RunnerSupport.liveClientOptions());
+      mergedOpts.put("apikey", env.get("HOOK0_APIKEY"));
+      setup.client = new Hook0SDK(mergedOpts);
+      setup.live = true;
+
+      Map<String, Object> idmap = new LinkedHashMap<>();
+      Object entidRaw = env.get("HOOK0_TEST_ERROR_ENTID");
+      if (entidRaw instanceof String && ((String) entidRaw).startsWith("{")) {
+        Map<String, Object> parsed = Helpers.toMapAny(Json.parseOrNull((String) entidRaw));
+        if (parsed != null) {
+          idmap = parsed;
+        }
+      }
+      else if (entidRaw instanceof Map) {
+        idmap = (Map<String, Object>) entidRaw;
+      }
+      setup.idmap = idmap;
+      return setup;
+    }
+
+    final Object mockdata = mockres != null ? mockres : jm("id", "direct01");
+    BiFunction<String, Map<String, Object>, Map<String, Object>> mockFetch =
+        (url, init) -> {
+          calls.add(jm("url", url, "init", init));
+          return jm(
+              "status", 200,
+              "statusText", "OK",
+              "headers", new LinkedHashMap<>(),
+              "json", (Supplier<Object>) () -> mockdata);
+        };
+
+    setup.client = new Hook0SDK(jm(
+        "base", "http://localhost:8080",
+        "system", jm("fetch", mockFetch)));
+    setup.live = false;
+    setup.idmap = new LinkedHashMap<>();
+    return setup;
+  }
+}

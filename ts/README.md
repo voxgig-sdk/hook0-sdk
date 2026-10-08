@@ -275,6 +275,8 @@ new Hook0SDK(options?: {
 | `Application(data?)` | `ApplicationEntity` | Create an Application entity instance. |
 | `ApplicationSecret(data?)` | `ApplicationSecretEntity` | Create an ApplicationSecret entity instance. |
 | `ApplicationsManagement(data?)` | `ApplicationsManagementEntity` | Create an ApplicationsManagement entity instance. |
+| `EmailPreference(data?)` | `EmailPreferenceEntity` | Create an EmailPreference entity instance. |
+| `Error(data?)` | `ErrorEntity` | Create an Error entity instance. |
 | `Event(data?)` | `EventEntity` | Create an Event entity instance. |
 | `EventType(data?)` | `EventTypeEntity` | Create an EventType entity instance. |
 | `EventsManagement(data?)` | `EventsManagementEntity` | Create an EventsManagement entity instance. |
@@ -285,7 +287,6 @@ new Hook0SDK(options?: {
 | `Login(data?)` | `LoginEntity` | Create a Login entity instance. |
 | `Organization(data?)` | `OrganizationEntity` | Create an Organization entity instance. |
 | `OrganizationEditRole(data?)` | `OrganizationEditRoleEntity` | Create an OrganizationEditRole entity instance. |
-| `Problem(data?)` | `ProblemEntity` | Create a Problem entity instance. |
 | `Quota(data?)` | `QuotaEntity` | Create a Quota entity instance. |
 | `Registration(data?)` | `RegistrationEntity` | Create a Registration entity instance. |
 | `RequestAttempt(data?)` | `RequestAttemptEntity` | Create a RequestAttempt entity instance. |
@@ -410,6 +411,30 @@ Operations: remove.
 
 API path: `/api/v1/application_secrets/{application_secret_token}`
 
+#### EmailPreference
+
+| Field | Description |
+| --- | --- |
+
+Operations: create.
+
+API path: `/api/v1/email-preferences/unsubscribe-reactivation`
+
+#### Error
+
+| Field | Description |
+| --- | --- |
+| `detail` |  |
+| `id` | Identifier of the problem that occurred, stable across releases |
+| `status` |  |
+| `title` |  |
+| `type` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+Operations: list.
+
+API path: `/api/v1/errors/`
+
 #### Event
 
 | Field | Description |
@@ -530,6 +555,7 @@ API path: `/api/v1/instance/`
 | --- | --- |
 | `email` |  |
 | `password` |  |
+| `token` |  |
 
 Operations: create.
 
@@ -570,19 +596,6 @@ Operations: update.
 
 API path: `/api/v1/organizations/{organization_id}/invite`
 
-#### Problem
-
-| Field | Description |
-| --- | --- |
-| `detail` |  |
-| `id` |  |
-| `status` |  |
-| `title` |  |
-
-Operations: list.
-
-API path: `/api/v1/errors/`
-
 #### Quota
 
 | Field | Description |
@@ -603,6 +616,7 @@ API path: `/api/v1/quotas/`
 | `gclid` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` |  |
 | `password` |  |
+| `signup_channel` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` |  |
 
 Operations: create.
@@ -700,6 +714,7 @@ API path: `/api/v1/subscriptions/`
 
 | Field | Description |
 | --- | --- |
+| `current_password` |  |
 | `email` |  |
 | `new_password` |  |
 | `token` |  |
@@ -833,6 +848,52 @@ Create an instance: `const applications_management = client.ApplicationsManageme
 | Method | Description |
 | --- | --- |
 | `remove(match)` | Remove the matching entity. |
+
+
+### EmailPreference
+
+Create an instance: `const email_preference = client.EmailPreference()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Example: Create
+
+```ts
+const email_preference = await client.EmailPreference().create({
+})
+```
+
+
+### Error
+
+Create an instance: `const error = client.Error()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `detail` | `string` |  |
+| `id` | `string` | Identifier of the problem that occurred, stable across releases |
+| `status` | `number` |  |
+| `title` | `string` |  |
+| `type` | `string` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `Record<string, any>` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+#### Example: List
+
+```ts
+const errors = await client.Error().list()
+```
 
 
 ### Event
@@ -1106,6 +1167,7 @@ Create an instance: `const login = client.Login()`
 | --- | --- | --- |
 | `email` | `string` |  |
 | `password` | `string` |  |
+| `token` | `string` |  |
 
 #### Example: Create
 
@@ -1113,6 +1175,7 @@ Create an instance: `const login = client.Login()`
 const login = await client.Login().create({
   email: 'example_email',
   password: 'example_password',
+  token: 'example_token',
 })
 ```
 
@@ -1202,32 +1265,6 @@ Create an instance: `const organization_edit_role = client.OrganizationEditRole(
 | `user_id` | `string` |  |
 
 
-### Problem
-
-Create an instance: `const problem = client.Problem()`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(match)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `detail` | `string` |  |
-| `id` | `string` |  |
-| `status` | `number` |  |
-| `title` | `string` |  |
-
-#### Example: List
-
-```ts
-const problems = await client.Problem().list()
-```
-
-
 ### Quota
 
 Create an instance: `const quota = client.Quota()`
@@ -1271,6 +1308,7 @@ Create an instance: `const registration = client.Registration()`
 | `gclid` | `string` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` |  |
 | `password` | `string` |  |
+| `signup_channel` | `string` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `string` |  |
 
 #### Example: Create
@@ -1499,6 +1537,7 @@ Create an instance: `const user_authentication = client.UserAuthentication()`
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `current_password` | `string` |  |
 | `email` | `string` |  |
 | `new_password` | `string` |  |
 | `token` | `string` |  |
@@ -1507,6 +1546,7 @@ Create an instance: `const user_authentication = client.UserAuthentication()`
 
 ```ts
 const user_authentication = await client.UserAuthentication().create({
+  current_password: 'example_current_password',
   email: 'example_email',
   new_password: 'example_new_password',
   token: 'example_token',

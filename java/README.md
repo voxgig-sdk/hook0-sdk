@@ -244,6 +244,8 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `application` | `(entopts) -> SdkEntity` | Create an Application entity instance. |
 | `applicationSecret` | `(entopts) -> SdkEntity` | Create an ApplicationSecret entity instance. |
 | `applicationsManagement` | `(entopts) -> SdkEntity` | Create an ApplicationsManagement entity instance. |
+| `emailPreference` | `(entopts) -> SdkEntity` | Create an EmailPreference entity instance. |
+| `error` | `(entopts) -> SdkEntity` | Create an Error entity instance. |
 | `event` | `(entopts) -> SdkEntity` | Create an Event entity instance. |
 | `eventType` | `(entopts) -> SdkEntity` | Create an EventType entity instance. |
 | `eventsManagement` | `(entopts) -> SdkEntity` | Create an EventsManagement entity instance. |
@@ -254,7 +256,6 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `login` | `(entopts) -> SdkEntity` | Create a Login entity instance. |
 | `organization` | `(entopts) -> SdkEntity` | Create an Organization entity instance. |
 | `organizationEditRole` | `(entopts) -> SdkEntity` | Create an OrganizationEditRole entity instance. |
-| `problem` | `(entopts) -> SdkEntity` | Create a Problem entity instance. |
 | `quota` | `(entopts) -> SdkEntity` | Create a Quota entity instance. |
 | `registration` | `(entopts) -> SdkEntity` | Create a Registration entity instance. |
 | `requestAttempt` | `(entopts) -> SdkEntity` | Create a RequestAttempt entity instance. |
@@ -345,6 +346,30 @@ API path: `/api/v1/application_secrets/`
 Operations: remove.
 
 API path: `/api/v1/application_secrets/{application_secret_token}`
+
+#### EmailPreference
+
+| Field | Description |
+| --- | --- |
+
+Operations: create.
+
+API path: `/api/v1/email-preferences/unsubscribe-reactivation`
+
+#### Error
+
+| Field | Description |
+| --- | --- |
+| `detail` |  |
+| `id` | Identifier of the problem that occurred, stable across releases |
+| `status` |  |
+| `title` |  |
+| `type` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+Operations: list.
+
+API path: `/api/v1/errors/`
 
 #### Event
 
@@ -466,6 +491,7 @@ API path: `/api/v1/instance/`
 | --- | --- |
 | `email` |  |
 | `password` |  |
+| `token` |  |
 
 Operations: create.
 
@@ -506,19 +532,6 @@ Operations: update.
 
 API path: `/api/v1/organizations/{organization_id}/invite`
 
-#### Problem
-
-| Field | Description |
-| --- | --- |
-| `detail` |  |
-| `id` |  |
-| `status` |  |
-| `title` |  |
-
-Operations: list.
-
-API path: `/api/v1/errors/`
-
 #### Quota
 
 | Field | Description |
@@ -539,6 +552,7 @@ API path: `/api/v1/quotas/`
 | `gclid` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` |  |
 | `password` |  |
+| `signup_channel` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` |  |
 
 Operations: create.
@@ -636,6 +650,7 @@ API path: `/api/v1/subscriptions/`
 
 | Field | Description |
 | --- | --- |
+| `current_password` |  |
 | `email` |  |
 | `new_password` |  |
 | `token` |  |
@@ -769,6 +784,52 @@ Create an instance: `SdkEntity applicationsManagement = client.applicationsManag
 | Method | Description |
 | --- | --- |
 | `remove(match, null)` | Remove the matching entity. |
+
+
+### EmailPreference
+
+Create an instance: `SdkEntity emailPreference = client.emailPreference(null);`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data, null)` | Create a new entity with the given data. |
+
+#### Example: Create
+
+```java
+Object emailPreference = client.emailPreference(null).create(Map.of(
+), null);
+```
+
+
+### Error
+
+Create an instance: `SdkEntity error = client.error(null);`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(null, null)` | List entities, optionally matching the given criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `detail` | `String` |  |
+| `id` | `String` | Identifier of the problem that occurred, stable across releases |
+| `status` | `Long` |  |
+| `title` | `String` |  |
+| `type` | `String` | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `Map<String, Object>` | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+#### Example: List
+
+```java
+Object errorList = client.error(null).list(null, null);
+```
 
 
 ### Event
@@ -1042,13 +1103,15 @@ Create an instance: `SdkEntity login = client.login(null);`
 | --- | --- | --- |
 | `email` | `String` |  |
 | `password` | `String` |  |
+| `token` | `String` |  |
 
 #### Example: Create
 
 ```java
 Object login = client.login(null).create(Map.of(
     "email", "example_email",  // String
-    "password", "example_password"  // String
+    "password", "example_password",  // String
+    "token", "example_token"  // String
 ), null);
 ```
 
@@ -1138,32 +1201,6 @@ Create an instance: `SdkEntity organizationEditRole = client.organizationEditRol
 | `user_id` | `String` |  |
 
 
-### Problem
-
-Create an instance: `SdkEntity problem = client.problem(null);`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(null, null)` | List entities, optionally matching the given criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `detail` | `String` |  |
-| `id` | `String` |  |
-| `status` | `Long` |  |
-| `title` | `String` |  |
-
-#### Example: List
-
-```java
-Object problemList = client.problem(null).list(null, null);
-```
-
-
 ### Quota
 
 Create an instance: `SdkEntity quota = client.quota(null);`
@@ -1207,6 +1244,7 @@ Create an instance: `SdkEntity registration = client.registration(null);`
 | `gclid` | `String` | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `String` |  |
 | `password` | `String` |  |
+| `signup_channel` | `String` | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `String` |  |
 
 #### Example: Create
@@ -1435,6 +1473,7 @@ Create an instance: `SdkEntity userAuthentication = client.userAuthentication(nu
 
 | Field | Type | Description |
 | --- | --- | --- |
+| `current_password` | `String` |  |
 | `email` | `String` |  |
 | `new_password` | `String` |  |
 | `token` | `String` |  |
@@ -1443,6 +1482,7 @@ Create an instance: `SdkEntity userAuthentication = client.userAuthentication(nu
 
 ```java
 Object userAuthentication = client.userAuthentication(null).create(Map.of(
+    "current_password", "example_current_password",  // String
     "email", "example_email",  // String
     "new_password", "example_new_password",  // String
     "token", "example_token"  // String

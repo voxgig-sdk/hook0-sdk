@@ -184,6 +184,8 @@ class Config {
             application: {},
             application_secret: {},
             applications_management: {},
+            email_preference: {},
+            error: {},
             event: {},
             event_type: {},
             events_management: {},
@@ -194,7 +196,6 @@ class Config {
             login: {},
             organization: {},
             organization_edit_role: {},
-            problem: {},
             quota: {},
             registration: {},
             request_attempt: {},
@@ -901,6 +902,146 @@ class Config {
                         "$.main.kit.entity.application_secret"
                     ]
                 ]
+            }
+        },
+        "email_preference": {
+            "fields": [],
+            "name": "email_preference",
+            "op": {
+                "create": {
+                    "input": "data",
+                    "name": "create",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "POST",
+                            "orig": "/api/v1/email-preferences/unsubscribe-reactivation",
+                            "segments": [
+                                {
+                                    "lit": "api"
+                                },
+                                {
+                                    "lit": "v1"
+                                },
+                                {
+                                    "lit": "email-preferences"
+                                },
+                                {
+                                    "lit": "unsubscribe-reactivation"
+                                }
+                            ],
+                            "parts": [
+                                "api",
+                                "v1",
+                                "email-preferences",
+                                "unsubscribe-reactivation"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {},
+                            "select": {
+                                "$action": "unsubscribe_reactivation"
+                            }
+                        }
+                    ]
+                }
+            },
+            "relations": {
+                "ancestors": []
+            }
+        },
+        "error": {
+            "fields": [
+                {
+                    "name": "detail",
+                    "title": "Detail",
+                    "type": "`$STRING`",
+                    "req": true
+                },
+                {
+                    "name": "id",
+                    "title": "Id",
+                    "type": "`$STRING`",
+                    "req": true,
+                    "short": "Identifier of the problem that occurred, stable across releases"
+                },
+                {
+                    "name": "status",
+                    "title": "Status",
+                    "type": "`$INTEGER`",
+                    "req": true,
+                    "format": "int32"
+                },
+                {
+                    "name": "title",
+                    "title": "Title",
+                    "type": "`$STRING`",
+                    "req": true
+                },
+                {
+                    "name": "type",
+                    "title": "Type",
+                    "type": "`$STRING`",
+                    "req": true,
+                    "short": "Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks."
+                },
+                {
+                    "name": "validation",
+                    "title": "Validation",
+                    "type": "`$OBJECT`",
+                    "short": "Which submitted values were rejected and why, keyed by the name of the field they were submitted under."
+                }
+            ],
+            "id": {
+                "field": "id",
+                "name": "id"
+            },
+            "name": "error",
+            "op": {
+                "list": {
+                    "input": "data",
+                    "name": "list",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/api/v1/errors/",
+                            "segments": [
+                                {
+                                    "lit": "api"
+                                },
+                                {
+                                    "lit": "v1"
+                                },
+                                {
+                                    "lit": "errors"
+                                }
+                            ],
+                            "parts": [
+                                "api",
+                                "v1",
+                                "errors"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {},
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        }
+                    ]
+                }
+            },
+            "relations": {
+                "ancestors": []
             }
         },
         "event": {
@@ -1916,6 +2057,12 @@ class Config {
                     "title": "Password",
                     "type": "`$STRING`",
                     "req": true
+                },
+                {
+                    "name": "token",
+                    "title": "Token",
+                    "type": "`$STRING`",
+                    "req": true
                 }
             ],
             "name": "login",
@@ -1983,6 +2130,42 @@ class Config {
                                 "v1",
                                 "auth",
                                 "refresh"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {},
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        },
+                        {
+                            "kind": "http",
+                            "method": "POST",
+                            "orig": "/api/v1/auth/verify-email",
+                            "segments": [
+                                {
+                                    "lit": "api"
+                                },
+                                {
+                                    "lit": "v1"
+                                },
+                                {
+                                    "lit": "auth"
+                                },
+                                {
+                                    "lit": "verify-email"
+                                }
+                            ],
+                            "parts": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "verify-email"
                             ],
                             "rename": {},
                             "transform": {
@@ -2516,83 +2699,6 @@ class Config {
                 "ancestors": []
             }
         },
-        "problem": {
-            "fields": [
-                {
-                    "name": "detail",
-                    "title": "Detail",
-                    "type": "`$STRING`",
-                    "req": true
-                },
-                {
-                    "name": "id",
-                    "title": "Id",
-                    "type": "`$STRING`",
-                    "req": true
-                },
-                {
-                    "name": "status",
-                    "title": "Status",
-                    "type": "`$INTEGER`",
-                    "req": true,
-                    "format": "int32"
-                },
-                {
-                    "name": "title",
-                    "title": "Title",
-                    "type": "`$STRING`",
-                    "req": true
-                }
-            ],
-            "id": {
-                "field": "id",
-                "name": "id"
-            },
-            "name": "problem",
-            "op": {
-                "list": {
-                    "input": "data",
-                    "name": "list",
-                    "points": [
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/api/v1/errors/",
-                            "segments": [
-                                {
-                                    "lit": "api"
-                                },
-                                {
-                                    "lit": "v1"
-                                },
-                                {
-                                    "lit": "errors"
-                                }
-                            ],
-                            "parts": [
-                                "api",
-                                "v1",
-                                "errors"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {},
-                            "select": {},
-                            "response": {
-                                "kind": "json",
-                                "media": "application/json"
-                            }
-                        }
-                    ]
-                }
-            },
-            "relations": {
-                "ancestors": []
-            }
-        },
         "quota": {
             "fields": [
                 {
@@ -2684,6 +2790,12 @@ class Config {
                     "title": "Password",
                     "type": "`$STRING`",
                     "req": true
+                },
+                {
+                    "name": "signup_channel",
+                    "title": "Signup Channel",
+                    "type": "`$STRING`",
+                    "short": "Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters."
                 },
                 {
                     "name": "turnstile_token",
@@ -3964,6 +4076,12 @@ class Config {
         "user_authentication": {
             "fields": [
                 {
+                    "name": "current_password",
+                    "title": "Current Password",
+                    "type": "`$STRING`",
+                    "req": true
+                },
+                {
                     "name": "email",
                     "title": "Email",
                     "type": "`$STRING`",
@@ -4087,6 +4205,38 @@ class Config {
                         {
                             "kind": "http",
                             "method": "POST",
+                            "orig": "/api/v1/auth/resend-verification-email",
+                            "segments": [
+                                {
+                                    "lit": "api"
+                                },
+                                {
+                                    "lit": "v1"
+                                },
+                                {
+                                    "lit": "auth"
+                                },
+                                {
+                                    "lit": "resend-verification-email"
+                                }
+                            ],
+                            "parts": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "resend-verification-email"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {},
+                            "select": {}
+                        },
+                        {
+                            "kind": "http",
+                            "method": "POST",
                             "orig": "/api/v1/auth/reset-password",
                             "segments": [
                                 {
@@ -4107,38 +4257,6 @@ class Config {
                                 "v1",
                                 "auth",
                                 "reset-password"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {},
-                            "select": {}
-                        },
-                        {
-                            "kind": "http",
-                            "method": "POST",
-                            "orig": "/api/v1/auth/verify-email",
-                            "segments": [
-                                {
-                                    "lit": "api"
-                                },
-                                {
-                                    "lit": "v1"
-                                },
-                                {
-                                    "lit": "auth"
-                                },
-                                {
-                                    "lit": "verify-email"
-                                }
-                            ],
-                            "parts": [
-                                "api",
-                                "v1",
-                                "auth",
-                                "verify-email"
                             ],
                             "rename": {},
                             "transform": {

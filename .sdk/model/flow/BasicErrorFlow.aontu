@@ -1,0 +1,22 @@
+# BasicErrorFlow
+
+main: kit: flow: BasicErrorFlow:
+{
+  entity: "error",
+  kind: "basic",
+  name: "BasicErrorFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "error_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicErrorFlow"
+}

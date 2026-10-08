@@ -3,6 +3,8 @@
 import { ApplicationEntity } from './entity/ApplicationEntity'
 import { ApplicationSecretEntity } from './entity/ApplicationSecretEntity'
 import { ApplicationsManagementEntity } from './entity/ApplicationsManagementEntity'
+import { EmailPreferenceEntity } from './entity/EmailPreferenceEntity'
+import { ErrorEntity } from './entity/ErrorEntity'
 import { EventEntity } from './entity/EventEntity'
 import { EventTypeEntity } from './entity/EventTypeEntity'
 import { EventsManagementEntity } from './entity/EventsManagementEntity'
@@ -13,7 +15,6 @@ import { InstanceEntity } from './entity/InstanceEntity'
 import { LoginEntity } from './entity/LoginEntity'
 import { OrganizationEntity } from './entity/OrganizationEntity'
 import { OrganizationEditRoleEntity } from './entity/OrganizationEditRoleEntity'
-import { ProblemEntity } from './entity/ProblemEntity'
 import { QuotaEntity } from './entity/QuotaEntity'
 import { RegistrationEntity } from './entity/RegistrationEntity'
 import { RequestAttemptEntity } from './entity/RequestAttemptEntity'
@@ -368,6 +369,24 @@ class Hook0SDK {
   }
 
 
+  // Entity access: `client.EmailPreference().list()` / `client.EmailPreference().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  EmailPreference(entopts?: Record<string, any>) {
+    const self = this
+    return new EmailPreferenceEntity(self, entopts)
+  }
+
+
+  // Entity access: `client.Error().list()` / `client.Error().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  Error(entopts?: Record<string, any>) {
+    const self = this
+    return new ErrorEntity(self, entopts)
+  }
+
+
   // Entity access: `client.Event().list()` / `client.Event().load({ id })`.
   // The argument is the entity OPTIONS object (passed to the entity
   // constructor as entopts), not initial entity data.
@@ -455,15 +474,6 @@ class Hook0SDK {
   OrganizationEditRole(entopts?: Record<string, any>) {
     const self = this
     return new OrganizationEditRoleEntity(self, entopts)
-  }
-
-
-  // Entity access: `client.Problem().list()` / `client.Problem().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  Problem(entopts?: Record<string, any>) {
-    const self = this
-    return new ProblemEntity(self, entopts)
   }
 
 

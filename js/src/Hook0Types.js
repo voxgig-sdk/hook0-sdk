@@ -112,6 +112,34 @@
  */
 
 /**
+ * @typedef {Object} EmailPreference
+ */
+
+/**
+ * @typedef {Object} EmailPreferenceCreateData
+ */
+
+/**
+ * @typedef {Object} Error
+ * @property {string} detail
+ * @property {string} id
+ * @property {number} status
+ * @property {string} title
+ * @property {string} type
+ * @property {Object} [validation]
+ */
+
+/**
+ * @typedef {Object} ErrorListMatch
+ * @property {string} [detail]
+ * @property {string} [id]
+ * @property {number} [status]
+ * @property {string} [title]
+ * @property {string} [type]
+ * @property {Object} [validation]
+ */
+
+/**
  * @typedef {Object} Event
  * @property {string} event_id
  * @property {string} event_type_name
@@ -295,12 +323,14 @@
  * @typedef {Object} Login
  * @property {string} email
  * @property {string} password
+ * @property {string} token
  */
 
 /**
  * @typedef {Object} LoginCreateData
  * @property {string} email
  * @property {string} password
+ * @property {string} token
  */
 
 /**
@@ -400,22 +430,6 @@
  */
 
 /**
- * @typedef {Object} Problem
- * @property {string} detail
- * @property {string} id
- * @property {number} status
- * @property {string} title
- */
-
-/**
- * @typedef {Object} ProblemListMatch
- * @property {string} [detail]
- * @property {string} [id]
- * @property {number} [status]
- * @property {string} [title]
- */
-
-/**
  * @typedef {Object} Quota
  * @property {boolean} enabled
  * @property {Object} limits
@@ -434,6 +448,7 @@
  * @property {string} [gclid]
  * @property {string} last_name
  * @property {string} password
+ * @property {string} [signup_channel]
  * @property {string} [turnstile_token]
  */
 
@@ -444,6 +459,7 @@
  * @property {string} [gclid]
  * @property {string} last_name
  * @property {string} password
+ * @property {string} [signup_channel]
  * @property {string} [turnstile_token]
  */
 
@@ -630,6 +646,7 @@
 
 /**
  * @typedef {Object} UserAuthentication
+ * @property {string} current_password
  * @property {string} email
  * @property {string} new_password
  * @property {string} token
@@ -637,6 +654,7 @@
 
 /**
  * @typedef {Object} UserAuthenticationCreateData
+ * @property {string} current_password
  * @property {string} email
  * @property {string} new_password
  * @property {string} token

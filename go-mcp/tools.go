@@ -13,7 +13,7 @@ import (
 
 // ListArgs is what an agent sends to hook0_list.
 type ListArgs struct {
-	Entity string         `json:"entity" jsonschema:"one of: application | application_secret | event | event_type | events_management | hook0 | organization | problem | request_attempt | service_token | subscription"`
+	Entity string         `json:"entity" jsonschema:"one of: application | application_secret | error | event | event_type | events_management | hook0 | organization | request_attempt | service_token | subscription"`
 	Query  map[string]any `json:"query,omitempty" jsonschema:"optional filter map; omit it for the first page"`
 }
 
@@ -28,7 +28,7 @@ func registerTools(server *mcp.Server, client *sdk.Hook0SDK) {
 		Name:        "hook0_list",
 		Description: "List records from Hook0. Args: entity, query (optional filter map; omit it for the first page). Returns the first page of records as JSON.",
 		Annotations: &mcp.ToolAnnotations{ReadOnlyHint: true},
-		InputSchema: entitySchema[ListArgs]("application", "application_secret", "event", "event_type", "events_management", "hook0", "organization", "problem", "request_attempt", "service_token", "subscription"),
+		InputSchema: entitySchema[ListArgs]("application", "application_secret", "error", "event", "event_type", "events_management", "hook0", "organization", "request_attempt", "service_token", "subscription"),
 	}, func(ctx context.Context, req *mcp.CallToolRequest, args ListArgs) (*mcp.CallToolResult, any, error) {
 		return runOp(ctx, client, "list", args.Entity, args.Query)
 	})
@@ -109,6 +109,10 @@ func entityFor(client *sdk.Hook0SDK, name string) (sdk.Hook0Entity, error) {
 		return client.ApplicationSecret(nil), nil
 	case "applications_management":
 		return client.ApplicationsManagement(nil), nil
+	case "email_preference":
+		return client.EmailPreference(nil), nil
+	case "error":
+		return client.Error(nil), nil
 	case "event":
 		return client.Event(nil), nil
 	case "event_type":
@@ -129,8 +133,6 @@ func entityFor(client *sdk.Hook0SDK, name string) (sdk.Hook0Entity, error) {
 		return client.Organization(nil), nil
 	case "organization_edit_role":
 		return client.OrganizationEditRole(nil), nil
-	case "problem":
-		return client.Problem(nil), nil
 	case "quota":
 		return client.Quota(nil), nil
 	case "registration":

@@ -29,7 +29,7 @@ describe("UserAuthenticationEntity", function()
       return
     end
     local client = sdk.test(nil, { feature = { validate = { active = true } } })
-    local _, err = client:UserAuthentication(nil):create({ ["email"] = 1, ["new_password"] = "x", ["token"] = "x" }, nil)
+    local _, err = client:UserAuthentication(nil):create({ ["current_password"] = 1, ["email"] = "x", ["new_password"] = "x", ["token"] = "x" }, nil)
     assert.are.equal("validate_failed", type(err) == "table" and err.code or nil)
   end)
 

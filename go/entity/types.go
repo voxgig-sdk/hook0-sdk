@@ -100,6 +100,28 @@ type ApplicationsManagementRemoveMatch struct {
 	ApplicationId string `json:"application_id"`
 }
 
+// EmailPreference is the typed data model for the email_preference entity.
+type EmailPreference struct {
+}
+
+// EmailPreferenceCreateData is the typed request payload for EmailPreference.CreateTyped.
+type EmailPreferenceCreateData struct {
+}
+
+// Error is the typed data model for the error entity.
+type Error struct {
+}
+
+// ErrorListMatch is the typed request payload for Error.ListTyped.
+type ErrorListMatch struct {
+	Detail *string `json:"detail,omitempty"`
+	Id *string `json:"id,omitempty"`
+	Status *int `json:"status,omitempty"`
+	Title *string `json:"title,omitempty"`
+	Type *string `json:"type,omitempty"`
+	Validation *map[string]any `json:"validation,omitempty"`
+}
+
 // Event is the typed data model for the event entity.
 type Event struct {
 }
@@ -237,6 +259,7 @@ type Login struct {
 type LoginCreateData struct {
 	Email string `json:"email"`
 	Password string `json:"password"`
+	Token string `json:"token"`
 }
 
 // Organization is the typed data model for the organization entity.
@@ -318,18 +341,6 @@ type OrganizationEditRoleUpdateData struct {
 	UserId *string `json:"user_id,omitempty"`
 }
 
-// Problem is the typed data model for the problem entity.
-type Problem struct {
-}
-
-// ProblemListMatch is the typed request payload for Problem.ListTyped.
-type ProblemListMatch struct {
-	Detail *string `json:"detail,omitempty"`
-	Id *string `json:"id,omitempty"`
-	Status *int `json:"status,omitempty"`
-	Title *string `json:"title,omitempty"`
-}
-
 // Quota is the typed data model for the quota entity.
 type Quota struct {
 }
@@ -351,6 +362,7 @@ type RegistrationCreateData struct {
 	Gclid *string `json:"gclid,omitempty"`
 	LastName string `json:"last_name"`
 	Password string `json:"password"`
+	SignupChannel *string `json:"signup_channel,omitempty"`
 	TurnstileToken *string `json:"turnstile_token,omitempty"`
 }
 
@@ -499,6 +511,7 @@ type UserAuthentication struct {
 
 // UserAuthenticationCreateData is the typed request payload for UserAuthentication.CreateTyped.
 type UserAuthenticationCreateData struct {
+	CurrentPassword string `json:"current_password"`
 	Email string `json:"email"`
 	NewPassword string `json:"new_password"`
 	Token string `json:"token"`

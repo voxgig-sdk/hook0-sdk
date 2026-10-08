@@ -2,30 +2,33 @@
   "existing": {
     "registration": {
       "REGISTRATION00": {
-        "email": "s3c",
-        "first_name": "s3d",
-        "gclid": "s3e",
-        "last_name": "s3f",
-        "password": "s40",
-        "turnstile_token": "s41",
+        "email": "s46",
+        "first_name": "s47",
+        "gclid": "s48",
+        "last_name": "s49",
+        "password": "s4a",
+        "signup_channel": "s4b",
+        "turnstile_token": "s4c",
         "id": "REGISTRATION00"
       },
       "REGISTRATION01": {
-        "email": "s78",
-        "first_name": "s79",
-        "gclid": "s7a",
-        "last_name": "s7b",
-        "password": "s7c",
-        "turnstile_token": "s7d",
+        "email": "s8c",
+        "first_name": "s8d",
+        "gclid": "s8e",
+        "last_name": "s8f",
+        "password": "s90",
+        "signup_channel": "s91",
+        "turnstile_token": "s92",
         "id": "REGISTRATION01"
       },
       "REGISTRATION02": {
-        "email": "sb4",
-        "first_name": "sb5",
-        "gclid": "sb6",
-        "last_name": "sb7",
-        "password": "sb8",
-        "turnstile_token": "sb9",
+        "email": "sd2",
+        "first_name": "sd3",
+        "gclid": "sd4",
+        "last_name": "sd5",
+        "password": "sd6",
+        "signup_channel": "sd7",
+        "turnstile_token": "sd8",
         "id": "REGISTRATION02"
       }
     }
@@ -33,12 +36,13 @@
   "new": {
     "registration": {
       "registration_ref01": {
-        "email": "sf0",
-        "first_name": "sf1",
-        "gclid": "sf2",
-        "last_name": "sf3",
-        "password": "sf4",
-        "turnstile_token": "sf5"
+        "email": "s118",
+        "first_name": "s119",
+        "gclid": "s11a",
+        "last_name": "s11b",
+        "password": "s11c",
+        "signup_channel": "s11d",
+        "turnstile_token": "s11e"
       }
     }
   },

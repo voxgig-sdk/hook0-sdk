@@ -59,6 +59,16 @@ initial options.
 Create a new `ApplicationsManagementEntity` instance. Pass `h.vnull()` for no
 initial options.
 
+#### `email_preference(entopts: Value) *EmailPreferenceEntity`
+
+Create a new `EmailPreferenceEntity` instance. Pass `h.vnull()` for no
+initial options.
+
+#### `error_(entopts: Value) *ErrorEntity`
+
+Create a new `ErrorEntity` instance. Pass `h.vnull()` for no
+initial options.
+
 #### `event(entopts: Value) *EventEntity`
 
 Create a new `EventEntity` instance. Pass `h.vnull()` for no
@@ -107,11 +117,6 @@ initial options.
 #### `organization_edit_role(entopts: Value) *OrganizationEditRoleEntity`
 
 Create a new `OrganizationEditRoleEntity` instance. Pass `h.vnull()` for no
-initial options.
-
-#### `problem(entopts: Value) *ProblemEntity`
-
-Create a new `ProblemEntity` instance. Pass `h.vnull()` for no
 initial options.
 
 #### `quota(entopts: Value) *QuotaEntity`
@@ -419,6 +424,110 @@ Remove the entity matching the given criteria. `.ok` carries the entity, marked 
 switch (client.applications_management(h.vnull()).remove(h.jo(&.{.{ "application_secret_token", h.vstr("application_secret_token") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
+}
+```
+
+### Common Methods
+
+#### `data(args: ?Value) Value`
+
+Get the entity data. Pass a map to set it.
+
+#### `matchv(args: ?Value) Value`
+
+Get the entity match criteria. Pass a map to set it.
+
+#### `stream(action: []const u8, args: Value, callopts: Value) StreamResult`
+
+Run an operation through the pipeline and materialise its result items.
+`StreamResult` is `.ok` with the items, or `.err` with the error that
+failed the operation, as an operation call reports it. Under `throw: false`
+in `callopts.ctrl`, a failed stream is `.ok` with whatever data the
+failure left.
+
+#### `get_name() []const u8`
+
+Return the entity name.
+
+
+---
+
+## EmailPreferenceEntity
+
+```zig
+const email_preference = client.email_preference(h.vnull());
+```
+
+### Operations
+
+#### `create(reqdata: Value, ctrl: Value) EntResult`
+
+Create a new entity with the given data. `.ok` carries the created entity.
+
+```zig
+switch (client.email_preference(h.vnull()).create(h.jo(&.{
+}), h.vnull())) {
+    .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
+    .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
+}
+```
+
+### Common Methods
+
+#### `data(args: ?Value) Value`
+
+Get the entity data. Pass a map to set it.
+
+#### `matchv(args: ?Value) Value`
+
+Get the entity match criteria. Pass a map to set it.
+
+#### `stream(action: []const u8, args: Value, callopts: Value) StreamResult`
+
+Run an operation through the pipeline and materialise its result items.
+`StreamResult` is `.ok` with the items, or `.err` with the error that
+failed the operation, as an operation call reports it. Under `throw: false`
+in `callopts.ctrl`, a failed stream is `.ok` with whatever data the
+failure left.
+
+#### `get_name() []const u8`
+
+Return the entity name.
+
+
+---
+
+## ErrorEntity
+
+```zig
+const error_ = client.error_(h.vnull());
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `detail` | `[]const u8` | Yes |  |
+| `id` | `[]const u8` | Yes | Identifier of the problem that occurred, stable across releases |
+| `status` | `i64` | Yes |  |
+| `title` | `[]const u8` | Yes |  |
+| `type` | `[]const u8` | Yes | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `Value (object)` | No | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+### Operations
+
+#### `list(reqmatch: Value, ctrl: Value) EntListResult`
+
+List entities matching the given criteria. The match is optional — pass `h.vnull()` to list all records. `.ok` is a slice of entities, one per record.
+
+```zig
+switch (client.error_(h.vnull()).list(h.vnull(), h.vnull())) {
+    .ok => |results| {
+        for (results) |result| {
+            std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))});
+        }
+    },
+    .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -945,6 +1054,7 @@ const login = client.login(h.vnull());
 | --- | --- | --- | --- |
 | `email` | `[]const u8` | Yes |  |
 | `password` | `[]const u8` | Yes |  |
+| `token` | `[]const u8` | Yes |  |
 
 ### Operations
 
@@ -956,6 +1066,7 @@ Create a new entity with the given data. `.ok` carries the created entity.
 switch (client.login(h.vnull()).create(h.jo(&.{
     .{ "email", h.vstr("example_email") }, // []const u8
     .{ "password", h.vstr("example_password") }, // []const u8
+    .{ "token", h.vstr("example_token") }, // []const u8
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1170,63 +1281,6 @@ Return the entity name.
 
 ---
 
-## ProblemEntity
-
-```zig
-const problem = client.problem(h.vnull());
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `detail` | `[]const u8` | Yes |  |
-| `id` | `[]const u8` | Yes |  |
-| `status` | `i64` | Yes |  |
-| `title` | `[]const u8` | Yes |  |
-
-### Operations
-
-#### `list(reqmatch: Value, ctrl: Value) EntListResult`
-
-List entities matching the given criteria. The match is optional — pass `h.vnull()` to list all records. `.ok` is a slice of entities, one per record.
-
-```zig
-switch (client.problem(h.vnull()).list(h.vnull(), h.vnull())) {
-    .ok => |results| {
-        for (results) |result| {
-            std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))});
-        }
-    },
-    .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
-}
-```
-
-### Common Methods
-
-#### `data(args: ?Value) Value`
-
-Get the entity data. Pass a map to set it.
-
-#### `matchv(args: ?Value) Value`
-
-Get the entity match criteria. Pass a map to set it.
-
-#### `stream(action: []const u8, args: Value, callopts: Value) StreamResult`
-
-Run an operation through the pipeline and materialise its result items.
-`StreamResult` is `.ok` with the items, or `.err` with the error that
-failed the operation, as an operation call reports it. Under `throw: false`
-in `callopts.ctrl`, a failed stream is `.ok` with whatever data the
-failure left.
-
-#### `get_name() []const u8`
-
-Return the entity name.
-
-
----
-
 ## QuotaEntity
 
 ```zig
@@ -1293,6 +1347,7 @@ const registration = client.registration(h.vnull());
 | `gclid` | `[]const u8` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `[]const u8` | Yes |  |
 | `password` | `[]const u8` | Yes |  |
+| `signup_channel` | `[]const u8` | No | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `[]const u8` | No |  |
 
 ### Operations
@@ -1787,6 +1842,7 @@ const user_authentication = client.user_authentication(h.vnull());
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `current_password` | `[]const u8` | Yes |  |
 | `email` | `[]const u8` | Yes |  |
 | `new_password` | `[]const u8` | Yes |  |
 | `token` | `[]const u8` | Yes |  |
@@ -1799,6 +1855,7 @@ Create a new entity with the given data. `.ok` carries the created entity.
 
 ```zig
 switch (client.user_authentication(h.vnull()).create(h.jo(&.{
+    .{ "current_password", h.vstr("example_current_password") }, // []const u8
     .{ "email", h.vstr("example_email") }, // []const u8
     .{ "new_password", h.vstr("example_new_password") }, // []const u8
     .{ "token", h.vstr("example_token") }, // []const u8

@@ -87,6 +87,26 @@
 ---@field application_secret_token string
 ---@field application_id string
 
+---@class EmailPreference
+
+---@class EmailPreferenceCreateData
+
+---@class Error
+---@field detail string
+---@field id string
+---@field status number
+---@field title string
+---@field type string
+---@field validation? table
+
+---@class ErrorListMatch
+---@field detail? string
+---@field id? string
+---@field status? number
+---@field title? string
+---@field type? string
+---@field validation? table
+
 ---@class Event
 ---@field event_id string
 ---@field event_type_name string
@@ -232,10 +252,12 @@
 ---@class Login
 ---@field email string
 ---@field password string
+---@field token string
 
 ---@class LoginCreateData
 ---@field email string
 ---@field password string
+---@field token string
 
 ---@class Organization
 ---@field amount number
@@ -317,18 +339,6 @@
 ---@field role? string
 ---@field user_id? string
 
----@class Problem
----@field detail string
----@field id string
----@field status number
----@field title string
-
----@class ProblemListMatch
----@field detail? string
----@field id? string
----@field status? number
----@field title? string
-
 ---@class Quota
 ---@field enabled boolean
 ---@field limits table
@@ -343,6 +353,7 @@
 ---@field gclid? string
 ---@field last_name string
 ---@field password string
+---@field signup_channel? string
 ---@field turnstile_token? string
 
 ---@class RegistrationCreateData
@@ -351,6 +362,7 @@
 ---@field gclid? string
 ---@field last_name string
 ---@field password string
+---@field signup_channel? string
 ---@field turnstile_token? string
 
 ---@class RequestAttempt
@@ -497,11 +509,13 @@
 ---@field application_id string
 
 ---@class UserAuthentication
+---@field current_password string
 ---@field email string
 ---@field new_password string
 ---@field token string
 
 ---@class UserAuthenticationCreateData
+---@field current_password string
 ---@field email string
 ---@field new_password string
 ---@field token string

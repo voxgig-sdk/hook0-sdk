@@ -79,6 +79,28 @@ export interface ApplicationsManagementRemoveMatch {
     application_secret_token: string;
     application_id: string;
 }
+export interface EmailPreference {
+}
+export interface EmailPreferenceCreateData {
+    $action?: string;
+    [action: string]: any;
+}
+export interface ErrorType {
+    detail: string;
+    id: string;
+    status: number;
+    title: string;
+    type: string;
+    validation?: Record<string, any>;
+}
+export interface ErrorListMatch {
+    detail?: string;
+    id?: string;
+    status?: number;
+    title?: string;
+    type?: string;
+    validation?: Record<string, any>;
+}
 export interface Event {
     event_id: string;
     event_type_name: string;
@@ -226,10 +248,12 @@ export interface InstanceLoadMatch {
 export interface Login {
     email: string;
     password: string;
+    token: string;
 }
 export interface LoginCreateData {
     email: string;
     password: string;
+    token: string;
 }
 export interface Organization {
     amount: number;
@@ -313,18 +337,6 @@ export interface OrganizationEditRoleUpdateData {
     $action?: string;
     [action: string]: any;
 }
-export interface Problem {
-    detail: string;
-    id: string;
-    status: number;
-    title: string;
-}
-export interface ProblemListMatch {
-    detail?: string;
-    id?: string;
-    status?: number;
-    title?: string;
-}
 export interface Quota {
     enabled: boolean;
     limits: Record<string, any>;
@@ -339,6 +351,7 @@ export interface Registration {
     gclid?: string;
     last_name: string;
     password: string;
+    signup_channel?: string;
     turnstile_token?: string;
 }
 export interface RegistrationCreateData {
@@ -347,6 +360,7 @@ export interface RegistrationCreateData {
     gclid?: string;
     last_name: string;
     password: string;
+    signup_channel?: string;
     turnstile_token?: string;
 }
 export interface RequestAttempt {
@@ -493,11 +507,13 @@ export interface SubscriptionRemoveMatch {
     application_id: string;
 }
 export interface UserAuthentication {
+    current_password: string;
     email: string;
     new_password: string;
     token: string;
 }
 export interface UserAuthenticationCreateData {
+    current_password: string;
     email: string;
     new_password: string;
     token: string;

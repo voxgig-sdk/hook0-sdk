@@ -462,6 +462,26 @@ fn try_applications_management_remove(client: *sdk.SDK, mtch: Value, ctrl: Value
     }
 }
 
+fn try_email_preference_create(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
+    const ent = client.email_preference(vnull());
+    switch (ent.create(mtch, ctrl)) {
+        .ok => |res| return .{ .ok = true, .err = null, .result = res.asEntity().data(null), .match = ent.asEntity().matchv(null) },
+        .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
+    }
+}
+
+fn try_error__list(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
+    const ent = client.error_(vnull());
+    switch (ent.list(mtch, ctrl)) {
+        .ok => |ents| {
+            const records = h.olist();
+            for (ents) |e| records.array.append(e.asEntity().data(null)) catch {};
+            return .{ .ok = true, .err = null, .result = records, .match = ent.asEntity().matchv(null) };
+        },
+        .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
+    }
+}
+
 fn try_event_list(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
     const ent = client.event(vnull());
     switch (ent.list(mtch, ctrl)) {
@@ -630,18 +650,6 @@ fn try_organization_edit_role_update(client: *sdk.SDK, mtch: Value, ctrl: Value)
     const ent = client.organization_edit_role(vnull());
     switch (ent.update(mtch, ctrl)) {
         .ok => |res| return .{ .ok = true, .err = null, .result = res.asEntity().data(null), .match = ent.asEntity().matchv(null) },
-        .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
-    }
-}
-
-fn try_problem_list(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
-    const ent = client.problem(vnull());
-    switch (ent.list(mtch, ctrl)) {
-        .ok => |ents| {
-            const records = h.olist();
-            for (ents) |e| records.array.append(e.asEntity().data(null)) catch {};
-            return .{ .ok = true, .err = null, .result = records, .match = ent.asEntity().matchv(null) };
-        },
         .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
     }
 }
@@ -838,6 +846,14 @@ fn stream_applications_management_remove(client: *sdk.SDK, mtch: Value, callopts
     return client.applications_management(vnull()).stream("remove", mtch, callopts);
 }
 
+fn stream_email_preference_create(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
+    return client.email_preference(vnull()).stream("create", mtch, callopts);
+}
+
+fn stream_error__list(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
+    return client.error_(vnull()).stream("list", mtch, callopts);
+}
+
 fn stream_event_list(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
     return client.event(vnull()).stream("list", mtch, callopts);
 }
@@ -912,10 +928,6 @@ fn stream_organization_update(client: *sdk.SDK, mtch: Value, callopts: Value) sd
 
 fn stream_organization_edit_role_update(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
     return client.organization_edit_role(vnull()).stream("update", mtch, callopts);
-}
-
-fn stream_problem_list(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
-    return client.problem(vnull()).stream("list", mtch, callopts);
 }
 
 fn stream_quota_load(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
@@ -1004,6 +1016,8 @@ const CANDIDATES = [_]CandidateDef{
     .{ .run = try_application_secret_create, .stream = stream_application_secret_create, .params = &.{} },
     .{ .run = try_application_secret_update, .stream = stream_application_secret_update, .params = &.{"id"} },
     .{ .run = try_applications_management_remove, .stream = stream_applications_management_remove, .params = &.{"application_secret_token"} },
+    .{ .run = try_email_preference_create, .stream = stream_email_preference_create, .params = &.{} },
+    .{ .run = try_error__list, .stream = stream_error__list, .params = &.{} },
     .{ .run = try_event_list, .stream = stream_event_list, .params = &.{} },
     .{ .run = try_event_load, .stream = stream_event_load, .params = &.{"id"} },
     .{ .run = try_event_create, .stream = stream_event_create, .params = &.{"id"} },
@@ -1023,7 +1037,6 @@ const CANDIDATES = [_]CandidateDef{
     .{ .run = try_organization_remove, .stream = stream_organization_remove, .params = &.{"id"} },
     .{ .run = try_organization_update, .stream = stream_organization_update, .params = &.{"id"} },
     .{ .run = try_organization_edit_role_update, .stream = stream_organization_edit_role_update, .params = &.{"id"} },
-    .{ .run = try_problem_list, .stream = stream_problem_list, .params = &.{} },
     .{ .run = try_quota_load, .stream = stream_quota_load, .params = &.{} },
     .{ .run = try_registration_create, .stream = stream_registration_create, .params = &.{} },
     .{ .run = try_request_attempt_list, .stream = stream_request_attempt_list, .params = &.{} },

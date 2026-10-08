@@ -4,9 +4,9 @@
 #   guide.aontu
 
 guide: {
-  metrics: count: entity: 23
-  metrics: count: path: 36
-  metrics: count: method: 54
+  metrics: count: entity: 24
+  metrics: count: path: 38
+  metrics: count: method: 56
 
   entity: application: {
     path: "/api/v1/applications/": {
@@ -38,6 +38,19 @@ guide: {
   entity: applications_management: {
     path: "/api/v1/application_secrets/{application_secret_token}": {
       op: remove: method: *DELETE
+    }
+  }
+
+  entity: email_preference: {
+    path: "/api/v1/email-preferences/unsubscribe-reactivation": {
+      action: "unsubscribe_reactivation": {}
+      op: create: method: *POST
+    }
+  }
+
+  entity: error: {
+    path: "/api/v1/errors/": {
+      op: list: method: *GET
     }
   }
 
@@ -107,6 +120,9 @@ guide: {
     path: "/api/v1/auth/refresh": {
       op: create: method: *POST
     }
+    path: "/api/v1/auth/verify-email": {
+      op: create: method: *POST
+    }
   }
 
   entity: organization: {
@@ -130,12 +146,6 @@ guide: {
       action: "invite": {}
       rename: param: "organization_id": *"id"
       op: update: method: *PUT
-    }
-  }
-
-  entity: problem: {
-    path: "/api/v1/errors/": {
-      op: list: method: *GET
     }
   }
 
@@ -210,10 +220,10 @@ guide: {
     path: "/api/v1/auth/password": {
       op: create: method: *POST
     }
-    path: "/api/v1/auth/reset-password": {
+    path: "/api/v1/auth/resend-verification-email": {
       op: create: method: *POST
     }
-    path: "/api/v1/auth/verify-email": {
+    path: "/api/v1/auth/reset-password": {
       op: create: method: *POST
     }
   }

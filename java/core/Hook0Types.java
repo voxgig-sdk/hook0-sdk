@@ -44,6 +44,14 @@ public final class Hook0Types {
 
   public record ApplicationsManagementRemoveMatch(String application_secret_token, String application_id) {}
 
+  public record EmailPreference() {}
+
+  public record EmailPreferenceCreateData() {}
+
+  public record Error(String detail, String id, Long status, String title, String type, Map<String, Object> validation) {}
+
+  public record ErrorListMatch(String detail, String id, Long status, String title, String type, Map<String, Object> validation) {}
+
   public record Event(String event_id, String event_type_name, String id, String ip, Map<String, Object> labels, Map<String, Object> metadata, String occurred_at, String payload, String payload_content_type, String received_at) {}
 
   public record EventLoadMatch(String id, String application_id) {}
@@ -82,9 +90,9 @@ public final class Hook0Types {
 
   public record InstanceLoadMatch(Boolean application_secret_compatibility, Boolean auto_db_migration, String biscuit_public_key, String cloudflare_turnstile_site_key, Map<String, Object> formbricks, Map<String, Object> matomo, Long password_minimum_length, Boolean quota_enforcement, Boolean registration_disabled, String support_email_address) {}
 
-  public record Login(String email, String password) {}
+  public record Login(String email, String password, String token) {}
 
-  public record LoginCreateData(String email, String password) {}
+  public record LoginCreateData(String email, String password, String token) {}
 
   public record Organization(Long amount, String application_id, String application_name, Map<String, Object> consumption, String date, String id, Boolean is_provisional, String name, Map<String, Object> onboarding_steps, String organization_id, Map<String, Object> plan, Map<String, Object> quotas, String role, List<Object> users) {}
 
@@ -102,17 +110,13 @@ public final class Hook0Types {
 
   public record OrganizationEditRoleUpdateData(String id, String role, String user_id) {}
 
-  public record Problem(String detail, String id, Long status, String title) {}
-
-  public record ProblemListMatch(String detail, String id, Long status, String title) {}
-
   public record Quota(Boolean enabled, Map<String, Object> limits) {}
 
   public record QuotaLoadMatch(Boolean enabled, Map<String, Object> limits) {}
 
-  public record Registration(String email, String first_name, String gclid, String last_name, String password, String turnstile_token) {}
+  public record Registration(String email, String first_name, String gclid, String last_name, String password, String signup_channel, String turnstile_token) {}
 
-  public record RegistrationCreateData(String email, String first_name, String gclid, String last_name, String password, String turnstile_token) {}
+  public record RegistrationCreateData(String email, String first_name, String gclid, String last_name, String password, String signup_channel, String turnstile_token) {}
 
   public record RequestAttempt(String created_at, String delay_until, Map<String, Object> event, String event_id, String failed_at, Long http_response_status, String id, String picked_at, String request_attempt_id, String response_id, Long retry_count, Map<String, Object> status, Map<String, Object> subscription, String succeeded_at) {}
 
@@ -152,9 +156,9 @@ public final class Hook0Types {
 
   public record SubscriptionRemoveMatch(String id, String application_id) {}
 
-  public record UserAuthentication(String email, String new_password, String token) {}
+  public record UserAuthentication(String current_password, String email, String new_password, String token) {}
 
-  public record UserAuthenticationCreateData(String email, String new_password, String token) {}
+  public record UserAuthenticationCreateData(String current_password, String email, String new_password, String token) {}
 
   public record UserInvitation(String email, String role) {}
 

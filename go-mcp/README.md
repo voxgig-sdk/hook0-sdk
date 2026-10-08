@@ -137,11 +137,11 @@ failure message (e.g. unknown entity, or an API error).
 ### Entities
 
 Each tool takes as its `entity` argument one of the entities that has its
-operation, of the 23 the SDK has:
+operation, of the 24 the SDK has:
 
 | Tool | Entities |
 |------|----------|
-| `hook0_list` | application, application_secret, event, event_type, events_management, hook0, organization, problem, request_attempt, service_token, subscription |
+| `hook0_list` | application, application_secret, error, event, event_type, events_management, hook0, organization, request_attempt, service_token, subscription |
 | `hook0_load` | application, event, event_type, health, instance, organization, quota, request_attempt, response, service_token, subscription |
 
 JSON schemas are emitted by the SDK from each tool's argument struct's

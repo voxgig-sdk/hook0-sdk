@@ -5,6 +5,12 @@ main: kit: entity: user_authentication: {
   alias: field: {}
 
   fields: {
+    current_password: {
+      h: "Current Password"
+      n: "current_password"
+      r: true
+      t: "`$STRING`"
+    }
     email: {
       h: "Email"
       n: "email"
@@ -89,6 +95,7 @@ main: kit: entity: user_authentication: {
         }
         {
           bf: [
+            "current_password"
             "new_password"
           ]
           co: {
@@ -110,6 +117,36 @@ main: kit: entity: user_authentication: {
             }
             {
               lit: "password"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          bf: [
+            "email"
+          ]
+          co: {
+            id: "POST /api/v1/auth/resend-verification-email"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/api/v1/auth/resend-verification-email"
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "auth"
+            }
+            {
+              lit: "resend-verification-email"
             }
           ]
           t: {
@@ -141,36 +178,6 @@ main: kit: entity: user_authentication: {
             }
             {
               lit: "reset-password"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          bf: [
-            "token"
-          ]
-          co: {
-            id: "POST /api/v1/auth/verify-email"
-            source: "openapi3"
-            version: 2
-          }
-          m: "POST"
-          o: "/api/v1/auth/verify-email"
-          s: [
-            {
-              lit: "api"
-            }
-            {
-              lit: "v1"
-            }
-            {
-              lit: "auth"
-            }
-            {
-              lit: "verify-email"
             }
           ]
           t: {

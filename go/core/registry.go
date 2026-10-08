@@ -26,6 +26,10 @@ var NewApplicationSecretEntityFunc func(client *Hook0SDK, entopts map[string]any
 
 var NewApplicationsManagementEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 
+var NewEmailPreferenceEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+
+var NewErrorEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+
 var NewEventEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 
 var NewEventTypeEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
@@ -45,8 +49,6 @@ var NewLoginEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entit
 var NewOrganizationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 
 var NewOrganizationEditRoleEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
-
-var NewProblemEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 
 var NewQuotaEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 

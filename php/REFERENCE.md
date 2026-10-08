@@ -54,6 +54,14 @@ Create a new `ApplicationSecretEntity` instance. Pass `null` for no initial data
 
 Create a new `ApplicationsManagementEntity` instance. Pass `null` for no initial data.
 
+#### `EmailPreference($data = null)`
+
+Create a new `EmailPreferenceEntity` instance. Pass `null` for no initial data.
+
+#### `Error($data = null)`
+
+Create a new `ErrorEntity` instance. Pass `null` for no initial data.
+
 #### `Event($data = null)`
 
 Create a new `EventEntity` instance. Pass `null` for no initial data.
@@ -93,10 +101,6 @@ Create a new `OrganizationEntity` instance. Pass `null` for no initial data.
 #### `OrganizationEditRole($data = null)`
 
 Create a new `OrganizationEditRoleEntity` instance. Pass `null` for no initial data.
-
-#### `Problem($data = null)`
-
-Create a new `ProblemEntity` instance. Pass `null` for no initial data.
 
 #### `Quota($data = null)`
 
@@ -396,6 +400,110 @@ Set the entity match criteria.
 #### `make(): ApplicationsManagementEntity`
 
 Create a new `ApplicationsManagementEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## EmailPreferenceEntity
+
+```php
+$email_preference = $client->EmailPreference();
+```
+
+### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Returns the created entity and throws on error.
+
+```php
+$result = $client->EmailPreference()->create([
+]);
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): EmailPreferenceEntity`
+
+Create a new `EmailPreferenceEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## ErrorEntity
+
+```php
+$error = $client->Error();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `detail` | `string` | Yes |  |
+| `id` | `string` | Yes | Identifier of the problem that occurred, stable across releases |
+| `status` | `int` | Yes |  |
+| `title` | `string` | Yes |  |
+| `type` | `string` | Yes | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `array` | No | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+### Operations
+
+#### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
+
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
+
+```php
+$results = $client->Error()->list();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): ErrorEntity`
+
+Create a new `ErrorEntity` instance with the same client and
 options.
 
 #### `get_name(): string`
@@ -886,6 +994,7 @@ $login = $client->Login();
 | --- | --- | --- | --- |
 | `email` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
+| `token` | `string` | Yes |  |
 
 ### Operations
 
@@ -897,6 +1006,7 @@ Create a new entity with the given data. Returns the created entity and throws o
 $result = $client->Login()->create([
   "email" => null, // string
   "password" => null, // string
+  "token" => null, // string
 ]);
 ```
 
@@ -1101,61 +1211,6 @@ Return the entity name.
 
 ---
 
-## ProblemEntity
-
-```php
-$problem = $client->Problem();
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `detail` | `string` | Yes |  |
-| `id` | `string` | Yes |  |
-| `status` | `int` | Yes |  |
-| `title` | `string` | Yes |  |
-
-### Operations
-
-#### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
-
-List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
-
-```php
-$results = $client->Problem()->list();
-```
-
-### Common Methods
-
-#### `data_get(): array`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set($data): void`
-
-Set the entity data.
-
-#### `match_get(): array`
-
-Get the entity match criteria.
-
-#### `match_set($match): void`
-
-Set the entity match criteria.
-
-#### `make(): ProblemEntity`
-
-Create a new `ProblemEntity` instance with the same client and
-options.
-
-#### `get_name(): string`
-
-Return the entity name.
-
-
----
-
 ## QuotaEntity
 
 ```php
@@ -1224,6 +1279,7 @@ $registration = $client->Registration();
 | `gclid` | `string` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
+| `signup_channel` | `string` | No | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `string` | No |  |
 
 ### Operations
@@ -1691,6 +1747,7 @@ $user_authentication = $client->UserAuthentication();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `current_password` | `string` | Yes |  |
 | `email` | `string` | Yes |  |
 | `new_password` | `string` | Yes |  |
 | `token` | `string` | Yes |  |
@@ -1703,6 +1760,7 @@ Create a new entity with the given data. Returns the created entity and throws o
 
 ```php
 $result = $client->UserAuthentication()->create([
+  "current_password" => null, // string
   "email" => null, // string
   "new_password" => null, // string
   "token" => null, // string

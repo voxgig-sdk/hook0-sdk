@@ -79,7 +79,7 @@ public class LoginEntityTest {
     Hook0SDK client = Hook0SDK.testSDK(null,
         Struct.jm("feature", Struct.jm("validate", Struct.jm("active", true))));
     SdkError err = assertThrows(SdkError.class, () ->
-        client.login(null).create(Struct.jm("email", 1, "password", "x"), null));
+        client.login(null).create(Struct.jm("email", 1, "password", "x", "token", "x"), null));
     assertEquals("validate_failed", err.code);
   }
 

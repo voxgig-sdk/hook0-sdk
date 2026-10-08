@@ -6,7 +6,7 @@ Core REST API of Hook0, Open-Source Webhooks as a service for SaaS
 
 This guide introduces the API, the client libraries, and the companion tools in this repository. Start with the API capabilities, choose a client for your application, and use the linked reference when you need exact request and response details.
 
-The selected API surface contains 23 entities and 54 HTTP routes. There are 8 SDK targets and 2 companion tools.
+The selected API surface contains 24 entities and 56 HTTP routes. There are 8 SDK targets and 2 companion tools.
 
 An entity groups related API operations. An operation can have several routes with different inputs or authentication requirements. The SDK exposes the entity and its operations using the conventions of the selected language.
 
@@ -22,9 +22,9 @@ Key fields to recognise:
 
 - `application_id`: Unique identifier of the application.
 - `consumption`: Current consumption metrics for this application.
+- `id`: Identifier of the problem that occurred, stable across releases
 - `name`: Name of the application. Length: 2-50 characters.
 - `onboarding_steps`: Onboarding completion status for this application.
-- `organization_id`: UUID of the organization this application belongs to.
 
 ### ApplicationSecret
 
@@ -32,11 +32,33 @@ Results: Created; OK.
 
 SDK operations: `create`, `list`, `update`.
 
+Key fields to recognise:
+
+- `id`: Identifier of the problem that occurred, stable across releases
+
 ### ApplicationsManagement
 
 Results: No Content.
 
 SDK operations: `remove`.
+
+### EmailPreference
+
+Results: No Content.
+
+SDK operations: `create`.
+
+### Error
+
+Results: OK.
+
+SDK operations: `list`.
+
+Key fields to recognise:
+
+- `id`: Identifier of the problem that occurred, stable across releases
+- `type`: Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on `id`: it says the same thing without parsing a URL.
+- `validation`: Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (`Validation`, status 422) and `null` for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a `code`, an optional `message` and the `params` the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.
 
 ### Event
 
@@ -44,11 +66,19 @@ Results: No Content; OK.
 
 SDK operations: `create`, `list`, `load`.
 
+Key fields to recognise:
+
+- `id`: Identifier of the problem that occurred, stable across releases
+
 ### EventType
 
 Results: Created; OK.
 
 SDK operations: `create`, `list`, `load`.
+
+Key fields to recognise:
+
+- `id`: Identifier of the problem that occurred, stable across releases
 
 ### EventsManagement
 
@@ -57,6 +87,8 @@ Results: OK; No Content.
 SDK operations: `list`, `remove`.
 
 ### Health
+
+Results: OK.
 
 SDK operations: `load`.
 
@@ -98,17 +130,19 @@ Results: OK; No Content.
 
 SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
+Key fields to recognise:
+
+- `id`: Identifier of the problem that occurred, stable across releases
+
 ### OrganizationEditRole
 
 Results: OK.
 
 SDK operations: `update`.
 
-### Problem
+Key fields to recognise:
 
-Results: OK.
-
-SDK operations: `list`.
+- `id`: Identifier of the problem that occurred, stable across releases
 
 ### Quota
 
@@ -125,6 +159,7 @@ SDK operations: `create`.
 Key fields to recognise:
 
 - `gclid`: Optional Google Ads click identifier captured during the user&#39;s journey from a Google Ad.
+- `signup_channel`: Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:&lt;host&gt;`, `direct`, …), derived in the browser from the referrer and campaign parameters.
 
 ### RequestAttempt
 
@@ -134,13 +169,18 @@ SDK operations: `list`, `load`.
 
 Key fields to recognise:
 
-- `status`: Status of a request attempt. The &#39;type&#39; field indicates the status variant. - waiting: &#123;type, since, until&#125; - Scheduled for future delivery - pending: &#123;type, since&#125; - Ready to be processed - `in_progress`: &#123;type, since&#125; - Currently being delivered - successful: &#123;type, at, `full_processing_ms`&#125; - Delivered successfully - failed: &#123;type, at, `full_processing_ms`&#125; - Delivery failed
+- `id`: Identifier of the problem that occurred, stable across releases
+- `status`: Status of a request attempt. The &#39;type&#39; field indicates the status variant. - waiting: &#123;type, since, until&#125; - Scheduled for future delivery - pending: &#123;type, since&#125; - Ready to be processed - paused: &#123;type, since&#125; - Held back because the subscription&#39;s endpoint has recently been failing; released gradually - `in_progress`: &#123;type, since&#125; - Currently being delivered - successful: &#123;type, at, `full_processing_ms`&#125; - Delivered successfully - failed: &#123;type, at, `full_processing_ms`&#125; - Delivery failed
 
 ### Response
 
 Results: OK.
 
 SDK operations: `load`.
+
+Key fields to recognise:
+
+- `id`: Identifier of the problem that occurred, stable across releases
 
 ### Revoke
 
@@ -154,6 +194,10 @@ Results: Created; OK; No Content.
 
 SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
+Key fields to recognise:
+
+- `id`: Identifier of the problem that occurred, stable across releases
+
 ### Subscription
 
 Results: Created; OK; No Content.
@@ -162,6 +206,7 @@ SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 Key fields to recognise:
 
+- `id`: Identifier of the problem that occurred, stable across releases
 - `label_key`: `_Kept` for backward compatibility, you should use `labels`_
 - `label_value`: `_Kept` for backward compatibility, you should use `labels`_
 
@@ -193,6 +238,8 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | ApplicationSecret | `list` | `GET /api/v1/application_secrets/` | Required |
 | ApplicationSecret | `update` | `PUT /api/v1/application_secrets/{application_secret_token}` | Required |
 | ApplicationsManagement | `remove` | `DELETE /api/v1/application_secrets/{application_secret_token}` | Required |
+| EmailPreference | `create` | `POST /api/v1/email-preferences/unsubscribe-reactivation` | See reference |
+| Error | `list` | `GET /api/v1/errors/` | See reference |
 | Event | `create` | `POST /api/v1/events/{event_id}/replay` | Required |
 | Event | `list` | `GET /api/v1/events/` | Required |
 | Event | `load` | `GET /api/v1/events/{event_id}` | Required |
@@ -207,6 +254,7 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | Instance | `load` | `GET /api/v1/instance/` | See reference |
 | Login | `create` | `POST /api/v1/auth/login` | See reference |
 | Login | `create` | `POST /api/v1/auth/refresh` | Required |
+| Login | `create` | `POST /api/v1/auth/verify-email` | See reference |
 | Organization | `create` | `POST /api/v1/organizations/` | Required |
 | Organization | `list` | `GET /api/v1/events_per_day/organization` | Required |
 | Organization | `list` | `GET /api/v1/organizations/` | Required |
@@ -214,7 +262,6 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | Organization | `remove` | `DELETE /api/v1/organizations/{organization_id}/` | Required |
 | Organization | `update` | `PUT /api/v1/organizations/{organization_id}/` | Required |
 | OrganizationEditRole | `update` | `PUT /api/v1/organizations/{organization_id}/invite` | Required |
-| Problem | `list` | `GET /api/v1/errors/` | See reference |
 | Quota | `load` | `GET /api/v1/quotas/` | See reference |
 | Registration | `create` | `POST /api/v1/register/` | See reference |
 | RequestAttempt | `list` | `GET /api/v1/request_attempts/` | Required |
@@ -234,8 +281,8 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | UserAuthentication | `create` | `POST /api/v1/auth/begin-reset-password` | See reference |
 | UserAuthentication | `create` | `POST /api/v1/auth/logout` | Required |
 | UserAuthentication | `create` | `POST /api/v1/auth/password` | Required |
+| UserAuthentication | `create` | `POST /api/v1/auth/resend-verification-email` | See reference |
 | UserAuthentication | `create` | `POST /api/v1/auth/reset-password` | See reference |
-| UserAuthentication | `create` | `POST /api/v1/auth/verify-email` | See reference |
 | UserInvitation | `create` | `POST /api/v1/organizations/{organization_id}/invite` | Required |
 
 ## Connect to the API
@@ -294,7 +341,7 @@ Use the MCP server to expose supported API operations to an MCP client.
 
 Repository directory: `go-mcp/`. Not published. Build from the go-mcp directory.
 
-- `hook0_list`: List records for an entity. Supported entities: `application`, `application_secret`, `event`, `event_type`, `events_management`, `hook0`, `organization`, `problem`, `request_attempt`, `service_token`, `subscription`.
+- `hook0_list`: List records for an entity. Supported entities: `application`, `application_secret`, `error`, `event`, `event_type`, `events_management`, `hook0`, `organization`, `request_attempt`, `service_token`, `subscription`.
 - `hook0_load`: Load one record for an entity. Supported entities: `application`, `event`, `event_type`, `health`, `instance`, `organization`, `quota`, `request_attempt`, `response`, `service_token`, `subscription`.
 
 ## Operational features

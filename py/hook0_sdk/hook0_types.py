@@ -128,6 +128,35 @@ class ApplicationsManagementRemoveMatch(TypedDict):
     application_id: str
 
 
+class EmailPreference(TypedDict):
+    pass
+
+
+class EmailPreferenceCreateData(TypedDict):
+    pass
+
+
+class ErrorRequired(TypedDict):
+    detail: str
+    id: str
+    status: int
+    title: str
+    type: str
+
+
+class Error(ErrorRequired, total=False):
+    validation: dict
+
+
+class ErrorListMatch(TypedDict, total=False):
+    detail: str
+    id: str
+    status: int
+    title: str
+    type: str
+    validation: dict
+
+
 class EventRequired(TypedDict):
     event_id: str
     event_type_name: str
@@ -321,11 +350,13 @@ class InstanceLoadMatch(TypedDict, total=False):
 class Login(TypedDict):
     email: str
     password: str
+    token: str
 
 
 class LoginCreateData(TypedDict):
     email: str
     password: str
+    token: str
 
 
 class OrganizationRequired(TypedDict):
@@ -431,20 +462,6 @@ class OrganizationEditRoleUpdateData(OrganizationEditRoleUpdateDataRequired, tot
     user_id: str
 
 
-class Problem(TypedDict):
-    detail: str
-    id: str
-    status: int
-    title: str
-
-
-class ProblemListMatch(TypedDict, total=False):
-    detail: str
-    id: str
-    status: int
-    title: str
-
-
 class Quota(TypedDict):
     enabled: bool
     limits: dict
@@ -464,6 +481,7 @@ class RegistrationRequired(TypedDict):
 
 class Registration(RegistrationRequired, total=False):
     gclid: str
+    signup_channel: str
     turnstile_token: str
 
 
@@ -476,6 +494,7 @@ class RegistrationCreateDataRequired(TypedDict):
 
 class RegistrationCreateData(RegistrationCreateDataRequired, total=False):
     gclid: str
+    signup_channel: str
     turnstile_token: str
 
 
@@ -670,12 +689,14 @@ class SubscriptionRemoveMatch(TypedDict):
 
 
 class UserAuthentication(TypedDict):
+    current_password: str
     email: str
     new_password: str
     token: str
 
 
 class UserAuthenticationCreateData(TypedDict):
+    current_password: str
     email: str
     new_password: str
     token: str

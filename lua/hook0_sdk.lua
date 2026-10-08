@@ -464,6 +464,34 @@ function Hook0SDK:ApplicationsManagement(data)
 end
 
 
+-- Idiomatic facade: client:EmailPreference():list() / client:EmailPreference():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function Hook0SDK:EmailPreference(data)
+  local EntityMod = require("entity.email_preference_entity")
+  if data == nil then
+    if self._email_preference == nil then
+      self._email_preference = EntityMod.new(self, nil)
+    end
+    return self._email_preference
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:Error():list() / client:Error():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function Hook0SDK:Error(data)
+  local EntityMod = require("entity.error_entity")
+  if data == nil then
+    if self._error == nil then
+      self._error = EntityMod.new(self, nil)
+    end
+    return self._error
+  end
+  return EntityMod.new(self, data)
+end
+
+
 -- Idiomatic facade: client:Event():list() / client:Event():load({ id = ... })
 -- Entity access is capitalised (PascalCase) for parity with the other SDKs.
 function Hook0SDK:Event(data)
@@ -599,20 +627,6 @@ function Hook0SDK:OrganizationEditRole(data)
       self._organization_edit_role = EntityMod.new(self, nil)
     end
     return self._organization_edit_role
-  end
-  return EntityMod.new(self, data)
-end
-
-
--- Idiomatic facade: client:Problem():list() / client:Problem():load({ id = ... })
--- Entity access is capitalised (PascalCase) for parity with the other SDKs.
-function Hook0SDK:Problem(data)
-  local EntityMod = require("entity.problem_entity")
-  if data == nil then
-    if self._problem == nil then
-      self._problem = EntityMod.new(self, nil)
-    end
-    return self._problem
   end
   return EntityMod.new(self, data)
 end

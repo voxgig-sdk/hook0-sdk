@@ -359,6 +359,18 @@ class Hook0SDK:
         return ApplicationsManagementEntity(self, data)
 
 
+    def EmailPreference(self, data=None) -> "EmailPreferenceEntity":
+        """Entity factory: client.EmailPreference().list() / client.EmailPreference().load({"id": ...})."""
+        from hook0_sdk.entity.email_preference_entity import EmailPreferenceEntity
+        return EmailPreferenceEntity(self, data)
+
+
+    def Error(self, data=None) -> "ErrorEntity":
+        """Entity factory: client.Error().list() / client.Error().load({"id": ...})."""
+        from hook0_sdk.entity.error_entity import ErrorEntity
+        return ErrorEntity(self, data)
+
+
     def Event(self, data=None) -> "EventEntity":
         """Entity factory: client.Event().list() / client.Event().load({"id": ...})."""
         from hook0_sdk.entity.event_entity import EventEntity
@@ -417,12 +429,6 @@ class Hook0SDK:
         """Entity factory: client.OrganizationEditRole().list() / client.OrganizationEditRole().load({"id": ...})."""
         from hook0_sdk.entity.organization_edit_role_entity import OrganizationEditRoleEntity
         return OrganizationEditRoleEntity(self, data)
-
-
-    def Problem(self, data=None) -> "ProblemEntity":
-        """Entity factory: client.Problem().list() / client.Problem().load({"id": ...})."""
-        from hook0_sdk.entity.problem_entity import ProblemEntity
-        return ProblemEntity(self, data)
 
 
     def Quota(self, data=None) -> "QuotaEntity":
@@ -509,6 +515,8 @@ if TYPE_CHECKING:
     from hook0_sdk.entity.application_entity import ApplicationEntity
     from hook0_sdk.entity.application_secret_entity import ApplicationSecretEntity
     from hook0_sdk.entity.applications_management_entity import ApplicationsManagementEntity
+    from hook0_sdk.entity.email_preference_entity import EmailPreferenceEntity
+    from hook0_sdk.entity.error_entity import ErrorEntity
     from hook0_sdk.entity.event_entity import EventEntity
     from hook0_sdk.entity.event_type_entity import EventTypeEntity
     from hook0_sdk.entity.events_management_entity import EventsManagementEntity
@@ -519,7 +527,6 @@ if TYPE_CHECKING:
     from hook0_sdk.entity.login_entity import LoginEntity
     from hook0_sdk.entity.organization_entity import OrganizationEntity
     from hook0_sdk.entity.organization_edit_role_entity import OrganizationEditRoleEntity
-    from hook0_sdk.entity.problem_entity import ProblemEntity
     from hook0_sdk.entity.quota_entity import QuotaEntity
     from hook0_sdk.entity.registration_entity import RegistrationEntity
     from hook0_sdk.entity.request_attempt_entity import RequestAttemptEntity

@@ -246,6 +246,105 @@ test "applications_management_validate" {
     }
 }
 
+test "error__list_smoke" {
+    const fixture = h.jo(&.{.{ "error", h.jo(&.{.{ "t01", h.jo(&.{.{ "id", h.vstr("t01") }}) }}) }});
+    const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());
+    const e = testsdk.error_(vnull());
+    const res = e.list(vnull(), vnull());
+    try std.testing.expect(res == .ok);
+}
+
+test "error__stream_smoke" {
+    // stream() runs the list op through the full pipeline and returns the
+    // result items. Seed two entities via test mode; with the streaming
+    // feature active it yields the feature's incremental items, else it falls
+    // back to the materialised items — either way every item is yielded.
+    const fixture = h.jo(&.{.{ "error", h.jo(&.{
+        .{ "strm01", h.jo(&.{.{ "id", h.vstr("strm01") }}) },
+        .{ "strm02", h.jo(&.{.{ "id", h.vstr("strm02") }}) },
+    }) }});
+    const sdkopts = h.jo(&.{.{ "feature", h.jo(&.{.{ "streaming", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
+    const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), sdkopts);
+    const e = testsdk.error_(vnull());
+    const items = e.stream("list", vnull(), vnull());
+    try std.testing.expect(items == .ok and items.ok.len == 2);
+
+    // Fallback: streaming inactive still yields both materialised items.
+    const plainsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());
+    const pe = plainsdk.error_(vnull());
+    const pitems = pe.stream("list", vnull(), vnull());
+    try std.testing.expect(pitems == .ok and pitems.ok.len == 2);
+}
+
+test "error__stream_error" {
+    const offline = h.jo(&.{.{ "net", h.jo(&.{.{ "offline", h.vbool(true) }}) }});
+    switch (sdk.test_sdk(offline, vnull()).error_(vnull()).stream("list", vnull(), vnull())) {
+        .err => |er| try std.testing.expect(std.mem.indexOf(u8, er.msg, "offline") != null),
+        .ok => try std.testing.expect(false),
+    }
+
+    const quiet = h.jo(&.{.{ "ctrl", h.jo(&.{.{ "throw", h.vbool(false) }}) }});
+    try std.testing.expect(sdk.test_sdk(offline, vnull()).error_(vnull()).stream("list", vnull(), quiet) == .ok);
+
+    if (fh.fh_has_feature("rbac")) {
+        const deny = h.jo(&.{.{ "feature", h.jo(&.{.{ "rbac", h.jo(&.{
+            .{ "active", h.vbool(true) },
+            .{ "deny", h.vbool(true) },
+        }) }}) }});
+        switch (sdk.test_sdk(vnull(), deny).error_(vnull()).stream("list", vnull(), vnull())) {
+            .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "rbac_denied")),
+            .ok => try std.testing.expect(false),
+        }
+    }
+}
+
+test "error__stream_ctrl" {
+    const explain = h.omap();
+    const ctrl = h.jo(&.{.{ "explain", explain }});
+    _ = sdk.test_sdk(vnull(), vnull()).error_(vnull()).stream("list", vnull(), h.jo(&.{.{ "ctrl", ctrl }}));
+    try std.testing.expect(h.is_noval(h.getp(ctrl, "stream")));
+    try std.testing.expect(0 < explain.object.count());
+}
+
+test "error__validate" {
+    if (!fh.fh_has_feature("validate")) return error.SkipZigTest;
+    const opts = h.jo(&.{.{ "feature", h.jo(&.{.{ "validate", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
+    switch (sdk.test_sdk(vnull(), opts).error_(vnull()).list(h.jo(&.{ .{ "detail", h.vnum(1) } }), vnull())) {
+        .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "validate_failed")),
+        .ok => try std.testing.expect(false),
+    }
+}
+
+test "error__direct_smoke" {
+    // direct() drives prepare -> transport and always returns a result map
+    // carrying an `ok` flag (never an error union), even on a non-2xx or a
+    // prepare failure.
+    const testsdk = sdk.test_sdk(vnull(), vnull());
+    const result = testsdk.direct(h.jo(&.{
+        .{ "path", h.vstr("/error/{id}") },
+        .{ "method", h.vstr("GET") },
+        .{ "params", h.jo(&.{.{ "id", h.vstr("direct01") }}) },
+    }));
+    try std.testing.expect(result == .object);
+    try std.testing.expect(h.get_bool(result, "ok") != null);
+}
+
+test "error__prepare_smoke" {
+    // prepare() returns the fetch definition (an error union). The generated
+    // fetchdef always carries a url + method.
+    const testsdk = sdk.test_sdk(vnull(), vnull());
+    const fetchdef = testsdk.prepare(h.jo(&.{
+        .{ "path", h.vstr("/error/{id}") },
+        .{ "method", h.vstr("GET") },
+        .{ "params", h.jo(&.{.{ "id", h.vstr("direct01") }}) },
+    })) catch {
+        // A prepare error is acceptable here (base may be unset); the surface
+        // exists and is exercised.
+        return;
+    };
+    try std.testing.expect(std.mem.eql(u8, h.get_str(fetchdef, "method") orelse "", "GET"));
+}
+
 test "event_load_smoke" {
     const fixture = h.jo(&.{.{ "event", h.jo(&.{.{ "t01", h.jo(&.{.{ "id", h.vstr("t01") }}) }}) }});
     const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());
@@ -824,7 +923,7 @@ test "instance_prepare_smoke" {
 test "login_validate" {
     if (!fh.fh_has_feature("validate")) return error.SkipZigTest;
     const opts = h.jo(&.{.{ "feature", h.jo(&.{.{ "validate", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
-    switch (sdk.test_sdk(vnull(), opts).login(vnull()).create(h.jo(&.{ .{ "email", h.vnum(1) }, .{ "password", h.vstr("x") } }), vnull())) {
+    switch (sdk.test_sdk(vnull(), opts).login(vnull()).create(h.jo(&.{ .{ "email", h.vnum(1) }, .{ "password", h.vstr("x") }, .{ "token", h.vstr("x") } }), vnull())) {
         .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "validate_failed")),
         .ok => try std.testing.expect(false),
     }
@@ -959,105 +1058,6 @@ test "organization_edit_role_validate" {
         .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "validate_failed")),
         .ok => try std.testing.expect(false),
     }
-}
-
-test "problem_list_smoke" {
-    const fixture = h.jo(&.{.{ "problem", h.jo(&.{.{ "t01", h.jo(&.{.{ "id", h.vstr("t01") }}) }}) }});
-    const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());
-    const e = testsdk.problem(vnull());
-    const res = e.list(vnull(), vnull());
-    try std.testing.expect(res == .ok);
-}
-
-test "problem_stream_smoke" {
-    // stream() runs the list op through the full pipeline and returns the
-    // result items. Seed two entities via test mode; with the streaming
-    // feature active it yields the feature's incremental items, else it falls
-    // back to the materialised items — either way every item is yielded.
-    const fixture = h.jo(&.{.{ "problem", h.jo(&.{
-        .{ "strm01", h.jo(&.{.{ "id", h.vstr("strm01") }}) },
-        .{ "strm02", h.jo(&.{.{ "id", h.vstr("strm02") }}) },
-    }) }});
-    const sdkopts = h.jo(&.{.{ "feature", h.jo(&.{.{ "streaming", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
-    const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), sdkopts);
-    const e = testsdk.problem(vnull());
-    const items = e.stream("list", vnull(), vnull());
-    try std.testing.expect(items == .ok and items.ok.len == 2);
-
-    // Fallback: streaming inactive still yields both materialised items.
-    const plainsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());
-    const pe = plainsdk.problem(vnull());
-    const pitems = pe.stream("list", vnull(), vnull());
-    try std.testing.expect(pitems == .ok and pitems.ok.len == 2);
-}
-
-test "problem_stream_error" {
-    const offline = h.jo(&.{.{ "net", h.jo(&.{.{ "offline", h.vbool(true) }}) }});
-    switch (sdk.test_sdk(offline, vnull()).problem(vnull()).stream("list", vnull(), vnull())) {
-        .err => |er| try std.testing.expect(std.mem.indexOf(u8, er.msg, "offline") != null),
-        .ok => try std.testing.expect(false),
-    }
-
-    const quiet = h.jo(&.{.{ "ctrl", h.jo(&.{.{ "throw", h.vbool(false) }}) }});
-    try std.testing.expect(sdk.test_sdk(offline, vnull()).problem(vnull()).stream("list", vnull(), quiet) == .ok);
-
-    if (fh.fh_has_feature("rbac")) {
-        const deny = h.jo(&.{.{ "feature", h.jo(&.{.{ "rbac", h.jo(&.{
-            .{ "active", h.vbool(true) },
-            .{ "deny", h.vbool(true) },
-        }) }}) }});
-        switch (sdk.test_sdk(vnull(), deny).problem(vnull()).stream("list", vnull(), vnull())) {
-            .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "rbac_denied")),
-            .ok => try std.testing.expect(false),
-        }
-    }
-}
-
-test "problem_stream_ctrl" {
-    const explain = h.omap();
-    const ctrl = h.jo(&.{.{ "explain", explain }});
-    _ = sdk.test_sdk(vnull(), vnull()).problem(vnull()).stream("list", vnull(), h.jo(&.{.{ "ctrl", ctrl }}));
-    try std.testing.expect(h.is_noval(h.getp(ctrl, "stream")));
-    try std.testing.expect(0 < explain.object.count());
-}
-
-test "problem_validate" {
-    if (!fh.fh_has_feature("validate")) return error.SkipZigTest;
-    const opts = h.jo(&.{.{ "feature", h.jo(&.{.{ "validate", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
-    switch (sdk.test_sdk(vnull(), opts).problem(vnull()).list(h.jo(&.{ .{ "detail", h.vnum(1) } }), vnull())) {
-        .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "validate_failed")),
-        .ok => try std.testing.expect(false),
-    }
-}
-
-test "problem_direct_smoke" {
-    // direct() drives prepare -> transport and always returns a result map
-    // carrying an `ok` flag (never an error union), even on a non-2xx or a
-    // prepare failure.
-    const testsdk = sdk.test_sdk(vnull(), vnull());
-    const result = testsdk.direct(h.jo(&.{
-        .{ "path", h.vstr("/problem/{id}") },
-        .{ "method", h.vstr("GET") },
-        .{ "params", h.jo(&.{.{ "id", h.vstr("direct01") }}) },
-    }));
-    try std.testing.expect(result == .object);
-    try std.testing.expect(h.get_bool(result, "ok") != null);
-}
-
-test "problem_prepare_smoke" {
-    // prepare() returns the fetch definition (an error union). The generated
-    // fetchdef always carries a url + method.
-    const testsdk = sdk.test_sdk(vnull(), vnull());
-    const fetchdef = testsdk.prepare(h.jo(&.{
-        .{ "path", h.vstr("/problem/{id}") },
-        .{ "method", h.vstr("GET") },
-        .{ "params", h.jo(&.{.{ "id", h.vstr("direct01") }}) },
-    })) catch {
-        // A prepare error is acceptable here (base may be unset); the surface
-        // exists and is exercised.
-        return;
-    };
-    try std.testing.expect(std.mem.eql(u8, h.get_str(fetchdef, "method") orelse "", "GET"));
 }
 
 test "quota_load_smoke" {
@@ -1571,7 +1571,7 @@ test "subscription_prepare_smoke" {
 test "user_authentication_validate" {
     if (!fh.fh_has_feature("validate")) return error.SkipZigTest;
     const opts = h.jo(&.{.{ "feature", h.jo(&.{.{ "validate", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
-    switch (sdk.test_sdk(vnull(), opts).user_authentication(vnull()).create(h.jo(&.{ .{ "email", h.vnum(1) }, .{ "new_password", h.vstr("x") }, .{ "token", h.vstr("x") } }), vnull())) {
+    switch (sdk.test_sdk(vnull(), opts).user_authentication(vnull()).create(h.jo(&.{ .{ "current_password", h.vnum(1) }, .{ "email", h.vstr("x") }, .{ "new_password", h.vstr("x") }, .{ "token", h.vstr("x") } }), vnull())) {
         .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "validate_failed")),
         .ok => try std.testing.expect(false),
     }

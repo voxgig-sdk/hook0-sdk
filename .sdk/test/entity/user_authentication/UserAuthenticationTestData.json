@@ -2,21 +2,24 @@
   "existing": {
     "user_authentication": {
       "USER_AUTHENTICATION00": {
-        "email": "s1e",
-        "new_password": "s1f",
-        "token": "s20",
+        "current_password": "s28",
+        "email": "s29",
+        "new_password": "s2a",
+        "token": "s2b",
         "id": "USER_AUTHENTICATION00"
       },
       "USER_AUTHENTICATION01": {
-        "email": "s3c",
-        "new_password": "s3d",
-        "token": "s3e",
+        "current_password": "s50",
+        "email": "s51",
+        "new_password": "s52",
+        "token": "s53",
         "id": "USER_AUTHENTICATION01"
       },
       "USER_AUTHENTICATION02": {
-        "email": "s5a",
-        "new_password": "s5b",
-        "token": "s5c",
+        "current_password": "s78",
+        "email": "s79",
+        "new_password": "s7a",
+        "token": "s7b",
         "id": "USER_AUTHENTICATION02"
       }
     }
@@ -24,9 +27,10 @@
   "new": {
     "user_authentication": {
       "user_authentication_ref01": {
-        "email": "s78",
-        "new_password": "s79",
-        "token": "s7a"
+        "current_password": "sa0",
+        "email": "sa1",
+        "new_password": "sa2",
+        "token": "sa3"
       }
     }
   },
@@ -46,12 +50,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "POST /api/v1/auth/reset-password": {
+    "POST /api/v1/auth/resend-verification-email": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "POST /api/v1/auth/verify-email": {
+    "POST /api/v1/auth/reset-password": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

@@ -405,6 +405,16 @@ pub const Hook0SDK = struct {
         return @import("../entity/applications_management.zig").ApplicationsManagementEntity.new(self, entopts);
     }
 
+    /// EmailPreference entity bound to this client.
+    pub fn email_preference(self: *@This(), entopts: Value) *@import("../entity/email_preference.zig").EmailPreferenceEntity {
+        return @import("../entity/email_preference.zig").EmailPreferenceEntity.new(self, entopts);
+    }
+
+    /// Error entity bound to this client.
+    pub fn error_(self: *@This(), entopts: Value) *@import("../entity/error_.zig").ErrorEntity {
+        return @import("../entity/error_.zig").ErrorEntity.new(self, entopts);
+    }
+
     /// Event entity bound to this client.
     pub fn event(self: *@This(), entopts: Value) *@import("../entity/event.zig").EventEntity {
         return @import("../entity/event.zig").EventEntity.new(self, entopts);
@@ -453,11 +463,6 @@ pub const Hook0SDK = struct {
     /// OrganizationEditRole entity bound to this client.
     pub fn organization_edit_role(self: *@This(), entopts: Value) *@import("../entity/organization_edit_role.zig").OrganizationEditRoleEntity {
         return @import("../entity/organization_edit_role.zig").OrganizationEditRoleEntity.new(self, entopts);
-    }
-
-    /// Problem entity bound to this client.
-    pub fn problem(self: *@This(), entopts: Value) *@import("../entity/problem.zig").ProblemEntity {
-        return @import("../entity/problem.zig").ProblemEntity.new(self, entopts);
     }
 
     /// Quota entity bound to this client.

@@ -60,6 +60,14 @@ Create a new `ApplicationSecret` entity instance. Pass `nil` for no initial data
 
 Create a new `ApplicationsManagement` entity instance. Pass `nil` for no initial data.
 
+#### `EmailPreference(data map[string]any) Hook0Entity`
+
+Create a new `EmailPreference` entity instance. Pass `nil` for no initial data.
+
+#### `Error(data map[string]any) Hook0Entity`
+
+Create a new `Error` entity instance. Pass `nil` for no initial data.
+
 #### `Event(data map[string]any) Hook0Entity`
 
 Create a new `Event` entity instance. Pass `nil` for no initial data.
@@ -99,10 +107,6 @@ Create a new `Organization` entity instance. Pass `nil` for no initial data.
 #### `OrganizationEditRole(data map[string]any) Hook0Entity`
 
 Create a new `OrganizationEditRole` entity instance. Pass `nil` for no initial data.
-
-#### `Problem(data map[string]any) Hook0Entity`
-
-Create a new `Problem` entity instance. Pass `nil` for no initial data.
 
 #### `Quota(data map[string]any) Hook0Entity`
 
@@ -442,6 +446,126 @@ Get or set the entity match criteria. Works the same as `Data()`.
 #### `Make() Entity`
 
 Create a new `ApplicationsManagementEntity` instance with the same client and
+options.
+
+#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
+
+Run an operation through the pipeline and send its result items on the
+returned channel, which closes when the stream ends. A `StreamItem` holds
+one item in `Item`, or in `Err` the error that ended the stream: the
+error the operation itself would return, sent as the last value. Under
+`throw: false` in `callopts["ctrl"]`, no error is sent.
+
+#### `GetName() string`
+
+Return the entity name.
+
+
+---
+
+## EmailPreferenceEntity
+
+```go
+emailPreference := client.EmailPreference(nil)
+fmt.Println(emailPreference.GetName()) // "email_preference"
+```
+
+### Operations
+
+#### `Create(reqdata, ctrl map[string]any) (any, error)`
+
+Create a new entity with the given data. Returns the created entity; `err` is non-nil on failure.
+
+```go
+result, err := client.EmailPreference(nil).Create(map[string]any{
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+### Common Methods
+
+#### `Data(args ...any) any`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `Match(args ...any) any`
+
+Get or set the entity match criteria. Works the same as `Data()`.
+
+#### `Make() Entity`
+
+Create a new `EmailPreferenceEntity` instance with the same client and
+options.
+
+#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
+
+Run an operation through the pipeline and send its result items on the
+returned channel, which closes when the stream ends. A `StreamItem` holds
+one item in `Item`, or in `Err` the error that ended the stream: the
+error the operation itself would return, sent as the last value. Under
+`throw: false` in `callopts["ctrl"]`, no error is sent.
+
+#### `GetName() string`
+
+Return the entity name.
+
+
+---
+
+## ErrorEntity
+
+```go
+error := client.Error(nil)
+fmt.Println(error.GetName()) // "error"
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `detail` | `string` | Yes |  |
+| `id` | `string` | Yes | Identifier of the problem that occurred, stable across releases |
+| `status` | `int` | Yes |  |
+| `title` | `string` | Yes |  |
+| `type` | `string` | Yes | Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. |
+| `validation` | `map[string]any` | No | Which submitted values were rejected and why, keyed by the name of the field they were submitted under. |
+
+### Operations
+
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.Error(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
+### Common Methods
+
+#### `Data(args ...any) any`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `Match(args ...any) any`
+
+Get or set the entity match criteria. Works the same as `Data()`.
+
+#### `Make() Entity`
+
+Create a new `ErrorEntity` instance with the same client and
 options.
 
 #### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
@@ -1018,6 +1142,7 @@ fmt.Println(login.GetName()) // "login"
 | --- | --- | --- | --- |
 | `email` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
+| `token` | `string` | Yes |  |
 
 ### Operations
 
@@ -1029,6 +1154,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 result, err := client.Login(nil).Create(map[string]any{
     "email": "example_email",
     "password": "example_password",
+    "token": "example_token",
 }, nil)
 if err != nil {
     panic(err)
@@ -1271,70 +1397,6 @@ Return the entity name.
 
 ---
 
-## ProblemEntity
-
-```go
-problem := client.Problem(nil)
-fmt.Println(problem.GetName()) // "problem"
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `detail` | `string` | Yes |  |
-| `id` | `string` | Yes |  |
-| `status` | `int` | Yes |  |
-| `title` | `string` | Yes |  |
-
-### Operations
-
-#### `List(reqmatch, ctrl map[string]any) (any, error)`
-
-List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
-
-```go
-results, err := client.Problem(nil).List(nil, nil)
-if err != nil {
-    panic(err)
-}
-for _, item := range results.([]any) {
-    fmt.Println(item.(sdk.Entity).Data())
-}
-```
-
-### Common Methods
-
-#### `Data(args ...any) any`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `Match(args ...any) any`
-
-Get or set the entity match criteria. Works the same as `Data()`.
-
-#### `Make() Entity`
-
-Create a new `ProblemEntity` instance with the same client and
-options.
-
-#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
-
-Run an operation through the pipeline and send its result items on the
-returned channel, which closes when the stream ends. A `StreamItem` holds
-one item in `Item`, or in `Err` the error that ended the stream: the
-error the operation itself would return, sent as the last value. Under
-`throw: false` in `callopts["ctrl"]`, no error is sent.
-
-#### `GetName() string`
-
-Return the entity name.
-
-
----
-
 ## QuotaEntity
 
 ```go
@@ -1411,6 +1473,7 @@ fmt.Println(registration.GetName()) // "registration"
 | `gclid` | `string` | No | Optional Google Ads click identifier captured during the user's journey from a Google Ad. |
 | `last_name` | `string` | Yes |  |
 | `password` | `string` | Yes |  |
+| `signup_channel` | `string` | No | Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters. |
 | `turnstile_token` | `string` | No |  |
 
 ### Operations
@@ -1962,6 +2025,7 @@ fmt.Println(userAuthentication.GetName()) // "user_authentication"
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
+| `current_password` | `string` | Yes |  |
 | `email` | `string` | Yes |  |
 | `new_password` | `string` | Yes |  |
 | `token` | `string` | Yes |  |
@@ -1974,6 +2038,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.UserAuthentication(nil).Create(map[string]any{
+    "current_password": "example_current_password",
     "email": "example_email",
     "new_password": "example_new_password",
     "token": "example_token",

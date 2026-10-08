@@ -36,6 +36,13 @@ main: kit: entity: registration: {
       r: true
       t: "`$STRING`"
     }
+    signup_channel: {
+      h: "Signup Channel"
+      n: "signup_channel"
+      r: false
+      sh: "Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters."
+      t: "`$STRING`"
+    }
     turnstile_token: {
       h: "Turnstile Token"
       n: "turnstile_token"
@@ -56,6 +63,7 @@ main: kit: entity: registration: {
             "gclid"
             "last_name"
             "password"
+            "signup_channel"
             "turnstile_token"
           ]
           co: {

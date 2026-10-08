@@ -1,0 +1,54 @@
+# Entity: email_preference
+
+main: kit: entity: email_preference: {
+
+  alias: field: {}
+
+  name: "email_preference"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "token"
+          ]
+          co: {
+            id: "POST /api/v1/email-preferences/unsubscribe-reactivation"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/api/v1/email-preferences/unsubscribe-reactivation"
+          q: {
+            "$action": "unsubscribe_reactivation"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "email-preferences"
+            }
+            {
+              lit: "unsubscribe-reactivation"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  fields: {
+  }
+
+
+
+}

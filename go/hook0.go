@@ -63,6 +63,12 @@ func init() {
 	core.NewApplicationsManagementEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
 		return entity.NewApplicationsManagementEntity(client, entopts)
 	}
+	core.NewEmailPreferenceEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+		return entity.NewEmailPreferenceEntity(client, entopts)
+	}
+	core.NewErrorEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+		return entity.NewErrorEntity(client, entopts)
+	}
 	core.NewEventEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
 		return entity.NewEventEntity(client, entopts)
 	}
@@ -92,9 +98,6 @@ func init() {
 	}
 	core.NewOrganizationEditRoleEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
 		return entity.NewOrganizationEditRoleEntity(client, entopts)
-	}
-	core.NewProblemEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
-		return entity.NewProblemEntity(client, entopts)
 	}
 	core.NewQuotaEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
 		return entity.NewQuotaEntity(client, entopts)

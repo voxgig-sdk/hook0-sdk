@@ -159,6 +159,8 @@ pub fn make_config() Value {
                 .{ "application", h.omap() },
                 .{ "application_secret", h.omap() },
                 .{ "applications_management", h.omap() },
+                .{ "email_preference", h.omap() },
+                .{ "error", h.omap() },
                 .{ "event", h.omap() },
                 .{ "event_type", h.omap() },
                 .{ "events_management", h.omap() },
@@ -169,7 +171,6 @@ pub fn make_config() Value {
                 .{ "login", h.omap() },
                 .{ "organization", h.omap() },
                 .{ "organization_edit_role", h.omap() },
-                .{ "problem", h.omap() },
                 .{ "quota", h.omap() },
                 .{ "registration", h.omap() },
                 .{ "request_attempt", h.omap() },
@@ -876,6 +877,146 @@ pub fn make_config() Value {
                             h.vstr("$.main.kit.entity.application_secret"),
                         }),
                     }) },
+                }) },
+            }) },
+            .{ "email_preference", h.jo(&.{
+                .{ "fields", h.olist() },
+                .{ "name", h.vstr("email_preference") },
+                .{ "op", h.jo(&.{
+                    .{ "create", h.jo(&.{
+                        .{ "input", h.vstr("data") },
+                        .{ "name", h.vstr("create") },
+                        .{ "points", h.ja(&.{
+                            h.jo(&.{
+                                .{ "kind", h.vstr("http") },
+                                .{ "method", h.vstr("POST") },
+                                .{ "orig", h.vstr("/api/v1/email-preferences/unsubscribe-reactivation") },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("email-preferences") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("unsubscribe-reactivation") },
+                                    }),
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("email-preferences"),
+                                    h.vstr("unsubscribe-reactivation"),
+                                }) },
+                                .{ "rename", h.omap() },
+                                .{ "transform", h.jo(&.{
+                                    .{ "req", h.vstr("`reqdata`") },
+                                    .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "args", h.omap() },
+                                .{ "select", h.jo(&.{
+                                    .{ "$action", h.vstr("unsubscribe_reactivation") },
+                                }) },
+                            }),
+                        }) },
+                    }) },
+                }) },
+                .{ "relations", h.jo(&.{
+                    .{ "ancestors", h.olist() },
+                }) },
+            }) },
+            .{ "error", h.jo(&.{
+                .{ "fields", h.ja(&.{
+                    h.jo(&.{
+                        .{ "name", h.vstr("detail") },
+                        .{ "title", h.vstr("Detail") },
+                        .{ "type", h.vstr("`$STRING`") },
+                        .{ "req", h.vbool(true) },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("id") },
+                        .{ "title", h.vstr("Id") },
+                        .{ "type", h.vstr("`$STRING`") },
+                        .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Identifier of the problem that occurred, stable across releases") },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("status") },
+                        .{ "title", h.vstr("Status") },
+                        .{ "type", h.vstr("`$INTEGER`") },
+                        .{ "req", h.vbool(true) },
+                        .{ "format", h.vstr("int32") },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("title") },
+                        .{ "title", h.vstr("Title") },
+                        .{ "type", h.vstr("`$STRING`") },
+                        .{ "req", h.vbool(true) },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("type") },
+                        .{ "title", h.vstr("Type") },
+                        .{ "type", h.vstr("`$STRING`") },
+                        .{ "req", h.vbool(true) },
+                        .{ "short", h.vstr("Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks.") },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("validation") },
+                        .{ "title", h.vstr("Validation") },
+                        .{ "type", h.vstr("`$OBJECT`") },
+                        .{ "short", h.vstr("Which submitted values were rejected and why, keyed by the name of the field they were submitted under.") },
+                    }),
+                }) },
+                .{ "id", h.jo(&.{
+                    .{ "field", h.vstr("id") },
+                    .{ "name", h.vstr("id") },
+                }) },
+                .{ "name", h.vstr("error") },
+                .{ "op", h.jo(&.{
+                    .{ "list", h.jo(&.{
+                        .{ "input", h.vstr("data") },
+                        .{ "name", h.vstr("list") },
+                        .{ "points", h.ja(&.{
+                            h.jo(&.{
+                                .{ "kind", h.vstr("http") },
+                                .{ "method", h.vstr("GET") },
+                                .{ "orig", h.vstr("/api/v1/errors/") },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("errors") },
+                                    }),
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("errors"),
+                                }) },
+                                .{ "rename", h.omap() },
+                                .{ "transform", h.jo(&.{
+                                    .{ "req", h.vstr("`reqdata`") },
+                                    .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "args", h.omap() },
+                                .{ "select", h.omap() },
+                                .{ "response", h.jo(&.{
+                                    .{ "kind", h.vstr("json") },
+                                    .{ "media", h.vstr("application/json") },
+                                }) },
+                            }),
+                        }) },
+                    }) },
+                }) },
+                .{ "relations", h.jo(&.{
+                    .{ "ancestors", h.olist() },
                 }) },
             }) },
             .{ "event", h.jo(&.{
@@ -1892,6 +2033,12 @@ pub fn make_config() Value {
                         .{ "type", h.vstr("`$STRING`") },
                         .{ "req", h.vbool(true) },
                     }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("token") },
+                        .{ "title", h.vstr("Token") },
+                        .{ "type", h.vstr("`$STRING`") },
+                        .{ "req", h.vbool(true) },
+                    }),
                 }) },
                 .{ "name", h.vstr("login") },
                 .{ "op", h.jo(&.{
@@ -1958,6 +2105,42 @@ pub fn make_config() Value {
                                     h.vstr("v1"),
                                     h.vstr("auth"),
                                     h.vstr("refresh"),
+                                }) },
+                                .{ "rename", h.omap() },
+                                .{ "transform", h.jo(&.{
+                                    .{ "req", h.vstr("`reqdata`") },
+                                    .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "args", h.omap() },
+                                .{ "select", h.omap() },
+                                .{ "response", h.jo(&.{
+                                    .{ "kind", h.vstr("json") },
+                                    .{ "media", h.vstr("application/json") },
+                                }) },
+                            }),
+                            h.jo(&.{
+                                .{ "kind", h.vstr("http") },
+                                .{ "method", h.vstr("POST") },
+                                .{ "orig", h.vstr("/api/v1/auth/verify-email") },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("verify-email") },
+                                    }),
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("verify-email"),
                                 }) },
                                 .{ "rename", h.omap() },
                                 .{ "transform", h.jo(&.{
@@ -2491,83 +2674,6 @@ pub fn make_config() Value {
                     .{ "ancestors", h.olist() },
                 }) },
             }) },
-            .{ "problem", h.jo(&.{
-                .{ "fields", h.ja(&.{
-                    h.jo(&.{
-                        .{ "name", h.vstr("detail") },
-                        .{ "title", h.vstr("Detail") },
-                        .{ "type", h.vstr("`$STRING`") },
-                        .{ "req", h.vbool(true) },
-                    }),
-                    h.jo(&.{
-                        .{ "name", h.vstr("id") },
-                        .{ "title", h.vstr("Id") },
-                        .{ "type", h.vstr("`$STRING`") },
-                        .{ "req", h.vbool(true) },
-                    }),
-                    h.jo(&.{
-                        .{ "name", h.vstr("status") },
-                        .{ "title", h.vstr("Status") },
-                        .{ "type", h.vstr("`$INTEGER`") },
-                        .{ "req", h.vbool(true) },
-                        .{ "format", h.vstr("int32") },
-                    }),
-                    h.jo(&.{
-                        .{ "name", h.vstr("title") },
-                        .{ "title", h.vstr("Title") },
-                        .{ "type", h.vstr("`$STRING`") },
-                        .{ "req", h.vbool(true) },
-                    }),
-                }) },
-                .{ "id", h.jo(&.{
-                    .{ "field", h.vstr("id") },
-                    .{ "name", h.vstr("id") },
-                }) },
-                .{ "name", h.vstr("problem") },
-                .{ "op", h.jo(&.{
-                    .{ "list", h.jo(&.{
-                        .{ "input", h.vstr("data") },
-                        .{ "name", h.vstr("list") },
-                        .{ "points", h.ja(&.{
-                            h.jo(&.{
-                                .{ "kind", h.vstr("http") },
-                                .{ "method", h.vstr("GET") },
-                                .{ "orig", h.vstr("/api/v1/errors/") },
-                                .{ "segments", h.ja(&.{
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("api") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("v1") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("errors") },
-                                    }),
-                                }) },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("errors"),
-                                }) },
-                                .{ "rename", h.omap() },
-                                .{ "transform", h.jo(&.{
-                                    .{ "req", h.vstr("`reqdata`") },
-                                    .{ "res", h.vstr("`body`") },
-                                }) },
-                                .{ "args", h.omap() },
-                                .{ "select", h.omap() },
-                                .{ "response", h.jo(&.{
-                                    .{ "kind", h.vstr("json") },
-                                    .{ "media", h.vstr("application/json") },
-                                }) },
-                            }),
-                        }) },
-                    }) },
-                }) },
-                .{ "relations", h.jo(&.{
-                    .{ "ancestors", h.olist() },
-                }) },
-            }) },
             .{ "quota", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
@@ -2659,6 +2765,12 @@ pub fn make_config() Value {
                         .{ "title", h.vstr("Password") },
                         .{ "type", h.vstr("`$STRING`") },
                         .{ "req", h.vbool(true) },
+                    }),
+                    h.jo(&.{
+                        .{ "name", h.vstr("signup_channel") },
+                        .{ "title", h.vstr("Signup Channel") },
+                        .{ "type", h.vstr("`$STRING`") },
+                        .{ "short", h.vstr("Optional label saying where this signup came from (`organic:google`, `social:linkedin`, `referral:<host>`, `direct`, …), derived in the browser from the referrer and campaign parameters.") },
                     }),
                     h.jo(&.{
                         .{ "name", h.vstr("turnstile_token") },
@@ -3939,6 +4051,12 @@ pub fn make_config() Value {
             .{ "user_authentication", h.jo(&.{
                 .{ "fields", h.ja(&.{
                     h.jo(&.{
+                        .{ "name", h.vstr("current_password") },
+                        .{ "title", h.vstr("Current Password") },
+                        .{ "type", h.vstr("`$STRING`") },
+                        .{ "req", h.vbool(true) },
+                    }),
+                    h.jo(&.{
                         .{ "name", h.vstr("email") },
                         .{ "title", h.vstr("Email") },
                         .{ "type", h.vstr("`$STRING`") },
@@ -4062,6 +4180,38 @@ pub fn make_config() Value {
                             h.jo(&.{
                                 .{ "kind", h.vstr("http") },
                                 .{ "method", h.vstr("POST") },
+                                .{ "orig", h.vstr("/api/v1/auth/resend-verification-email") },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("auth") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("resend-verification-email") },
+                                    }),
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("auth"),
+                                    h.vstr("resend-verification-email"),
+                                }) },
+                                .{ "rename", h.omap() },
+                                .{ "transform", h.jo(&.{
+                                    .{ "req", h.vstr("`reqdata`") },
+                                    .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "args", h.omap() },
+                                .{ "select", h.omap() },
+                            }),
+                            h.jo(&.{
+                                .{ "kind", h.vstr("http") },
+                                .{ "method", h.vstr("POST") },
                                 .{ "orig", h.vstr("/api/v1/auth/reset-password") },
                                 .{ "segments", h.ja(&.{
                                     h.jo(&.{
@@ -4082,38 +4232,6 @@ pub fn make_config() Value {
                                     h.vstr("v1"),
                                     h.vstr("auth"),
                                     h.vstr("reset-password"),
-                                }) },
-                                .{ "rename", h.omap() },
-                                .{ "transform", h.jo(&.{
-                                    .{ "req", h.vstr("`reqdata`") },
-                                    .{ "res", h.vstr("`body`") },
-                                }) },
-                                .{ "args", h.omap() },
-                                .{ "select", h.omap() },
-                            }),
-                            h.jo(&.{
-                                .{ "kind", h.vstr("http") },
-                                .{ "method", h.vstr("POST") },
-                                .{ "orig", h.vstr("/api/v1/auth/verify-email") },
-                                .{ "segments", h.ja(&.{
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("api") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("v1") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("auth") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("verify-email") },
-                                    }),
-                                }) },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("auth"),
-                                    h.vstr("verify-email"),
                                 }) },
                                 .{ "rename", h.omap() },
                                 .{ "transform", h.jo(&.{

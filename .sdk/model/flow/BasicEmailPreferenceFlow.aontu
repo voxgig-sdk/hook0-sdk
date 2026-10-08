@@ -1,0 +1,18 @@
+# BasicEmailPreferenceFlow
+
+main: kit: flow: BasicEmailPreferenceFlow:
+{
+  entity: "email_preference",
+  kind: "basic",
+  name: "BasicEmailPreferenceFlow",
+  step: [
+    {
+      i: {
+        ref: "email_preference_ref01"
+      }
+
+      o: "create"
+    }
+  ],
+  "key$": "BasicEmailPreferenceFlow"
+}

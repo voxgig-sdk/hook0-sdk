@@ -129,6 +129,38 @@ class ApplicationsManagementRemoveMatch
     public string $application_id;
 }
 
+/** EmailPreference entity data model. */
+class EmailPreference
+{
+}
+
+/** Request payload for EmailPreference#create. */
+class EmailPreferenceCreateData
+{
+}
+
+/** Error entity data model. */
+class Error
+{
+    public string $detail;
+    public string $id;
+    public int $status;
+    public string $title;
+    public string $type;
+    public ?array $validation = null;
+}
+
+/** Request payload for Error#list. */
+class ErrorListMatch
+{
+    public ?string $detail = null;
+    public ?string $id = null;
+    public ?int $status = null;
+    public ?string $title = null;
+    public ?string $type = null;
+    public ?array $validation = null;
+}
+
 /** Event entity data model. */
 class Event
 {
@@ -333,6 +365,7 @@ class Login
 {
     public string $email;
     public string $password;
+    public string $token;
 }
 
 /** Request payload for Login#create. */
@@ -340,6 +373,7 @@ class LoginCreateData
 {
     public string $email;
     public string $password;
+    public string $token;
 }
 
 /** Organization entity data model. */
@@ -446,24 +480,6 @@ class OrganizationEditRoleUpdateData
     public ?string $user_id = null;
 }
 
-/** Problem entity data model. */
-class Problem
-{
-    public string $detail;
-    public string $id;
-    public int $status;
-    public string $title;
-}
-
-/** Request payload for Problem#list. */
-class ProblemListMatch
-{
-    public ?string $detail = null;
-    public ?string $id = null;
-    public ?int $status = null;
-    public ?string $title = null;
-}
-
 /** Quota entity data model. */
 class Quota
 {
@@ -486,6 +502,7 @@ class Registration
     public ?string $gclid = null;
     public string $last_name;
     public string $password;
+    public ?string $signup_channel = null;
     public ?string $turnstile_token = null;
 }
 
@@ -497,6 +514,7 @@ class RegistrationCreateData
     public ?string $gclid = null;
     public string $last_name;
     public string $password;
+    public ?string $signup_channel = null;
     public ?string $turnstile_token = null;
 }
 
@@ -703,6 +721,7 @@ class SubscriptionRemoveMatch
 /** UserAuthentication entity data model. */
 class UserAuthentication
 {
+    public string $current_password;
     public string $email;
     public string $new_password;
     public string $token;
@@ -711,6 +730,7 @@ class UserAuthentication
 /** Request payload for UserAuthentication#create. */
 class UserAuthenticationCreateData
 {
+    public string $current_password;
     public string $email;
     public string $new_password;
     public string $token;
