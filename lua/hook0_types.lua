@@ -26,30 +26,13 @@
 ---@field organization_id string
 
 ---@class ApplicationCreateData
----@field amount number
----@field application_id string
----@field application_name string
----@field consumption table
----@field date string
----@field id? string
----@field is_provisional boolean
 ---@field name string
----@field onboarding_steps table
 ---@field organization_id string
----@field quotas table
 
 ---@class ApplicationUpdateData
 ---@field id string
----@field amount? number
----@field application_id? string
----@field application_name? string
----@field consumption? table
----@field date? string
----@field is_provisional? boolean
 ---@field name? string
----@field onboarding_steps? table
 ---@field organization_id? string
----@field quotas? table
 
 ---@class ApplicationRemoveMatch
 ---@field id string
@@ -67,29 +50,21 @@
 
 ---@class ApplicationSecretCreateData
 ---@field application_id string
----@field created_at string
----@field deleted_at? string
----@field id? string
 ---@field name? string
----@field token string
 
 ---@class ApplicationSecretUpdateData
 ---@field id string
 ---@field application_id? string
----@field created_at? string
----@field deleted_at? string
 ---@field name? string
----@field token? string
 
----@class ApplicationsManagement
-
----@class ApplicationsManagementRemoveMatch
----@field application_secret_token string
+---@class ApplicationSecretRemoveMatch
+---@field id string
 ---@field application_id string
 
 ---@class EmailPreference
 
 ---@class EmailPreferenceCreateData
+---@field token? any
 
 ---@class Error
 ---@field detail string
@@ -128,15 +103,7 @@
 
 ---@class EventCreateData
 ---@field id string
----@field event_id string
----@field event_type_name string
----@field ip string
----@field labels table
----@field metadata? table
----@field occurred_at string
----@field payload string
----@field payload_content_type string
----@field received_at string
+---@field application_id? any
 
 ---@class EventType
 ---@field application_id string
@@ -158,22 +125,17 @@
 
 ---@class EventTypeCreateData
 ---@field application_id string
----@field event_type_name string
----@field id? string
 ---@field resource_type string
----@field resource_type_name string
 ---@field service string
----@field service_name string
 ---@field verb string
----@field verb_name string
+
+---@class EventTypeRemoveMatch
+---@field id string
+---@field application_id string
 
 ---@class EventsManagement
 
 ---@class EventsManagementListMatch
-
----@class EventsManagementRemoveMatch
----@field event_type_name string
----@field application_id string
 
 ---@class Health
 ---@field database boolean
@@ -295,36 +257,11 @@
 ---@field users? table
 
 ---@class OrganizationCreateData
----@field amount number
----@field application_id string
----@field application_name string
----@field consumption table
----@field date string
----@field id? string
----@field is_provisional boolean
 ---@field name string
----@field onboarding_steps table
----@field organization_id string
----@field plan table
----@field quotas table
----@field role string
----@field users table
 
 ---@class OrganizationUpdateData
 ---@field id string
----@field amount? number
----@field application_id? string
----@field application_name? string
----@field consumption? table
----@field date? string
----@field is_provisional? boolean
 ---@field name? string
----@field onboarding_steps? table
----@field organization_id? string
----@field plan? table
----@field quotas? table
----@field role? string
----@field users? table
 
 ---@class OrganizationRemoveMatch
 ---@field id string
@@ -428,20 +365,13 @@
 ---@field organization_id string
 
 ---@class ServiceTokenCreateData
----@field biscuit string
----@field created_at string
----@field id? string
 ---@field name string
 ---@field organization_id string
----@field token_id string
 
 ---@class ServiceTokenUpdateData
 ---@field id string
----@field biscuit? string
----@field created_at? string
 ---@field name? string
 ---@field organization_id? string
----@field token_id? string
 
 ---@class ServiceTokenRemoveMatch
 ---@field id string
@@ -472,25 +402,19 @@
 
 ---@class SubscriptionCreateData
 ---@field application_id string
----@field created_at string
----@field dedicated_workers table
+---@field dedicated_workers? table
 ---@field description? string
 ---@field event_types table
----@field id? string
 ---@field is_enabled boolean
----@field label_key string
----@field label_value string
----@field labels table
----@field metadata table
----@field secret string
----@field subscription_id string
+---@field label_key? string
+---@field label_value? string
+---@field labels? table
+---@field metadata? table
 ---@field target table
----@field updated_at string
 
 ---@class SubscriptionUpdateData
 ---@field id string
 ---@field application_id? string
----@field created_at? string
 ---@field dedicated_workers? table
 ---@field description? string
 ---@field event_types? table
@@ -499,10 +423,7 @@
 ---@field label_value? string
 ---@field labels? table
 ---@field metadata? table
----@field secret? string
----@field subscription_id? string
 ---@field target? table
----@field updated_at? string
 
 ---@class SubscriptionRemoveMatch
 ---@field id string

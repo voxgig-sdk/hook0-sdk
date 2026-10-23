@@ -147,7 +147,7 @@ describe("EventTypeEntity", function()
     local setup = event_type_basic_setup(nil)
     -- Per-op sdk-test-control.json skip.
     local _live = setup.live or false
-    for _, _op in ipairs({"create", "list", "load"}) do
+    for _, _op in ipairs({"create", "list", "load", "remove"}) do
       local _should_skip, _reason = runner.is_control_skipped("entityOp", "event_type." .. _op, _live and "live" or "unit")
       if _should_skip then
         pending(_reason or "skipped via sdk-test-control.json")
@@ -188,6 +188,25 @@ describe("EventTypeEntity", function()
     local event_type_ref01_data_dt0_load_result = helpers.to_map(type(event_type_ref01_data_dt0_loaded) == 'table' and event_type_ref01_data_dt0_loaded.data_get and event_type_ref01_data_dt0_loaded:data_get() or event_type_ref01_data_dt0_loaded)
     assert.is_not_nil(event_type_ref01_data_dt0_load_result)
     assert.are.equal(event_type_ref01_data_dt0_load_result["id"], event_type_ref01_data["id"])
+
+    -- REMOVE
+    local event_type_ref01_match_rm0 = {
+      id = event_type_ref01_data["id"],
+    }
+    local _, err = event_type_ref01_ent:remove(event_type_ref01_match_rm0, nil)
+    assert.is_nil(err)
+
+    -- LIST
+    local event_type_ref01_match_rt0 = {}
+
+    local event_type_ref01_list_rt0_result, err = event_type_ref01_ent:list(event_type_ref01_match_rt0, nil)
+    assert.is_nil(err)
+    assert.is_table(event_type_ref01_list_rt0_result)
+
+    local not_found_item = vs.select(
+      runner.entity_list_to_data(event_type_ref01_list_rt0_result),
+      { id = event_type_ref01_data["id"] })
+    assert.is_true(vs.isempty(not_found_item))
 
   end)
 end)

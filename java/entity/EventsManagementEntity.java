@@ -69,29 +69,9 @@ public class EventsManagementEntity extends EntityBase {
   }
 
 
-
   @Override
-  public Object remove(Map<String, Object> reqmatch, Map<String, Object> ctrl) {
-    Map<String, Object> ctxmap = new LinkedHashMap<>();
-    ctxmap.put("opname", "remove");
-    ctxmap.put("ctrl", ctrl);
-    ctxmap.put("match", this.match);
-    ctxmap.put("data", this.data);
-    ctxmap.put("reqmatch", reqmatch);
-    Context ctx = this.utility.makeContext.apply(ctxmap, this.entctx);
-
-    return runOp(ctx, () -> {
-      if (ctx.result != null) {
-        if (ctx.result.resmatch != null) {
-          this.match = ctx.result.resmatch;
-        }
-        if (ctx.result.resdata != null) {
-          Map<String, Object> d = Helpers.toMapAny(Struct.clone(ctx.result.resdata));
-          this.data = d == null ? new LinkedHashMap<>() : d;
-        }
-      }
-    });
+  public Object remove(Map<String, Object> req, Map<String, Object> ctrl) {
+    throw Helpers.unsupportedOp("remove", this.name);
   }
-
 
 }

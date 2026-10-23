@@ -168,19 +168,6 @@ func TestEventsManagementEntity(t *testing.T) {
 		}
 	})
 
-	t.Run("validate", func(t *testing.T) {
-		if !fhHasFeature("validate") {
-			t.Skip("feature not present in this SDK: validate")
-		}
-		client := sdk.TestSDK(nil, map[string]any{
-			"feature": map[string]any{"validate": map[string]any{"active": true}},
-		})
-		_, err := client.EventsManagement(nil).Remove(map[string]any{"event_type_name": 1, "application_id": "x"}, nil)
-		if sdkerr, ok := err.(*core.Hook0Error); !ok || "validate_failed" != sdkerr.Code {
-			t.Fatalf("expected validate_failed, got %v", err)
-		}
-	})
-
 	t.Run("basic", func(tt *testing.T) {
 		var t testing.TB = tt
 		setup := events_managementBasicSetup(nil)
@@ -200,6 +187,7 @@ func TestEventsManagementEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// Bootstrap entity data from existing test data (no create step in flow).
 		eventsManagementRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.events_management")))
@@ -252,7 +240,7 @@ func events_managementBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap, _ := vs.Transform(
-		[]any{"events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03"},
+		[]any{"events_management01", "events_management02", "events_management03"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",

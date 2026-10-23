@@ -63,6 +63,7 @@ func TestIngestedEventEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		ingestedEventRef01Ent := client.IngestedEvent(nil)

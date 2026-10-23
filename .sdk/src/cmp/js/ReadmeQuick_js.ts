@@ -1,5 +1,5 @@
 
-import { cmp, each, Content, isAuthActive, packageName, envName, opRequestShape, entityIdField, entityOps, safeVarName, exampleVarName, jsKey, matchArg, listMatchArg } from '@voxgig/sdkgen'
+import { cmp, each, Content, isAuthActive, packageName, envName, opRequestShape, entityIdField, entityOps, safeVarName, exampleVarName, jsKey, matchArg, listMatchArg, matchExampleItems } from '@voxgig/sdkgen'
 
 import {
   KIT,
@@ -61,8 +61,7 @@ const client = ${ctor}
     // params like page_id) — the same shape the runtime resolves path params
     // from, so the example always carries the keys the route needs.
     const matchArg = (opname: string): string => {
-      const matchItems = opRequestShape(exampleEntity, opname).items
-        .filter((it: any) => !it.optional || it.name === idF)
+      const matchItems = matchExampleItems(exampleEntity, opname, idF)
         .sort((a: any, b: any) =>
           (a.name === idF ? 0 : 1) - (b.name === idF ? 0 : 1))
       return 0 < matchItems.length
@@ -111,7 +110,7 @@ console.log(created.data())
 
     if (opnames.includes('update')) {
       const updateLines = (idF
-        ? [`  ${idF}: ${exampleValue(exampleEntity, exampleEntity.op && exampleEntity.op.update, idF, exampleEntity.name + '_id')},`]
+        ? [`  ${jsKey(idF)}: ${exampleValue(exampleEntity, exampleEntity.op && exampleEntity.op.update, idF, exampleEntity.name + '_id')},`]
         : []).concat(exampleFields('update'))
       const updateBody = updateLines.length ? '\n' + updateLines.join('\n') + '\n' : ''
       Content(`
@@ -126,7 +125,7 @@ console.log(updated.data())
 
     if (opnames.includes('patch')) {
       const patchLines = (idF
-        ? [`  ${idF}: ${exampleValue(exampleEntity, exampleEntity.op && exampleEntity.op.patch, idF, exampleEntity.name + '_id')},`]
+        ? [`  ${jsKey(idF)}: ${exampleValue(exampleEntity, exampleEntity.op && exampleEntity.op.patch, idF, exampleEntity.name + '_id')},`]
         : []).concat(exampleFields('patch'))
       const patchBody = patchLines.length ? '\n' + patchLines.join('\n') + '\n' : ''
       Content(`

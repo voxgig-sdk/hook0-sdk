@@ -1,5 +1,5 @@
 
-import { cmp, Content, isAuthActive, envName, canonKey, entityIdField, opRequestShape , serverVariables, javaMapOf } from '@voxgig/sdkgen'
+import { cmp, Content, isAuthActive, envName, canonKey, entityIdField, opRequestShape , serverVariables, javaMapOf, matchExampleItems, javaMapItems } from '@voxgig/sdkgen'
 
 import {
   KIT,
@@ -79,13 +79,12 @@ for (Object ${eVar}Item : ${eVar}List) {
     }
 
     if (opnames.includes('load')) {
-      const loadItems = opRequestShape(exampleEntity, 'load').items
-        .filter((it: any) => !it.optional || it.name === idF)
+      const loadItems = javaMapItems(matchExampleItems(exampleEntity, 'load', idF))
         .sort((a: any, b: any) =>
           (a.name === idF ? 0 : 1) - (b.name === idF ? 0 : 1))
       const loadArg = 0 < loadItems.length
         ? javaMapOf(loadItems.map((it: any) =>
-          `"${it.name}", ${javaLit(it.type,
+          `${JSON.stringify(it.name)}, ${javaLit(it.type,
             it.name === idF ? 'example_id' : 'example_' + it.name)}`))
         : 'null'
       Content(`

@@ -122,6 +122,29 @@ pub fn make_config() Value {
                 .{ "strict", h.vbool(false) },
                 .{ "transport", h.vstr("wrap") },
             }) },
+            .{ "secrets", h.jo(&.{
+                .{ "options", h.jo(&.{
+                    .{ "active", h.vbool(false) },
+                    .{ "cache", h.vbool(true) },
+                    .{ "exchange", h.jo(&.{
+                        .{ "active", h.vbool(false) },
+                        .{ "method", h.vstr("POST") },
+                        .{ "path", h.vstr("auth/token") },
+                        .{ "refresh", h.vstr("") },
+                        .{ "request", h.vstr("refresh_token") },
+                        .{ "response", h.vstr("access_token") },
+                        .{ "retries", h.vnum(1) },
+                        .{ "statuses", h.ja(&.{
+                            h.vnum(401),
+                        }) },
+                    }) },
+                    .{ "name", h.vstr("apikey") },
+                    .{ "providers", h.olist() },
+                }) },
+                .{ "optspec", h.omap() },
+                .{ "strict", h.vbool(false) },
+                .{ "transport", h.vstr("wrap") },
+            }) },
             .{ "test", h.jo(&.{
                 .{ "options", h.jo(&.{
                     .{ "active", h.vbool(false) },
@@ -150,7 +173,7 @@ pub fn make_config() Value {
         .{ "options", h.jo(&.{
             .{ "base", h.vstr("https://app.hook0.com") },
             .{ "auth", h.jo(&.{
-                .{ "prefix", h.vstr("") },
+                .{ "prefix", h.vstr("Bearer") },
             }) },
             .{ "headers", h.jo(&.{
                 .{ "content-type", h.vstr("application/json") },
@@ -158,7 +181,6 @@ pub fn make_config() Value {
             .{ "entity", h.jo(&.{
                 .{ "application", h.omap() },
                 .{ "application_secret", h.omap() },
-                .{ "applications_management", h.omap() },
                 .{ "email_preference", h.omap() },
                 .{ "error", h.omap() },
                 .{ "event", h.omap() },
@@ -739,6 +761,73 @@ pub fn make_config() Value {
                             }),
                         }) },
                     }) },
+                    .{ "remove", h.jo(&.{
+                        .{ "input", h.vstr("data") },
+                        .{ "name", h.vstr("remove") },
+                        .{ "points", h.ja(&.{
+                            h.jo(&.{
+                                .{ "kind", h.vstr("http") },
+                                .{ "method", h.vstr("DELETE") },
+                                .{ "orig", h.vstr("/api/v1/application_secrets/{application_secret_token}") },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("application_secrets") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("application_secrets"),
+                                    h.vstr("{id}"),
+                                }) },
+                                .{ "rename", h.jo(&.{
+                                    .{ "param", h.jo(&.{
+                                        .{ "application_secret_token", h.vstr("id") },
+                                    }) },
+                                }) },
+                                .{ "transform", h.jo(&.{
+                                    .{ "req", h.vstr("`reqdata`") },
+                                    .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "args", h.jo(&.{
+                                    .{ "params", h.ja(&.{
+                                        h.jo(&.{
+                                            .{ "name", h.vstr("id") },
+                                            .{ "orig", h.vstr("application_secret_token") },
+                                            .{ "type", h.vstr("`$STRING`") },
+                                            .{ "kind", h.vstr("param") },
+                                            .{ "reqd", h.vbool(true) },
+                                        }),
+                                    }) },
+                                    .{ "query", h.ja(&.{
+                                        h.jo(&.{
+                                            .{ "name", h.vstr("application_id") },
+                                            .{ "orig", h.vstr("application_id") },
+                                            .{ "type", h.vstr("`$STRING`") },
+                                            .{ "kind", h.vstr("query") },
+                                            .{ "reqd", h.vbool(true) },
+                                            .{ "field", h.vbool(true) },
+                                        }),
+                                    }) },
+                                }) },
+                                .{ "select", h.jo(&.{
+                                    .{ "exist", h.ja(&.{
+                                        h.vstr("application_id"),
+                                        h.vstr("id"),
+                                    }) },
+                                }) },
+                            }),
+                        }) },
+                    }) },
                     .{ "update", h.jo(&.{
                         .{ "input", h.vstr("data") },
                         .{ "name", h.vstr("update") },
@@ -802,81 +891,6 @@ pub fn make_config() Value {
                 }) },
                 .{ "relations", h.jo(&.{
                     .{ "ancestors", h.olist() },
-                }) },
-            }) },
-            .{ "applications_management", h.jo(&.{
-                .{ "fields", h.olist() },
-                .{ "name", h.vstr("applications_management") },
-                .{ "op", h.jo(&.{
-                    .{ "remove", h.jo(&.{
-                        .{ "input", h.vstr("data") },
-                        .{ "name", h.vstr("remove") },
-                        .{ "points", h.ja(&.{
-                            h.jo(&.{
-                                .{ "kind", h.vstr("http") },
-                                .{ "method", h.vstr("DELETE") },
-                                .{ "orig", h.vstr("/api/v1/application_secrets/{application_secret_token}") },
-                                .{ "segments", h.ja(&.{
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("api") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("v1") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("application_secrets") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "var", h.vstr("application_secret_token") },
-                                    }),
-                                }) },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("application_secrets"),
-                                    h.vstr("{application_secret_token}"),
-                                }) },
-                                .{ "rename", h.omap() },
-                                .{ "transform", h.jo(&.{
-                                    .{ "req", h.vstr("`reqdata`") },
-                                    .{ "res", h.vstr("`body`") },
-                                }) },
-                                .{ "args", h.jo(&.{
-                                    .{ "params", h.ja(&.{
-                                        h.jo(&.{
-                                            .{ "name", h.vstr("application_secret_token") },
-                                            .{ "orig", h.vstr("application_secret_token") },
-                                            .{ "type", h.vstr("`$STRING`") },
-                                            .{ "kind", h.vstr("param") },
-                                            .{ "reqd", h.vbool(true) },
-                                        }),
-                                    }) },
-                                    .{ "query", h.ja(&.{
-                                        h.jo(&.{
-                                            .{ "name", h.vstr("application_id") },
-                                            .{ "orig", h.vstr("application_id") },
-                                            .{ "type", h.vstr("`$STRING`") },
-                                            .{ "kind", h.vstr("query") },
-                                            .{ "reqd", h.vbool(true) },
-                                        }),
-                                    }) },
-                                }) },
-                                .{ "select", h.jo(&.{
-                                    .{ "exist", h.ja(&.{
-                                        h.vstr("application_id"),
-                                        h.vstr("application_secret_token"),
-                                    }) },
-                                }) },
-                            }),
-                        }) },
-                    }) },
-                }) },
-                .{ "relations", h.jo(&.{
-                    .{ "ancestors", h.ja(&.{
-                        h.ja(&.{
-                            h.vstr("$.main.kit.entity.application_secret"),
-                        }),
-                    }) },
                 }) },
             }) },
             .{ "email_preference", h.jo(&.{
@@ -1502,6 +1516,73 @@ pub fn make_config() Value {
                             }),
                         }) },
                     }) },
+                    .{ "remove", h.jo(&.{
+                        .{ "input", h.vstr("data") },
+                        .{ "name", h.vstr("remove") },
+                        .{ "points", h.ja(&.{
+                            h.jo(&.{
+                                .{ "kind", h.vstr("http") },
+                                .{ "method", h.vstr("DELETE") },
+                                .{ "orig", h.vstr("/api/v1/event_types/{event_type_name}") },
+                                .{ "segments", h.ja(&.{
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("api") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("v1") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "lit", h.vstr("event_types") },
+                                    }),
+                                    h.jo(&.{
+                                        .{ "var", h.vstr("id") },
+                                    }),
+                                }) },
+                                .{ "parts", h.ja(&.{
+                                    h.vstr("api"),
+                                    h.vstr("v1"),
+                                    h.vstr("event_types"),
+                                    h.vstr("{id}"),
+                                }) },
+                                .{ "rename", h.jo(&.{
+                                    .{ "param", h.jo(&.{
+                                        .{ "event_type_name", h.vstr("id") },
+                                    }) },
+                                }) },
+                                .{ "transform", h.jo(&.{
+                                    .{ "req", h.vstr("`reqdata`") },
+                                    .{ "res", h.vstr("`body`") },
+                                }) },
+                                .{ "args", h.jo(&.{
+                                    .{ "params", h.ja(&.{
+                                        h.jo(&.{
+                                            .{ "name", h.vstr("id") },
+                                            .{ "orig", h.vstr("event_type_name") },
+                                            .{ "type", h.vstr("`$STRING`") },
+                                            .{ "kind", h.vstr("param") },
+                                            .{ "reqd", h.vbool(true) },
+                                        }),
+                                    }) },
+                                    .{ "query", h.ja(&.{
+                                        h.jo(&.{
+                                            .{ "name", h.vstr("application_id") },
+                                            .{ "orig", h.vstr("application_id") },
+                                            .{ "type", h.vstr("`$STRING`") },
+                                            .{ "kind", h.vstr("query") },
+                                            .{ "reqd", h.vbool(true) },
+                                            .{ "field", h.vbool(true) },
+                                        }),
+                                    }) },
+                                }) },
+                                .{ "select", h.jo(&.{
+                                    .{ "exist", h.ja(&.{
+                                        h.vstr("application_id"),
+                                        h.vstr("id"),
+                                    }) },
+                                }) },
+                            }),
+                        }) },
+                    }) },
                 }) },
                 .{ "relations", h.jo(&.{
                     .{ "ancestors", h.olist() },
@@ -1549,75 +1630,9 @@ pub fn make_config() Value {
                             }),
                         }) },
                     }) },
-                    .{ "remove", h.jo(&.{
-                        .{ "input", h.vstr("data") },
-                        .{ "name", h.vstr("remove") },
-                        .{ "points", h.ja(&.{
-                            h.jo(&.{
-                                .{ "kind", h.vstr("http") },
-                                .{ "method", h.vstr("DELETE") },
-                                .{ "orig", h.vstr("/api/v1/event_types/{event_type_name}") },
-                                .{ "segments", h.ja(&.{
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("api") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("v1") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "lit", h.vstr("event_types") },
-                                    }),
-                                    h.jo(&.{
-                                        .{ "var", h.vstr("event_type_name") },
-                                    }),
-                                }) },
-                                .{ "parts", h.ja(&.{
-                                    h.vstr("api"),
-                                    h.vstr("v1"),
-                                    h.vstr("event_types"),
-                                    h.vstr("{event_type_name}"),
-                                }) },
-                                .{ "rename", h.omap() },
-                                .{ "transform", h.jo(&.{
-                                    .{ "req", h.vstr("`reqdata`") },
-                                    .{ "res", h.vstr("`body`") },
-                                }) },
-                                .{ "args", h.jo(&.{
-                                    .{ "params", h.ja(&.{
-                                        h.jo(&.{
-                                            .{ "name", h.vstr("event_type_name") },
-                                            .{ "orig", h.vstr("event_type_name") },
-                                            .{ "type", h.vstr("`$STRING`") },
-                                            .{ "kind", h.vstr("param") },
-                                            .{ "reqd", h.vbool(true) },
-                                        }),
-                                    }) },
-                                    .{ "query", h.ja(&.{
-                                        h.jo(&.{
-                                            .{ "name", h.vstr("application_id") },
-                                            .{ "orig", h.vstr("application_id") },
-                                            .{ "type", h.vstr("`$STRING`") },
-                                            .{ "kind", h.vstr("query") },
-                                            .{ "reqd", h.vbool(true) },
-                                        }),
-                                    }) },
-                                }) },
-                                .{ "select", h.jo(&.{
-                                    .{ "exist", h.ja(&.{
-                                        h.vstr("application_id"),
-                                        h.vstr("event_type_name"),
-                                    }) },
-                                }) },
-                            }),
-                        }) },
-                    }) },
                 }) },
                 .{ "relations", h.jo(&.{
-                    .{ "ancestors", h.ja(&.{
-                        h.ja(&.{
-                            h.vstr("$.main.kit.entity.event_type"),
-                        }),
-                    }) },
+                    .{ "ancestors", h.olist() },
                 }) },
             }) },
             .{ "health", h.jo(&.{
@@ -4379,5 +4394,6 @@ pub fn make_feature(name: []const u8) Feature {
     if (std.mem.eql(u8, name, "telemetry")) return @import("../feature/telemetry.zig").TelemetryFeature.make();
     if (std.mem.eql(u8, name, "test")) return @import("../feature/test.zig").TestFeature.make();
     if (std.mem.eql(u8, name, "timeout")) return @import("../feature/timeout.zig").TimeoutFeature.make();
+    if (std.mem.eql(u8, name, "secrets")) return @import("../feature/secrets.zig").SecretsFeature.make();
     return @import("../feature/base.zig").BaseFeature.make();
 }

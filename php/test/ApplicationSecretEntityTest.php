@@ -173,6 +173,24 @@ class ApplicationSecretEntityTest extends TestCase
         $this->assertSame(2, $client->_cost["total"]["attempts"]);
     }
 
+    public function test_validate_list_response(): void
+    {
+        $cfg = Hook0Config::shared_config();
+        if (!isset($cfg["feature"]["validate"])) {
+            $this->markTestSkipped('feature not present in this SDK: validate');
+        }
+        $opts = ["feature" => ["validate" => ["active" => true, "request" => false, "response" => true]]];
+        $listed = Hook0SDK::test(['entity' => ['application_secret' => ['v1' => ['application_id' => 'x', 'created_at' => 'x', 'token' => 'x']]]], $opts)->ApplicationSecret(null)->list(null, null);
+        $this->assertSame(['v1'], array_map(fn($ent) => $ent->data_get()['id'] ?? null, $listed));
+        $err = null;
+        try {
+            Hook0SDK::test(['entity' => ['application_secret' => ['v1' => ['application_id' => 1, 'created_at' => 'x', 'token' => 'x']]]], $opts)->ApplicationSecret(null)->list(null, null);
+        } catch (\Throwable $e) {
+            $err = $e;
+        }
+        $this->assertSame('validate_failed', $err->sdk_code ?? null);
+    }
+
     public function test_validate(): void
     {
         $cfg = Hook0Config::shared_config();
@@ -194,7 +212,7 @@ class ApplicationSecretEntityTest extends TestCase
         $setup = application_secret_basic_setup(null);
         // Per-op sdk-test-control.json skip.
         $_live = !empty($setup["live"]);
-        foreach (["create", "list", "update"] as $_op) {
+        foreach (["create", "list", "update", "remove"] as $_op) {
             [$_shouldSkip, $_reason] = Runner::is_control_skipped("entityOp", "application_secret." . $_op, $_live ? "live" : "unit");
             if ($_shouldSkip) {
                 $this->markTestSkipped($_reason ?? "skipped via sdk-test-control.json");
@@ -238,6 +256,23 @@ class ApplicationSecretEntityTest extends TestCase
         $this->assertNotNull($application_secret_ref01_resdata_up0);
         $this->assertEquals($application_secret_ref01_resdata_up0["id"], $application_secret_ref01_data_up0_up["id"]);
         $this->assertEquals($application_secret_ref01_resdata_up0[$application_secret_ref01_markdef_up0_name], $application_secret_ref01_markdef_up0_value);
+
+        // REMOVE
+        $application_secret_ref01_match_rm0 = [
+            "id" => $application_secret_ref01_data["id"],
+        ];
+        $application_secret_ref01_ent->remove($application_secret_ref01_match_rm0, null);
+
+        // LIST
+        $application_secret_ref01_match_rt0 = [];
+
+        $application_secret_ref01_list_rt0_result = $application_secret_ref01_ent->list($application_secret_ref01_match_rt0, null);
+        $this->assertIsArray($application_secret_ref01_list_rt0_result);
+
+        $not_found_item = sdk_select(
+            Runner::entity_list_to_data($application_secret_ref01_list_rt0_result),
+            ["id" => $application_secret_ref01_data["id"]]);
+        $this->assertEmpty($not_found_item);
 
     }
 }

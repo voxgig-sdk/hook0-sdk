@@ -114,6 +114,16 @@ class TestEventTypeEntity:
         assert client.EventType(None).list(None, {"throw": False}) is None
         assert fired < hook.unexpected
 
+    def test_should_validate_each_listed_record(self):
+        if "validate" not in (shared_config().get("feature") or {}):
+            pytest.skip("feature not present in this SDK: validate")
+        opts = {"feature": {"validate": {"active": True, "request": False, "response": True}}}
+        listed = Hook0SDK.test({"entity": {"event_type": {"v1": {"application_id": "x", "event_type_name": "x", "resource_type": "x", "resource_type_name": "x", "service": "x", "service_name": "x", "verb": "x", "verb_name": "x"}}}}, opts).EventType(None).list(None, None)
+        assert ["v1"] == [ent.data_get().get("id") for ent in listed]
+        with pytest.raises(Exception) as err:
+            Hook0SDK.test({"entity": {"event_type": {"v1": {"application_id": 1, "event_type_name": "x", "resource_type": "x", "resource_type_name": "x", "service": "x", "service_name": "x", "verb": "x", "verb_name": "x"}}}}, opts).EventType(None).list(None, None)
+        assert "validate_failed" == getattr(err.value, "code", None)
+
     def test_should_refuse_an_invalid_request(self):
         if "validate" not in (shared_config().get("feature") or {}):
             pytest.skip("feature not present in this SDK: validate")
@@ -129,7 +139,7 @@ class TestEventTypeEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["create", "list", "load"]:
+        for _op in ["create", "list", "load", "remove"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "event_type." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
@@ -164,6 +174,23 @@ class TestEventTypeEntity:
         event_type_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(event_type_ref01_data_dt0_loaded))
         assert event_type_ref01_data_dt0_load_result is not None
         assert event_type_ref01_data_dt0_load_result["id"] == event_type_ref01_data["id"]
+
+        # REMOVE
+        event_type_ref01_match_rm0 = {
+            "id": event_type_ref01_data["id"],
+        }
+        event_type_ref01_ent.remove(event_type_ref01_match_rm0, None)
+
+        # LIST
+        event_type_ref01_match_rt0 = {}
+
+        event_type_ref01_list_rt0_result = event_type_ref01_ent.list(event_type_ref01_match_rt0, None)
+        assert isinstance(event_type_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(event_type_ref01_list_rt0_result),
+            {"id": event_type_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 

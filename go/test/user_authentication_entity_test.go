@@ -63,6 +63,7 @@ func TestUserAuthenticationEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		userAuthenticationRef01Ent := client.UserAuthentication(nil)

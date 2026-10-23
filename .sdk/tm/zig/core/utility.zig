@@ -540,6 +540,7 @@ pub fn make_error_util(ctx: *Context) E!Value {
     sdk_err.code = clean_str_util(ctx, the_err.code);
     sdk_err.result = clean_util(ctx, result.to_value());
     sdk_err.spec = clean_util(ctx, spec_val);
+    sdk_err.status = result.status;
 
     c.err = sdk_err;
 
@@ -1204,8 +1205,13 @@ pub fn make_url_util(ctx: *Context) E![]const u8 {
             const key = kv.key_ptr.*;
             const val = kv.value_ptr.*;
             if (!h.is_noval(val)) {
+                // A whole . or .. is a dot segment, which moves the request to another route.
+                const text = h.scalar_str(val);
+                if (std.mem.eql(u8, text, ".") or std.mem.eql(u8, text, "..")) {
+                    return ctx.fail("url_param_invalid", fmt("URL path parameter {s} cannot be \"{s}\".", .{ key, text }));
+                }
                 const needle = fmt("{{{s}}}", .{key});
-                const sub = h.esc_url(h.scalar_str(val));
+                const sub = h.esc_url(text);
                 url = std.mem.replaceOwned(u8, h.A(), url, needle, sub) catch url;
                 h.setp(resmatch, key, val);
             }
@@ -1391,7 +1397,7 @@ pub fn make_result_util(ctx: *Context) E!*SdkResult {
                 const entities = h.olist();
                 for (resdata.array.data.items) |entry| {
                     const e = ent.makeEnt();
-                    const out = if (entry == .object) e.data(entry) else e.data(null);
+                    const out = e.data(entry);
                     entities.array.append(out) catch {};
                 }
                 result.resdata = entities;
@@ -2012,14 +2018,6 @@ pub fn graphql_errors_util(ctx: *Context) bool {
 // shared corpus's `prepareAuth` section through. A file-scope const bound to
 // the generated function is the whole of the binding change.
 pub const prepare_auth_util = @import("prepare_auth.zig").prepare_auth_util;
-
-// The two comptime FACTS the generated file decided: where this SDK puts its
-// credential ("header" | "query" | "cookie" | "none"), and whether the scheme
-// is genuine HTTP Basic. Re-exported on the same path as the function, so
-// test/pipeline_test.zig can reach both as `sdk.utilmod.<name>` and skip the
-// header-shape cases on an SDK that has no header credential to assert on.
-pub const prepare_auth_placement = @import("prepare_auth.zig").PLACEMENT;
-pub const prepare_auth_basic = @import("prepare_auth.zig").BASIC;
 
 pub fn result_basic_util(ctx: *Context) ?*SdkResult {
     const response = ctx.response;

@@ -1,0 +1,3587 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Subscription | Hook0 API</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header class="site-header"><a class="site-title" href="../index.html">Hook0 API<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/hook0-sdk">voxgig-sdk/hook0-sdk</a></div></header>
+<div class="site-notice" role="note"></div>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Hook0 API</a></details>
+<details open><summary>API</summary><a href="../api/index.html">API overview</a>
+<a href="../api/application.html">Application</a>
+<a href="../api/application_secret.html">ApplicationSecret</a>
+<a href="../api/email_preference.html">EmailPreference</a>
+<a href="../api/error.html">Error</a>
+<a href="../api/event.html">Event</a>
+<a href="../api/event_type.html">EventType</a>
+<a href="../api/events_management.html">EventsManagement</a>
+<a href="../api/health.html">Health</a>
+<a href="../api/hook0.html">Hook0</a>
+<a href="../api/ingested_event.html">IngestedEvent</a>
+<a href="../api/instance.html">Instance</a>
+<a href="../api/login.html">Login</a>
+<a href="../api/organization.html">Organization</a>
+<a href="../api/organization_edit_role.html">OrganizationEditRole</a>
+<a href="../api/quota.html">Quota</a>
+<a href="../api/registration.html">Registration</a>
+<a href="../api/request_attempt.html">RequestAttempt</a>
+<a href="../api/response.html">Response</a>
+<a href="../api/revoke.html">Revoke</a>
+<a href="../api/service_token.html">ServiceToken</a>
+<a aria-current="page" href="../api/subscription.html">Subscription</a><div class="nav-sections"><a class="nav-section" href="#post-apiv1subscriptions">POST /api/v1/subscriptions/</a>
+<a class="nav-section" href="#get-apiv1subscriptions">GET /api/v1/subscriptions/</a>
+<a class="nav-section" href="#get-apiv1subscriptionssubscription_id">GET /api/v1/subscriptions/{subscription_id}</a>
+<a class="nav-section" href="#delete-apiv1subscriptionssubscription_id">DELETE /api/v1/subscriptions/{subscription_id}</a>
+<a class="nav-section" href="#put-apiv1subscriptionssubscription_id">PUT /api/v1/subscriptions/{subscription_id}</a></div>
+<a href="../api/user_authentication.html">UserAuthentication</a>
+<a href="../api/user_invitation.html">UserInvitation</a></details>
+<details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
+<a href="../guides/first-call.html">Make your first API call</a>
+<a href="../guides/errors.html">Handle errors</a>
+<a href="../guides/concepts.html">Entities, SDKs, and tools</a></details>
+<details><summary>SDKs</summary><a href="../sdks/go.html">Golang</a>
+<a href="../sdks/java.html">Java</a>
+<a href="../sdks/js.html">JavaScript</a>
+<a href="../sdks/lua.html">Lua</a>
+<a href="../sdks/php.html">PHP</a>
+<a href="../sdks/py.html">Python</a>
+<a href="../sdks/rb.html">Ruby</a>
+<a href="../sdks/ts.html">TypeScript</a>
+<a href="../sdks/zig.html">Zig</a></details>
+<details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
+<a href="../tools/go-mcp.html">Go MCP server</a></details>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/secrets.html">Secrets</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="subscription">Subscription</h1>
+<h2 id="operations">Operations</h2>
+<p>Every route this entity exposes. Each route links to its own reference on this page.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>SDK operation</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><a href="#post-apiv1subscriptions"><code>/api/v1/subscriptions/</code></a></td>
+<td><code>create</code></td>
+<td>Created</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-apiv1subscriptions"><code>/api/v1/subscriptions/</code></a></td>
+<td><code>list</code></td>
+<td>OK</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-apiv1subscriptionssubscription_id"><code>/api/v1/subscriptions/{subscription_id}</code></a></td>
+<td><code>load</code></td>
+<td>OK</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><a href="#delete-apiv1subscriptionssubscription_id"><code>/api/v1/subscriptions/{subscription_id}</code></a></td>
+<td><code>remove</code></td>
+<td>No Content</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><a href="#put-apiv1subscriptionssubscription_id"><code>/api/v1/subscriptions/{subscription_id}</code></a></td>
+<td><code>update</code></td>
+<td>OK</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">subscriptions, err := client.Subscription(nil).List(map[string]any{&quot;application_id&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(subscriptions)
+subscription, err := client.Subscription(nil).Load(map[string]any{&quot;id&quot;: &quot;example_id&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(subscription)
+created, err := client.Subscription(nil).Create(map[string]any{&quot;application_id&quot;: &quot;example&quot;, &quot;event_types&quot;: []any{}, &quot;is_enabled&quot;: true, &quot;target&quot;: map[string]any{}}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(created)
+updated, err := client.Subscription(nil).Update(map[string]any{&quot;id&quot;: &quot;example_id&quot;, &quot;application_id&quot;: &quot;example&quot;, &quot;dedicated_workers&quot;: []any{}}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(updated)
+removed, err := client.Subscription(nil).Remove(map[string]any{&quot;id&quot;: &quot;example_id&quot;, &quot;application_id&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(removed)
+</code></pre>
+<h3 id="javascript">JavaScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/js.html#set-up-the-client">JavaScript setup</a>, then call the operations:</p>
+<pre><code class="language-js">const subscriptions = await client.Subscription().list({ application_id: &quot;example&quot; })
+const subscription = await client.Subscription().load({ id: &quot;example_id&quot; })
+const created = await client.Subscription().create({ application_id: &quot;example&quot;, event_types: [], is_enabled: true, target: {} })
+const updated = await client.Subscription().update({ id: &quot;example_id&quot;, application_id: &quot;example&quot;, dedicated_workers: [] })
+await client.Subscription().remove({ id: &quot;example_id&quot;, application_id: &quot;example&quot; })
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local subscriptions, err = client:Subscription():list({ application_id = &quot;example&quot; })
+local subscription, err = client:Subscription():load({ id = &quot;example_id&quot; })
+local created, err = client:Subscription():create({ application_id = &quot;example&quot;, event_types = {}, is_enabled = true, target = {} })
+local updated, err = client:Subscription():update({ id = &quot;example_id&quot;, application_id = &quot;example&quot;, dedicated_workers = {} })
+local removed, err = client:Subscription():remove({ id = &quot;example_id&quot;, application_id = &quot;example&quot; })
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$subscriptions = $client-&gt;Subscription()-&gt;list([&quot;application_id&quot; =&gt; &quot;example&quot;]);
+$subscription = $client-&gt;Subscription()-&gt;load([&quot;id&quot; =&gt; &quot;example_id&quot;]);
+$created = $client-&gt;Subscription()-&gt;create([&quot;application_id&quot; =&gt; &quot;example&quot;, &quot;event_types&quot; =&gt; [], &quot;is_enabled&quot; =&gt; true, &quot;target&quot; =&gt; []]);
+$updated = $client-&gt;Subscription()-&gt;update([&quot;id&quot; =&gt; &quot;example_id&quot;, &quot;application_id&quot; =&gt; &quot;example&quot;, &quot;dedicated_workers&quot; =&gt; []]);
+$client-&gt;Subscription()-&gt;remove([&quot;id&quot; =&gt; &quot;example_id&quot;, &quot;application_id&quot; =&gt; &quot;example&quot;]);
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">subscriptions = client.Subscription().list({&quot;application_id&quot;: &quot;example&quot;})
+subscription = client.Subscription().load({&quot;id&quot;: &quot;example_id&quot;})
+created = client.Subscription().create({ &quot;application_id&quot;: &quot;example&quot;, &quot;event_types&quot;: [], &quot;is_enabled&quot;: True, &quot;target&quot;: {} })
+updated = client.Subscription().update({&quot;id&quot;: &quot;example_id&quot;, &quot;application_id&quot;: &quot;example&quot;, &quot;dedicated_workers&quot;: []})
+client.Subscription().remove({&quot;id&quot;: &quot;example_id&quot;, &quot;application_id&quot;: &quot;example&quot;})
+</code></pre>
+<h3 id="ruby">Ruby</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/rb.html#set-up-the-client">Ruby setup</a>, then call the operations:</p>
+<pre><code class="language-rb">subscriptions = client.Subscription.list({ &quot;application_id&quot; =&gt; &quot;example&quot; })
+subscription = client.Subscription.load({ &quot;id&quot; =&gt; &quot;example_id&quot; })
+created = client.Subscription.create({ &quot;application_id&quot; =&gt; &quot;example&quot;, &quot;event_types&quot; =&gt; [], &quot;is_enabled&quot; =&gt; true, &quot;target&quot; =&gt; {} })
+updated = client.Subscription.update({ &quot;id&quot; =&gt; &quot;example_id&quot;, &quot;application_id&quot; =&gt; &quot;example&quot;, &quot;dedicated_workers&quot; =&gt; [] })
+client.Subscription.remove({ &quot;id&quot; =&gt; &quot;example_id&quot;, &quot;application_id&quot; =&gt; &quot;example&quot; })
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const subscriptions = await client.Subscription().list({ application_id: &quot;example&quot; })
+const subscription = await client.Subscription().load({ id: &quot;example_id&quot; })
+const created = await client.Subscription().create({ application_id: &quot;example&quot;, event_types: [], is_enabled: true, target: {} })
+const updated = await client.Subscription().update({ id: &quot;example_id&quot;, application_id: &quot;example&quot;, dedicated_workers: [] })
+await client.Subscription().remove({ id: &quot;example_id&quot;, application_id: &quot;example&quot; })
+</code></pre>
+<h2 id="fields">Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Application Id</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Created At</td>
+</tr>
+<tr>
+<td><code>dedicated_workers</code></td>
+<td><code>array</code></td>
+<td>Yes</td>
+<td>Dedicated Workers</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Description</td>
+</tr>
+<tr>
+<td><code>event_types</code></td>
+<td><code>array</code></td>
+<td>Yes</td>
+<td>Event Types</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Id</td>
+</tr>
+<tr>
+<td><code>is_enabled</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td>Is Enabled</td>
+</tr>
+<tr>
+<td><code>label_key</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>label_value</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Labels</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Metadata</td>
+</tr>
+<tr>
+<td><code>secret</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Secret</td>
+</tr>
+<tr>
+<td><code>subscription_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Subscription Id</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Target</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Updated At</td>
+</tr>
+</tbody>
+</table>
+<h2 id="create">create</h2>
+<h3 id="post-apiv1subscriptions" class="operation" data-method="post"><code>POST</code> /api/v1/subscriptions/</h3>
+<p>Operation ID: <code>subscriptions.create</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="request-body">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dedicated_workers</code></td>
+<td><code>array of string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>event_types</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_enabled</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>label_key</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>label_value</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.headers</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.method</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.url</code></td>
+<td><code>string (url)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses">Responses</h4>
+<h5 id="201-created" class="status" data-status="2xx">201: Created</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dedicated_workers</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>event_types</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_enabled</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>label_key</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>label_value</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>secret</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>subscription_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.headers</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.method</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.url</code></td>
+<td><code>string (url)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request" class="status" data-status="4xx">400: Bad Request</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-unauthorized" class="status" data-status="4xx">401: Unauthorized</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="403-forbidden" class="status" data-status="4xx">403: Forbidden</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="404-not-found" class="status" data-status="4xx">404: Not Found</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="409-conflict" class="status" data-status="4xx">409: Conflict</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="410-gone" class="status" data-status="4xx">410: Gone</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-unprocessable-entity" class="status" data-status="4xx">422: Unprocessable Entity</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="429-too-many-requests" class="status" data-status="4xx">429: Too Many Requests</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="500-internal-server-error" class="status" data-status="5xx">500: Internal Server Error</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="503-service-unavailable" class="status" data-status="5xx">503: Service Unavailable</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="list">list</h2>
+<h3 id="get-apiv1subscriptions" class="operation" data-method="get"><code>GET</code> /api/v1/subscriptions/</h3>
+<p>Operation ID: <code>subscriptions.list</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>query</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses-1">Responses</h4>
+<h5 id="200-ok" class="status" data-status="2xx">200: OK</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[].application_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].created_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].dedicated_workers</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].description</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].event_types</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].is_enabled</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].label_key</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>[].label_value</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>[].labels</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].metadata</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].secret</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].subscription_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].target</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].target.headers</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].target.method</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].target.type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].target.url</code></td>
+<td><code>string (url)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[].updated_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-1" class="status" data-status="4xx">400: Bad Request</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-unauthorized-1" class="status" data-status="4xx">401: Unauthorized</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="403-forbidden-1" class="status" data-status="4xx">403: Forbidden</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="404-not-found-1" class="status" data-status="4xx">404: Not Found</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="409-conflict-1" class="status" data-status="4xx">409: Conflict</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="410-gone-1" class="status" data-status="4xx">410: Gone</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-unprocessable-entity-1" class="status" data-status="4xx">422: Unprocessable Entity</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="429-too-many-requests-1" class="status" data-status="4xx">429: Too Many Requests</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="500-internal-server-error-1" class="status" data-status="5xx">500: Internal Server Error</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="503-service-unavailable-1" class="status" data-status="5xx">503: Service Unavailable</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="load">load</h2>
+<h3 id="get-apiv1subscriptionssubscription_id" class="operation" data-method="get"><code>GET</code> /api/v1/subscriptions/{subscription_id}</h3>
+<p>Operation ID: <code>subscriptions.get</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters-1">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subscription_id</code></td>
+<td><code>path</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses-2">Responses</h4>
+<h5 id="200-ok-1" class="status" data-status="2xx">200: OK</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dedicated_workers</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>event_types</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_enabled</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>label_key</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>label_value</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>secret</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>subscription_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.headers</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.method</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.url</code></td>
+<td><code>string (url)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-2" class="status" data-status="4xx">400: Bad Request</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-unauthorized-2" class="status" data-status="4xx">401: Unauthorized</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="403-forbidden-2" class="status" data-status="4xx">403: Forbidden</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="404-not-found-2" class="status" data-status="4xx">404: Not Found</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="409-conflict-2" class="status" data-status="4xx">409: Conflict</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="410-gone-2" class="status" data-status="4xx">410: Gone</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-unprocessable-entity-2" class="status" data-status="4xx">422: Unprocessable Entity</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="429-too-many-requests-2" class="status" data-status="4xx">429: Too Many Requests</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="500-internal-server-error-2" class="status" data-status="5xx">500: Internal Server Error</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="503-service-unavailable-2" class="status" data-status="5xx">503: Service Unavailable</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="remove">remove</h2>
+<h3 id="delete-apiv1subscriptionssubscription_id" class="operation" data-method="delete"><code>DELETE</code> /api/v1/subscriptions/{subscription_id}</h3>
+<p>Operation ID: <code>subscriptions.delete</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters-2">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subscription_id</code></td>
+<td><code>path</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>application_id</code></td>
+<td><code>query</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses-3">Responses</h4>
+<h5 id="204-no-content" class="status" data-status="2xx">204: No Content</h5>
+<h5 id="400-bad-request-3" class="status" data-status="4xx">400: Bad Request</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-unauthorized-3" class="status" data-status="4xx">401: Unauthorized</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="403-forbidden-3" class="status" data-status="4xx">403: Forbidden</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="404-not-found-3" class="status" data-status="4xx">404: Not Found</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="409-conflict-3" class="status" data-status="4xx">409: Conflict</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="410-gone-3" class="status" data-status="4xx">410: Gone</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-unprocessable-entity-3" class="status" data-status="4xx">422: Unprocessable Entity</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="429-too-many-requests-3" class="status" data-status="4xx">429: Too Many Requests</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="500-internal-server-error-3" class="status" data-status="5xx">500: Internal Server Error</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="503-service-unavailable-3" class="status" data-status="5xx">503: Service Unavailable</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="update">update</h2>
+<h3 id="put-apiv1subscriptionssubscription_id" class="operation" data-method="put"><code>PUT</code> /api/v1/subscriptions/{subscription_id}</h3>
+<p>Operation ID: <code>subscriptions.update</code>.</p>
+<p>Authentication: API key in the header (<code>biscuit</code>).</p>
+<h4 id="parameters-3">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subscription_id</code></td>
+<td><code>path</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="request-body-1">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dedicated_workers</code></td>
+<td><code>array of string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>event_types</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_enabled</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>label_key</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>label_value</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.headers</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.method</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.url</code></td>
+<td><code>string (url)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses-4">Responses</h4>
+<h5 id="200-ok-2" class="status" data-status="2xx">200: OK</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dedicated_workers</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>event_types</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_enabled</code></td>
+<td><code>boolean</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>label_key</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>label_value</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td><code>_Kept</code> for backward compatibility, you should use <code>labels</code>_</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>secret</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>subscription_id</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.headers</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.method</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>target.url</code></td>
+<td><code>string (url)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-4" class="status" data-status="4xx">400: Bad Request</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-unauthorized-4" class="status" data-status="4xx">401: Unauthorized</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="403-forbidden-4" class="status" data-status="4xx">403: Forbidden</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="404-not-found-4" class="status" data-status="4xx">404: Not Found</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="409-conflict-4" class="status" data-status="4xx">409: Conflict</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="410-gone-4" class="status" data-status="4xx">410: Gone</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-unprocessable-entity-4" class="status" data-status="4xx">422: Unprocessable Entity</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="429-too-many-requests-4" class="status" data-status="4xx">429: Too Many Requests</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="500-internal-server-error-4" class="status" data-status="5xx">500: Internal Server Error</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="503-service-unavailable-4" class="status" data-status="5xx">503: Service Unavailable</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detail</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>enum: OrganizationNameMissing, UserAlreadyExist, RegistrationDisabled, PasswordTooShort, PasswordTooLong, PasswordSimilarToEmail, ...</code></td>
+<td>Yes</td>
+<td>Identifier of the problem that occurred, stable across releases</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>integer (int32)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Documentation page of this problem, which is also what distinguishes one problem type from another as RFC 7807 asks. Prefer matching on <code>id</code>: it says the same thing without parsing a URL.</td>
+</tr>
+<tr>
+<td><code>validation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Which submitted values were rejected and why, keyed by the name of the field they were submitted under. Carried by validation failures (<code>Validation</code>, status 422) and <code>null</code> for every other problem, as nothing else has a field to point at. The value of a key is either the list of failures on that field, each one a <code>code</code>, an optional <code>message</code> and the <code>params</code> the check was run with, or the same structure again for a nested object, or a map from index to that structure for a list. Nesting follows the shape of the submitted body and is therefore left free-form rather than modelled.</td>
+</tr>
+</tbody>
+</table>
+</main></div>
+<script src="../assets/search.js" defer></script></body></html>

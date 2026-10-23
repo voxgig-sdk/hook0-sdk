@@ -123,6 +123,29 @@ func MakeConfig() map[string]any {
 				"strict": false,
 				"transport": "wrap",
 			},
+			"secrets": map[string]any{
+				"options": map[string]any{
+					"active": false,
+					"cache": true,
+					"exchange": map[string]any{
+						"active": false,
+						"method": "POST",
+						"path": "auth/token",
+						"refresh": "",
+						"request": "refresh_token",
+						"response": "access_token",
+						"retries": 1,
+						"statuses": []any{
+							401,
+						},
+					},
+					"name": "apikey",
+					"providers": []any{},
+				},
+				"optspec": map[string]any{},
+				"strict": false,
+				"transport": "wrap",
+			},
 			"test": map[string]any{
 				"options": map[string]any{
 					"active": false,
@@ -151,7 +174,7 @@ func MakeConfig() map[string]any {
 		"options": map[string]any{
 			"base": "https://app.hook0.com",
 			"auth": map[string]any{
-				"prefix": "",
+				"prefix": "Bearer",
 			},
 			"headers": map[string]any{
 				"content-type": "application/json",
@@ -159,7 +182,6 @@ func MakeConfig() map[string]any {
 			"entity": map[string]any{
 				"application": map[string]any{},
 				"application_secret": map[string]any{},
-				"applications_management": map[string]any{},
 				"email_preference": map[string]any{},
 				"error": map[string]any{},
 				"event": map[string]any{},
@@ -740,6 +762,73 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
+					"remove": map[string]any{
+						"input": "data",
+						"name": "remove",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "DELETE",
+								"orig": "/api/v1/application_secrets/{application_secret_token}",
+								"segments": []any{
+									map[string]any{
+										"lit": "api",
+									},
+									map[string]any{
+										"lit": "v1",
+									},
+									map[string]any{
+										"lit": "application_secrets",
+									},
+									map[string]any{
+										"var": "id",
+									},
+								},
+								"parts": []any{
+									"api",
+									"v1",
+									"application_secrets",
+									"{id}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"application_secret_token": "id",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "id",
+											"orig": "application_secret_token",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+									"query": []any{
+										map[string]any{
+											"name": "application_id",
+											"orig": "application_id",
+											"type": "`$STRING`",
+											"kind": "query",
+											"reqd": true,
+											"field": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"application_id",
+										"id",
+									},
+								},
+							},
+						},
+					},
 					"update": map[string]any{
 						"input": "data",
 						"name": "update",
@@ -803,81 +892,6 @@ func MakeConfig() map[string]any {
 				},
 				"relations": map[string]any{
 					"ancestors": []any{},
-				},
-			},
-			"applications_management": map[string]any{
-				"fields": []any{},
-				"name": "applications_management",
-				"op": map[string]any{
-					"remove": map[string]any{
-						"input": "data",
-						"name": "remove",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "DELETE",
-								"orig": "/api/v1/application_secrets/{application_secret_token}",
-								"segments": []any{
-									map[string]any{
-										"lit": "api",
-									},
-									map[string]any{
-										"lit": "v1",
-									},
-									map[string]any{
-										"lit": "application_secrets",
-									},
-									map[string]any{
-										"var": "application_secret_token",
-									},
-								},
-								"parts": []any{
-									"api",
-									"v1",
-									"application_secrets",
-									"{application_secret_token}",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "application_secret_token",
-											"orig": "application_secret_token",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-									"query": []any{
-										map[string]any{
-											"name": "application_id",
-											"orig": "application_id",
-											"type": "`$STRING`",
-											"kind": "query",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"application_id",
-										"application_secret_token",
-									},
-								},
-							},
-						},
-					},
-				},
-				"relations": map[string]any{
-					"ancestors": []any{
-						[]any{
-							"$.main.kit.entity.application_secret",
-						},
-					},
 				},
 			},
 			"email_preference": map[string]any{
@@ -1503,6 +1517,73 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
+					"remove": map[string]any{
+						"input": "data",
+						"name": "remove",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "DELETE",
+								"orig": "/api/v1/event_types/{event_type_name}",
+								"segments": []any{
+									map[string]any{
+										"lit": "api",
+									},
+									map[string]any{
+										"lit": "v1",
+									},
+									map[string]any{
+										"lit": "event_types",
+									},
+									map[string]any{
+										"var": "id",
+									},
+								},
+								"parts": []any{
+									"api",
+									"v1",
+									"event_types",
+									"{id}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"event_type_name": "id",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "id",
+											"orig": "event_type_name",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+									"query": []any{
+										map[string]any{
+											"name": "application_id",
+											"orig": "application_id",
+											"type": "`$STRING`",
+											"kind": "query",
+											"reqd": true,
+											"field": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"application_id",
+										"id",
+									},
+								},
+							},
+						},
+					},
 				},
 				"relations": map[string]any{
 					"ancestors": []any{},
@@ -1550,75 +1631,9 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
-					"remove": map[string]any{
-						"input": "data",
-						"name": "remove",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "DELETE",
-								"orig": "/api/v1/event_types/{event_type_name}",
-								"segments": []any{
-									map[string]any{
-										"lit": "api",
-									},
-									map[string]any{
-										"lit": "v1",
-									},
-									map[string]any{
-										"lit": "event_types",
-									},
-									map[string]any{
-										"var": "event_type_name",
-									},
-								},
-								"parts": []any{
-									"api",
-									"v1",
-									"event_types",
-									"{event_type_name}",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "event_type_name",
-											"orig": "event_type_name",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-									"query": []any{
-										map[string]any{
-											"name": "application_id",
-											"orig": "application_id",
-											"type": "`$STRING`",
-											"kind": "query",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"application_id",
-										"event_type_name",
-									},
-								},
-							},
-						},
-					},
 				},
 				"relations": map[string]any{
-					"ancestors": []any{
-						[]any{
-							"$.main.kit.entity.event_type",
-						},
-					},
+					"ancestors": []any{},
 				},
 			},
 			"health": map[string]any{
@@ -4393,6 +4408,10 @@ func makeFeature(name string) Feature {
 	case "retry":
 		if NewRetryFeatureFunc != nil {
 			return NewRetryFeatureFunc()
+		}
+	case "secrets":
+		if NewSecretsFeatureFunc != nil {
+			return NewSecretsFeatureFunc()
 		}
 	case "test":
 		if NewTestFeatureFunc != nil {

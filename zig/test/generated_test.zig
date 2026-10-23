@@ -237,15 +237,6 @@ test "application_secret_prepare_smoke" {
     try std.testing.expect(std.mem.eql(u8, h.get_str(fetchdef, "method") orelse "", "GET"));
 }
 
-test "applications_management_validate" {
-    if (!fh.fh_has_feature("validate")) return error.SkipZigTest;
-    const opts = h.jo(&.{.{ "feature", h.jo(&.{.{ "validate", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
-    switch (sdk.test_sdk(vnull(), opts).applications_management(vnull()).remove(h.jo(&.{ .{ "application_secret_token", h.vnum(1) }, .{ "application_id", h.vstr("x") } }), vnull())) {
-        .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "validate_failed")),
-        .ok => try std.testing.expect(false),
-    }
-}
-
 test "error__list_smoke" {
     const fixture = h.jo(&.{.{ "error", h.jo(&.{.{ "t01", h.jo(&.{.{ "id", h.vstr("t01") }}) }}) }});
     const testsdk = sdk.test_sdk(h.jo(&.{.{ "entity", fixture }}), vnull());
@@ -647,15 +638,6 @@ test "events_management_stream_ctrl" {
     _ = sdk.test_sdk(vnull(), vnull()).events_management(vnull()).stream("list", vnull(), h.jo(&.{.{ "ctrl", ctrl }}));
     try std.testing.expect(h.is_noval(h.getp(ctrl, "stream")));
     try std.testing.expect(0 < explain.object.count());
-}
-
-test "events_management_validate" {
-    if (!fh.fh_has_feature("validate")) return error.SkipZigTest;
-    const opts = h.jo(&.{.{ "feature", h.jo(&.{.{ "validate", h.jo(&.{.{ "active", h.vbool(true) }}) }}) }});
-    switch (sdk.test_sdk(vnull(), opts).events_management(vnull()).remove(h.jo(&.{ .{ "event_type_name", h.vnum(1) }, .{ "application_id", h.vstr("x") } }), vnull())) {
-        .err => |er| try std.testing.expect(std.mem.eql(u8, er.code, "validate_failed")),
-        .ok => try std.testing.expect(false),
-    }
 }
 
 test "events_management_direct_smoke" {

@@ -50,10 +50,6 @@ Create a new `ApplicationEntity` instance. Pass `None` for no initial data.
 
 Create a new `ApplicationSecretEntity` instance. Pass `None` for no initial data.
 
-#### `ApplicationsManagement(data=None)`
-
-Create a new `ApplicationsManagementEntity` instance. Pass `None` for no initial data.
-
 #### `EmailPreference(data=None)`
 
 Create a new `EmailPreferenceEntity` instance. Pass `None` for no initial data.
@@ -200,16 +196,8 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.Application().create({
-    "amount": 1,  # int
-    "application_id": "example_application_id",  # str
-    "application_name": "example_application_name",  # str
-    "consumption": {},  # dict
-    "date": "example_date",  # str
-    "is_provisional": True,  # bool
     "name": "example_name",  # str
-    "onboarding_steps": {},  # dict
     "organization_id": "example_organization_id",  # str
-    "quotas": {},  # dict
 })
 ```
 
@@ -305,8 +293,6 @@ Create a new entity with the given data. Returns the created entity and raises o
 ```python
 result = client.ApplicationSecret().create({
     "application_id": "example_application_id",  # str
-    "created_at": "example_created_at",  # str
-    "token": "example_token",  # str
 })
 ```
 
@@ -320,13 +306,21 @@ for application_secret in results:
     print(application_secret.data_get())
 ```
 
+#### `remove(reqmatch, ctrl=None) -> ApplicationSecretEntity`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
+
+```python
+result = client.ApplicationSecret().remove({"id": "application_secret_id", "application_id": "application_id"})
+```
+
 #### `update(reqdata, ctrl=None) -> ApplicationSecretEntity`
 
 Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
 
 ```python
 result = client.ApplicationSecret().update({
-    "id": "id",
+    "id": "application_secret_id",
     # Fields to update
 })
 ```
@@ -352,51 +346,6 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `ApplicationSecretEntity` instance with the same options.
-
-#### `get_name() -> str`
-
-Return the entity name.
-
-
----
-
-## ApplicationsManagementEntity
-
-```python
-applications_management = client.ApplicationsManagement()
-```
-
-### Operations
-
-#### `remove(reqmatch, ctrl=None) -> ApplicationsManagementEntity`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
-
-```python
-result = client.ApplicationsManagement().remove({"application_secret_token": "application_secret_token", "application_id": "application_id"})
-```
-
-### Common Methods
-
-#### `data_get() -> dict`
-
-Get the entity data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> dict`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `ApplicationsManagementEntity` instance with the same options.
 
 #### `get_name() -> str`
 
@@ -539,14 +488,6 @@ Create a new entity with the given data. Returns the created entity and raises o
 ```python
 result = client.Event().create({
     "id": "example_id",  # str
-    "event_id": "example_event_id",  # str
-    "event_type_name": "example_event_type_name",  # str
-    "ip": "example_ip",  # str
-    "labels": {},  # dict
-    "occurred_at": "example_occurred_at",  # str
-    "payload": "example_payload",  # str
-    "payload_content_type": "example_payload_content_type",  # str
-    "received_at": "example_received_at",  # str
 })
 ```
 
@@ -626,13 +567,9 @@ Create a new entity with the given data. Returns the created entity and raises o
 ```python
 result = client.EventType().create({
     "application_id": "example_application_id",  # str
-    "event_type_name": "example_event_type_name",  # str
     "resource_type": "example_resource_type",  # str
-    "resource_type_name": "example_resource_type_name",  # str
     "service": "example_service",  # str
-    "service_name": "example_service_name",  # str
     "verb": "example_verb",  # str
-    "verb_name": "example_verb_name",  # str
 })
 ```
 
@@ -652,6 +589,14 @@ Load a single entity matching the given criteria. Returns the entity, whose reco
 
 ```python
 result = client.EventType().load({"id": "event_type_id", "application_id": "application_id"})
+```
+
+#### `remove(reqmatch, ctrl=None) -> EventTypeEntity`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
+
+```python
+result = client.EventType().remove({"id": "event_type_id", "application_id": "application_id"})
 ```
 
 ### Common Methods
@@ -699,14 +644,6 @@ List entities matching the given criteria. The match is optional — call `list(
 results = client.EventsManagement().list()
 for events_management in results:
     print(events_management.data_get())
-```
-
-#### `remove(reqmatch, ctrl=None) -> EventsManagementEntity`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
-
-```python
-result = client.EventsManagement().remove({"event_type_name": "event_type_name", "application_id": "application_id"})
 ```
 
 ### Common Methods
@@ -1069,19 +1006,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.Organization().create({
-    "amount": 1,  # int
-    "application_id": "example_application_id",  # str
-    "application_name": "example_application_name",  # str
-    "consumption": {},  # dict
-    "date": "example_date",  # str
-    "is_provisional": True,  # bool
     "name": "example_name",  # str
-    "onboarding_steps": {},  # dict
-    "organization_id": "example_organization_id",  # str
-    "plan": {},  # dict
-    "quotas": {},  # dict
-    "role": "example_role",  # str
-    "users": [],  # list
 })
 ```
 
@@ -1522,11 +1447,8 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.ServiceToken().create({
-    "biscuit": "example_biscuit",  # str
-    "created_at": "example_created_at",  # str
     "name": "example_name",  # str
     "organization_id": "example_organization_id",  # str
-    "token_id": "example_token_id",  # str
 })
 ```
 
@@ -1651,18 +1573,9 @@ Create a new entity with the given data. Returns the created entity and raises o
 ```python
 result = client.Subscription().create({
     "application_id": "example_application_id",  # str
-    "created_at": "example_created_at",  # str
-    "dedicated_workers": [],  # list
     "event_types": [],  # list
     "is_enabled": True,  # bool
-    "label_key": "example_label_key",  # str
-    "label_value": "example_label_value",  # str
-    "labels": {},  # dict
-    "metadata": {},  # dict
-    "secret": "example_secret",  # str
-    "subscription_id": "example_subscription_id",  # str
     "target": {},  # dict
-    "updated_at": "example_updated_at",  # str
 })
 ```
 
@@ -1857,6 +1770,7 @@ Return the entity name.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `secrets` | 0.1.0 | Secrets |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -1872,6 +1786,7 @@ client = Hook0SDK({
         "paging": {"active": True},
         "ratelimit": {"active": True},
         "retry": {"active": True},
+        "secrets": {"active": True},
         "test": {"active": True},
         "timeout": {"active": True},
     },
@@ -1890,7 +1805,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `secrets`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -2084,6 +1999,31 @@ another when you do not.
 **Usage**
 
 Set `feature.retry.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
+#### `secrets`
+
+Secrets.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+**Usage**
+
+Set `feature.secrets.active` to true in the client options, and override any option above in the same entry. Every option keeps
 its default unless you name it.
 
 **Considerations**

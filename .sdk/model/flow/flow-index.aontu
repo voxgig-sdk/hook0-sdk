@@ -2,7 +2,6 @@
 
 @"./BasicApplicationFlow.aontu"
 @"./BasicApplicationSecretFlow.aontu"
-@"./BasicApplicationsManagementFlow.aontu"
 @"./BasicEmailPreferenceFlow.aontu"
 @"./BasicErrorFlow.aontu"
 @"./BasicEventFlow.aontu"

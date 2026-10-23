@@ -14,7 +14,7 @@ type EventTypeEntity struct {
 	client  *core.Hook0SDK
 	utility *core.Utility
 	entopts map[string]any
-	data    map[string]any
+	data    any
 	match   map[string]any
 	entctx  *core.Context
 	deleted bool
@@ -64,8 +64,12 @@ func (e *EventTypeEntity) GoString() string {
 }
 
 func (e *EventTypeEntity) MarshalJSON() ([]byte, error) {
+	data, ok := e.data.(map[string]any)
+	if !ok {
+		return json.Marshal(e.data)
+	}
 	out := map[string]any{}
-	for k, v := range e.data {
+	for k, v := range data {
 		out[k] = v
 	}
 	out["voxgig$entity"] = "EventType"
@@ -93,10 +97,7 @@ func (e *EventTypeEntity) Make() core.Entity {
 
 func (e *EventTypeEntity) Data(args ...any) any {
 	if len(args) > 0 && args[0] != nil {
-		e.data = core.ToMapAny(vs.Clone(args[0]))
-		if e.data == nil {
-			e.data = map[string]any{}
-		}
+		e.data = vs.Clone(args[0])
 		e.utility.FeatureHook(e.entctx, "SetData")
 	}
 
@@ -310,9 +311,9 @@ func (e *EventTypeEntity) Load(reqmatch map[string]any, ctrl map[string]any) (an
 				e.match = ctx.Result.Resmatch
 			}
 			if ctx.Result.Resdata != nil {
-				e.data = core.ToMapAny(vs.Clone(ctx.Result.Resdata))
-				if e.data == nil {
-					e.data = map[string]any{}
+				e.data = map[string]any{}
+				if data := core.ToMapAny(vs.Clone(ctx.Result.Resdata)); data != nil {
+					e.data = data
 				}
 			}
 		}
@@ -379,9 +380,9 @@ func (e *EventTypeEntity) Create(reqdata map[string]any, ctrl map[string]any) (a
 	return e.runOp(ctx, func() {
 		if ctx.Result != nil {
 			if ctx.Result.Resdata != nil {
-				e.data = core.ToMapAny(vs.Clone(ctx.Result.Resdata))
-				if e.data == nil {
-					e.data = map[string]any{}
+				e.data = map[string]any{}
+				if data := core.ToMapAny(vs.Clone(ctx.Result.Resdata)); data != nil {
+					e.data = data
 				}
 			}
 		}
@@ -411,9 +412,43 @@ func (e *EventTypeEntity) Patch(_ map[string]any, _ map[string]any) (any, error)
 }
 
 
-func (e *EventTypeEntity) Remove(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("remove", e.name)
+
+func (e *EventTypeEntity) Remove(reqmatch map[string]any, ctrl map[string]any) (any, error) {
+	utility := e.utility
+	ctx := utility.MakeContext(map[string]any{
+		"opname":   "remove",
+		"ctrl":     ctrl,
+		"match":    e.match,
+		"data":     e.data,
+		"reqmatch": reqmatch,
+	}, e.entctx)
+
+	return e.runOp(ctx, func() {
+		if ctx.Result != nil {
+			if ctx.Result.Resmatch != nil {
+				e.match = ctx.Result.Resmatch
+			}
+			if ctx.Result.Resdata != nil {
+				e.data = map[string]any{}
+				if data := core.ToMapAny(vs.Clone(ctx.Result.Resdata)); data != nil {
+					e.data = data
+				}
+			}
+		}
+	})
 }
+
+// RemoveTyped is the statically-typed variant of Remove: it takes an
+// EventTypeRemoveMatch and returns an EventType. It delegates to the untyped
+// Remove (identical runtime) and converts at the typed boundary.
+func (e *EventTypeEntity) RemoveTyped(reqmatch EventTypeRemoveMatch, ctrl map[string]any) (EventType, error) {
+	res, err := e.Remove(asMap(reqmatch), ctrl)
+	if err != nil {
+		return EventType{}, err
+	}
+	return typedFrom[EventType](res), nil
+}
+
 
 
 func (e *EventTypeEntity) runOp(ctx *core.Context, postDone func()) (out any, err error) {

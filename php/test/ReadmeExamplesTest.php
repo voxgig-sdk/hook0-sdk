@@ -42,7 +42,6 @@ class ReadmeExamplesTest extends TestCase
     private const ENTITIES = [
         "Application" => "application",
         "ApplicationSecret" => "application_secret",
-        "ApplicationsManagement" => "applications_management",
         "EmailPreference" => "email_preference",
         "Error" => "error",
         "Event" => "event",

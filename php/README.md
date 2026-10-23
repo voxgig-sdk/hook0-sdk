@@ -69,10 +69,10 @@ try {
 
 ```php
 // create() returns the ENTITY — call data_get() for the created Application record.
-$created = $client->Application()->create(["amount" => 1, "application_id" => "example_application_id", "application_name" => "example_application_name", "consumption" => [], "date" => "example_date", "is_provisional" => true, "name" => "example_name", "onboarding_steps" => [], "organization_id" => "example_organization_id", "quotas" => []]);
+$created = $client->Application()->create(["name" => "example_name", "organization_id" => "example_organization_id"]);
 
 // Update — index the record via data_get() ($created->data_get()["id"]).
-$client->Application()->update(["id" => $created->data_get()["id"], "amount" => 1, "application_id" => "example_application_id"]);
+$client->Application()->update(["id" => $created->data_get()["id"], "name" => "example_name", "organization_id" => "example_organization_id"]);
 
 // Remove
 $client->Application()->remove(["id" => $created->data_get()["id"]]);
@@ -247,7 +247,6 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `direct` | `(array $fetchargs): array` | Build and send an HTTP request. |
 | `Application` | `($data): ApplicationEntity` | Create an Application entity instance. |
 | `ApplicationSecret` | `($data): ApplicationSecretEntity` | Create an ApplicationSecret entity instance. |
-| `ApplicationsManagement` | `($data): ApplicationsManagementEntity` | Create an ApplicationsManagement entity instance. |
 | `EmailPreference` | `($data): EmailPreferenceEntity` | Create an EmailPreference entity instance. |
 | `Error` | `($data): ErrorEntity` | Create an Error entity instance. |
 | `Event` | `($data): EventEntity` | Create an Event entity instance. |
@@ -339,18 +338,9 @@ API path: `/api/v1/applications/`
 | `name` |  |
 | `token` |  |
 
-Operations: Create, List, Update.
+Operations: Create, List, Remove, Update.
 
 API path: `/api/v1/application_secrets/`
-
-#### ApplicationsManagement
-
-| Field | Description |
-| --- | --- |
-
-Operations: Remove.
-
-API path: `/api/v1/application_secrets/{application_secret_token}`
 
 #### EmailPreference
 
@@ -409,7 +399,7 @@ API path: `/api/v1/events/{event_id}/replay`
 | `verb` |  |
 | `verb_name` |  |
 
-Operations: Create, List, Load.
+Operations: Create, List, Load, Remove.
 
 API path: `/api/v1/event_types/`
 
@@ -418,7 +408,7 @@ API path: `/api/v1/event_types/`
 | Field | Description |
 | --- | --- |
 
-Operations: List, Remove.
+Operations: List.
 
 API path: `/api/v1/payload_content_types/`
 
@@ -728,16 +718,8 @@ $applications = $client->Application()->list(["organization_id" => "example"]);
 
 ```php
 $application = $client->Application()->create([
-    "amount" => null, // int
-    "application_id" => null, // string
-    "application_name" => null, // string
-    "consumption" => null, // array
-    "date" => null, // string
-    "is_provisional" => null, // bool
     "name" => null, // string
-    "onboarding_steps" => null, // array
     "organization_id" => null, // string
-    "quotas" => null, // array
 ]);
 ```
 
@@ -752,6 +734,7 @@ Create an instance: `$application_secret = $client->ApplicationSecret();`
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
+| `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -777,21 +760,8 @@ $application_secrets = $client->ApplicationSecret()->list(["application_id" => "
 ```php
 $application_secret = $client->ApplicationSecret()->create([
     "application_id" => null, // string
-    "created_at" => null, // string
-    "token" => null, // string
 ]);
 ```
-
-
-### ApplicationsManagement
-
-Create an instance: `$applications_management = $client->ApplicationsManagement();`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `remove(match)` | Remove the matching entity. |
 
 
 ### EmailPreference
@@ -887,14 +857,6 @@ $events = $client->Event()->list(["application_id" => "example"]);
 ```php
 $event = $client->Event()->create([
     "id" => null, // string
-    "event_id" => null, // string
-    "event_type_name" => null, // string
-    "ip" => null, // string
-    "labels" => null, // array
-    "occurred_at" => null, // string
-    "payload" => null, // string
-    "payload_content_type" => null, // string
-    "received_at" => null, // string
 ]);
 ```
 
@@ -910,6 +872,7 @@ Create an instance: `$event_type = $client->EventType();`
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
+| `remove(match)` | Remove the matching entity. |
 
 #### Fields
 
@@ -944,13 +907,9 @@ $event_types = $client->EventType()->list(["application_id" => "example"]);
 ```php
 $event_type = $client->EventType()->create([
     "application_id" => null, // string
-    "event_type_name" => null, // string
     "resource_type" => null, // string
-    "resource_type_name" => null, // string
     "service" => null, // string
-    "service_name" => null, // string
     "verb" => null, // string
-    "verb_name" => null, // string
 ]);
 ```
 
@@ -964,7 +923,6 @@ Create an instance: `$events_management = $client->EventsManagement();`
 | Method | Description |
 | --- | --- |
 | `list(match)` | List entities matching the criteria. |
-| `remove(match)` | Remove the matching entity. |
 
 #### Example: List
 
@@ -1184,19 +1142,7 @@ $organizations = $client->Organization()->list();
 
 ```php
 $organization = $client->Organization()->create([
-    "amount" => null, // int
-    "application_id" => null, // string
-    "application_name" => null, // string
-    "consumption" => null, // array
-    "date" => null, // string
-    "is_provisional" => null, // bool
     "name" => null, // string
-    "onboarding_steps" => null, // array
-    "organization_id" => null, // string
-    "plan" => null, // array
-    "quotas" => null, // array
-    "role" => null, // string
-    "users" => null, // array
 ]);
 ```
 
@@ -1408,11 +1354,8 @@ $service_tokens = $client->ServiceToken()->list(["organization_id" => "example"]
 
 ```php
 $service_token = $client->ServiceToken()->create([
-    "biscuit" => null, // string
-    "created_at" => null, // string
     "name" => null, // string
     "organization_id" => null, // string
-    "token_id" => null, // string
 ]);
 ```
 
@@ -1470,18 +1413,9 @@ $subscriptions = $client->Subscription()->list(["application_id" => "example"]);
 ```php
 $subscription = $client->Subscription()->create([
     "application_id" => null, // string
-    "created_at" => null, // string
-    "dedicated_workers" => null, // array
     "event_types" => null, // array
     "is_enabled" => null, // bool
-    "label_key" => null, // string
-    "label_value" => null, // string
-    "labels" => null, // array
-    "metadata" => null, // array
-    "secret" => null, // string
-    "subscription_id" => null, // string
     "target" => null, // array
-    "updated_at" => null, // string
 ]);
 ```
 
@@ -1546,7 +1480,7 @@ $user_invitation = $client->UserInvitation()->create([
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -1561,10 +1495,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`secrets`](#secrets) | Secrets |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `secrets`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -1655,6 +1590,24 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### secrets
+
+Secrets.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+Set `feature.secrets.active` to enable it, then override any of the options above.
+
+`secrets` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -1725,6 +1678,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **SecretsFeature**: Secrets
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 

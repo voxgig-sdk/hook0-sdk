@@ -18,30 +18,13 @@ export interface ApplicationListMatch {
     organization_id: string;
 }
 export interface ApplicationCreateData {
-    amount: number;
-    application_id: string;
-    application_name: string;
-    consumption: Record<string, any>;
-    date: string;
-    id?: string;
-    is_provisional: boolean;
     name: string;
-    onboarding_steps: Record<string, any>;
     organization_id: string;
-    quotas: Record<string, any>;
 }
 export interface ApplicationUpdateData {
     id: string;
-    amount?: number;
-    application_id?: string;
-    application_name?: string;
-    consumption?: Record<string, any>;
-    date?: string;
-    is_provisional?: boolean;
     name?: string;
-    onboarding_steps?: Record<string, any>;
     organization_id?: string;
-    quotas?: Record<string, any>;
 }
 export interface ApplicationRemoveMatch {
     id: string;
@@ -59,29 +42,21 @@ export interface ApplicationSecretListMatch {
 }
 export interface ApplicationSecretCreateData {
     application_id: string;
-    created_at: string;
-    deleted_at?: string;
-    id?: string;
     name?: string;
-    token: string;
 }
 export interface ApplicationSecretUpdateData {
     id: string;
     application_id?: string;
-    created_at?: string;
-    deleted_at?: string;
     name?: string;
-    token?: string;
 }
-export interface ApplicationsManagement {
-}
-export interface ApplicationsManagementRemoveMatch {
-    application_secret_token: string;
+export interface ApplicationSecretRemoveMatch {
+    id: string;
     application_id: string;
 }
 export interface EmailPreference {
 }
 export interface EmailPreferenceCreateData {
+    token?: any;
     $action?: string;
     [action: string]: any;
 }
@@ -122,15 +97,7 @@ export interface EventListMatch {
 }
 export interface EventCreateData {
     id: string;
-    event_id: string;
-    event_type_name: string;
-    ip: string;
-    labels: Record<string, any>;
-    metadata?: Record<string, any>;
-    occurred_at: string;
-    payload: string;
-    payload_content_type: string;
-    received_at: string;
+    application_id?: any;
     $action?: string;
     [action: string]: any;
 }
@@ -154,22 +121,17 @@ export interface EventTypeListMatch {
 }
 export interface EventTypeCreateData {
     application_id: string;
-    event_type_name: string;
-    id?: string;
     resource_type: string;
-    resource_type_name: string;
     service: string;
-    service_name: string;
     verb: string;
-    verb_name: string;
+}
+export interface EventTypeRemoveMatch {
+    id: string;
+    application_id: string;
 }
 export interface EventsManagement {
 }
 export interface EventsManagementListMatch {
-}
-export interface EventsManagementRemoveMatch {
-    event_type_name: string;
-    application_id: string;
 }
 export interface Health {
     database: boolean;
@@ -291,36 +253,11 @@ export interface OrganizationListMatch {
     users?: any[];
 }
 export interface OrganizationCreateData {
-    amount: number;
-    application_id: string;
-    application_name: string;
-    consumption: Record<string, any>;
-    date: string;
-    id?: string;
-    is_provisional: boolean;
     name: string;
-    onboarding_steps: Record<string, any>;
-    organization_id: string;
-    plan: Record<string, any>;
-    quotas: Record<string, any>;
-    role: string;
-    users: any[];
 }
 export interface OrganizationUpdateData {
     id: string;
-    amount?: number;
-    application_id?: string;
-    application_name?: string;
-    consumption?: Record<string, any>;
-    date?: string;
-    is_provisional?: boolean;
     name?: string;
-    onboarding_steps?: Record<string, any>;
-    organization_id?: string;
-    plan?: Record<string, any>;
-    quotas?: Record<string, any>;
-    role?: string;
-    users?: any[];
 }
 export interface OrganizationRemoveMatch {
     id: string;
@@ -426,20 +363,13 @@ export interface ServiceTokenListMatch {
     organization_id: string;
 }
 export interface ServiceTokenCreateData {
-    biscuit: string;
-    created_at: string;
-    id?: string;
     name: string;
     organization_id: string;
-    token_id: string;
 }
 export interface ServiceTokenUpdateData {
     id: string;
-    biscuit?: string;
-    created_at?: string;
     name?: string;
     organization_id?: string;
-    token_id?: string;
 }
 export interface ServiceTokenRemoveMatch {
     id: string;
@@ -470,25 +400,19 @@ export interface SubscriptionListMatch {
 }
 export interface SubscriptionCreateData {
     application_id: string;
-    created_at: string;
-    dedicated_workers: any[];
+    dedicated_workers?: any[];
     description?: string;
     event_types: any[];
-    id?: string;
     is_enabled: boolean;
-    label_key: string;
-    label_value: string;
-    labels: Record<string, any>;
-    metadata: Record<string, any>;
-    secret: string;
-    subscription_id: string;
+    label_key?: string;
+    label_value?: string;
+    labels?: Record<string, any>;
+    metadata?: Record<string, any>;
     target: Record<string, any>;
-    updated_at: string;
 }
 export interface SubscriptionUpdateData {
     id: string;
     application_id?: string;
-    created_at?: string;
     dedicated_workers?: any[];
     description?: string;
     event_types?: any[];
@@ -497,10 +421,7 @@ export interface SubscriptionUpdateData {
     label_value?: string;
     labels?: Record<string, any>;
     metadata?: Record<string, any>;
-    secret?: string;
-    subscription_id?: string;
     target?: Record<string, any>;
-    updated_at?: string;
 }
 export interface SubscriptionRemoveMatch {
     id: string;

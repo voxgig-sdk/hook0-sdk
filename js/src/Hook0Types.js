@@ -33,32 +33,15 @@
 
 /**
  * @typedef {Object} ApplicationCreateData
- * @property {number} amount
- * @property {string} application_id
- * @property {string} application_name
- * @property {Object} consumption
- * @property {string} date
- * @property {string} [id]
- * @property {boolean} is_provisional
  * @property {string} name
- * @property {Object} onboarding_steps
  * @property {string} organization_id
- * @property {Object} quotas
  */
 
 /**
  * @typedef {Object} ApplicationUpdateData
  * @property {string} id
- * @property {number} [amount]
- * @property {string} [application_id]
- * @property {string} [application_name]
- * @property {Object} [consumption]
- * @property {string} [date]
- * @property {boolean} [is_provisional]
  * @property {string} [name]
- * @property {Object} [onboarding_steps]
  * @property {string} [organization_id]
- * @property {Object} [quotas]
  */
 
 /**
@@ -84,30 +67,19 @@
 /**
  * @typedef {Object} ApplicationSecretCreateData
  * @property {string} application_id
- * @property {string} created_at
- * @property {string} [deleted_at]
- * @property {string} [id]
  * @property {string} [name]
- * @property {string} token
  */
 
 /**
  * @typedef {Object} ApplicationSecretUpdateData
  * @property {string} id
  * @property {string} [application_id]
- * @property {string} [created_at]
- * @property {string} [deleted_at]
  * @property {string} [name]
- * @property {string} [token]
  */
 
 /**
- * @typedef {Object} ApplicationsManagement
- */
-
-/**
- * @typedef {Object} ApplicationsManagementRemoveMatch
- * @property {string} application_secret_token
+ * @typedef {Object} ApplicationSecretRemoveMatch
+ * @property {string} id
  * @property {string} application_id
  */
 
@@ -117,6 +89,7 @@
 
 /**
  * @typedef {Object} EmailPreferenceCreateData
+ * @property {*} [token]
  */
 
 /**
@@ -167,15 +140,7 @@
 /**
  * @typedef {Object} EventCreateData
  * @property {string} id
- * @property {string} event_id
- * @property {string} event_type_name
- * @property {string} ip
- * @property {Object} labels
- * @property {Object} [metadata]
- * @property {string} occurred_at
- * @property {string} payload
- * @property {string} payload_content_type
- * @property {string} received_at
+ * @property {*} [application_id]
  */
 
 /**
@@ -205,14 +170,15 @@
 /**
  * @typedef {Object} EventTypeCreateData
  * @property {string} application_id
- * @property {string} event_type_name
- * @property {string} [id]
  * @property {string} resource_type
- * @property {string} resource_type_name
  * @property {string} service
- * @property {string} service_name
  * @property {string} verb
- * @property {string} verb_name
+ */
+
+/**
+ * @typedef {Object} EventTypeRemoveMatch
+ * @property {string} id
+ * @property {string} application_id
  */
 
 /**
@@ -221,12 +187,6 @@
 
 /**
  * @typedef {Object} EventsManagementListMatch
- */
-
-/**
- * @typedef {Object} EventsManagementRemoveMatch
- * @property {string} event_type_name
- * @property {string} application_id
  */
 
 /**
@@ -376,38 +336,13 @@
 
 /**
  * @typedef {Object} OrganizationCreateData
- * @property {number} amount
- * @property {string} application_id
- * @property {string} application_name
- * @property {Object} consumption
- * @property {string} date
- * @property {string} [id]
- * @property {boolean} is_provisional
  * @property {string} name
- * @property {Object} onboarding_steps
- * @property {string} organization_id
- * @property {Object} plan
- * @property {Object} quotas
- * @property {string} role
- * @property {Array} users
  */
 
 /**
  * @typedef {Object} OrganizationUpdateData
  * @property {string} id
- * @property {number} [amount]
- * @property {string} [application_id]
- * @property {string} [application_name]
- * @property {Object} [consumption]
- * @property {string} [date]
- * @property {boolean} [is_provisional]
  * @property {string} [name]
- * @property {Object} [onboarding_steps]
- * @property {string} [organization_id]
- * @property {Object} [plan]
- * @property {Object} [quotas]
- * @property {string} [role]
- * @property {Array} [users]
  */
 
 /**
@@ -547,22 +482,15 @@
 
 /**
  * @typedef {Object} ServiceTokenCreateData
- * @property {string} biscuit
- * @property {string} created_at
- * @property {string} [id]
  * @property {string} name
  * @property {string} organization_id
- * @property {string} token_id
  */
 
 /**
  * @typedef {Object} ServiceTokenUpdateData
  * @property {string} id
- * @property {string} [biscuit]
- * @property {string} [created_at]
  * @property {string} [name]
  * @property {string} [organization_id]
- * @property {string} [token_id]
  */
 
 /**
@@ -603,27 +531,21 @@
 /**
  * @typedef {Object} SubscriptionCreateData
  * @property {string} application_id
- * @property {string} created_at
- * @property {Array} dedicated_workers
+ * @property {Array} [dedicated_workers]
  * @property {string} [description]
  * @property {Array} event_types
- * @property {string} [id]
  * @property {boolean} is_enabled
- * @property {string} label_key
- * @property {string} label_value
- * @property {Object} labels
- * @property {Object} metadata
- * @property {string} secret
- * @property {string} subscription_id
+ * @property {string} [label_key]
+ * @property {string} [label_value]
+ * @property {Object} [labels]
+ * @property {Object} [metadata]
  * @property {Object} target
- * @property {string} updated_at
  */
 
 /**
  * @typedef {Object} SubscriptionUpdateData
  * @property {string} id
  * @property {string} [application_id]
- * @property {string} [created_at]
  * @property {Array} [dedicated_workers]
  * @property {string} [description]
  * @property {Array} [event_types]
@@ -632,10 +554,7 @@
  * @property {string} [label_value]
  * @property {Object} [labels]
  * @property {Object} [metadata]
- * @property {string} [secret]
- * @property {string} [subscription_id]
  * @property {Object} [target]
- * @property {string} [updated_at]
  */
 
 /**

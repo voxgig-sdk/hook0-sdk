@@ -173,20 +173,15 @@ class EventsManagementEntityTest extends TestCase
         $this->assertSame(2, $client->_cost["total"]["attempts"]);
     }
 
-    public function test_validate(): void
+    public function test_validate_list_response(): void
     {
         $cfg = Hook0Config::shared_config();
         if (!isset($cfg["feature"]["validate"])) {
             $this->markTestSkipped('feature not present in this SDK: validate');
         }
-        $client = Hook0SDK::test(null, ["feature" => ["validate" => ["active" => true]]]);
-        $err = null;
-        try {
-            $client->EventsManagement(null)->remove(["event_type_name" => 1, "application_id" => 'x'], null);
-        } catch (\Throwable $e) {
-            $err = $e;
-        }
-        $this->assertSame('validate_failed', $err->sdk_code ?? null);
+        $opts = ["feature" => ["validate" => ["active" => true, "request" => false, "response" => true]]];
+        $listed = Hook0SDK::test(['entity' => ['events_management' => ['v1' => []]]], $opts)->EventsManagement(null)->list(null, null);
+        $this->assertSame(['v1'], array_map(fn($ent) => $ent->data_get()['id'] ?? null, $listed));
     }
 
     public function test_basic_flow(): void
@@ -236,7 +231,7 @@ function events_management_basic_setup($extra)
 
     // Generate idmap.
     $idmap = [];
-    foreach (["events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03"] as $k) {
+    foreach (["events_management01", "events_management02", "events_management03"] as $k) {
         $idmap[$k] = strtoupper($k);
     }
 

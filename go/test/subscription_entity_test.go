@@ -201,6 +201,7 @@ func TestSubscriptionEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		subscriptionRef01Ent := client.Subscription(nil)

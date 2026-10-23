@@ -200,6 +200,7 @@ func TestEventEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 		if setup.live {
 			liveExisting(t, eventEntityLiveStrict, setup.data, "event", func() (any, error) {
 				return client.Event(nil).List(map[string]any{}, nil)

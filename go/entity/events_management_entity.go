@@ -14,7 +14,7 @@ type EventsManagementEntity struct {
 	client  *core.Hook0SDK
 	utility *core.Utility
 	entopts map[string]any
-	data    map[string]any
+	data    any
 	match   map[string]any
 	entctx  *core.Context
 	deleted bool
@@ -64,8 +64,12 @@ func (e *EventsManagementEntity) GoString() string {
 }
 
 func (e *EventsManagementEntity) MarshalJSON() ([]byte, error) {
+	data, ok := e.data.(map[string]any)
+	if !ok {
+		return json.Marshal(e.data)
+	}
 	out := map[string]any{}
-	for k, v := range e.data {
+	for k, v := range data {
 		out[k] = v
 	}
 	out["voxgig$entity"] = "EventsManagement"
@@ -93,10 +97,7 @@ func (e *EventsManagementEntity) Make() core.Entity {
 
 func (e *EventsManagementEntity) Data(args ...any) any {
 	if len(args) > 0 && args[0] != nil {
-		e.data = core.ToMapAny(vs.Clone(args[0]))
-		if e.data == nil {
-			e.data = map[string]any{}
-		}
+		e.data = vs.Clone(args[0])
 		e.utility.FeatureHook(e.entctx, "SetData")
 	}
 
@@ -346,43 +347,9 @@ func (e *EventsManagementEntity) Patch(_ map[string]any, _ map[string]any) (any,
 }
 
 
-
-func (e *EventsManagementEntity) Remove(reqmatch map[string]any, ctrl map[string]any) (any, error) {
-	utility := e.utility
-	ctx := utility.MakeContext(map[string]any{
-		"opname":   "remove",
-		"ctrl":     ctrl,
-		"match":    e.match,
-		"data":     e.data,
-		"reqmatch": reqmatch,
-	}, e.entctx)
-
-	return e.runOp(ctx, func() {
-		if ctx.Result != nil {
-			if ctx.Result.Resmatch != nil {
-				e.match = ctx.Result.Resmatch
-			}
-			if ctx.Result.Resdata != nil {
-				e.data = core.ToMapAny(vs.Clone(ctx.Result.Resdata))
-				if e.data == nil {
-					e.data = map[string]any{}
-				}
-			}
-		}
-	})
+func (e *EventsManagementEntity) Remove(_ map[string]any, _ map[string]any) (any, error) {
+	return core.UnsupportedOp("remove", e.name)
 }
-
-// RemoveTyped is the statically-typed variant of Remove: it takes an
-// EventsManagementRemoveMatch and returns an EventsManagement. It delegates to the untyped
-// Remove (identical runtime) and converts at the typed boundary.
-func (e *EventsManagementEntity) RemoveTyped(reqmatch EventsManagementRemoveMatch, ctrl map[string]any) (EventsManagement, error) {
-	res, err := e.Remove(asMap(reqmatch), ctrl)
-	if err != nil {
-		return EventsManagement{}, err
-	}
-	return typedFrom[EventsManagement](res), nil
-}
-
 
 
 func (e *EventsManagementEntity) runOp(ctx *core.Context, postDone func()) (out any, err error) {

@@ -1,5 +1,5 @@
 
-import { cmp, Content, isAuthActive, packageName, envName, entityIdField, entityOps, opRequestShape, safeVarName, exampleVarName, jsKey, listMatchArg } from '@voxgig/sdkgen'
+import { cmp, Content, isAuthActive, packageName, envName, entityIdField, entityOps, opRequestShape, safeVarName, exampleVarName, jsKey, listMatchArg, matchExampleItems } from '@voxgig/sdkgen'
 
 import {
   KIT,
@@ -65,8 +65,7 @@ for (const ${eVar} of ${eVar}s) {
       // entity's own id last) — the same shape the runtime resolves path
       // params from, so the example always works.
       const neIdF = entityIdField(nestedEntity)
-      const neMatchLines = opRequestShape(nestedEntity, 'load').items
-        .filter((it: any) => !it.optional || it.name === neIdF)
+      const neMatchLines = matchExampleItems(nestedEntity, 'load', neIdF)
         .sort((a: any, b: any) =>
           (a.name === neIdF ? 1 : 0) - (b.name === neIdF ? 1 : 0))
         .map((it: any) =>
@@ -84,8 +83,17 @@ console.log(${neVar}.data())
     }
 
     if (!hasCall && opnames.includes('load')) {
+      // The id and every required parameter: a load without them has no route.
+      const idF = entityIdField(exampleEntity)
+      const loadItems = matchExampleItems(exampleEntity, 'load', idF)
+        .sort((a: any, b: any) =>
+          (a.name === idF ? 1 : 0) - (b.name === idF ? 1 : 0))
+        .map((it: any) =>
+          `  ${jsKey(it.name)}: ${exampleValue(exampleEntity, exampleEntity.op && exampleEntity.op.load, it.name,
+            it.name === idF ? 'example_id' : 'example_' + it.name)},`)
+      const loadArg = 0 < loadItems.length ? `{\n${loadItems.join('\n')}\n}` : ''
       Content(`// Load a specific ${eName.toLowerCase()} (returns the entity)
-const ${eVar} = await client.${eName}().load()
+const ${eVar} = await client.${eName}().load(${loadArg})
 console.log(${eVar}.data())
 `)
     }

@@ -2,7 +2,6 @@
 
 @"./application.aontu"
 @"./application_secret.aontu"
-@"./applications_management.aontu"
 @"./email_preference.aontu"
 @"./error.aontu"
 @"./event.aontu"

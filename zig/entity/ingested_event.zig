@@ -287,11 +287,7 @@ pub const IngestedEventEntity = struct {
     fn data_impl(self: *IngestedEventEntity, args: ?Value) Value {
         if (args) |arg| {
             if (!h.is_noval(arg)) {
-                const cloned = h.to_map(h.clone(arg));
-                self.data = switch (cloned) {
-                    .object => cloned,
-                    else => h.omap(),
-                };
+                self.data = if (arg == .null) h.omap() else h.clone(arg);
                 self.utility.feature_hook(self.ent_ctx(), "SetData");
             }
         }

@@ -173,6 +173,24 @@ class EventTypeEntityTest extends TestCase
         $this->assertSame(2, $client->_cost["total"]["attempts"]);
     }
 
+    public function test_validate_list_response(): void
+    {
+        $cfg = Hook0Config::shared_config();
+        if (!isset($cfg["feature"]["validate"])) {
+            $this->markTestSkipped('feature not present in this SDK: validate');
+        }
+        $opts = ["feature" => ["validate" => ["active" => true, "request" => false, "response" => true]]];
+        $listed = Hook0SDK::test(['entity' => ['event_type' => ['v1' => ['application_id' => 'x', 'event_type_name' => 'x', 'resource_type' => 'x', 'resource_type_name' => 'x', 'service' => 'x', 'service_name' => 'x', 'verb' => 'x', 'verb_name' => 'x']]]], $opts)->EventType(null)->list(null, null);
+        $this->assertSame(['v1'], array_map(fn($ent) => $ent->data_get()['id'] ?? null, $listed));
+        $err = null;
+        try {
+            Hook0SDK::test(['entity' => ['event_type' => ['v1' => ['application_id' => 1, 'event_type_name' => 'x', 'resource_type' => 'x', 'resource_type_name' => 'x', 'service' => 'x', 'service_name' => 'x', 'verb' => 'x', 'verb_name' => 'x']]]], $opts)->EventType(null)->list(null, null);
+        } catch (\Throwable $e) {
+            $err = $e;
+        }
+        $this->assertSame('validate_failed', $err->sdk_code ?? null);
+    }
+
     public function test_validate(): void
     {
         $cfg = Hook0Config::shared_config();
@@ -194,7 +212,7 @@ class EventTypeEntityTest extends TestCase
         $setup = event_type_basic_setup(null);
         // Per-op sdk-test-control.json skip.
         $_live = !empty($setup["live"]);
-        foreach (["create", "list", "load"] as $_op) {
+        foreach (["create", "list", "load", "remove"] as $_op) {
             [$_shouldSkip, $_reason] = Runner::is_control_skipped("entityOp", "event_type." . $_op, $_live ? "live" : "unit");
             if ($_shouldSkip) {
                 $this->markTestSkipped($_reason ?? "skipped via sdk-test-control.json");
@@ -232,6 +250,23 @@ class EventTypeEntityTest extends TestCase
         $event_type_ref01_data_dt0_load_result = Helpers::to_map(is_object($event_type_ref01_data_dt0_loaded) && method_exists($event_type_ref01_data_dt0_loaded, 'data_get') ? $event_type_ref01_data_dt0_loaded->data_get() : $event_type_ref01_data_dt0_loaded);
         $this->assertNotNull($event_type_ref01_data_dt0_load_result);
         $this->assertEquals($event_type_ref01_data_dt0_load_result["id"], $event_type_ref01_data["id"]);
+
+        // REMOVE
+        $event_type_ref01_match_rm0 = [
+            "id" => $event_type_ref01_data["id"],
+        ];
+        $event_type_ref01_ent->remove($event_type_ref01_match_rm0, null);
+
+        // LIST
+        $event_type_ref01_match_rt0 = [];
+
+        $event_type_ref01_list_rt0_result = $event_type_ref01_ent->list($event_type_ref01_match_rt0, null);
+        $this->assertIsArray($event_type_ref01_list_rt0_result);
+
+        $not_found_item = sdk_select(
+            Runner::entity_list_to_data($event_type_ref01_list_rt0_result),
+            ["id" => $event_type_ref01_data["id"]]);
+        $this->assertEmpty($not_found_item);
 
     }
 }

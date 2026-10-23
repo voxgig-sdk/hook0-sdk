@@ -132,17 +132,6 @@ describe("EventsManagementEntity", function()
     assert.is_true(hook.unexpected > fired)
   end)
 
-  it("should refuse an invalid request", function()
-    local config = require("config_shared")()
-    if type(config.feature) ~= "table" or config.feature.validate == nil then
-      pending("feature not present in this SDK: validate")
-      return
-    end
-    local client = sdk.test(nil, { feature = { validate = { active = true } } })
-    local _, err = client:EventsManagement(nil):remove({ ["event_type_name"] = 1, ["application_id"] = "x" }, nil)
-    assert.are.equal("validate_failed", type(err) == "table" and err.code or nil)
-  end)
-
   it("should run basic flow", function()
     local setup = events_management_basic_setup(nil)
     -- Per-op sdk-test-control.json skip.
@@ -195,7 +184,7 @@ function events_management_basic_setup(extra)
 
   -- Generate idmap via transform.
   local idmap = vs.transform(
-    { "events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03" },
+    { "events_management01", "events_management02", "events_management03" },
     {
       ["`$PACK`"] = { "", {
         ["`$KEY`"] = "`$COPY`",

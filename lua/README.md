@@ -66,11 +66,11 @@ print(rec["id"])
 
 ```lua
 -- Create
-local created, err = client:Application():create({ amount = 1, application_id = "example_application_id", application_name = "example_application_name", consumption = {}, date = "example_date", is_provisional = true, name = "example_name", onboarding_steps = {}, organization_id = "example_organization_id", quotas = {} })
+local created, err = client:Application():create({ name = "example_name", organization_id = "example_organization_id" })
 if err then error(err) end
 
 -- Update
-client:Application():update({ id = created:data_get()["id"], amount = 1, application_id = "example_application_id" })
+client:Application():update({ id = created:data_get()["id"], name = "example_name", organization_id = "example_organization_id" })
 
 -- Remove
 client:Application():remove({ id = created:data_get()["id"] })
@@ -224,7 +224,6 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `direct` | `(fetchargs) -> table, err` | Build and send an HTTP request. |
 | `Application` | `(data) -> ApplicationEntity` | Create an Application entity instance. |
 | `ApplicationSecret` | `(data) -> ApplicationSecretEntity` | Create an ApplicationSecret entity instance. |
-| `ApplicationsManagement` | `(data) -> ApplicationsManagementEntity` | Create an ApplicationsManagement entity instance. |
 | `EmailPreference` | `(data) -> EmailPreferenceEntity` | Create an EmailPreference entity instance. |
 | `Error` | `(data) -> ErrorEntity` | Create an Error entity instance. |
 | `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
@@ -317,18 +316,9 @@ API path: `/api/v1/applications/`
 | `name` |  |
 | `token` |  |
 
-Operations: Create, List, Update.
+Operations: Create, List, Remove, Update.
 
 API path: `/api/v1/application_secrets/`
-
-#### ApplicationsManagement
-
-| Field | Description |
-| --- | --- |
-
-Operations: Remove.
-
-API path: `/api/v1/application_secrets/{application_secret_token}`
 
 #### EmailPreference
 
@@ -387,7 +377,7 @@ API path: `/api/v1/events/{event_id}/replay`
 | `verb` |  |
 | `verb_name` |  |
 
-Operations: Create, List, Load.
+Operations: Create, List, Load, Remove.
 
 API path: `/api/v1/event_types/`
 
@@ -396,7 +386,7 @@ API path: `/api/v1/event_types/`
 | Field | Description |
 | --- | --- |
 
-Operations: List, Remove.
+Operations: List.
 
 API path: `/api/v1/payload_content_types/`
 
@@ -704,16 +694,8 @@ local applications, err = client:Application():list({ organization_id = "example
 
 ```lua
 local application, err = client:Application():create({
-  amount = 1, -- number
-  application_id = "example_application_id", -- string
-  application_name = "example_application_name", -- string
-  consumption = {}, -- table
-  date = "example_date", -- string
-  is_provisional = true, -- boolean
   name = "example_name", -- string
-  onboarding_steps = {}, -- table
   organization_id = "example_organization_id", -- string
-  quotas = {}, -- table
 })
 ```
 
@@ -728,6 +710,7 @@ Create an instance: `local application_secret = client:ApplicationSecret(nil)`
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
+| `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -752,21 +735,8 @@ local application_secrets, err = client:ApplicationSecret():list({ application_i
 ```lua
 local application_secret, err = client:ApplicationSecret():create({
   application_id = "example_application_id", -- string
-  created_at = "example_created_at", -- string
-  token = "example_token", -- string
 })
 ```
-
-
-### ApplicationsManagement
-
-Create an instance: `local applications_management = client:ApplicationsManagement(nil)`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `remove(match)` | Remove the matching entity. |
 
 
 ### EmailPreference
@@ -859,14 +829,6 @@ local events, err = client:Event():list({ application_id = "example" })
 ```lua
 local event, err = client:Event():create({
   id = "example_id", -- string
-  event_id = "example_event_id", -- string
-  event_type_name = "example_event_type_name", -- string
-  ip = "example_ip", -- string
-  labels = {}, -- table
-  occurred_at = "example_occurred_at", -- string
-  payload = "example_payload", -- string
-  payload_content_type = "example_payload_content_type", -- string
-  received_at = "example_received_at", -- string
 })
 ```
 
@@ -882,6 +844,7 @@ Create an instance: `local event_type = client:EventType(nil)`
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
+| `remove(match)` | Remove the matching entity. |
 
 #### Fields
 
@@ -914,13 +877,9 @@ local event_types, err = client:EventType():list({ application_id = "example" })
 ```lua
 local event_type, err = client:EventType():create({
   application_id = "example_application_id", -- string
-  event_type_name = "example_event_type_name", -- string
   resource_type = "example_resource_type", -- string
-  resource_type_name = "example_resource_type_name", -- string
   service = "example_service", -- string
-  service_name = "example_service_name", -- string
   verb = "example_verb", -- string
-  verb_name = "example_verb_name", -- string
 })
 ```
 
@@ -934,7 +893,6 @@ Create an instance: `local events_management = client:EventsManagement(nil)`
 | Method | Description |
 | --- | --- |
 | `list(match)` | List entities matching the criteria. |
-| `remove(match)` | Remove the matching entity. |
 
 #### Example: List
 
@@ -1148,19 +1106,7 @@ local organizations, err = client:Organization():list()
 
 ```lua
 local organization, err = client:Organization():create({
-  amount = 1, -- number
-  application_id = "example_application_id", -- string
-  application_name = "example_application_name", -- string
-  consumption = {}, -- table
-  date = "example_date", -- string
-  is_provisional = true, -- boolean
   name = "example_name", -- string
-  onboarding_steps = {}, -- table
-  organization_id = "example_organization_id", -- string
-  plan = {}, -- table
-  quotas = {}, -- table
-  role = "example_role", -- string
-  users = {}, -- table
 })
 ```
 
@@ -1366,11 +1312,8 @@ local service_tokens, err = client:ServiceToken():list({ organization_id = "exam
 
 ```lua
 local service_token, err = client:ServiceToken():create({
-  biscuit = "example_biscuit", -- string
-  created_at = "example_created_at", -- string
   name = "example_name", -- string
   organization_id = "example_organization_id", -- string
-  token_id = "example_token_id", -- string
 })
 ```
 
@@ -1426,18 +1369,9 @@ local subscriptions, err = client:Subscription():list({ application_id = "exampl
 ```lua
 local subscription, err = client:Subscription():create({
   application_id = "example_application_id", -- string
-  created_at = "example_created_at", -- string
-  dedicated_workers = {}, -- table
   event_types = {}, -- table
   is_enabled = true, -- boolean
-  label_key = "example_label_key", -- string
-  label_value = "example_label_value", -- string
-  labels = {}, -- table
-  metadata = {}, -- table
-  secret = "example_secret", -- string
-  subscription_id = "example_subscription_id", -- string
   target = {}, -- table
-  updated_at = "example_updated_at", -- string
 })
 ```
 
@@ -1502,7 +1436,7 @@ local user_invitation, err = client:UserInvitation():create({
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -1517,10 +1451,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`secrets`](#secrets) | Secrets |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `secrets`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -1611,6 +1546,24 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### secrets
+
+Secrets.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+Set `feature.secrets.active` to enable it, then override any of the options above.
+
+`secrets` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -1681,6 +1634,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **SecretsFeature**: Secrets
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 

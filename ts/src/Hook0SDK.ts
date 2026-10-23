@@ -2,7 +2,6 @@
 
 import { ApplicationEntity } from './entity/ApplicationEntity'
 import { ApplicationSecretEntity } from './entity/ApplicationSecretEntity'
-import { ApplicationsManagementEntity } from './entity/ApplicationsManagementEntity'
 import { EmailPreferenceEntity } from './entity/EmailPreferenceEntity'
 import { ErrorEntity } from './entity/ErrorEntity'
 import { EventEntity } from './entity/EventEntity'
@@ -41,6 +40,7 @@ import { allowed } from './utility/PrepareMethodUtility'
 
 
 import { BaseFeature } from './feature/base/BaseFeature'
+import * as sekreto from './feature/secrets/sekreto'
 
 
 
@@ -60,7 +60,8 @@ class Hook0SDK {
   _utility = new Utility()
   _features: Feature[]
   _rootctx: Context
-  
+  _secrets?: any
+
 
   constructor(options?: any) {
 
@@ -140,6 +141,10 @@ class Hook0SDK {
   }
 
   
+secrets() {
+  return this._secrets && this._secrets.sekreto()
+}
+
 
 
   async prepare(fetchargs?: any) {
@@ -192,6 +197,15 @@ class Hook0SDK {
     }
 
     
+if (null != this._secrets) {
+  try {
+    await this._secrets.resolve()
+  }
+  catch (err: any) {
+    return err instanceof Error ? err : new Error(String(err))
+  }
+}
+
 
     const authResult = prepareAuth(ctx)
     if (authResult instanceof Error) {
@@ -357,15 +371,6 @@ class Hook0SDK {
   ApplicationSecret(entopts?: Record<string, any>) {
     const self = this
     return new ApplicationSecretEntity(self, entopts)
-  }
-
-
-  // Entity access: `client.ApplicationsManagement().list()` / `client.ApplicationsManagement().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  ApplicationsManagement(entopts?: Record<string, any>) {
-    const self = this
-    return new ApplicationsManagementEntity(self, entopts)
   }
 
 
@@ -607,7 +612,8 @@ const SDK = Hook0SDK
 export {
   stdutil,
   config,
-  
+  sekreto,
+
 
   BaseFeature,
   Hook0EntityBase,

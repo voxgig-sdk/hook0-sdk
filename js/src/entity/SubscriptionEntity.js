@@ -131,9 +131,12 @@ class SubscriptionEntity extends Hook0EntityBase {
     catch (err) {
       // What a hook throws here must not escape the cleaning below.
       try {
+        // Once per operation: makeError fires it for its own error.
+        if (!ctx.unexpectedFired) {
 
-        fres = featureHook(ctx, 'PreUnexpected')
-        if (fres instanceof Promise) { await fres }
+          fres = featureHook(ctx, 'PreUnexpected')
+          if (fres instanceof Promise) { await fres }
+        }
       }
       catch (hookerr) {
         err = hookerr
@@ -250,9 +253,12 @@ class SubscriptionEntity extends Hook0EntityBase {
     catch (err) {
       // What a hook throws here must not escape the cleaning below.
       try {
+        // Once per operation: makeError fires it for its own error.
+        if (!ctx.unexpectedFired) {
 
-        fres = featureHook(ctx, 'PreUnexpected')
-        if (fres instanceof Promise) { await fres }
+          fres = featureHook(ctx, 'PreUnexpected')
+          if (fres instanceof Promise) { await fres }
+        }
       }
       catch (hookerr) {
         err = hookerr
@@ -376,9 +382,12 @@ class SubscriptionEntity extends Hook0EntityBase {
     catch (err) {
       // What a hook throws here must not escape the cleaning below.
       try {
+        // Once per operation: makeError fires it for its own error.
+        if (!ctx.unexpectedFired) {
 
-        fres = featureHook(ctx, 'PreUnexpected')
-        if (fres instanceof Promise) { await fres }
+          fres = featureHook(ctx, 'PreUnexpected')
+          if (fres instanceof Promise) { await fres }
+        }
       }
       catch (hookerr) {
         err = hookerr
@@ -508,9 +517,12 @@ class SubscriptionEntity extends Hook0EntityBase {
     catch (err) {
       // What a hook throws here must not escape the cleaning below.
       try {
+        // Once per operation: makeError fires it for its own error.
+        if (!ctx.unexpectedFired) {
 
-        fres = featureHook(ctx, 'PreUnexpected')
-        if (fres instanceof Promise) { await fres }
+          fres = featureHook(ctx, 'PreUnexpected')
+          if (fres instanceof Promise) { await fres }
+        }
       }
       catch (hookerr) {
         err = hookerr
@@ -647,9 +659,12 @@ class SubscriptionEntity extends Hook0EntityBase {
     catch (err) {
       // What a hook throws here must not escape the cleaning below.
       try {
+        // Once per operation: makeError fires it for its own error.
+        if (!ctx.unexpectedFired) {
 
-        fres = featureHook(ctx, 'PreUnexpected')
-        if (fres instanceof Promise) { await fres }
+          fres = featureHook(ctx, 'PreUnexpected')
+          if (fres instanceof Promise) { await fres }
+        }
       }
       catch (hookerr) {
         err = hookerr

@@ -28,32 +28,15 @@ type ApplicationListMatch struct {
 
 // ApplicationCreateData is the typed request payload for Application.CreateTyped.
 type ApplicationCreateData struct {
-	Amount int `json:"amount"`
-	ApplicationId string `json:"application_id"`
-	ApplicationName string `json:"application_name"`
-	Consumption map[string]any `json:"consumption"`
-	Date string `json:"date"`
-	Id *string `json:"id,omitempty"`
-	IsProvisional bool `json:"is_provisional"`
 	Name string `json:"name"`
-	OnboardingSteps map[string]any `json:"onboarding_steps"`
 	OrganizationId string `json:"organization_id"`
-	Quotas map[string]any `json:"quotas"`
 }
 
 // ApplicationUpdateData is the typed request payload for Application.UpdateTyped.
 type ApplicationUpdateData struct {
 	Id string `json:"id"`
-	Amount *int `json:"amount,omitempty"`
-	ApplicationId *string `json:"application_id,omitempty"`
-	ApplicationName *string `json:"application_name,omitempty"`
-	Consumption *map[string]any `json:"consumption,omitempty"`
-	Date *string `json:"date,omitempty"`
-	IsProvisional *bool `json:"is_provisional,omitempty"`
 	Name *string `json:"name,omitempty"`
-	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
-	Quotas *map[string]any `json:"quotas,omitempty"`
 }
 
 // ApplicationRemoveMatch is the typed request payload for Application.RemoveTyped.
@@ -73,30 +56,19 @@ type ApplicationSecretListMatch struct {
 // ApplicationSecretCreateData is the typed request payload for ApplicationSecret.CreateTyped.
 type ApplicationSecretCreateData struct {
 	ApplicationId string `json:"application_id"`
-	CreatedAt string `json:"created_at"`
-	DeletedAt *string `json:"deleted_at,omitempty"`
-	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
-	Token string `json:"token"`
 }
 
 // ApplicationSecretUpdateData is the typed request payload for ApplicationSecret.UpdateTyped.
 type ApplicationSecretUpdateData struct {
 	Id string `json:"id"`
 	ApplicationId *string `json:"application_id,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	DeletedAt *string `json:"deleted_at,omitempty"`
 	Name *string `json:"name,omitempty"`
-	Token *string `json:"token,omitempty"`
 }
 
-// ApplicationsManagement is the typed data model for the applications_management entity.
-type ApplicationsManagement struct {
-}
-
-// ApplicationsManagementRemoveMatch is the typed request payload for ApplicationsManagement.RemoveTyped.
-type ApplicationsManagementRemoveMatch struct {
-	ApplicationSecretToken string `json:"application_secret_token"`
+// ApplicationSecretRemoveMatch is the typed request payload for ApplicationSecret.RemoveTyped.
+type ApplicationSecretRemoveMatch struct {
+	Id string `json:"id"`
 	ApplicationId string `json:"application_id"`
 }
 
@@ -106,6 +78,7 @@ type EmailPreference struct {
 
 // EmailPreferenceCreateData is the typed request payload for EmailPreference.CreateTyped.
 type EmailPreferenceCreateData struct {
+	Token *any `json:"token,omitempty"`
 }
 
 // Error is the typed data model for the error entity.
@@ -140,15 +113,7 @@ type EventListMatch struct {
 // EventCreateData is the typed request payload for Event.CreateTyped.
 type EventCreateData struct {
 	Id string `json:"id"`
-	EventId string `json:"event_id"`
-	EventTypeName string `json:"event_type_name"`
-	Ip string `json:"ip"`
-	Labels map[string]any `json:"labels"`
-	Metadata *map[string]any `json:"metadata,omitempty"`
-	OccurredAt string `json:"occurred_at"`
-	Payload string `json:"payload"`
-	PayloadContentType string `json:"payload_content_type"`
-	ReceivedAt string `json:"received_at"`
+	ApplicationId *any `json:"application_id,omitempty"`
 }
 
 // EventType is the typed data model for the event_type entity.
@@ -169,14 +134,15 @@ type EventTypeListMatch struct {
 // EventTypeCreateData is the typed request payload for EventType.CreateTyped.
 type EventTypeCreateData struct {
 	ApplicationId string `json:"application_id"`
-	EventTypeName string `json:"event_type_name"`
-	Id *string `json:"id,omitempty"`
 	ResourceType string `json:"resource_type"`
-	ResourceTypeName string `json:"resource_type_name"`
 	Service string `json:"service"`
-	ServiceName string `json:"service_name"`
 	Verb string `json:"verb"`
-	VerbName string `json:"verb_name"`
+}
+
+// EventTypeRemoveMatch is the typed request payload for EventType.RemoveTyped.
+type EventTypeRemoveMatch struct {
+	Id string `json:"id"`
+	ApplicationId string `json:"application_id"`
 }
 
 // EventsManagement is the typed data model for the events_management entity.
@@ -185,12 +151,6 @@ type EventsManagement struct {
 
 // EventsManagementListMatch is the typed request payload for EventsManagement.ListTyped.
 type EventsManagementListMatch struct {
-}
-
-// EventsManagementRemoveMatch is the typed request payload for EventsManagement.RemoveTyped.
-type EventsManagementRemoveMatch struct {
-	EventTypeName string `json:"event_type_name"`
-	ApplicationId string `json:"application_id"`
 }
 
 // Health is the typed data model for the health entity.
@@ -291,38 +251,13 @@ type OrganizationListMatch struct {
 
 // OrganizationCreateData is the typed request payload for Organization.CreateTyped.
 type OrganizationCreateData struct {
-	Amount int `json:"amount"`
-	ApplicationId string `json:"application_id"`
-	ApplicationName string `json:"application_name"`
-	Consumption map[string]any `json:"consumption"`
-	Date string `json:"date"`
-	Id *string `json:"id,omitempty"`
-	IsProvisional bool `json:"is_provisional"`
 	Name string `json:"name"`
-	OnboardingSteps map[string]any `json:"onboarding_steps"`
-	OrganizationId string `json:"organization_id"`
-	Plan map[string]any `json:"plan"`
-	Quotas map[string]any `json:"quotas"`
-	Role string `json:"role"`
-	Users []any `json:"users"`
 }
 
 // OrganizationUpdateData is the typed request payload for Organization.UpdateTyped.
 type OrganizationUpdateData struct {
 	Id string `json:"id"`
-	Amount *int `json:"amount,omitempty"`
-	ApplicationId *string `json:"application_id,omitempty"`
-	ApplicationName *string `json:"application_name,omitempty"`
-	Consumption *map[string]any `json:"consumption,omitempty"`
-	Date *string `json:"date,omitempty"`
-	IsProvisional *bool `json:"is_provisional,omitempty"`
 	Name *string `json:"name,omitempty"`
-	OnboardingSteps *map[string]any `json:"onboarding_steps,omitempty"`
-	OrganizationId *string `json:"organization_id,omitempty"`
-	Plan *map[string]any `json:"plan,omitempty"`
-	Quotas *map[string]any `json:"quotas,omitempty"`
-	Role *string `json:"role,omitempty"`
-	Users *[]any `json:"users,omitempty"`
 }
 
 // OrganizationRemoveMatch is the typed request payload for Organization.RemoveTyped.
@@ -423,22 +358,15 @@ type ServiceTokenListMatch struct {
 
 // ServiceTokenCreateData is the typed request payload for ServiceToken.CreateTyped.
 type ServiceTokenCreateData struct {
-	Biscuit string `json:"biscuit"`
-	CreatedAt string `json:"created_at"`
-	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	OrganizationId string `json:"organization_id"`
-	TokenId string `json:"token_id"`
 }
 
 // ServiceTokenUpdateData is the typed request payload for ServiceToken.UpdateTyped.
 type ServiceTokenUpdateData struct {
 	Id string `json:"id"`
-	Biscuit *string `json:"biscuit,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
 	Name *string `json:"name,omitempty"`
 	OrganizationId *string `json:"organization_id,omitempty"`
-	TokenId *string `json:"token_id,omitempty"`
 }
 
 // ServiceTokenRemoveMatch is the typed request payload for ServiceToken.RemoveTyped.
@@ -464,27 +392,21 @@ type SubscriptionListMatch struct {
 // SubscriptionCreateData is the typed request payload for Subscription.CreateTyped.
 type SubscriptionCreateData struct {
 	ApplicationId string `json:"application_id"`
-	CreatedAt string `json:"created_at"`
-	DedicatedWorkers []any `json:"dedicated_workers"`
+	DedicatedWorkers *[]any `json:"dedicated_workers,omitempty"`
 	Description *string `json:"description,omitempty"`
 	EventTypes []any `json:"event_types"`
-	Id *string `json:"id,omitempty"`
 	IsEnabled bool `json:"is_enabled"`
-	LabelKey string `json:"label_key"`
-	LabelValue string `json:"label_value"`
-	Labels map[string]any `json:"labels"`
-	Metadata map[string]any `json:"metadata"`
-	Secret string `json:"secret"`
-	SubscriptionId string `json:"subscription_id"`
+	LabelKey *string `json:"label_key,omitempty"`
+	LabelValue *string `json:"label_value,omitempty"`
+	Labels *map[string]any `json:"labels,omitempty"`
+	Metadata *map[string]any `json:"metadata,omitempty"`
 	Target map[string]any `json:"target"`
-	UpdatedAt string `json:"updated_at"`
 }
 
 // SubscriptionUpdateData is the typed request payload for Subscription.UpdateTyped.
 type SubscriptionUpdateData struct {
 	Id string `json:"id"`
 	ApplicationId *string `json:"application_id,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
 	DedicatedWorkers *[]any `json:"dedicated_workers,omitempty"`
 	Description *string `json:"description,omitempty"`
 	EventTypes *[]any `json:"event_types,omitempty"`
@@ -493,10 +415,7 @@ type SubscriptionUpdateData struct {
 	LabelValue *string `json:"label_value,omitempty"`
 	Labels *map[string]any `json:"labels,omitempty"`
 	Metadata *map[string]any `json:"metadata,omitempty"`
-	Secret *string `json:"secret,omitempty"`
-	SubscriptionId *string `json:"subscription_id,omitempty"`
 	Target *map[string]any `json:"target,omitempty"`
-	UpdatedAt *string `json:"updated_at,omitempty"`
 }
 
 // SubscriptionRemoveMatch is the typed request payload for Subscription.RemoveTyped.

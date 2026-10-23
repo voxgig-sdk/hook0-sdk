@@ -50,11 +50,6 @@ Create a new `Application` entity instance (returns `SdkEntity`). Pass
 Create a new `ApplicationSecret` entity instance (returns `SdkEntity`). Pass
 `null` for no initial options.
 
-#### `applicationsManagement(entopts)`
-
-Create a new `ApplicationsManagement` entity instance (returns `SdkEntity`). Pass
-`null` for no initial options.
-
 #### `emailPreference(entopts)`
 
 Create a new `EmailPreference` entity instance (returns `SdkEntity`). Pass
@@ -225,16 +220,8 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```java
 Object result = client.application(null).create(Map.of(
-    "amount", 1L,  // Long
-    "application_id", "example_application_id",  // String
-    "application_name", "example_application_name",  // String
-    "consumption", Map.of(),  // Map<String, Object>
-    "date", "example_date",  // String
-    "is_provisional", true,  // Boolean
     "name", "example_name",  // String
-    "onboarding_steps", Map.of(),  // Map<String, Object>
-    "organization_id", "example_organization_id",  // String
-    "quotas", Map.of()  // Map<String, Object>
+    "organization_id", "example_organization_id"  // String
 ), null);
 ```
 
@@ -321,9 +308,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```java
 Object result = client.applicationSecret(null).create(Map.of(
-    "application_id", "example_application_id",  // String
-    "created_at", "example_created_at",  // String
-    "token", "example_token"  // String
+    "application_id", "example_application_id"  // String
 ), null);
 ```
 
@@ -338,13 +323,21 @@ for (Object item : results) {
 }
 ```
 
+#### `remove(reqmatch, ctrl) -> Object`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
+
+```java
+Object result = client.applicationSecret(null).remove(Map.of("id", "application_secret_id", "application_id", "application_id"), null);
+```
+
 #### `update(reqdata, ctrl) -> Object`
 
 Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
 
 ```java
 Object result = client.applicationSecret(null).update(Map.of(
-    "id", "id"
+    "id", "application_secret_id"
 ), null);
 ```
 
@@ -361,43 +354,6 @@ Get or set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `ApplicationSecret` entity instance with the same options.
-
-#### `getName() -> String`
-
-Return the entity name.
-
-
----
-
-## ApplicationsManagement
-
-```java
-SdkEntity applicationsManagement = client.applicationsManagement(null);
-```
-
-### Operations
-
-#### `remove(reqmatch, ctrl) -> Object`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
-
-```java
-Object result = client.applicationsManagement(null).remove(Map.of("application_secret_token", "application_secret_token", "application_id", "application_id"), null);
-```
-
-### Common Methods
-
-#### `data(newdata...) -> Object`
-
-Get or set the entity data.
-
-#### `match(newmatch...) -> Object`
-
-Get or set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `ApplicationsManagement` entity instance with the same options.
 
 #### `getName() -> String`
 
@@ -524,15 +480,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```java
 Object result = client.event(null).create(Map.of(
-    "id", "example_id",  // String
-    "event_id", "example_event_id",  // String
-    "event_type_name", "example_event_type_name",  // String
-    "ip", "example_ip",  // String
-    "labels", Map.of(),  // Map<String, Object>
-    "occurred_at", "example_occurred_at",  // String
-    "payload", "example_payload",  // String
-    "payload_content_type", "example_payload_content_type",  // String
-    "received_at", "example_received_at"  // String
+    "id", "example_id"  // String
 ), null);
 ```
 
@@ -605,13 +553,9 @@ Create a new entity with the given data. Returns the created entity and raises o
 ```java
 Object result = client.eventType(null).create(Map.of(
     "application_id", "example_application_id",  // String
-    "event_type_name", "example_event_type_name",  // String
     "resource_type", "example_resource_type",  // String
-    "resource_type_name", "example_resource_type_name",  // String
     "service", "example_service",  // String
-    "service_name", "example_service_name",  // String
-    "verb", "example_verb",  // String
-    "verb_name", "example_verb_name"  // String
+    "verb", "example_verb"  // String
 ), null);
 ```
 
@@ -632,6 +576,14 @@ Load a single entity matching the given criteria. Returns the entity, whose reco
 
 ```java
 Object result = client.eventType(null).load(Map.of("id", "event_type_id", "application_id", "application_id"), null);
+```
+
+#### `remove(reqmatch, ctrl) -> Object`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
+
+```java
+Object result = client.eventType(null).remove(Map.of("id", "event_type_id", "application_id", "application_id"), null);
 ```
 
 ### Common Methods
@@ -672,14 +624,6 @@ List<?> results = (List<?>) client.eventsManagement(null).list(null, null);
 for (Object item : results) {
     System.out.println(((SdkEntity) item).data());
 }
-```
-
-#### `remove(reqmatch, ctrl) -> Object`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
-
-```java
-Object result = client.eventsManagement(null).remove(Map.of("event_type_name", "event_type_name", "application_id", "application_id"), null);
 ```
 
 ### Common Methods
@@ -994,20 +938,8 @@ SdkEntity organization = client.organization(null);
 Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
-Object result = client.organization(null).create(Map.ofEntries(
-    Map.entry("amount", 1L),  // Long
-    Map.entry("application_id", "example_application_id"),  // String
-    Map.entry("application_name", "example_application_name"),  // String
-    Map.entry("consumption", Map.of()),  // Map<String, Object>
-    Map.entry("date", "example_date"),  // String
-    Map.entry("is_provisional", true),  // Boolean
-    Map.entry("name", "example_name"),  // String
-    Map.entry("onboarding_steps", Map.of()),  // Map<String, Object>
-    Map.entry("organization_id", "example_organization_id"),  // String
-    Map.entry("plan", Map.of()),  // Map<String, Object>
-    Map.entry("quotas", Map.of()),  // Map<String, Object>
-    Map.entry("role", "example_role"),  // String
-    Map.entry("users", List.of())  // List<Object>
+Object result = client.organization(null).create(Map.of(
+    "name", "example_name"  // String
 ), null);
 ```
 
@@ -1392,11 +1324,8 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```java
 Object result = client.serviceToken(null).create(Map.of(
-    "biscuit", "example_biscuit",  // String
-    "created_at", "example_created_at",  // String
     "name", "example_name",  // String
-    "organization_id", "example_organization_id",  // String
-    "token_id", "example_token_id"  // String
+    "organization_id", "example_organization_id"  // String
 ), null);
 ```
 
@@ -1511,20 +1440,11 @@ SdkEntity subscription = client.subscription(null);
 Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```java
-Object result = client.subscription(null).create(Map.ofEntries(
-    Map.entry("application_id", "example_application_id"),  // String
-    Map.entry("created_at", "example_created_at"),  // String
-    Map.entry("dedicated_workers", List.of()),  // List<Object>
-    Map.entry("event_types", List.of()),  // List<Object>
-    Map.entry("is_enabled", true),  // Boolean
-    Map.entry("label_key", "example_label_key"),  // String
-    Map.entry("label_value", "example_label_value"),  // String
-    Map.entry("labels", Map.of()),  // Map<String, Object>
-    Map.entry("metadata", Map.of()),  // Map<String, Object>
-    Map.entry("secret", "example_secret"),  // String
-    Map.entry("subscription_id", "example_subscription_id"),  // String
-    Map.entry("target", Map.of()),  // Map<String, Object>
-    Map.entry("updated_at", "example_updated_at")  // String
+Object result = client.subscription(null).create(Map.of(
+    "application_id", "example_application_id",  // String
+    "event_types", List.of(),  // List<Object>
+    "is_enabled", true,  // Boolean
+    "target", Map.of()  // Map<String, Object>
 ), null);
 ```
 
@@ -1695,6 +1615,7 @@ Return the entity name.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `secrets` | 0.1.0 | Secrets |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -1709,6 +1630,7 @@ feature.put("metrics", Map.of("active", true));
 feature.put("paging", Map.of("active", true));
 feature.put("ratelimit", Map.of("active", true));
 feature.put("retry", Map.of("active", true));
+feature.put("secrets", Map.of("active", true));
 feature.put("test", Map.of("active", true));
 feature.put("timeout", Map.of("active", true));
 Map<String, Object> options = new java.util.LinkedHashMap<>();
@@ -1728,7 +1650,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `secrets`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -1922,6 +1844,31 @@ another when you do not.
 **Usage**
 
 Set `feature.retry.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
+#### `secrets`
+
+Secrets.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+**Usage**
+
+Set `feature.secrets.active` to true in the client options, and override any option above in the same entry. Every option keeps
 its default unless you name it.
 
 **Considerations**

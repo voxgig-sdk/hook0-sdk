@@ -50,6 +50,7 @@ func TestEmailPreferenceEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		emailPreferenceRef01Ent := client.EmailPreference(nil)

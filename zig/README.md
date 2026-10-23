@@ -84,13 +84,13 @@ switch (client.application(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("example_id")
 
 ```zig
 // Create — .ok carries the created entity
-switch (client.application(h.vnull()).create(h.jo(&.{.{ "amount", h.vnum(1) }, .{ "application_id", h.vstr("example_application_id") }, .{ "application_name", h.vstr("example_application_name") }, .{ "consumption", h.omap() }, .{ "date", h.vstr("example_date") }, .{ "is_provisional", h.vbool(true) }, .{ "name", h.vstr("example_name") }, .{ "onboarding_steps", h.omap() }, .{ "organization_id", h.vstr("example_organization_id") }, .{ "quotas", h.omap() }}), h.vnull())) {
+switch (client.application(h.vnull()).create(h.jo(&.{.{ "name", h.vstr("example_name") }, .{ "organization_id", h.vstr("example_organization_id") }}), h.vnull())) {
     .ok => |created| std.debug.print("{s}\n", .{h.stringify(created.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 
 // Update
-switch (client.application(h.vnull()).update(h.jo(&.{.{ "id", h.vstr("example_id") }, .{ "amount", h.vnum(1) }, .{ "application_id", h.vstr("example_application_id") }}), h.vnull())) {
+switch (client.application(h.vnull()).update(h.jo(&.{.{ "id", h.vstr("example_id") }, .{ "name", h.vstr("example_name") }, .{ "organization_id", h.vstr("example_organization_id") }}), h.vnull())) {
     .ok => |updated| std.debug.print("{s}\n", .{h.stringify(updated.asEntity().data(null))}),
     .err => |e| std.debug.print("update failed: {s}\n", .{e.msg}),
 }
@@ -179,7 +179,7 @@ Create a mock client for unit testing — no server required:
 const client = sdk.test_sdk(h.vnull(), h.vnull());
 
 // Entity ops return a result union — .ok carries the entity, .err the error.
-switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("test01") }}), h.vnull())) {
+switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("test01") }, .{ "application_id", h.vstr("example") }}), h.vnull())) {
     .ok => |response| std.debug.print("{s}\n", .{h.stringify(response.asEntity().data(null))}), // the mock record
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
 }
@@ -253,7 +253,6 @@ Creates a test-mode client with mock transport. Both arguments may be
 | `direct` | `(fetchargs: Value) Value` | Build and send an HTTP request. Returns a result map (branch on `ok`). |
 | `application` | `(entopts: Value) *ApplicationEntity` | Create an Application entity instance. |
 | `application_secret` | `(entopts: Value) *ApplicationSecretEntity` | Create an ApplicationSecret entity instance. |
-| `applications_management` | `(entopts: Value) *ApplicationsManagementEntity` | Create an ApplicationsManagement entity instance. |
 | `email_preference` | `(entopts: Value) *EmailPreferenceEntity` | Create an EmailPreference entity instance. |
 | `error_` | `(entopts: Value) *ErrorEntity` | Create an Error entity instance. |
 | `event` | `(entopts: Value) *EventEntity` | Create an Event entity instance. |
@@ -345,18 +344,9 @@ API path: `/api/v1/applications/`
 | `name` |  |
 | `token` |  |
 
-Operations: Create, List, Update.
+Operations: Create, List, Remove, Update.
 
 API path: `/api/v1/application_secrets/`
-
-#### ApplicationsManagement
-
-| Field | Description |
-| --- | --- |
-
-Operations: Remove.
-
-API path: `/api/v1/application_secrets/{application_secret_token}`
 
 #### EmailPreference
 
@@ -415,7 +405,7 @@ API path: `/api/v1/events/{event_id}/replay`
 | `verb` |  |
 | `verb_name` |  |
 
-Operations: Create, List, Load.
+Operations: Create, List, Load, Remove.
 
 API path: `/api/v1/event_types/`
 
@@ -424,7 +414,7 @@ API path: `/api/v1/event_types/`
 | Field | Description |
 | --- | --- |
 
-Operations: List, Remove.
+Operations: List.
 
 API path: `/api/v1/payload_content_types/`
 
@@ -746,16 +736,8 @@ switch (client.application(h.vnull()).list(h.jo(&.{.{ "organization_id", h.vstr(
 
 ```zig
 switch (client.application(h.vnull()).create(h.jo(&.{
-    .{ "amount", h.vnum(1) }, // i64
-    .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "application_name", h.vstr("example_application_name") }, // []const u8
-    .{ "consumption", h.omap() }, // Value (object)
-    .{ "date", h.vstr("example_date") }, // []const u8
-    .{ "is_provisional", h.vbool(true) }, // bool
     .{ "name", h.vstr("example_name") }, // []const u8
-    .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
-    .{ "quotas", h.omap() }, // Value (object)
 }), h.vnull())) {
     .ok => |application| std.debug.print("{s}\n", .{h.stringify(application.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -773,6 +755,7 @@ Create an instance: `const application_secret = client.application_secret(h.vnul
 | --- | --- |
 | `create(reqdata, ctrl)` | Create a new entity with the given data. |
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
+| `remove(reqmatch, ctrl)` | Remove the matching entity. |
 | `update(reqdata, ctrl)` | Update an existing entity. |
 
 Each operation returns a result union — `switch` on it: `.ok` carries the
@@ -808,28 +791,11 @@ switch (client.application_secret(h.vnull()).list(h.jo(&.{.{ "application_id", h
 ```zig
 switch (client.application_secret(h.vnull()).create(h.jo(&.{
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "created_at", h.vstr("example_created_at") }, // []const u8
-    .{ "token", h.vstr("example_token") }, // []const u8
 }), h.vnull())) {
     .ok => |application_secret| std.debug.print("{s}\n", .{h.stringify(application_secret.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
 }
 ```
-
-
-### ApplicationsManagement
-
-Create an instance: `const applications_management = client.applications_management(h.vnull());`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `remove(reqmatch, ctrl)` | Remove the matching entity. |
-
-Each operation returns a result union — `switch` on it: `.ok` carries the
-entity (for `list`, a slice of entities, one per record), whose record
-`asEntity().data(null)` reads, and `.err => |e|` the branded error.
 
 
 ### EmailPreference
@@ -954,14 +920,6 @@ switch (client.event(h.vnull()).list(h.jo(&.{.{ "application_id", h.vstr("exampl
 ```zig
 switch (client.event(h.vnull()).create(h.jo(&.{
     .{ "id", h.vstr("example_id") }, // []const u8
-    .{ "event_id", h.vstr("example_event_id") }, // []const u8
-    .{ "event_type_name", h.vstr("example_event_type_name") }, // []const u8
-    .{ "ip", h.vstr("example_ip") }, // []const u8
-    .{ "labels", h.omap() }, // Value (object)
-    .{ "occurred_at", h.vstr("example_occurred_at") }, // []const u8
-    .{ "payload", h.vstr("example_payload") }, // []const u8
-    .{ "payload_content_type", h.vstr("example_payload_content_type") }, // []const u8
-    .{ "received_at", h.vstr("example_received_at") }, // []const u8
 }), h.vnull())) {
     .ok => |event| std.debug.print("{s}\n", .{h.stringify(event.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -980,6 +938,7 @@ Create an instance: `const event_type = client.event_type(h.vnull());`
 | `create(reqdata, ctrl)` | Create a new entity with the given data. |
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
 | `load(reqmatch, ctrl)` | Load a single entity by match criteria. |
+| `remove(reqmatch, ctrl)` | Remove the matching entity. |
 
 Each operation returns a result union — `switch` on it: `.ok` carries the
 entity (for `list`, a slice of entities, one per record), whose record
@@ -1026,13 +985,9 @@ switch (client.event_type(h.vnull()).list(h.jo(&.{.{ "application_id", h.vstr("e
 ```zig
 switch (client.event_type(h.vnull()).create(h.jo(&.{
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "event_type_name", h.vstr("example_event_type_name") }, // []const u8
     .{ "resource_type", h.vstr("example_resource_type") }, // []const u8
-    .{ "resource_type_name", h.vstr("example_resource_type_name") }, // []const u8
     .{ "service", h.vstr("example_service") }, // []const u8
-    .{ "service_name", h.vstr("example_service_name") }, // []const u8
     .{ "verb", h.vstr("example_verb") }, // []const u8
-    .{ "verb_name", h.vstr("example_verb_name") }, // []const u8
 }), h.vnull())) {
     .ok => |event_type| std.debug.print("{s}\n", .{h.stringify(event_type.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1049,7 +1004,6 @@ Create an instance: `const events_management = client.events_management(h.vnull(
 | Method | Description |
 | --- | --- |
 | `list(reqmatch, ctrl)` | List entities, optionally matching the given criteria. |
-| `remove(reqmatch, ctrl)` | Remove the matching entity. |
 
 Each operation returns a result union — `switch` on it: `.ok` carries the
 entity (for `list`, a slice of entities, one per record), whose record
@@ -1327,19 +1281,7 @@ switch (client.organization(h.vnull()).list(h.vnull(), h.vnull())) {
 
 ```zig
 switch (client.organization(h.vnull()).create(h.jo(&.{
-    .{ "amount", h.vnum(1) }, // i64
-    .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "application_name", h.vstr("example_application_name") }, // []const u8
-    .{ "consumption", h.omap() }, // Value (object)
-    .{ "date", h.vstr("example_date") }, // []const u8
-    .{ "is_provisional", h.vbool(true) }, // bool
     .{ "name", h.vstr("example_name") }, // []const u8
-    .{ "onboarding_steps", h.omap() }, // Value (object)
-    .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
-    .{ "plan", h.omap() }, // Value (object)
-    .{ "quotas", h.omap() }, // Value (object)
-    .{ "role", h.vstr("example_role") }, // []const u8
-    .{ "users", h.olist() }, // Value (array)
 }), h.vnull())) {
     .ok => |organization| std.debug.print("{s}\n", .{h.stringify(organization.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1605,11 +1547,8 @@ switch (client.service_token(h.vnull()).list(h.jo(&.{.{ "organization_id", h.vst
 
 ```zig
 switch (client.service_token(h.vnull()).create(h.jo(&.{
-    .{ "biscuit", h.vstr("example_biscuit") }, // []const u8
-    .{ "created_at", h.vstr("example_created_at") }, // []const u8
     .{ "name", h.vstr("example_name") }, // []const u8
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
-    .{ "token_id", h.vstr("example_token_id") }, // []const u8
 }), h.vnull())) {
     .ok => |service_token| std.debug.print("{s}\n", .{h.stringify(service_token.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1682,18 +1621,9 @@ switch (client.subscription(h.vnull()).list(h.jo(&.{.{ "application_id", h.vstr(
 ```zig
 switch (client.subscription(h.vnull()).create(h.jo(&.{
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "created_at", h.vstr("example_created_at") }, // []const u8
-    .{ "dedicated_workers", h.olist() }, // Value (array)
     .{ "event_types", h.olist() }, // Value (array)
     .{ "is_enabled", h.vbool(true) }, // bool
-    .{ "label_key", h.vstr("example_label_key") }, // []const u8
-    .{ "label_value", h.vstr("example_label_value") }, // []const u8
-    .{ "labels", h.omap() }, // Value (object)
-    .{ "metadata", h.omap() }, // Value (object)
-    .{ "secret", h.vstr("example_secret") }, // []const u8
-    .{ "subscription_id", h.vstr("example_subscription_id") }, // []const u8
     .{ "target", h.omap() }, // Value (object)
-    .{ "updated_at", h.vstr("example_updated_at") }, // []const u8
 }), h.vnull())) {
     .ok => |subscription| std.debug.print("{s}\n", .{h.stringify(subscription.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1775,7 +1705,7 @@ switch (client.user_invitation(h.vnull()).create(h.jo(&.{
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -1790,10 +1720,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`secrets`](#secrets) | Secrets |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `secrets`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -1884,6 +1815,24 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### secrets
+
+Secrets.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+Set `feature.secrets.active` to enable it, then override any of the options above.
+
+`secrets` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -1954,6 +1903,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **SecretsFeature**: Secrets
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 

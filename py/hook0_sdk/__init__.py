@@ -116,6 +116,10 @@ class Hook0SDK:
     def get_root_ctx(self):
         return self._rootctx
 
+    def secrets(self):
+        _s = getattr(self, "_secrets", None)
+        return None if _s is None else _s.sekreto()
+
     def prepare(self, fetchargs=None):
         utility = self._utility
 
@@ -130,6 +134,9 @@ class Hook0SDK:
             "opname": "prepare",
             "ctrl": ctrl,
         }, self._rootctx)
+
+        if getattr(self, "_secrets", None) is not None:
+            self._secrets.resolve()
 
         options = self.options
 
@@ -353,12 +360,6 @@ class Hook0SDK:
         return ApplicationSecretEntity(self, data)
 
 
-    def ApplicationsManagement(self, data=None) -> "ApplicationsManagementEntity":
-        """Entity factory: client.ApplicationsManagement().list() / client.ApplicationsManagement().load({"id": ...})."""
-        from hook0_sdk.entity.applications_management_entity import ApplicationsManagementEntity
-        return ApplicationsManagementEntity(self, data)
-
-
     def EmailPreference(self, data=None) -> "EmailPreferenceEntity":
         """Entity factory: client.EmailPreference().list() / client.EmailPreference().load({"id": ...})."""
         from hook0_sdk.entity.email_preference_entity import EmailPreferenceEntity
@@ -514,7 +515,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from hook0_sdk.entity.application_entity import ApplicationEntity
     from hook0_sdk.entity.application_secret_entity import ApplicationSecretEntity
-    from hook0_sdk.entity.applications_management_entity import ApplicationsManagementEntity
     from hook0_sdk.entity.email_preference_entity import EmailPreferenceEntity
     from hook0_sdk.entity.error_entity import ErrorEntity
     from hook0_sdk.entity.event_entity import EventEntity

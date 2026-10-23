@@ -78,7 +78,6 @@ _CLIENT_VARS = ("client", "sdk")
 _ENTITIES = {
     "Application": "application",
     "ApplicationSecret": "application_secret",
-    "ApplicationsManagement": "applications_management",
     "EmailPreference": "email_preference",
     "Error": "error",
     "Event": "event",

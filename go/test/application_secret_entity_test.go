@@ -191,7 +191,7 @@ func TestApplicationSecretEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"create", "list", "update"} {
+		for _, _op := range []string{"create", "list", "update", "remove"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "application_secret." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -201,6 +201,7 @@ func TestApplicationSecretEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		applicationSecretRef01Ent := client.ApplicationSecret(nil)
@@ -258,6 +259,32 @@ func TestApplicationSecretEntity(t *testing.T) {
 		}
 		if applicationSecretRef01ResdataUp0[applicationSecretRef01MarkdefUp0Name] != applicationSecretRef01MarkdefUp0Value {
 			t.Fatalf("expected %s to be updated, got %v", applicationSecretRef01MarkdefUp0Name, applicationSecretRef01ResdataUp0[applicationSecretRef01MarkdefUp0Name])
+		}
+
+		// REMOVE
+		applicationSecretRef01MatchRm0 := map[string]any{
+			"id": applicationSecretRef01Data["id"],
+		}
+		_, err = applicationSecretRef01Ent.Remove(applicationSecretRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
+
+		// LIST
+		applicationSecretRef01MatchRt0 := map[string]any{}
+
+		applicationSecretRef01ListRt0Result, err := applicationSecretRef01Ent.List(applicationSecretRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		applicationSecretRef01ListRt0, applicationSecretRef01ListRt0Ok := applicationSecretRef01ListRt0Result.([]any)
+		if !applicationSecretRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", applicationSecretRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(applicationSecretRef01ListRt0), map[string]any{"id": applicationSecretRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})

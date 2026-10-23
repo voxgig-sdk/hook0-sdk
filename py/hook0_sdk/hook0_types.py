@@ -41,21 +41,9 @@ class ApplicationListMatch(TypedDict):
     organization_id: str
 
 
-class ApplicationCreateDataRequired(TypedDict):
-    amount: int
-    application_id: str
-    application_name: str
-    consumption: dict
-    date: str
-    is_provisional: bool
+class ApplicationCreateData(TypedDict):
     name: str
-    onboarding_steps: dict
     organization_id: str
-    quotas: dict
-
-
-class ApplicationCreateData(ApplicationCreateDataRequired, total=False):
-    id: str
 
 
 class ApplicationUpdateDataRequired(TypedDict):
@@ -63,16 +51,8 @@ class ApplicationUpdateDataRequired(TypedDict):
 
 
 class ApplicationUpdateData(ApplicationUpdateDataRequired, total=False):
-    amount: int
-    application_id: str
-    application_name: str
-    consumption: dict
-    date: str
-    is_provisional: bool
     name: str
-    onboarding_steps: dict
     organization_id: str
-    quotas: dict
 
 
 class ApplicationRemoveMatch(TypedDict):
@@ -97,13 +77,9 @@ class ApplicationSecretListMatch(TypedDict):
 
 class ApplicationSecretCreateDataRequired(TypedDict):
     application_id: str
-    created_at: str
-    token: str
 
 
 class ApplicationSecretCreateData(ApplicationSecretCreateDataRequired, total=False):
-    deleted_at: str
-    id: str
     name: str
 
 
@@ -113,18 +89,11 @@ class ApplicationSecretUpdateDataRequired(TypedDict):
 
 class ApplicationSecretUpdateData(ApplicationSecretUpdateDataRequired, total=False):
     application_id: str
-    created_at: str
-    deleted_at: str
     name: str
-    token: str
 
 
-class ApplicationsManagement(TypedDict):
-    pass
-
-
-class ApplicationsManagementRemoveMatch(TypedDict):
-    application_secret_token: str
+class ApplicationSecretRemoveMatch(TypedDict):
+    id: str
     application_id: str
 
 
@@ -132,8 +101,8 @@ class EmailPreference(TypedDict):
     pass
 
 
-class EmailPreferenceCreateData(TypedDict):
-    pass
+class EmailPreferenceCreateData(TypedDict, total=False):
+    token: Any
 
 
 class ErrorRequired(TypedDict):
@@ -184,18 +153,10 @@ class EventListMatch(TypedDict):
 
 class EventCreateDataRequired(TypedDict):
     id: str
-    event_id: str
-    event_type_name: str
-    ip: str
-    labels: dict
-    occurred_at: str
-    payload: str
-    payload_content_type: str
-    received_at: str
 
 
 class EventCreateData(EventCreateDataRequired, total=False):
-    metadata: dict
+    application_id: Any
 
 
 class EventTypeRequired(TypedDict):
@@ -222,19 +183,16 @@ class EventTypeListMatch(TypedDict):
     application_id: str
 
 
-class EventTypeCreateDataRequired(TypedDict):
+class EventTypeCreateData(TypedDict):
     application_id: str
-    event_type_name: str
     resource_type: str
-    resource_type_name: str
     service: str
-    service_name: str
     verb: str
-    verb_name: str
 
 
-class EventTypeCreateData(EventTypeCreateDataRequired, total=False):
+class EventTypeRemoveMatch(TypedDict):
     id: str
+    application_id: str
 
 
 class EventsManagement(TypedDict):
@@ -243,11 +201,6 @@ class EventsManagement(TypedDict):
 
 class EventsManagementListMatch(TypedDict):
     pass
-
-
-class EventsManagementRemoveMatch(TypedDict):
-    event_type_name: str
-    application_id: str
 
 
 class HealthRequired(TypedDict):
@@ -400,24 +353,8 @@ class OrganizationListMatch(TypedDict, total=False):
     users: list
 
 
-class OrganizationCreateDataRequired(TypedDict):
-    amount: int
-    application_id: str
-    application_name: str
-    consumption: dict
-    date: str
-    is_provisional: bool
+class OrganizationCreateData(TypedDict):
     name: str
-    onboarding_steps: dict
-    organization_id: str
-    plan: dict
-    quotas: dict
-    role: str
-    users: list
-
-
-class OrganizationCreateData(OrganizationCreateDataRequired, total=False):
-    id: str
 
 
 class OrganizationUpdateDataRequired(TypedDict):
@@ -425,19 +362,7 @@ class OrganizationUpdateDataRequired(TypedDict):
 
 
 class OrganizationUpdateData(OrganizationUpdateDataRequired, total=False):
-    amount: int
-    application_id: str
-    application_name: str
-    consumption: dict
-    date: str
-    is_provisional: bool
     name: str
-    onboarding_steps: dict
-    organization_id: str
-    plan: dict
-    quotas: dict
-    role: str
-    users: list
 
 
 class OrganizationRemoveMatch(TypedDict):
@@ -583,16 +508,9 @@ class ServiceTokenListMatch(TypedDict):
     organization_id: str
 
 
-class ServiceTokenCreateDataRequired(TypedDict):
-    biscuit: str
-    created_at: str
+class ServiceTokenCreateData(TypedDict):
     name: str
     organization_id: str
-    token_id: str
-
-
-class ServiceTokenCreateData(ServiceTokenCreateDataRequired, total=False):
-    id: str
 
 
 class ServiceTokenUpdateDataRequired(TypedDict):
@@ -600,11 +518,8 @@ class ServiceTokenUpdateDataRequired(TypedDict):
 
 
 class ServiceTokenUpdateData(ServiceTokenUpdateDataRequired, total=False):
-    biscuit: str
-    created_at: str
     name: str
     organization_id: str
-    token_id: str
 
 
 class ServiceTokenRemoveMatch(TypedDict):
@@ -643,23 +558,18 @@ class SubscriptionListMatch(TypedDict):
 
 class SubscriptionCreateDataRequired(TypedDict):
     application_id: str
-    created_at: str
-    dedicated_workers: list
     event_types: list
     is_enabled: bool
+    target: dict
+
+
+class SubscriptionCreateData(SubscriptionCreateDataRequired, total=False):
+    dedicated_workers: list
+    description: str
     label_key: str
     label_value: str
     labels: dict
     metadata: dict
-    secret: str
-    subscription_id: str
-    target: dict
-    updated_at: str
-
-
-class SubscriptionCreateData(SubscriptionCreateDataRequired, total=False):
-    description: str
-    id: str
 
 
 class SubscriptionUpdateDataRequired(TypedDict):
@@ -668,7 +578,6 @@ class SubscriptionUpdateDataRequired(TypedDict):
 
 class SubscriptionUpdateData(SubscriptionUpdateDataRequired, total=False):
     application_id: str
-    created_at: str
     dedicated_workers: list
     description: str
     event_types: list
@@ -677,10 +586,7 @@ class SubscriptionUpdateData(SubscriptionUpdateDataRequired, total=False):
     label_value: str
     labels: dict
     metadata: dict
-    secret: str
-    subscription_id: str
     target: dict
-    updated_at: str
 
 
 class SubscriptionRemoveMatch(TypedDict):

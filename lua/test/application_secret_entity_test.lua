@@ -147,7 +147,7 @@ describe("ApplicationSecretEntity", function()
     local setup = application_secret_basic_setup(nil)
     -- Per-op sdk-test-control.json skip.
     local _live = setup.live or false
-    for _, _op in ipairs({"create", "list", "update"}) do
+    for _, _op in ipairs({"create", "list", "update", "remove"}) do
       local _should_skip, _reason = runner.is_control_skipped("entityOp", "application_secret." .. _op, _live and "live" or "unit")
       if _should_skip then
         pending(_reason or "skipped via sdk-test-control.json")
@@ -194,6 +194,25 @@ describe("ApplicationSecretEntity", function()
     assert.is_not_nil(application_secret_ref01_resdata_up0)
     assert.are.equal(application_secret_ref01_resdata_up0["id"], application_secret_ref01_data_up0_up["id"])
     assert.are.equal(application_secret_ref01_resdata_up0[application_secret_ref01_markdef_up0_name], application_secret_ref01_markdef_up0_value)
+
+    -- REMOVE
+    local application_secret_ref01_match_rm0 = {
+      id = application_secret_ref01_data["id"],
+    }
+    local _, err = application_secret_ref01_ent:remove(application_secret_ref01_match_rm0, nil)
+    assert.is_nil(err)
+
+    -- LIST
+    local application_secret_ref01_match_rt0 = {}
+
+    local application_secret_ref01_list_rt0_result, err = application_secret_ref01_ent:list(application_secret_ref01_match_rt0, nil)
+    assert.is_nil(err)
+    assert.is_table(application_secret_ref01_list_rt0_result)
+
+    local not_found_item = vs.select(
+      runner.entity_list_to_data(application_secret_ref01_list_rt0_result),
+      { id = application_secret_ref01_data["id"] })
+    assert.is_true(vs.isempty(not_found_item))
 
   end)
 end)

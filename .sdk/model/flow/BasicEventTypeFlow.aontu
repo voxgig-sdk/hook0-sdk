@@ -47,6 +47,35 @@ main: kit: flow: BasicEventTypeFlow:
         }
       ]
     }
+
+    {
+      i: {
+        ref: "event_type_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        id: "event_type01"
+      }
+
+      o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "event_type_ref01"
+          }
+        }
+      ]
+    }
   ],
   "key$": "BasicEventTypeFlow"
 }

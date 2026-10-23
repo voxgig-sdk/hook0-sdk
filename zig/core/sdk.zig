@@ -400,11 +400,6 @@ pub const Hook0SDK = struct {
         return @import("../entity/application_secret.zig").ApplicationSecretEntity.new(self, entopts);
     }
 
-    /// ApplicationsManagement entity bound to this client.
-    pub fn applications_management(self: *@This(), entopts: Value) *@import("../entity/applications_management.zig").ApplicationsManagementEntity {
-        return @import("../entity/applications_management.zig").ApplicationsManagementEntity.new(self, entopts);
-    }
-
     /// EmailPreference entity bound to this client.
     pub fn email_preference(self: *@This(), entopts: Value) *@import("../entity/email_preference.zig").EmailPreferenceEntity {
         return @import("../entity/email_preference.zig").EmailPreferenceEntity.new(self, entopts);

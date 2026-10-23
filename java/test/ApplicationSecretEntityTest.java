@@ -49,7 +49,7 @@ public class ApplicationSecretEntityTest {
     // Per-op sdk-test-control.json skip — basic test exercises a flow
     // with multiple ops; skipping any op skips the whole flow.
     String mode = setup.live ? "live" : "unit";
-    for (String op : new String[] { "create", "list", "update" }) {
+    for (String op : new String[] { "create", "list", "update", "remove" }) {
       String reason = RunnerSupport.skipReason("entityOp", "application_secret." + op, mode);
       Assumptions.assumeTrue(reason == null,
           reason == null || "".equals(reason)
@@ -95,6 +95,24 @@ public class ApplicationSecretEntityTest {
         "expected update result id to match");
     assertEquals(applicationSecretRef01MarkdefUp0Value, applicationSecretRef01ResdataUp0.get(applicationSecretRef01MarkdefUp0Name),
         "expected " + applicationSecretRef01MarkdefUp0Name + " to be updated");
+
+    // REMOVE
+    Map<String, Object> applicationSecretRef01MatchRm0 = new LinkedHashMap<>();
+    applicationSecretRef01MatchRm0.put("id", applicationSecretRef01Data.get("id"));
+    applicationSecretRef01Ent.remove(applicationSecretRef01MatchRm0, null);
+
+    // LIST
+    Map<String, Object> applicationSecretRef01MatchRt0 = new LinkedHashMap<>();
+
+    Object applicationSecretRef01ListRt0Result = applicationSecretRef01Ent.list(applicationSecretRef01MatchRt0, null);
+    assertTrue(applicationSecretRef01ListRt0Result instanceof List,
+        "expected list result to be an array, got " + applicationSecretRef01ListRt0Result);
+    List<Object> applicationSecretRef01ListRt0 = (List<Object>) applicationSecretRef01ListRt0Result;
+
+    List<Object> notFoundItem = Struct.select(
+        RunnerSupport.entityListToData(applicationSecretRef01ListRt0),
+        Struct.jm("id", applicationSecretRef01Data.get("id")));
+    assertTrue(Struct.isempty(notFoundItem), "expected removed entity to not be in list");
 
   }
 

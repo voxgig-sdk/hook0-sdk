@@ -157,6 +157,7 @@ function Hook0SDK.new(options)
   -- feature: paging
   -- feature: ratelimit
   -- feature: retry
+  -- feature: secrets
   -- feature: test
   -- feature: timeout
 
@@ -445,20 +446,6 @@ function Hook0SDK:ApplicationSecret(data)
       self._application_secret = EntityMod.new(self, nil)
     end
     return self._application_secret
-  end
-  return EntityMod.new(self, data)
-end
-
-
--- Idiomatic facade: client:ApplicationsManagement():list() / client:ApplicationsManagement():load({ id = ... })
--- Entity access is capitalised (PascalCase) for parity with the other SDKs.
-function Hook0SDK:ApplicationsManagement(data)
-  local EntityMod = require("entity.applications_management_entity")
-  if data == nil then
-    if self._applications_management == nil then
-      self._applications_management = EntityMod.new(self, nil)
-    end
-    return self._applications_management
   end
   return EntityMod.new(self, data)
 end

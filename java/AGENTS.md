@@ -48,6 +48,7 @@ the runtime under `.sdk/tm/java/feature/` and regenerate.
 | **paging** — Paging | `feature/paging_feature.java` | `PreRequest`, `PreResult` |
 | **ratelimit** — Rate limiting | `feature/ratelimit_feature.java` | — |
 | **retry** — Retry | `feature/retry_feature.java` | — |
+| **secrets** — Secrets | `feature/secrets_feature.java` | `PreSpec` |
 | **test** — Test transport | `feature/test_feature.java` | `GetData`, `GetMatch`, `PostConstruct`, `PostConstructEntity`, `PrePoint`, `PreRequest`, `PreResponse`, `PreResult`, `PreSpec`, `SetData`, `SetMatch` |
 | **timeout** — Timeout | `feature/timeout_feature.java` | — |
 

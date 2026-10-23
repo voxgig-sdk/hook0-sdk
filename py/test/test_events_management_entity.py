@@ -114,14 +114,12 @@ class TestEventsManagementEntity:
         assert client.EventsManagement(None).list(None, {"throw": False}) is None
         assert fired < hook.unexpected
 
-    def test_should_refuse_an_invalid_request(self):
+    def test_should_validate_each_listed_record(self):
         if "validate" not in (shared_config().get("feature") or {}):
             pytest.skip("feature not present in this SDK: validate")
-        client = Hook0SDK.test(
-            None, {"feature": {"validate": {"active": True}}})
-        with pytest.raises(Exception) as err:
-            client.EventsManagement(None).remove({"event_type_name": 1, "application_id": "x"}, None)
-        assert "validate_failed" == getattr(err.value, "code", None)
+        opts = {"feature": {"validate": {"active": True, "request": False, "response": True}}}
+        listed = Hook0SDK.test({"entity": {"events_management": {"v1": {}}}}, opts).EventsManagement(None).list(None, None)
+        assert ["v1"] == [ent.data_get().get("id") for ent in listed]
 
     def test_should_run_basic_flow(self):
         setup = _events_management_basic_setup(None)
@@ -168,7 +166,7 @@ def _events_management_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["events_management01", "events_management02", "events_management03", "event_type01", "event_type02", "event_type03"],
+        ["events_management01", "events_management02", "events_management03"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",

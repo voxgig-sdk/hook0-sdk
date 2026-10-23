@@ -48,6 +48,7 @@ the runtime under `.sdk/tm/zig/feature/` and regenerate.
 | **paging** — Paging | `feature/paging_feature.zig` | `PreRequest`, `PreResult` |
 | **ratelimit** — Rate limiting | `feature/ratelimit_feature.zig` | — |
 | **retry** — Retry | `feature/retry_feature.zig` | — |
+| **secrets** — Secrets | `feature/secrets_feature.zig` | `PreSpec` |
 | **test** — Test transport | `feature/test_feature.zig` | `GetData`, `GetMatch`, `PostConstruct`, `PostConstructEntity`, `PrePoint`, `PreRequest`, `PreResponse`, `PreResult`, `PreSpec`, `SetData`, `SetMatch` |
 | **timeout** — Timeout | `feature/timeout_feature.zig` | — |
 

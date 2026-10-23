@@ -56,10 +56,6 @@ Create a new `Application` entity instance. Pass `nil` for no initial data.
 
 Create a new `ApplicationSecret` entity instance. Pass `nil` for no initial data.
 
-#### `ApplicationsManagement(data map[string]any) Hook0Entity`
-
-Create a new `ApplicationsManagement` entity instance. Pass `nil` for no initial data.
-
 #### `EmailPreference(data map[string]any) Hook0Entity`
 
 Create a new `EmailPreference` entity instance. Pass `nil` for no initial data.
@@ -237,16 +233,8 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.Application(nil).Create(map[string]any{
-    "amount": 1,
-    "application_id": "example_application_id",
-    "application_name": "example_application_name",
-    "consumption": map[string]any{},
-    "date": "example_date",
-    "is_provisional": true,
     "name": "example_name",
-    "onboarding_steps": map[string]any{},
     "organization_id": "example_organization_id",
-    "quotas": map[string]any{},
 }, nil)
 if err != nil {
     panic(err)
@@ -354,8 +342,6 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 ```go
 result, err := client.ApplicationSecret(nil).Create(map[string]any{
     "application_id": "example_application_id",
-    "created_at": "example_created_at",
-    "token": "example_token",
 }, nil)
 if err != nil {
     panic(err)
@@ -369,9 +355,21 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 
 ```go
 result, err := client.ApplicationSecret(nil).Update(map[string]any{
-    "id": "id",
+    "id": "application_secret_id",
     // Fields to update
 }, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+#### `Remove(reqmatch, ctrl map[string]any) (any, error)`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
+
+```go
+result, err := client.ApplicationSecret(nil).Remove(map[string]any{"id": "application_secret_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -393,59 +391,6 @@ Get or set the entity match criteria. Works the same as `Data()`.
 #### `Make() Entity`
 
 Create a new `ApplicationSecretEntity` instance with the same client and
-options.
-
-#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
-
-Run an operation through the pipeline and send its result items on the
-returned channel, which closes when the stream ends. A `StreamItem` holds
-one item in `Item`, or in `Err` the error that ended the stream: the
-error the operation itself would return, sent as the last value. Under
-`throw: false` in `callopts["ctrl"]`, no error is sent.
-
-#### `GetName() string`
-
-Return the entity name.
-
-
----
-
-## ApplicationsManagementEntity
-
-```go
-applicationsManagement := client.ApplicationsManagement(nil)
-fmt.Println(applicationsManagement.GetName()) // "applications_management"
-```
-
-### Operations
-
-#### `Remove(reqmatch, ctrl map[string]any) (any, error)`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
-
-```go
-result, err := client.ApplicationsManagement(nil).Remove(map[string]any{"application_secret_token": "application_secret_token", "application_id": "application_id"}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result.(sdk.Entity).Data())
-```
-
-### Common Methods
-
-#### `Data(args ...any) any`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `Match(args ...any) any`
-
-Get or set the entity match criteria. Works the same as `Data()`.
-
-#### `Make() Entity`
-
-Create a new `ApplicationsManagementEntity` instance with the same client and
 options.
 
 #### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
@@ -640,14 +585,6 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 ```go
 result, err := client.Event(nil).Create(map[string]any{
     "id": "example_id",
-    "event_id": "example_event_id",
-    "event_type_name": "example_event_type_name",
-    "ip": "example_ip",
-    "labels": map[string]any{},
-    "occurred_at": "example_occurred_at",
-    "payload": "example_payload",
-    "payload_content_type": "example_payload_content_type",
-    "received_at": "example_received_at",
 }, nil)
 if err != nil {
     panic(err)
@@ -743,14 +680,22 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 ```go
 result, err := client.EventType(nil).Create(map[string]any{
     "application_id": "example_application_id",
-    "event_type_name": "example_event_type_name",
     "resource_type": "example_resource_type",
-    "resource_type_name": "example_resource_type_name",
     "service": "example_service",
-    "service_name": "example_service_name",
     "verb": "example_verb",
-    "verb_name": "example_verb_name",
 }, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+#### `Remove(reqmatch, ctrl map[string]any) (any, error)`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
+
+```go
+result, err := client.EventType(nil).Remove(map[string]any{"id": "event_type_id", "application_id": "application_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -810,18 +755,6 @@ if err != nil {
 for _, item := range results.([]any) {
     fmt.Println(item.(sdk.Entity).Data())
 }
-```
-
-#### `Remove(reqmatch, ctrl map[string]any) (any, error)`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
-
-```go
-result, err := client.EventsManagement(nil).Remove(map[string]any{"event_type_name": "event_type_name", "application_id": "application_id"}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result.(sdk.Entity).Data())
 ```
 
 ### Common Methods
@@ -1254,19 +1187,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.Organization(nil).Create(map[string]any{
-    "amount": 1,
-    "application_id": "example_application_id",
-    "application_name": "example_application_name",
-    "consumption": map[string]any{},
-    "date": "example_date",
-    "is_provisional": true,
     "name": "example_name",
-    "onboarding_steps": map[string]any{},
-    "organization_id": "example_organization_id",
-    "plan": map[string]any{},
-    "quotas": map[string]any{},
-    "role": "example_role",
-    "users": []any{},
 }, nil)
 if err != nil {
     panic(err)
@@ -1783,11 +1704,8 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.ServiceToken(nil).Create(map[string]any{
-    "biscuit": "example_biscuit",
-    "created_at": "example_created_at",
     "name": "example_name",
     "organization_id": "example_organization_id",
-    "token_id": "example_token_id",
 }, nil)
 if err != nil {
     panic(err)
@@ -1936,18 +1854,9 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 ```go
 result, err := client.Subscription(nil).Create(map[string]any{
     "application_id": "example_application_id",
-    "created_at": "example_created_at",
-    "dedicated_workers": []any{},
     "event_types": []any{},
     "is_enabled": true,
-    "label_key": "example_label_key",
-    "label_value": "example_label_value",
-    "labels": map[string]any{},
-    "metadata": map[string]any{},
-    "secret": "example_secret",
-    "subscription_id": "example_subscription_id",
     "target": map[string]any{},
-    "updated_at": "example_updated_at",
 }, nil)
 if err != nil {
     panic(err)
@@ -2155,6 +2064,7 @@ Return the entity name.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `secrets` | 0.1.0 | Secrets |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -2170,6 +2080,7 @@ client := sdk.NewHook0SDK(map[string]any{
         "paging": map[string]any{"active": true},
         "ratelimit": map[string]any{"active": true},
         "retry": map[string]any{"active": true},
+        "secrets": map[string]any{"active": true},
         "test": map[string]any{"active": true},
         "timeout": map[string]any{"active": true},
     },
@@ -2188,7 +2099,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `secrets`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -2382,6 +2293,31 @@ another when you do not.
 **Usage**
 
 Set `feature.retry.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
+#### `secrets`
+
+Secrets.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+**Usage**
+
+Set `feature.secrets.active` to true in the client options, and override any option above in the same entry. Every option keeps
 its default unless you name it.
 
 **Considerations**

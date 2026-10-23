@@ -60,16 +60,8 @@ for (const application of applications) {
 
 ```js
 const created = await client.Application().create({
-  amount: 1,
-  application_id: 'example_application_id',
-  application_name: 'example_application_name',
-  consumption: {},
-  date: 'example_date',
-  is_provisional: true,
   name: 'example_name',
-  onboarding_steps: {},
   organization_id: 'example_organization_id',
-  quotas: {},
 })
 console.log(created.data())
 ```
@@ -79,8 +71,8 @@ console.log(created.data())
 ```js
 const updated = await client.Application().update({
   id: 'application_id',
-  amount: 1,
-  application_id: 'example_application_id',
+  name: 'example_name',
+  organization_id: 'example_organization_id',
 })
 console.log(updated.data())
 ```
@@ -273,7 +265,6 @@ new Hook0SDK(options?)
 | `direct(fetchargs?)` | `Promise<DirectResult>` | Build and send an HTTP request. |
 | `Application(data?)` | `ApplicationEntity` | Create an Application entity instance. |
 | `ApplicationSecret(data?)` | `ApplicationSecretEntity` | Create an ApplicationSecret entity instance. |
-| `ApplicationsManagement(data?)` | `ApplicationsManagementEntity` | Create an ApplicationsManagement entity instance. |
 | `EmailPreference(data?)` | `EmailPreferenceEntity` | Create an EmailPreference entity instance. |
 | `Error(data?)` | `ErrorEntity` | Create an Error entity instance. |
 | `Event(data?)` | `EventEntity` | Create an Event entity instance. |
@@ -397,18 +388,9 @@ API path: `/api/v1/applications/`
 | `name` |  |
 | `token` |  |
 
-Operations: create, list, update.
+Operations: create, list, remove, update.
 
 API path: `/api/v1/application_secrets/`
-
-#### ApplicationsManagement
-
-| Field | Description |
-| --- | --- |
-
-Operations: remove.
-
-API path: `/api/v1/application_secrets/{application_secret_token}`
 
 #### EmailPreference
 
@@ -467,7 +449,7 @@ API path: `/api/v1/events/{event_id}/replay`
 | `verb` |  |
 | `verb_name` |  |
 
-Operations: create, list, load.
+Operations: create, list, load, remove.
 
 API path: `/api/v1/event_types/`
 
@@ -476,7 +458,7 @@ API path: `/api/v1/event_types/`
 | Field | Description |
 | --- | --- |
 
-Operations: list, remove.
+Operations: list.
 
 API path: `/api/v1/payload_content_types/`
 
@@ -784,16 +766,8 @@ const applications = await client.Application().list({ organization_id: "example
 
 ```ts
 const application = await client.Application().create({
-  amount: 1,
-  application_id: 'example_application_id',
-  application_name: 'example_application_name',
-  consumption: {},
-  date: 'example_date',
-  is_provisional: true,
   name: 'example_name',
-  onboarding_steps: {},
   organization_id: 'example_organization_id',
-  quotas: {},
 })
 ```
 
@@ -808,6 +782,7 @@ Create an instance: `const application_secret = client.ApplicationSecret()`
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
+| `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -832,21 +807,8 @@ const application_secrets = await client.ApplicationSecret().list({ application_
 ```ts
 const application_secret = await client.ApplicationSecret().create({
   application_id: 'example_application_id',
-  created_at: 'example_created_at',
-  token: 'example_token',
 })
 ```
-
-
-### ApplicationsManagement
-
-Create an instance: `const applications_management = client.ApplicationsManagement()`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `remove(match)` | Remove the matching entity. |
 
 
 ### EmailPreference
@@ -939,14 +901,6 @@ const events = await client.Event().list({ application_id: "example" })
 ```ts
 const event = await client.Event().create({
   id: 'example_id',
-  event_id: 'example_event_id',
-  event_type_name: 'example_event_type_name',
-  ip: 'example_ip',
-  labels: {},
-  occurred_at: 'example_occurred_at',
-  payload: 'example_payload',
-  payload_content_type: 'example_payload_content_type',
-  received_at: 'example_received_at',
 })
 ```
 
@@ -962,6 +916,7 @@ Create an instance: `const event_type = client.EventType()`
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
+| `remove(match)` | Remove the matching entity. |
 
 #### Fields
 
@@ -994,13 +949,9 @@ const event_types = await client.EventType().list({ application_id: "example" })
 ```ts
 const event_type = await client.EventType().create({
   application_id: 'example_application_id',
-  event_type_name: 'example_event_type_name',
   resource_type: 'example_resource_type',
-  resource_type_name: 'example_resource_type_name',
   service: 'example_service',
-  service_name: 'example_service_name',
   verb: 'example_verb',
-  verb_name: 'example_verb_name',
 })
 ```
 
@@ -1014,7 +965,6 @@ Create an instance: `const events_management = client.EventsManagement()`
 | Method | Description |
 | --- | --- |
 | `list(match)` | List entities matching the criteria. |
-| `remove(match)` | Remove the matching entity. |
 
 #### Example: List
 
@@ -1228,19 +1178,7 @@ const organizations = await client.Organization().list()
 
 ```ts
 const organization = await client.Organization().create({
-  amount: 1,
-  application_id: 'example_application_id',
-  application_name: 'example_application_name',
-  consumption: {},
-  date: 'example_date',
-  is_provisional: true,
   name: 'example_name',
-  onboarding_steps: {},
-  organization_id: 'example_organization_id',
-  plan: {},
-  quotas: {},
-  role: 'example_role',
-  users: [],
 })
 ```
 
@@ -1446,11 +1384,8 @@ const service_tokens = await client.ServiceToken().list({ organization_id: "exam
 
 ```ts
 const service_token = await client.ServiceToken().create({
-  biscuit: 'example_biscuit',
-  created_at: 'example_created_at',
   name: 'example_name',
   organization_id: 'example_organization_id',
-  token_id: 'example_token_id',
 })
 ```
 
@@ -1506,18 +1441,9 @@ const subscriptions = await client.Subscription().list({ application_id: "exampl
 ```ts
 const subscription = await client.Subscription().create({
   application_id: 'example_application_id',
-  created_at: 'example_created_at',
-  dedicated_workers: [],
   event_types: [],
   is_enabled: true,
-  label_key: 'example_label_key',
-  label_value: 'example_label_value',
-  labels: {},
-  metadata: {},
-  secret: 'example_secret',
-  subscription_id: 'example_subscription_id',
   target: {},
-  updated_at: 'example_updated_at',
 })
 ```
 
@@ -1582,7 +1508,7 @@ const user_invitation = await client.UserInvitation().create({
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -1597,10 +1523,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`secrets`](#secrets) | Secrets |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `secrets`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -1691,6 +1618,24 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### secrets
+
+Secrets.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+Set `feature.secrets.active` to enable it, then override any of the options above.
+
+`secrets` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -1761,6 +1706,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **SecretsFeature**: Secrets
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 

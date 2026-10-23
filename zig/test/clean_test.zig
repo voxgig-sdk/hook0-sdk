@@ -446,17 +446,17 @@ fn try_application_secret_create(client: *sdk.SDK, mtch: Value, ctrl: Value) Out
     }
 }
 
-fn try_application_secret_update(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
+fn try_application_secret_remove(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
     const ent = client.application_secret(vnull());
-    switch (ent.update(mtch, ctrl)) {
+    switch (ent.remove(mtch, ctrl)) {
         .ok => |res| return .{ .ok = true, .err = null, .result = res.asEntity().data(null), .match = ent.asEntity().matchv(null) },
         .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
     }
 }
 
-fn try_applications_management_remove(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
-    const ent = client.applications_management(vnull());
-    switch (ent.remove(mtch, ctrl)) {
+fn try_application_secret_update(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
+    const ent = client.application_secret(vnull());
+    switch (ent.update(mtch, ctrl)) {
         .ok => |res| return .{ .ok = true, .err = null, .result = res.asEntity().data(null), .match = ent.asEntity().matchv(null) },
         .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
     }
@@ -538,6 +538,14 @@ fn try_event_type_create(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
     }
 }
 
+fn try_event_type_remove(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
+    const ent = client.event_type(vnull());
+    switch (ent.remove(mtch, ctrl)) {
+        .ok => |res| return .{ .ok = true, .err = null, .result = res.asEntity().data(null), .match = ent.asEntity().matchv(null) },
+        .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
+    }
+}
+
 fn try_events_management_list(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
     const ent = client.events_management(vnull());
     switch (ent.list(mtch, ctrl)) {
@@ -546,14 +554,6 @@ fn try_events_management_list(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcom
             for (ents) |e| records.array.append(e.asEntity().data(null)) catch {};
             return .{ .ok = true, .err = null, .result = records, .match = ent.asEntity().matchv(null) };
         },
-        .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
-    }
-}
-
-fn try_events_management_remove(client: *sdk.SDK, mtch: Value, ctrl: Value) Outcome {
-    const ent = client.events_management(vnull());
-    switch (ent.remove(mtch, ctrl)) {
-        .ok => |res| return .{ .ok = true, .err = null, .result = res.asEntity().data(null), .match = ent.asEntity().matchv(null) },
         .err => |e| return .{ .ok = false, .err = e, .result = vnull(), .match = ent.asEntity().matchv(null) },
     }
 }
@@ -838,12 +838,12 @@ fn stream_application_secret_create(client: *sdk.SDK, mtch: Value, callopts: Val
     return client.application_secret(vnull()).stream("create", mtch, callopts);
 }
 
-fn stream_application_secret_update(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
-    return client.application_secret(vnull()).stream("update", mtch, callopts);
+fn stream_application_secret_remove(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
+    return client.application_secret(vnull()).stream("remove", mtch, callopts);
 }
 
-fn stream_applications_management_remove(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
-    return client.applications_management(vnull()).stream("remove", mtch, callopts);
+fn stream_application_secret_update(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
+    return client.application_secret(vnull()).stream("update", mtch, callopts);
 }
 
 fn stream_email_preference_create(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
@@ -878,12 +878,12 @@ fn stream_event_type_create(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.
     return client.event_type(vnull()).stream("create", mtch, callopts);
 }
 
-fn stream_events_management_list(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
-    return client.events_management(vnull()).stream("list", mtch, callopts);
+fn stream_event_type_remove(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
+    return client.event_type(vnull()).stream("remove", mtch, callopts);
 }
 
-fn stream_events_management_remove(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
-    return client.events_management(vnull()).stream("remove", mtch, callopts);
+fn stream_events_management_list(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
+    return client.events_management(vnull()).stream("list", mtch, callopts);
 }
 
 fn stream_health_load(client: *sdk.SDK, mtch: Value, callopts: Value) sdk.StreamResult {
@@ -1014,8 +1014,8 @@ const CANDIDATES = [_]CandidateDef{
     .{ .run = try_application_update, .stream = stream_application_update, .params = &.{"id"} },
     .{ .run = try_application_secret_list, .stream = stream_application_secret_list, .params = &.{} },
     .{ .run = try_application_secret_create, .stream = stream_application_secret_create, .params = &.{} },
+    .{ .run = try_application_secret_remove, .stream = stream_application_secret_remove, .params = &.{"id"} },
     .{ .run = try_application_secret_update, .stream = stream_application_secret_update, .params = &.{"id"} },
-    .{ .run = try_applications_management_remove, .stream = stream_applications_management_remove, .params = &.{"application_secret_token"} },
     .{ .run = try_email_preference_create, .stream = stream_email_preference_create, .params = &.{} },
     .{ .run = try_error__list, .stream = stream_error__list, .params = &.{} },
     .{ .run = try_event_list, .stream = stream_event_list, .params = &.{} },
@@ -1024,8 +1024,8 @@ const CANDIDATES = [_]CandidateDef{
     .{ .run = try_event_type_list, .stream = stream_event_type_list, .params = &.{} },
     .{ .run = try_event_type_load, .stream = stream_event_type_load, .params = &.{"id"} },
     .{ .run = try_event_type_create, .stream = stream_event_type_create, .params = &.{} },
+    .{ .run = try_event_type_remove, .stream = stream_event_type_remove, .params = &.{"id"} },
     .{ .run = try_events_management_list, .stream = stream_events_management_list, .params = &.{} },
-    .{ .run = try_events_management_remove, .stream = stream_events_management_remove, .params = &.{"event_type_name"} },
     .{ .run = try_health_load, .stream = stream_health_load, .params = &.{} },
     .{ .run = try_hook0_list, .stream = stream_hook0_list, .params = &.{} },
     .{ .run = try_ingested_event_create, .stream = stream_ingested_event_create, .params = &.{} },

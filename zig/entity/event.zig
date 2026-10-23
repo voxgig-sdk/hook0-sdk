@@ -287,11 +287,7 @@ pub const EventEntity = struct {
     fn data_impl(self: *EventEntity, args: ?Value) Value {
         if (args) |arg| {
             if (!h.is_noval(arg)) {
-                const cloned = h.to_map(h.clone(arg));
-                self.data = switch (cloned) {
-                    .object => cloned,
-                    else => h.omap(),
-                };
+                self.data = if (arg == .null) h.omap() else h.clone(arg);
                 self.utility.feature_hook(self.ent_ctx(), "SetData");
             }
         }
@@ -362,9 +358,7 @@ pub const EventEntity = struct {
         if (out == .array) {
             for (out.array.data.items) |entry| {
                 const ent = EventEntity.new(self.client, h.clone(self.entopts));
-                if (entry == .object) {
-                    _ = ent.data_impl(entry);
-                }
+                _ = ent.data_impl(entry);
                 items.append(h.A(), ent) catch {};
             }
         }

@@ -16,6 +16,8 @@ var NewRatelimitFeatureFunc func() Feature
 
 var NewRetryFeatureFunc func() Feature
 
+var NewSecretsFeatureFunc func() Feature
+
 var NewTestFeatureFunc func() Feature
 
 var NewTimeoutFeatureFunc func() Feature
@@ -23,8 +25,6 @@ var NewTimeoutFeatureFunc func() Feature
 var NewApplicationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 
 var NewApplicationSecretEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
-
-var NewApplicationsManagementEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 
 var NewEmailPreferenceEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
 

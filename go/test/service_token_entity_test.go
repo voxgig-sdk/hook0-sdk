@@ -201,6 +201,7 @@ func TestServiceTokenEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		serviceTokenRef01Ent := client.ServiceToken(nil)

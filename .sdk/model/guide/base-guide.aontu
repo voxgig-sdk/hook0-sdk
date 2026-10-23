@@ -4,7 +4,7 @@
 #   guide.aontu
 
 guide: {
-  metrics: count: entity: 24
+  metrics: count: entity: 23
   metrics: count: path: 38
   metrics: count: method: 56
 
@@ -31,13 +31,8 @@ guide: {
     }
     path: "/api/v1/application_secrets/{application_secret_token}": {
       rename: param: "application_secret_token": *"id"
-      op: update: method: *PUT
-    }
-  }
-
-  entity: applications_management: {
-    path: "/api/v1/application_secrets/{application_secret_token}": {
       op: remove: method: *DELETE
+      op: update: method: *PUT
     }
   }
 
@@ -77,13 +72,11 @@ guide: {
     path: "/api/v1/event_types/{event_type_name}": {
       rename: param: "event_type_name": *"id"
       op: load: method: *GET
+      op: remove: method: *DELETE
     }
   }
 
   entity: events_management: {
-    path: "/api/v1/event_types/{event_type_name}": {
-      op: remove: method: *DELETE
-    }
     path: "/api/v1/payload_content_types/": {
       op: list: method: *GET
     }

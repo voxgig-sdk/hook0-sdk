@@ -54,11 +54,6 @@ initial options.
 Create a new `ApplicationSecretEntity` instance. Pass `h.vnull()` for no
 initial options.
 
-#### `applications_management(entopts: Value) *ApplicationsManagementEntity`
-
-Create a new `ApplicationsManagementEntity` instance. Pass `h.vnull()` for no
-initial options.
-
 #### `email_preference(entopts: Value) *EmailPreferenceEntity`
 
 Create a new `EmailPreferenceEntity` instance. Pass `h.vnull()` for no
@@ -228,16 +223,8 @@ Create a new entity with the given data. `.ok` carries the created entity.
 
 ```zig
 switch (client.application(h.vnull()).create(h.jo(&.{
-    .{ "amount", h.vnum(1) }, // i64
-    .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "application_name", h.vstr("example_application_name") }, // []const u8
-    .{ "consumption", h.omap() }, // Value (object)
-    .{ "date", h.vstr("example_date") }, // []const u8
-    .{ "is_provisional", h.vbool(true) }, // bool
     .{ "name", h.vstr("example_name") }, // []const u8
-    .{ "onboarding_steps", h.omap() }, // Value (object)
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
-    .{ "quotas", h.omap() }, // Value (object)
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -346,8 +333,6 @@ Create a new entity with the given data. `.ok` carries the created entity.
 ```zig
 switch (client.application_secret(h.vnull()).create(h.jo(&.{
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "created_at", h.vstr("example_created_at") }, // []const u8
-    .{ "token", h.vstr("example_token") }, // []const u8
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -369,61 +354,28 @@ switch (client.application_secret(h.vnull()).list(h.jo(&.{.{ "application_id", h
 }
 ```
 
+#### `remove(reqmatch: Value, ctrl: Value) EntResult`
+
+Remove the entity matching the given criteria. `.ok` carries the entity, marked as deleted, and `.err` the branded error.
+
+```zig
+switch (client.application_secret(h.vnull()).remove(h.jo(&.{.{ "id", h.vstr("application_secret_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
+    .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
+    .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
+}
+```
+
 #### `update(reqdata: Value, ctrl: Value) EntResult`
 
 Update an existing entity. The data must include the entity id. `.ok` carries the updated entity.
 
 ```zig
 switch (client.application_secret(h.vnull()).update(h.jo(&.{
-    .{ "id", h.vstr("id") },
+    .{ "id", h.vstr("application_secret_id") },
     // Fields to update
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("update failed: {s}\n", .{e.msg}),
-}
-```
-
-### Common Methods
-
-#### `data(args: ?Value) Value`
-
-Get the entity data. Pass a map to set it.
-
-#### `matchv(args: ?Value) Value`
-
-Get the entity match criteria. Pass a map to set it.
-
-#### `stream(action: []const u8, args: Value, callopts: Value) StreamResult`
-
-Run an operation through the pipeline and materialise its result items.
-`StreamResult` is `.ok` with the items, or `.err` with the error that
-failed the operation, as an operation call reports it. Under `throw: false`
-in `callopts.ctrl`, a failed stream is `.ok` with whatever data the
-failure left.
-
-#### `get_name() []const u8`
-
-Return the entity name.
-
-
----
-
-## ApplicationsManagementEntity
-
-```zig
-const applications_management = client.applications_management(h.vnull());
-```
-
-### Operations
-
-#### `remove(reqmatch: Value, ctrl: Value) EntResult`
-
-Remove the entity matching the given criteria. `.ok` carries the entity, marked as deleted, and `.err` the branded error.
-
-```zig
-switch (client.applications_management(h.vnull()).remove(h.jo(&.{.{ "application_secret_token", h.vstr("application_secret_token") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
-    .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
-    .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -586,14 +538,6 @@ Create a new entity with the given data. `.ok` carries the created entity.
 ```zig
 switch (client.event(h.vnull()).create(h.jo(&.{
     .{ "id", h.vstr("example_id") }, // []const u8
-    .{ "event_id", h.vstr("example_event_id") }, // []const u8
-    .{ "event_type_name", h.vstr("example_event_type_name") }, // []const u8
-    .{ "ip", h.vstr("example_ip") }, // []const u8
-    .{ "labels", h.omap() }, // Value (object)
-    .{ "occurred_at", h.vstr("example_occurred_at") }, // []const u8
-    .{ "payload", h.vstr("example_payload") }, // []const u8
-    .{ "payload_content_type", h.vstr("example_payload_content_type") }, // []const u8
-    .{ "received_at", h.vstr("example_received_at") }, // []const u8
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -680,13 +624,9 @@ Create a new entity with the given data. `.ok` carries the created entity.
 ```zig
 switch (client.event_type(h.vnull()).create(h.jo(&.{
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "event_type_name", h.vstr("example_event_type_name") }, // []const u8
     .{ "resource_type", h.vstr("example_resource_type") }, // []const u8
-    .{ "resource_type_name", h.vstr("example_resource_type_name") }, // []const u8
     .{ "service", h.vstr("example_service") }, // []const u8
-    .{ "service_name", h.vstr("example_service_name") }, // []const u8
     .{ "verb", h.vstr("example_verb") }, // []const u8
-    .{ "verb_name", h.vstr("example_verb_name") }, // []const u8
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -716,6 +656,17 @@ Load a single entity matching the given criteria. `.ok` carries the entity, whos
 switch (client.event_type(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("event_type_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("load failed: {s}\n", .{e.msg}),
+}
+```
+
+#### `remove(reqmatch: Value, ctrl: Value) EntResult`
+
+Remove the entity matching the given criteria. `.ok` carries the entity, marked as deleted, and `.err` the branded error.
+
+```zig
+switch (client.event_type(h.vnull()).remove(h.jo(&.{.{ "id", h.vstr("event_type_id") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
+    .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
+    .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -764,17 +715,6 @@ switch (client.events_management(h.vnull()).list(h.vnull(), h.vnull())) {
         }
     },
     .err => |e| std.debug.print("list failed: {s}\n", .{e.msg}),
-}
-```
-
-#### `remove(reqmatch: Value, ctrl: Value) EntResult`
-
-Remove the entity matching the given criteria. `.ok` carries the entity, marked as deleted, and `.err` the branded error.
-
-```zig
-switch (client.events_management(h.vnull()).remove(h.jo(&.{.{ "event_type_name", h.vstr("event_type_name") }, .{ "application_id", h.vstr("application_id") }}), h.vnull())) {
-    .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
-    .err => |e| std.debug.print("remove failed: {s}\n", .{e.msg}),
 }
 ```
 
@@ -1131,19 +1071,7 @@ Create a new entity with the given data. `.ok` carries the created entity.
 
 ```zig
 switch (client.organization(h.vnull()).create(h.jo(&.{
-    .{ "amount", h.vnum(1) }, // i64
-    .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "application_name", h.vstr("example_application_name") }, // []const u8
-    .{ "consumption", h.omap() }, // Value (object)
-    .{ "date", h.vstr("example_date") }, // []const u8
-    .{ "is_provisional", h.vbool(true) }, // bool
     .{ "name", h.vstr("example_name") }, // []const u8
-    .{ "onboarding_steps", h.omap() }, // Value (object)
-    .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
-    .{ "plan", h.omap() }, // Value (object)
-    .{ "quotas", h.omap() }, // Value (object)
-    .{ "role", h.vstr("example_role") }, // []const u8
-    .{ "users", h.olist() }, // Value (array)
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1596,11 +1524,8 @@ Create a new entity with the given data. `.ok` carries the created entity.
 
 ```zig
 switch (client.service_token(h.vnull()).create(h.jo(&.{
-    .{ "biscuit", h.vstr("example_biscuit") }, // []const u8
-    .{ "created_at", h.vstr("example_created_at") }, // []const u8
     .{ "name", h.vstr("example_name") }, // []const u8
     .{ "organization_id", h.vstr("example_organization_id") }, // []const u8
-    .{ "token_id", h.vstr("example_token_id") }, // []const u8
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1738,18 +1663,9 @@ Create a new entity with the given data. `.ok` carries the created entity.
 ```zig
 switch (client.subscription(h.vnull()).create(h.jo(&.{
     .{ "application_id", h.vstr("example_application_id") }, // []const u8
-    .{ "created_at", h.vstr("example_created_at") }, // []const u8
-    .{ "dedicated_workers", h.olist() }, // Value (array)
     .{ "event_types", h.olist() }, // Value (array)
     .{ "is_enabled", h.vbool(true) }, // bool
-    .{ "label_key", h.vstr("example_label_key") }, // []const u8
-    .{ "label_value", h.vstr("example_label_value") }, // []const u8
-    .{ "labels", h.omap() }, // Value (object)
-    .{ "metadata", h.omap() }, // Value (object)
-    .{ "secret", h.vstr("example_secret") }, // []const u8
-    .{ "subscription_id", h.vstr("example_subscription_id") }, // []const u8
     .{ "target", h.omap() }, // Value (object)
-    .{ "updated_at", h.vstr("example_updated_at") }, // []const u8
 }), h.vnull())) {
     .ok => |result| std.debug.print("{s}\n", .{h.stringify(result.asEntity().data(null))}),
     .err => |e| std.debug.print("create failed: {s}\n", .{e.msg}),
@@ -1955,6 +1871,7 @@ Return the entity name.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `secrets` | 0.1.0 | Secrets |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -1970,6 +1887,7 @@ const client = sdk.Hook0SDK.new(h.jo(&.{
         .{ "paging", h.jo(&.{.{ "active", h.vbool(true) }}) },
         .{ "ratelimit", h.jo(&.{.{ "active", h.vbool(true) }}) },
         .{ "retry", h.jo(&.{.{ "active", h.vbool(true) }}) },
+        .{ "secrets", h.jo(&.{.{ "active", h.vbool(true) }}) },
         .{ "test", h.jo(&.{.{ "active", h.vbool(true) }}) },
         .{ "timeout", h.jo(&.{.{ "active", h.vbool(true) }}) },
     }) },
@@ -1988,7 +1906,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `secrets`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -2182,6 +2100,31 @@ another when you do not.
 **Usage**
 
 Set `feature.retry.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
+#### `secrets`
+
+Secrets.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+**Usage**
+
+Set `feature.secrets.active` to true in the client options, and override any option above in the same entry. Every option keeps
 its default unless you name it.
 
 **Considerations**

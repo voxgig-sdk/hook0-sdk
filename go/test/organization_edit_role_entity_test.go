@@ -67,6 +67,7 @@ func TestOrganizationEditRoleEntity(t *testing.T) {
 			liveMiss(t, organization_edit_roleEntityLiveStrict, "Live entity test blocked: %s", "the flow updates a organization_edit_role record it did not create")
 		}
 		client := setup.client
+		_ = client
 
 		// Bootstrap entity data from existing test data (no create step in flow).
 		organizationEditRoleRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.organization_edit_role")))

@@ -107,8 +107,6 @@ func entityFor(client *sdk.Hook0SDK, name string) (sdk.Hook0Entity, error) {
 		return client.Application(nil), nil
 	case "application_secret":
 		return client.ApplicationSecret(nil), nil
-	case "applications_management":
-		return client.ApplicationsManagement(nil), nil
 	case "email_preference":
 		return client.EmailPreference(nil), nil
 	case "error":

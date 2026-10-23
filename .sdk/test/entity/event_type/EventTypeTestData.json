@@ -65,6 +65,11 @@
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
+    },
+    "DELETE /api/v1/event_types/{event_type_name}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
     }
   }
 }

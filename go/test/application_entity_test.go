@@ -201,6 +201,7 @@ func TestApplicationEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		applicationRef01Ent := client.Application(nil)

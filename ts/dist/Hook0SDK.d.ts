@@ -1,6 +1,5 @@
 import { ApplicationEntity } from './entity/ApplicationEntity';
 import { ApplicationSecretEntity } from './entity/ApplicationSecretEntity';
-import { ApplicationsManagementEntity } from './entity/ApplicationsManagementEntity';
 import { EmailPreferenceEntity } from './entity/EmailPreferenceEntity';
 import { ErrorEntity } from './entity/ErrorEntity';
 import { EventEntity } from './entity/EventEntity';
@@ -29,6 +28,7 @@ import { config } from './Config';
 import { Hook0EntityBase } from './Hook0EntityBase';
 import { Utility } from './utility/Utility';
 import { BaseFeature } from './feature/base/BaseFeature';
+import * as sekreto from './feature/secrets/sekreto';
 declare const stdutil: Utility;
 type DirectResult = {
     ok: false;
@@ -49,16 +49,17 @@ declare class Hook0SDK {
     _utility: Utility;
     _features: Feature[];
     _rootctx: Context;
+    _secrets?: any;
     constructor(options?: any);
     options(): any;
     utility(): any;
+    secrets(): any;
     prepare(fetchargs?: any): Promise<any>;
     direct(fetchargs?: any): Promise<DirectResult>;
     _rawRequest(fetchargs?: any): Promise<DirectResult>;
     graphql(query: string, variables?: any, ctrl?: any): Promise<any>;
     Application(entopts?: Record<string, any>): ApplicationEntity;
     ApplicationSecret(entopts?: Record<string, any>): ApplicationSecretEntity;
-    ApplicationsManagement(entopts?: Record<string, any>): ApplicationsManagementEntity;
     EmailPreference(entopts?: Record<string, any>): EmailPreferenceEntity;
     Error(entopts?: Record<string, any>): ErrorEntity;
     Event(entopts?: Record<string, any>): EventEntity;
@@ -89,5 +90,5 @@ declare class Hook0SDK {
     [inspect.custom](): string;
 }
 declare const SDK: typeof Hook0SDK;
-export { stdutil, config, BaseFeature, Hook0EntityBase, Hook0SDK, SDK, };
+export { stdutil, config, sekreto, BaseFeature, Hook0EntityBase, Hook0SDK, SDK, };
 export type { DirectResult };

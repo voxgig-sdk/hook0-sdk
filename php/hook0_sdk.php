@@ -411,24 +411,6 @@ class Hook0SDK implements \JsonSerializable
     }
 
 
-    private $_applications_management = null;
-
-    // Canonical facade: $client->ApplicationsManagement()->list() / ->load(["id" => ...]).
-    // PHP method names are case-insensitive, so lowercase $client->applications_management()
-    // resolves here too.
-    public function ApplicationsManagement($data = null)
-    {
-        require_once __DIR__ . '/entity/applications_management_entity.php';
-        if ($data === null) {
-            if ($this->_applications_management === null) {
-                $this->_applications_management = new ApplicationsManagementEntity($this, null);
-            }
-            return $this->_applications_management;
-        }
-        return new ApplicationsManagementEntity($this, $data);
-    }
-
-
     private $_email_preference = null;
 
     // Canonical facade: $client->EmailPreference()->list() / ->load(["id" => ...]).

@@ -287,11 +287,7 @@ pub const EventsManagementEntity = struct {
     fn data_impl(self: *EventsManagementEntity, args: ?Value) Value {
         if (args) |arg| {
             if (!h.is_noval(arg)) {
-                const cloned = h.to_map(h.clone(arg));
-                self.data = switch (cloned) {
-                    .object => cloned,
-                    else => h.omap(),
-                };
+                self.data = if (arg == .null) h.omap() else h.clone(arg);
                 self.utility.feature_hook(self.ent_ctx(), "SetData");
             }
         }
@@ -343,9 +339,7 @@ pub const EventsManagementEntity = struct {
         if (out == .array) {
             for (out.array.data.items) |entry| {
                 const ent = EventsManagementEntity.new(self.client, h.clone(self.entopts));
-                if (entry == .object) {
-                    _ = ent.data_impl(entry);
-                }
+                _ = ent.data_impl(entry);
                 items.append(h.A(), ent) catch {};
             }
         }
@@ -379,31 +373,9 @@ pub const EventsManagementEntity = struct {
         return .{ .err = h.unsupported_op("patch", self.name) };
     }
 
-
-    pub fn remove(self: *EventsManagementEntity, reqmatch: Value, ctrl: Value) EntResult {
-        const ctx = self.utility.make_context(CtxSpec{
-            .opname = "remove",
-            .ctrl = ctrl,
-            .mtch = self.mtch,
-            .data = self.data,
-            .reqmatch = reqmatch,
-        }, self.ent_ctx());
-        const res = self.run_op_ent(ctx, remove_post_done);
-        // A removed entity keeps its data but is no longer a live record.
-        if (res == .ok) self.mark_deleted();
-        return res;
+    pub fn remove(self: *EventsManagementEntity, _reqmatch: Value, _ctrl: Value) EntResult {
+        _ = _reqmatch;
+        _ = _ctrl;
+        return .{ .err = h.unsupported_op("remove", self.name) };
     }
-    
-    fn remove_post_done(self: *EventsManagementEntity, ctx: *Context) void {
-        if (ctx.result) |result| {
-            const resmatch = result.resmatch;
-            const resdata = result.resdata;
-            if (resmatch == .object) self.mtch = resmatch;
-            if (!h.is_noval(resdata)) {
-                const cm = h.to_map(h.clone(resdata));
-                self.data = if (cm == .object) cm else h.omap();
-            }
-        }
-    }
-    
 };

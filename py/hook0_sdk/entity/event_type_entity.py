@@ -9,6 +9,7 @@ from hook0_sdk.hook0_types import (
     EventTypeLoadMatch,
     EventTypeListMatch,
     EventTypeCreateData,
+    EventTypeRemoveMatch,
 )
 
 
@@ -60,7 +61,7 @@ class EventTypeEntity:
 
     def data_set(self, args=None):
         if args is not None:
-            self._data = helpers.to_map(vs.clone(args)) or {}
+            self._data = vs.clone(args)
             self._utility.feature_hook(self._entctx, "SetData")
 
     def data_get(self) -> EventType:
@@ -156,7 +157,8 @@ class EventTypeEntity:
         except Exception as err:
             # What a hook raises here must not escape the cleaning below.
             try:
-                utility.feature_hook(ctx, "PreUnexpected")
+                if not ctx.unexpected_fired:
+                    utility.feature_hook(ctx, "PreUnexpected")
             except Exception as hookerr:
                 err = hookerr
             if self._unexpected(ctx, err) is not None:
@@ -276,6 +278,31 @@ class EventTypeEntity:
     
 
     
+    def remove(self, reqmatch=None, ctrl=None) -> EventTypeEntity:
+        utility = self._utility
+        # reqmatch is optional: an entity with no id-like key removes with no
+        # match. Treat None as an empty match so client.EventType().remove()
+        # works with no args.
+        if reqmatch is None:
+            reqmatch = {}
+        ctx = utility.make_context({
+            "opname": "remove",
+            "ctrl": ctrl,
+            "match": self._match,
+            "data": self._data,
+            "reqmatch": reqmatch,
+        }, self._entctx)
+
+        def post_done():
+            if ctx.result is not None:
+                if ctx.result.resmatch is not None:
+                    self._match = ctx.result.resmatch
+                if ctx.result.resdata is not None:
+                    self._data = helpers.to_map(vs.clone(ctx.result.resdata)) or {}
+
+        return self._run_op(ctx, post_done)
+
+
 
     def _run_op(self, ctx, post_done):
         utility = self._utility
@@ -342,7 +369,9 @@ class EventTypeEntity:
         except Exception as err:
             # What a hook raises here must not escape the cleaning below.
             try:
-                utility.feature_hook(ctx, "PreUnexpected")
+                # Once per operation: make_error fires it for its own error.
+                if not ctx.unexpected_fired:
+                    utility.feature_hook(ctx, "PreUnexpected")
             except Exception as hookerr:
                 err = hookerr
             if self._unexpected(ctx, err) is None:

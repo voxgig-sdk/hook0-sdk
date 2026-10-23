@@ -331,6 +331,45 @@ const PLAN = [
     {
         "entity": "application_secret",
         "accessor": "ApplicationSecret",
+        "op": "remove",
+        "method": "DELETE",
+        "path": "/api/v1/application_secrets/{application_secret_token}",
+        "args": [
+            {
+                "name": "id",
+                "wire": "application_secret_token",
+                "value": "p1"
+            }
+        ],
+        "select": {
+            "application_id": "v1"
+        },
+        "headers": [],
+        "cookies": [],
+        "query": [
+            "application_id"
+        ],
+        "queryArgs": [
+            {
+                "name": "application_id",
+                "wire": "application_id"
+            }
+        ],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "authorization"
+                }
+            ]
+        ],
+        "status": 204,
+        "sample": null,
+        "idField": "id"
+    },
+    {
+        "entity": "application_secret",
+        "accessor": "ApplicationSecret",
         "op": "update",
         "method": "PUT",
         "path": "/api/v1/application_secrets/{application_secret_token}",
@@ -364,45 +403,6 @@ const PLAN = [
             "name": "x",
             "token": "x"
         },
-        "idField": "id"
-    },
-    {
-        "entity": "applications_management",
-        "accessor": "ApplicationsManagement",
-        "op": "remove",
-        "method": "DELETE",
-        "path": "/api/v1/application_secrets/{application_secret_token}",
-        "args": [
-            {
-                "name": "application_secret_token",
-                "wire": "application_secret_token",
-                "value": "p1"
-            }
-        ],
-        "select": {
-            "application_id": "v1"
-        },
-        "headers": [],
-        "cookies": [],
-        "query": [
-            "application_id"
-        ],
-        "queryArgs": [
-            {
-                "name": "application_id",
-                "wire": "application_id"
-            }
-        ],
-        "auth": [
-            [
-                {
-                    "in": "header",
-                    "name": "authorization"
-                }
-            ]
-        ],
-        "status": 204,
-        "sample": null,
         "idField": "id"
     },
     {
@@ -705,36 +705,14 @@ const PLAN = [
         "idField": "id"
     },
     {
-        "entity": "events_management",
-        "accessor": "EventsManagement",
-        "op": "list",
-        "method": "GET",
-        "path": "/api/v1/payload_content_types/",
-        "args": [],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": [],
-        "status": 200,
-        "sample": [
-            "x"
-        ],
-        "idField": "id"
-    },
-    {
-        "entity": "events_management",
-        "accessor": "EventsManagement",
+        "entity": "event_type",
+        "accessor": "EventType",
         "op": "remove",
         "method": "DELETE",
         "path": "/api/v1/event_types/{event_type_name}",
         "args": [
             {
-                "name": "event_type_name",
+                "name": "id",
                 "wire": "event_type_name",
                 "value": "p1"
             }
@@ -763,6 +741,28 @@ const PLAN = [
         ],
         "status": 204,
         "sample": null,
+        "idField": "id"
+    },
+    {
+        "entity": "events_management",
+        "accessor": "EventsManagement",
+        "op": "list",
+        "method": "GET",
+        "path": "/api/v1/payload_content_types/",
+        "args": [],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": [],
+        "status": 200,
+        "sample": [
+            "x"
+        ],
         "idField": "id"
     },
     {

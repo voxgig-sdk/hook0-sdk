@@ -183,16 +183,6 @@ public class EventsManagementEntityTest {
     assertTrue(fired < hook.unexpected);
   }
 
-  @Test
-  public void validate() {
-    Assumptions.assumeTrue(hasFeature("validate"), "feature not present in this SDK: validate");
-    Hook0SDK client = Hook0SDK.testSDK(null,
-        Struct.jm("feature", Struct.jm("validate", Struct.jm("active", true))));
-    SdkError err = assertThrows(SdkError.class, () ->
-        client.eventsManagement(null).remove(Struct.jm("event_type_name", 1, "application_id", "x"), null));
-    assertEquals("validate_failed", err.code);
-  }
-
   static RunnerSupport.EntityTestSetup eventsManagementBasicSetup(Map<String, Object> extra) {
     RunnerSupport.loadEnvLocal();
 
@@ -216,9 +206,6 @@ public class EventsManagementEntityTest {
     idnames.add("events_management01");
     idnames.add("events_management02");
     idnames.add("events_management03");
-    idnames.add("event_type01");
-    idnames.add("event_type02");
-    idnames.add("event_type03");
     Object idmap = Struct.transform(idnames, Json.parse(
         "{\"`$PACK`\": [\"\", {"
         + "\"`$KEY`\": \"`$COPY`\","

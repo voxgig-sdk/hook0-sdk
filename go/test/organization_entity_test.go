@@ -201,6 +201,7 @@ func TestOrganizationEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		organizationRef01Ent := client.Organization(nil)

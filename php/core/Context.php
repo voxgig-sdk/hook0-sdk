@@ -34,6 +34,9 @@ class Hook0Context implements \JsonSerializable
     public ?Hook0Result $result;
     public ?Hook0Response $response;
     public Hook0Operation $op;
+    // Set by make_error as it fires PreUnexpected, which fires once per
+    // operation.
+    public bool $unexpected_fired = false;
 
     public function __construct(array $ctxmap = [], ?self $basectx = null)
     {

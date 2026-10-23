@@ -63,6 +63,7 @@ func TestRegistrationEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		registrationRef01Ent := client.Registration(nil)

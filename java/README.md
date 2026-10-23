@@ -76,10 +76,10 @@ catch (RuntimeException err) {
 
 ```java
 // Create — returns the ENTITY (call data() for the record)
-Object created = client.application(null).create(Map.of("amount", 1L, "application_id", "example_application_id", "application_name", "example_application_name", "consumption", Map.of(), "date", "example_date", "is_provisional", true, "name", "example_name", "onboarding_steps", Map.of(), "organization_id", "example_organization_id", "quotas", Map.of()), null);
+Object created = client.application(null).create(Map.of("name", "example_name", "organization_id", "example_organization_id"), null);
 
 // Update — supply the id in the match/data
-client.application(null).update(Map.of("id", "example_id", "amount", 1L, "application_id", "example_application_id"), null);
+client.application(null).update(Map.of("id", "example_id", "name", "example_name", "organization_id", "example_organization_id"), null);
 
 // Remove
 client.application(null).remove(Map.of("id", "example_id"), null);
@@ -162,7 +162,7 @@ Create a mock client for unit testing — no server required:
 Hook0SDK client = Hook0SDK.testSDK(null, null);
 
 // Entity ops return the entity; they raise on error.
-SdkEntity response = (SdkEntity) client.response(null).load(Map.of("id", "test01"), null);
+SdkEntity response = (SdkEntity) client.response(null).load(Map.of("id", "test01", "application_id", "example"), null);
 // data() reads the entity's mock record
 System.out.println(response.data());
 ```
@@ -243,7 +243,6 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `direct` | `(fetchargs) -> Map` | Build and send an HTTP request. Returns a result map (branch on `ok`). |
 | `application` | `(entopts) -> SdkEntity` | Create an Application entity instance. |
 | `applicationSecret` | `(entopts) -> SdkEntity` | Create an ApplicationSecret entity instance. |
-| `applicationsManagement` | `(entopts) -> SdkEntity` | Create an ApplicationsManagement entity instance. |
 | `emailPreference` | `(entopts) -> SdkEntity` | Create an EmailPreference entity instance. |
 | `error` | `(entopts) -> SdkEntity` | Create an Error entity instance. |
 | `event` | `(entopts) -> SdkEntity` | Create an Event entity instance. |
@@ -334,18 +333,9 @@ API path: `/api/v1/applications/`
 | `name` |  |
 | `token` |  |
 
-Operations: create, list, update.
+Operations: create, list, remove, update.
 
 API path: `/api/v1/application_secrets/`
-
-#### ApplicationsManagement
-
-| Field | Description |
-| --- | --- |
-
-Operations: remove.
-
-API path: `/api/v1/application_secrets/{application_secret_token}`
 
 #### EmailPreference
 
@@ -404,7 +394,7 @@ API path: `/api/v1/events/{event_id}/replay`
 | `verb` |  |
 | `verb_name` |  |
 
-Operations: create, list, load.
+Operations: create, list, load, remove.
 
 API path: `/api/v1/event_types/`
 
@@ -413,7 +403,7 @@ API path: `/api/v1/event_types/`
 | Field | Description |
 | --- | --- |
 
-Operations: list, remove.
+Operations: list.
 
 API path: `/api/v1/payload_content_types/`
 
@@ -721,16 +711,8 @@ Object applicationList = client.application(null).list(Map.of("organization_id",
 
 ```java
 Object application = client.application(null).create(Map.of(
-    "amount", 1L,  // Long
-    "application_id", "example_application_id",  // String
-    "application_name", "example_application_name",  // String
-    "consumption", Map.of(),  // Map<String, Object>
-    "date", "example_date",  // String
-    "is_provisional", true,  // Boolean
     "name", "example_name",  // String
-    "onboarding_steps", Map.of(),  // Map<String, Object>
-    "organization_id", "example_organization_id",  // String
-    "quotas", Map.of()  // Map<String, Object>
+    "organization_id", "example_organization_id"  // String
 ), null);
 ```
 
@@ -745,6 +727,7 @@ Create an instance: `SdkEntity applicationSecret = client.applicationSecret(null
 | --- | --- |
 | `create(data, null)` | Create a new entity with the given data. |
 | `list(null, null)` | List entities, optionally matching the given criteria. |
+| `remove(match, null)` | Remove the matching entity. |
 | `update(data, null)` | Update an existing entity. |
 
 #### Fields
@@ -768,22 +751,9 @@ Object applicationSecretList = client.applicationSecret(null).list(Map.of("appli
 
 ```java
 Object applicationSecret = client.applicationSecret(null).create(Map.of(
-    "application_id", "example_application_id",  // String
-    "created_at", "example_created_at",  // String
-    "token", "example_token"  // String
+    "application_id", "example_application_id"  // String
 ), null);
 ```
-
-
-### ApplicationsManagement
-
-Create an instance: `SdkEntity applicationsManagement = client.applicationsManagement(null);`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `remove(match, null)` | Remove the matching entity. |
 
 
 ### EmailPreference
@@ -875,15 +845,7 @@ Object eventList = client.event(null).list(Map.of("application_id", "example"), 
 
 ```java
 Object event = client.event(null).create(Map.of(
-    "id", "example_id",  // String
-    "event_id", "example_event_id",  // String
-    "event_type_name", "example_event_type_name",  // String
-    "ip", "example_ip",  // String
-    "labels", Map.of(),  // Map<String, Object>
-    "occurred_at", "example_occurred_at",  // String
-    "payload", "example_payload",  // String
-    "payload_content_type", "example_payload_content_type",  // String
-    "received_at", "example_received_at"  // String
+    "id", "example_id"  // String
 ), null);
 ```
 
@@ -899,6 +861,7 @@ Create an instance: `SdkEntity eventType = client.eventType(null);`
 | `create(data, null)` | Create a new entity with the given data. |
 | `list(null, null)` | List entities, optionally matching the given criteria. |
 | `load(match, null)` | Load a single entity by match criteria. |
+| `remove(match, null)` | Remove the matching entity. |
 
 #### Fields
 
@@ -931,13 +894,9 @@ Object eventTypeList = client.eventType(null).list(Map.of("application_id", "exa
 ```java
 Object eventType = client.eventType(null).create(Map.of(
     "application_id", "example_application_id",  // String
-    "event_type_name", "example_event_type_name",  // String
     "resource_type", "example_resource_type",  // String
-    "resource_type_name", "example_resource_type_name",  // String
     "service", "example_service",  // String
-    "service_name", "example_service_name",  // String
-    "verb", "example_verb",  // String
-    "verb_name", "example_verb_name"  // String
+    "verb", "example_verb"  // String
 ), null);
 ```
 
@@ -951,7 +910,6 @@ Create an instance: `SdkEntity eventsManagement = client.eventsManagement(null);
 | Method | Description |
 | --- | --- |
 | `list(null, null)` | List entities, optionally matching the given criteria. |
-| `remove(match, null)` | Remove the matching entity. |
 
 #### Example: List
 
@@ -1164,20 +1122,8 @@ Object organizationList = client.organization(null).list(null, null);
 #### Example: Create
 
 ```java
-Object organization = client.organization(null).create(Map.ofEntries(
-    Map.entry("amount", 1L),  // Long
-    Map.entry("application_id", "example_application_id"),  // String
-    Map.entry("application_name", "example_application_name"),  // String
-    Map.entry("consumption", Map.of()),  // Map<String, Object>
-    Map.entry("date", "example_date"),  // String
-    Map.entry("is_provisional", true),  // Boolean
-    Map.entry("name", "example_name"),  // String
-    Map.entry("onboarding_steps", Map.of()),  // Map<String, Object>
-    Map.entry("organization_id", "example_organization_id"),  // String
-    Map.entry("plan", Map.of()),  // Map<String, Object>
-    Map.entry("quotas", Map.of()),  // Map<String, Object>
-    Map.entry("role", "example_role"),  // String
-    Map.entry("users", List.of())  // List<Object>
+Object organization = client.organization(null).create(Map.of(
+    "name", "example_name"  // String
 ), null);
 ```
 
@@ -1383,11 +1329,8 @@ Object serviceTokenList = client.serviceToken(null).list(Map.of("organization_id
 
 ```java
 Object serviceToken = client.serviceToken(null).create(Map.of(
-    "biscuit", "example_biscuit",  // String
-    "created_at", "example_created_at",  // String
     "name", "example_name",  // String
-    "organization_id", "example_organization_id",  // String
-    "token_id", "example_token_id"  // String
+    "organization_id", "example_organization_id"  // String
 ), null);
 ```
 
@@ -1441,20 +1384,11 @@ Object subscriptionList = client.subscription(null).list(Map.of("application_id"
 #### Example: Create
 
 ```java
-Object subscription = client.subscription(null).create(Map.ofEntries(
-    Map.entry("application_id", "example_application_id"),  // String
-    Map.entry("created_at", "example_created_at"),  // String
-    Map.entry("dedicated_workers", List.of()),  // List<Object>
-    Map.entry("event_types", List.of()),  // List<Object>
-    Map.entry("is_enabled", true),  // Boolean
-    Map.entry("label_key", "example_label_key"),  // String
-    Map.entry("label_value", "example_label_value"),  // String
-    Map.entry("labels", Map.of()),  // Map<String, Object>
-    Map.entry("metadata", Map.of()),  // Map<String, Object>
-    Map.entry("secret", "example_secret"),  // String
-    Map.entry("subscription_id", "example_subscription_id"),  // String
-    Map.entry("target", Map.of()),  // Map<String, Object>
-    Map.entry("updated_at", "example_updated_at")  // String
+Object subscription = client.subscription(null).create(Map.of(
+    "application_id", "example_application_id",  // String
+    "event_types", List.of(),  // List<Object>
+    "is_enabled", true,  // Boolean
+    "target", Map.of()  // Map<String, Object>
 ), null);
 ```
 
@@ -1519,7 +1453,7 @@ Object userInvitation = client.userInvitation(null).create(Map.of(
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -1534,10 +1468,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`secrets`](#secrets) | Secrets |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `secrets`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -1628,6 +1563,24 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### secrets
+
+Secrets.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+Set `feature.secrets.active` to enable it, then override any of the options above.
+
+`secrets` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -1698,6 +1651,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **SecretsFeature**: Secrets
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 

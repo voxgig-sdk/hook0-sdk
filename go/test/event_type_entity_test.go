@@ -190,7 +190,7 @@ func TestEventTypeEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"create", "list", "load"} {
+		for _, _op := range []string{"create", "list", "load", "remove"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "event_type." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -200,6 +200,7 @@ func TestEventTypeEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		eventTypeRef01Ent := client.EventType(nil)
@@ -249,6 +250,32 @@ func TestEventTypeEntity(t *testing.T) {
 		}
 		if eventTypeRef01DataDt0LoadResult["id"] != eventTypeRef01Data["id"] {
 			t.Fatal("expected load result id to match")
+		}
+
+		// REMOVE
+		eventTypeRef01MatchRm0 := map[string]any{
+			"id": eventTypeRef01Data["id"],
+		}
+		_, err = eventTypeRef01Ent.Remove(eventTypeRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
+
+		// LIST
+		eventTypeRef01MatchRt0 := map[string]any{}
+
+		eventTypeRef01ListRt0Result, err := eventTypeRef01Ent.List(eventTypeRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		eventTypeRef01ListRt0, eventTypeRef01ListRt0Ok := eventTypeRef01ListRt0Result.([]any)
+		if !eventTypeRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", eventTypeRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(eventTypeRef01ListRt0), map[string]any{"id": eventTypeRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})

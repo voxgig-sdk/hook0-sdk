@@ -388,14 +388,6 @@ func (sdk *Hook0SDK) ApplicationSecret(data map[string]any) Hook0Entity {
 }
 
 
-// ApplicationsManagement returns a ApplicationsManagement entity bound to this client.
-// Idiomatic usage: client.ApplicationsManagement(nil).List(nil, nil) or
-// client.ApplicationsManagement(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) ApplicationsManagement(data map[string]any) Hook0Entity {
-	return NewApplicationsManagementEntityFunc(sdk, data)
-}
-
-
 // EmailPreference returns a EmailPreference entity bound to this client.
 // Idiomatic usage: client.EmailPreference(nil).List(nil, nil) or
 // client.EmailPreference(nil).Load(map[string]any{"id": ...}, nil).

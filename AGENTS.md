@@ -12,7 +12,7 @@ There are companion guides deeper in the tree: one per language
 
 ## Project map
 
-**Targets** (10):
+**Targets** (11):
 
 | Target | Directory | Build guide |
 | --- | --- | --- |
@@ -24,16 +24,17 @@ There are companion guides deeper in the tree: one per language
 | `lua` | `lua/` | [`lua/AGENTS.md`](./lua/AGENTS.md) |
 | `php` | `php/` | [`php/AGENTS.md`](./php/AGENTS.md) |
 | `py` | `py/` | [`py/AGENTS.md`](./py/AGENTS.md) |
+| `rb` | `rb/` | [`rb/AGENTS.md`](./rb/AGENTS.md) |
 | `ts` | `ts/` | [`ts/AGENTS.md`](./ts/AGENTS.md) |
 | `zig` | `zig/` | [`zig/AGENTS.md`](./zig/AGENTS.md) |
 
-**Features** (8): `debug`, `idempotency`, `metrics`, `paging`, `ratelimit`, `retry`, `test`, `timeout`.
+**Features** (9): `debug`, `idempotency`, `metrics`, `paging`, `ratelimit`, `retry`, `secrets`, `test`, `timeout`.
 
 Each feature is generated into every SDK target — as a directory
 `<lang>/src/feature/<name>/` (ts/js) or a flat file in the `<lang>/feature/`
 package (other languages). Each target's guide documents its features.
 
-**Entities** (24): `Application`, `ApplicationSecret`, `ApplicationsManagement`, `EmailPreference`, `Error`, `Event`, `EventType`, `EventsManagement`, `Health`, `Hook0`, `IngestedEvent`, `Instance`, `Login`, `Organization`, `OrganizationEditRole`, `Quota`, `Registration`, `RequestAttempt`, `Response`, `Revoke`, `ServiceToken`, `Subscription`, `UserAuthentication`, `UserInvitation`.
+**Entities** (23): `Application`, `ApplicationSecret`, `EmailPreference`, `Error`, `Event`, `EventType`, `EventsManagement`, `Health`, `Hook0`, `IngestedEvent`, `Instance`, `Login`, `Organization`, `OrganizationEditRole`, `Quota`, `Registration`, `RequestAttempt`, `Response`, `Revoke`, `ServiceToken`, `Subscription`, `UserAuthentication`, `UserInvitation`.
 
 ## Generating and updating the SDK
 

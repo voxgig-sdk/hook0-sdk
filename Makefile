@@ -16,6 +16,7 @@
 #   lua      luarocks (publish pending: deploy publishes the git tag only) https://luarocks.org
 #   php      packagist (publish pending: deploy publishes the git tag only) https://packagist.org
 #   py       pypi (publish pending: deploy publishes the git tag only) https://pypi.org
+#   rb       rubygems (publish pending: deploy publishes the git tag only) https://rubygems.org
 #   ts       npm (publish pending: deploy publishes the git tag only) https://registry.npmjs.org
 #   zig      none (publish pending: deploy publishes the git tag only)
 #
@@ -39,11 +40,12 @@ NPM_ALIAS ?= npm
 LUAROCKS_ALIAS ?= luarocks
 PACKAGIST_ALIAS ?= packagist
 PYPI_ALIAS ?= pypi
+RUBYGEMS_ALIAS ?= gem
 NONE_ALIAS ?= none
 
 BORU_DRY_RUN_FILLER := BORU-DRY-RUN-FILLER-NOT-A-REAL-SECRET
 
-TARGETS := go go-cli go-mcp java js lua php py ts zig
+TARGETS := go go-cli go-mcp java js lua php py rb ts zig
 
 .PHONY: deploy deploy-dry \
   $(addprefix deploy-,$(TARGETS)) $(addprefix deploy-dry-,$(TARGETS)) \
@@ -61,6 +63,7 @@ deploy:
 	@echo "  deploy-lua      luarocks publish pending (deploy = git tag only)"
 	@echo "  deploy-php      packagist publish pending (deploy = git tag only)"
 	@echo "  deploy-py       pypi publish pending (deploy = git tag only)"
+	@echo "  deploy-rb       rubygems publish pending (deploy = git tag only)"
 	@echo "  deploy-ts       npm publish pending (deploy = git tag only)"
 	@echo "  deploy-zig      none publish pending (deploy = git tag only)"
 	@echo "Rehearse everything safely first: make deploy-dry"
@@ -220,6 +223,27 @@ tag-push-py:
 	hdr="AUTHORIZATION: basic $$(printf 'x-access-token:%s' "$$token" | base64 | tr -d '\n')"; \
 	git -c http.extraheader="$$hdr" push "$$url" "$$tag"; \
 	echo "pushed $$tag (pypi publication pending — tag-only deploy)"
+
+deploy-rb:
+	@echo "deploy-rb: rubygems publication is pending — publishing the git tag only."
+	boru vault exec --for=github=$(GITHUB_ALIAS) -- $(MAKE) tag-push-rb
+
+deploy-dry-rb:
+	boru vault exec --dry-run --for=github=$(GITHUB_ALIAS) -- $(MAKE) tag-push-rb
+
+tag-push-rb:
+	@set -e; tag="rb/v0.1.1"; \
+	token="$${GITHUB_TOKEN:-$$GH_TOKEN}"; \
+	if [ "$$token" = "$(BORU_DRY_RUN_FILLER)" ]; then \
+	  echo "[dry-run] boru filler token detected: would create (if missing) and push tag $$tag; nothing pushed."; exit 0; fi; \
+	if [ -z "$$token" ]; then echo "tag-push-rb: no GITHUB_TOKEN in env — run via make deploy-rb (boru vault exec)"; exit 1; fi; \
+	if git rev-parse -q --verify "refs/tags/$$tag" >/dev/null; then \
+	  echo "tag $$tag already exists — pushing existing tag"; \
+	else git tag -a "$$tag" -m "Release $$tag"; fi; \
+	url=$$(git remote get-url origin | sed -E 's#^git@github.com:#https://github.com/#'); \
+	hdr="AUTHORIZATION: basic $$(printf 'x-access-token:%s' "$$token" | base64 | tr -d '\n')"; \
+	git -c http.extraheader="$$hdr" push "$$url" "$$tag"; \
+	echo "pushed $$tag (rubygems publication pending — tag-only deploy)"
 
 deploy-ts:
 	@echo "deploy-ts: npm publication is pending — publishing the git tag only."

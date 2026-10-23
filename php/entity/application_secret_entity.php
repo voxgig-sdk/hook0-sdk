@@ -14,7 +14,7 @@ class ApplicationSecretEntity
     private $_client;
     private $_utility;
     private array $_entopts;
-    private array $_data;
+    private mixed $_data;
     private array $_match;
     private $_entctx;
     private bool $_deleted = false;
@@ -98,8 +98,9 @@ class ApplicationSecretEntity
      */
     public function data_set($args): void
     {
-        if ($args) {
-            $this->_data = Hook0Helpers::to_map(Struct::clone($args)) ?? [];
+        if ($args !== null) {
+            $data = Struct::clone($args);
+            $this->_data = $data instanceof \stdClass ? (array)$data : $data;
             ($this->_utility->feature_hook)($this->_entctx, "SetData");
         }
     }
@@ -230,7 +231,9 @@ class ApplicationSecretEntity
         } catch (\Throwable $err) {
             // What a hook throws here must not escape the cleaning below.
             try {
-                ($utility->feature_hook)($ctx, "PreUnexpected");
+                if (!$ctx->unexpected_fired) {
+                    ($utility->feature_hook)($ctx, "PreUnexpected");
+                }
             } catch (\Throwable $hookerr) {
                 $err = $hookerr;
             }
@@ -390,6 +393,39 @@ class ApplicationSecretEntity
     
 
     
+    /**
+     * Remove an ApplicationSecret matching the given criteria.
+     *
+     * @param ApplicationSecretRemoveMatch|array|null $reqmatch Match criteria (id/query
+     *   fields) as an assoc-array; ApplicationSecretRemoveMatch names the shape.
+     * @param mixed $ctrl Optional per-call control overrides.
+     * @return ApplicationSecretEntity The removed ApplicationSecret entity, marked as deleted; throws
+     *   Hook0Error on failure (item-5 convention).
+     */
+    public function remove(?array $reqmatch = null, $ctrl = null): mixed
+    {
+        $utility = $this->_utility;
+        $ctx = ($utility->make_context)([
+            "opname" => "remove",
+            "ctrl" => $ctrl,
+            "match" => $this->_match,
+            "data" => $this->_data,
+            "reqmatch" => $reqmatch,
+        ], $this->_entctx);
+
+        return $this->_run_op($ctx, function () use ($ctx) {
+            if ($ctx->result) {
+                if ($ctx->result->resmatch) {
+                    $this->_match = $ctx->result->resmatch;
+                }
+                if ($ctx->result->resdata) {
+                    $this->_data = Hook0Helpers::to_map(Struct::clone($ctx->result->resdata)) ?? [];
+                }
+            }
+        });
+    }
+
+
 
     private function _run_op($ctx, callable $post_done): mixed
     {
@@ -400,7 +436,10 @@ class ApplicationSecretEntity
         } catch (\Throwable $err) {
             // What a hook throws here must not escape the cleaning below.
             try {
-                ($utility->feature_hook)($ctx, "PreUnexpected");            } catch (\Throwable $hookerr) {
+                // Once per operation: make_error fires it for its own error.
+                if (!$ctx->unexpected_fired) {
+                    ($utility->feature_hook)($ctx, "PreUnexpected");                }
+            } catch (\Throwable $hookerr) {
                 $err = $hookerr;
             }
             $err = $this->_unexpected($ctx, $err);

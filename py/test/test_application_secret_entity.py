@@ -114,6 +114,16 @@ class TestApplicationSecretEntity:
         assert client.ApplicationSecret(None).list(None, {"throw": False}) is None
         assert fired < hook.unexpected
 
+    def test_should_validate_each_listed_record(self):
+        if "validate" not in (shared_config().get("feature") or {}):
+            pytest.skip("feature not present in this SDK: validate")
+        opts = {"feature": {"validate": {"active": True, "request": False, "response": True}}}
+        listed = Hook0SDK.test({"entity": {"application_secret": {"v1": {"application_id": "x", "created_at": "x", "token": "x"}}}}, opts).ApplicationSecret(None).list(None, None)
+        assert ["v1"] == [ent.data_get().get("id") for ent in listed]
+        with pytest.raises(Exception) as err:
+            Hook0SDK.test({"entity": {"application_secret": {"v1": {"application_id": 1, "created_at": "x", "token": "x"}}}}, opts).ApplicationSecret(None).list(None, None)
+        assert "validate_failed" == getattr(err.value, "code", None)
+
     def test_should_refuse_an_invalid_request(self):
         if "validate" not in (shared_config().get("feature") or {}):
             pytest.skip("feature not present in this SDK: validate")
@@ -129,7 +139,7 @@ class TestApplicationSecretEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["create", "list", "update"]:
+        for _op in ["create", "list", "update", "remove"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "application_secret." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
@@ -169,6 +179,23 @@ class TestApplicationSecretEntity:
         assert application_secret_ref01_resdata_up0 is not None
         assert application_secret_ref01_resdata_up0["id"] == application_secret_ref01_data_up0_up["id"]
         assert application_secret_ref01_resdata_up0[application_secret_ref01_markdef_up0_name] == application_secret_ref01_markdef_up0_value
+
+        # REMOVE
+        application_secret_ref01_match_rm0 = {
+            "id": application_secret_ref01_data["id"],
+        }
+        application_secret_ref01_ent.remove(application_secret_ref01_match_rm0, None)
+
+        # LIST
+        application_secret_ref01_match_rt0 = {}
+
+        application_secret_ref01_list_rt0_result = application_secret_ref01_ent.list(application_secret_ref01_match_rt0, None)
+        assert isinstance(application_secret_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(application_secret_ref01_list_rt0_result),
+            {"id": application_secret_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 

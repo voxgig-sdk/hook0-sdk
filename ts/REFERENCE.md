@@ -73,18 +73,6 @@ Create a new `ApplicationSecret` entity instance.
 
 **Returns:** `ApplicationSecretEntity` instance.
 
-#### `ApplicationsManagement(data?: object)`
-
-Create a new `ApplicationsManagement` entity instance.
-
-**Parameters:**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| `data` | `object` | Initial entity data. |
-
-**Returns:** `ApplicationsManagementEntity` instance.
-
 #### `EmailPreference(data?: object)`
 
 Create a new `EmailPreference` entity instance.
@@ -424,16 +412,8 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Application().create({
-  amount: 1,
-  application_id: 'example_application_id',
-  application_name: 'example_application_name',
-  consumption: {},
-  date: 'example_date',
-  is_provisional: true,
   name: 'example_name',
-  onboarding_steps: {},
   organization_id: 'example_organization_id',
-  quotas: {},
 })
 ```
 
@@ -526,8 +506,6 @@ Create a new entity with the given data. Resolves to the created entity.
 ```ts
 const result = await client.ApplicationSecret().create({
   application_id: 'example_application_id',
-  created_at: 'example_created_at',
-  token: 'example_token',
 })
 ```
 
@@ -539,13 +517,21 @@ List entities matching the given criteria. Resolves to an array of entities, one
 const results = await client.ApplicationSecret().list({ application_id: "example" })
 ```
 
+#### `remove(match: object, ctrl?: object)`
+
+Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
+
+```ts
+const result = await client.ApplicationSecret().remove({ id: 'application_secret_id', application_id: 'application_id' })
+```
+
 #### `update(data: object, ctrl?: object)`
 
 Update an existing entity. The data must include the entity `id`. Resolves to the updated entity.
 
 ```ts
 const result = await client.ApplicationSecret().update({
-  id: 'id',
+  id: 'application_secret_id',
   // Fields to update
 })
 ```
@@ -565,50 +551,6 @@ Get or set the entity match criteria. Works the same as `data()`.
 #### `make()`
 
 Create a new `ApplicationSecretEntity` instance with the same client and
-options.
-
-#### `client()`
-
-Return the parent `Hook0SDK` instance.
-
-#### `entopts()`
-
-Return a copy of the entity options.
-
-
----
-
-## ApplicationsManagementEntity
-
-```ts
-const applications_management = client.ApplicationsManagement()
-```
-
-### Operations
-
-#### `remove(match: object, ctrl?: object)`
-
-Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
-
-```ts
-const result = await client.ApplicationsManagement().remove({ application_secret_token: 'application_secret_token', application_id: 'application_id' })
-```
-
-### Common Methods
-
-#### `data(data?: object)`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `match(match?: object)`
-
-Get or set the entity match criteria. Works the same as `data()`.
-
-#### `make()`
-
-Create a new `ApplicationsManagementEntity` instance with the same client and
 options.
 
 #### `client()`
@@ -792,14 +734,6 @@ Create a new entity with the given data. Resolves to the created entity.
 ```ts
 const result = await client.Event().create({
   id: 'example_id',
-  event_id: 'example_event_id',
-  event_type_name: 'example_event_type_name',
-  ip: 'example_ip',
-  labels: {},
-  occurred_at: 'example_occurred_at',
-  payload: 'example_payload',
-  payload_content_type: 'example_payload_content_type',
-  received_at: 'example_received_at',
 })
 ```
 
@@ -876,13 +810,9 @@ Create a new entity with the given data. Resolves to the created entity.
 ```ts
 const result = await client.EventType().create({
   application_id: 'example_application_id',
-  event_type_name: 'example_event_type_name',
   resource_type: 'example_resource_type',
-  resource_type_name: 'example_resource_type_name',
   service: 'example_service',
-  service_name: 'example_service_name',
   verb: 'example_verb',
-  verb_name: 'example_verb_name',
 })
 ```
 
@@ -900,6 +830,14 @@ Load a single entity matching the given criteria. Resolves to the entity, whose 
 
 ```ts
 const result = await client.EventType().load({ id: 'event_type_id', application_id: 'application_id' })
+```
+
+#### `remove(match: object, ctrl?: object)`
+
+Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
+
+```ts
+const result = await client.EventType().remove({ id: 'event_type_id', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -944,14 +882,6 @@ List entities matching the given criteria. Resolves to an array of entities, one
 
 ```ts
 const results = await client.EventsManagement().list()
-```
-
-#### `remove(match: object, ctrl?: object)`
-
-Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
-
-```ts
-const result = await client.EventsManagement().remove({ event_type_name: 'event_type_name', application_id: 'application_id' })
 ```
 
 ### Common Methods
@@ -1306,19 +1236,7 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Organization().create({
-  amount: 1,
-  application_id: 'example_application_id',
-  application_name: 'example_application_name',
-  consumption: {},
-  date: 'example_date',
-  is_provisional: true,
   name: 'example_name',
-  onboarding_steps: {},
-  organization_id: 'example_organization_id',
-  plan: {},
-  quotas: {},
-  role: 'example_role',
-  users: [],
 })
 ```
 
@@ -1768,11 +1686,8 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.ServiceToken().create({
-  biscuit: 'example_biscuit',
-  created_at: 'example_created_at',
   name: 'example_name',
   organization_id: 'example_organization_id',
-  token_id: 'example_token_id',
 })
 ```
 
@@ -1894,18 +1809,9 @@ Create a new entity with the given data. Resolves to the created entity.
 ```ts
 const result = await client.Subscription().create({
   application_id: 'example_application_id',
-  created_at: 'example_created_at',
-  dedicated_workers: [],
   event_types: [],
   is_enabled: true,
-  label_key: 'example_label_key',
-  label_value: 'example_label_value',
-  labels: {},
-  metadata: {},
-  secret: 'example_secret',
-  subscription_id: 'example_subscription_id',
   target: {},
-  updated_at: 'example_updated_at',
 })
 ```
 
@@ -2095,6 +2001,7 @@ Return a copy of the entity options.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `secrets` | 0.1.0 | Secrets |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -2110,6 +2017,7 @@ const client = new Hook0SDK({
     paging: { active: true },
     ratelimit: { active: true },
     retry: { active: true },
+    secrets: { active: true },
     test: { active: true },
     timeout: { active: true },
   }
@@ -2128,7 +2036,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `secrets`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -2322,6 +2230,31 @@ another when you do not.
 **Usage**
 
 Set `feature.retry.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
+#### `secrets`
+
+Secrets.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+**Usage**
+
+Set `feature.secrets.active` to true in the client options, and override any option above in the same entry. Every option keeps
 its default unless you name it.
 
 **Considerations**

@@ -48,6 +48,9 @@ func init() {
 	core.NewRetryFeatureFunc = func() core.Feature {
 		return feature.NewRetryFeature()
 	}
+	core.NewSecretsFeatureFunc = func() core.Feature {
+		return feature.NewSecretsFeature()
+	}
 	core.NewTestFeatureFunc = func() core.Feature {
 		return feature.NewTestFeature()
 	}
@@ -59,9 +62,6 @@ func init() {
 	}
 	core.NewApplicationSecretEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
 		return entity.NewApplicationSecretEntity(client, entopts)
-	}
-	core.NewApplicationsManagementEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
-		return entity.NewApplicationsManagementEntity(client, entopts)
 	}
 	core.NewEmailPreferenceEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
 		return entity.NewEmailPreferenceEntity(client, entopts)
@@ -152,5 +152,6 @@ var NewMetricsFeature = feature.NewMetricsFeature
 var NewPagingFeature = feature.NewPagingFeature
 var NewRatelimitFeature = feature.NewRatelimitFeature
 var NewRetryFeature = feature.NewRetryFeature
+var NewSecretsFeature = feature.NewSecretsFeature
 var NewTestFeature = feature.NewTestFeature
 var NewTimeoutFeature = feature.NewTimeoutFeature

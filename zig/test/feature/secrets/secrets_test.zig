@@ -61,6 +61,22 @@ fn present() bool {
     return h.getp(h.getp(cfg, "feature"), "secrets") == .object;
 }
 
+// The header the credential travels in: the DEFAULT client's auth.name,
+// lower-cased as prepare_auth sends it. Read from a default client because a
+// test's `auth: null` leaves no name to read. Computed once.
+var credheader: ?[]const u8 = null;
+
+fn cred_header() []const u8 {
+    if (credheader) |name| return name;
+    const client = sdk.test_sdk(vnull(), vnull());
+    const name: []const u8 = switch (h.getpath(&.{ "auth", "name" }, client.options_map())) {
+        .string => |s| if (s.len == 0) "authorization" else std.ascii.allocLowerString(h.A(), s) catch "authorization",
+        else => "authorization",
+    };
+    credheader = name;
+    return name;
+}
+
 // ---- the counted transport ---------------------------------------------
 
 /// One recorded request, SNAPSHOT at the moment it was handed to the
@@ -103,7 +119,7 @@ const Wire = struct {
             "";
         const fetchdef: Value = if (arg == .array and 2 <= arg.array.data.items.len) arg.array.data.items[1] else vnull();
         const headers = h.getp(fetchdef, "headers");
-        const auth: ?[]const u8 = if (h.get_str(headers, "authorization")) |a| (h.A().dupe(u8, a) catch a) else null;
+        const auth: ?[]const u8 = if (h.get_str(headers, cred_header())) |a| (h.A().dupe(u8, a) catch a) else null;
         const body: ?[]const u8 = if (h.get_str(fetchdef, "body")) |b| (h.A().dupe(u8, b) catch b) else null;
         self.calls.append(h.A(), .{ .url = h.A().dupe(u8, url) catch url, .auth = auth, .body = body }) catch {};
 
@@ -227,15 +243,15 @@ fn count_named(client: *sdk.SDK, name: []const u8) usize {
     return n;
 }
 
-// The Authorization header carries the SPEC's credential prefix, which a
-// TEMPLATE cannot know: an OpenAPI bearer scheme gives `Bearer <token>`, an
+// The credential header carries the SPEC's credential prefix (if any), which
+// a TEMPLATE cannot know: an OpenAPI bearer scheme gives `Bearer <token>`, an
 // apiKey scheme the raw token. So assert on the CREDENTIAL and let the
 // prefix be whatever this SDK's API declares.
 fn credential_is(auth: ?[]const u8, token: []const u8) !void {
     const got = auth orelse "";
     const suffix = std.fmt.allocPrint(h.A(), " {s}", .{token}) catch token;
     if (!(std.mem.eql(u8, got, token) or std.mem.endsWith(u8, got, suffix))) {
-        std.debug.print("expected the authorization header to carry {s}, got: {s}\n", .{ token, got });
+        std.debug.print("expected the {s} header to carry {s}, got: {s}\n", .{ cred_header(), token, got });
         return error.TestUnexpectedResult;
     }
 }
@@ -273,18 +289,22 @@ fn drive_entity(client: *sdk.SDK) Drive {
                     {
                         const ent = @field(sdk.SDK, d.name)(client, vnull());
                         const ops = h.getpath(&.{ "entity", ent.name, "op" }, cfg);
+                        // A call whose route it cannot fill is refused before
+                        // the chain is consulted, so the next entity is tried.
                         if (h.getp(ops, "load") == .object) {
                             const res = ent.load(h.jo(&.{.{ "id", h.vstr("s01") }}), vnull());
-                            return switch (res) {
-                                .err => |e| .{ .ran = true, .ok = false, .msg = e.msg },
-                                .ok => .{ .ran = true, .ok = true, .msg = "" },
-                            };
+                            switch (res) {
+                                .err => |e| if (!std.mem.eql(u8, e.code, "url_param_missing"))
+                                    return .{ .ran = true, .ok = false, .msg = e.msg },
+                                .ok => return .{ .ran = true, .ok = true, .msg = "" },
+                            }
                         } else if (h.getp(ops, "list") == .object) {
                             const res = ent.list(h.omap(), vnull());
-                            return switch (res) {
-                                .err => |e| .{ .ran = true, .ok = false, .msg = e.msg },
-                                .ok => .{ .ran = true, .ok = true, .msg = "" },
-                            };
+                            switch (res) {
+                                .err => |e| if (!std.mem.eql(u8, e.code, "url_param_missing"))
+                                    return .{ .ran = true, .ok = false, .msg = e.msg },
+                                .ok => return .{ .ran = true, .ok = true, .msg = "" },
+                            }
                         }
                     }
                 }
@@ -313,7 +333,7 @@ test "secrets inactive: apikey option behaves exactly as before" {
     try credential_is(w.api()[0].auth, "OPTKEY01");
 }
 
-test "secrets inactive: no apikey means no authorization header" {
+test "secrets inactive: no apikey means no credential header" {
     if (!present()) return error.SkipZigTest;
     const w = Wire.new();
     const client = live_client(w, h.omap());

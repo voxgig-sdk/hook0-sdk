@@ -2,7 +2,6 @@
 
 const { ApplicationEntity } = require('./entity/ApplicationEntity')
 const { ApplicationSecretEntity } = require('./entity/ApplicationSecretEntity')
-const { ApplicationsManagementEntity } = require('./entity/ApplicationsManagementEntity')
 const { EmailPreferenceEntity } = require('./entity/EmailPreferenceEntity')
 const { ErrorEntity } = require('./entity/ErrorEntity')
 const { EventEntity } = require('./entity/EventEntity')
@@ -37,6 +36,7 @@ const { Hook0EntityBase } = require('./Hook0EntityBase')
 
 
 const { BaseFeature } = require('./feature/base/BaseFeature')
+const sekreto = require('./feature/secrets/sekreto')
 
 
 
@@ -49,7 +49,8 @@ class Hook0SDK {
   _utility = new Utility()
   _features
   _rootctx
-  
+  _secrets
+
 
   constructor(options) {
 
@@ -132,6 +133,10 @@ class Hook0SDK {
   }
 
   
+secrets() {
+  return this._secrets && this._secrets.sekreto()
+}
+
 
 
   async prepare(fetchargs) {
@@ -186,6 +191,15 @@ class Hook0SDK {
     }
 
     
+if (null != this._secrets) {
+  try {
+    await this._secrets.resolve()
+  }
+  catch (err) {
+    return err instanceof Error ? err : new Error(String(err))
+  }
+}
+
 
     // Apply SDK auth (apikey, auth prefix, etc.)
     const authResult = prepareAuth(ctx)
@@ -364,15 +378,6 @@ class Hook0SDK {
   ApplicationSecret(entopts) {
     const self = this
     return new ApplicationSecretEntity(self, entopts)
-  }
-
-
-  // Entity access: `client.ApplicationsManagement().list()` / `client.ApplicationsManagement().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  ApplicationsManagement(entopts) {
-    const self = this
-    return new ApplicationsManagementEntity(self, entopts)
   }
 
 
@@ -614,7 +619,8 @@ const SDK = Hook0SDK
 module.exports = {
   stdutil,
   config,
-  
+  sekreto,
+
 
   BaseFeature,
   Hook0EntityBase,

@@ -1,5 +1,5 @@
 
-import { cmp, Content, isAuthActive, envName, entityIdField, entityDataIdField, pickExampleEntity, opRequestShape, safeVarName, exampleVarName, jsKey, requiredItems } from '@voxgig/sdkgen'
+import { cmp, Content, isAuthActive, envName, entityIdField, entityDataIdField, pickExampleEntity, opRequestShape, safeVarName, exampleVarName, jsKey, requiredItems, matchExampleItems, jsProp } from '@voxgig/sdkgen'
 
 import {
   KIT,
@@ -31,8 +31,7 @@ const ReadmeHowto = cmp(function ReadmeHowto(props: any) {
   const primaryArg = (idPlaceholder: string): string => {
     if (!exampleEntity || !primaryOp) return ''
     if (isMatchOp || 'list' === primaryOp) {
-      const items = (isMatchOp ? opRequestShape(exampleEntity, primaryOp).items
-        .filter((it: any) => !it.optional || it.name === idF) : requiredItems(exampleEntity, 'list'))
+      const items = (isMatchOp ? matchExampleItems(exampleEntity, primaryOp, idF) : requiredItems(exampleEntity, 'list'))
         .sort((a: any, b: any) => (a.name === idF ? 0 : 1) - (b.name === idF ? 0 : 1))
       if (0 === items.length) return ''
       const pairs = items.map((it: any) =>
@@ -51,7 +50,7 @@ const ReadmeHowto = cmp(function ReadmeHowto(props: any) {
   const testCallArg = primaryArg('test01')
   const stateCallArg = primaryArg('example')
   const stateDataLine = dataIdF
-    ? `console.log(data.${dataIdF})`
+    ? `console.log(${jsProp('data', dataIdF)})`
     : `console.log(data)`
 
   // The op-driven example lines, shown only when the SDK has an entity op.

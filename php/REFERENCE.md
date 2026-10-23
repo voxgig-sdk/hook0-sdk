@@ -50,10 +50,6 @@ Create a new `ApplicationEntity` instance. Pass `null` for no initial data.
 
 Create a new `ApplicationSecretEntity` instance. Pass `null` for no initial data.
 
-#### `ApplicationsManagement($data = null)`
-
-Create a new `ApplicationsManagementEntity` instance. Pass `null` for no initial data.
-
 #### `EmailPreference($data = null)`
 
 Create a new `EmailPreferenceEntity` instance. Pass `null` for no initial data.
@@ -205,16 +201,8 @@ Create a new entity with the given data. Returns the created entity and throws o
 
 ```php
 $result = $client->Application()->create([
-  "amount" => null, // int
-  "application_id" => null, // string
-  "application_name" => null, // string
-  "consumption" => null, // array
-  "date" => null, // string
-  "is_provisional" => null, // bool
   "name" => null, // string
-  "onboarding_steps" => null, // array
   "organization_id" => null, // string
-  "quotas" => null, // array
 ]);
 ```
 
@@ -309,8 +297,6 @@ Create a new entity with the given data. Returns the created entity and throws o
 ```php
 $result = $client->ApplicationSecret()->create([
   "application_id" => null, // string
-  "created_at" => null, // string
-  "token" => null, // string
 ]);
 ```
 
@@ -322,13 +308,21 @@ List entities matching the given criteria (call with no argument to list all). R
 $results = $client->ApplicationSecret()->list(["application_id" => "example"]);
 ```
 
+#### `remove(array $reqmatch, ?array $ctrl = null): mixed`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
+
+```php
+$result = $client->ApplicationSecret()->remove(["id" => "application_secret_id", "application_id" => "application_id"]);
+```
+
 #### `update(array $reqdata, ?array $ctrl = null): mixed`
 
 Update an existing entity. The data must include the entity `id`. Returns the updated entity and throws on error.
 
 ```php
 $result = $client->ApplicationSecret()->update([
-  "id" => "id",
+  "id" => "application_secret_id",
   // Fields to update
 ]);
 ```
@@ -354,52 +348,6 @@ Set the entity match criteria.
 #### `make(): ApplicationSecretEntity`
 
 Create a new `ApplicationSecretEntity` instance with the same client and
-options.
-
-#### `get_name(): string`
-
-Return the entity name.
-
-
----
-
-## ApplicationsManagementEntity
-
-```php
-$applications_management = $client->ApplicationsManagement();
-```
-
-### Operations
-
-#### `remove(array $reqmatch, ?array $ctrl = null): mixed`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
-
-```php
-$result = $client->ApplicationsManagement()->remove(["application_secret_token" => "application_secret_token", "application_id" => "application_id"]);
-```
-
-### Common Methods
-
-#### `data_get(): array`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set($data): void`
-
-Set the entity data.
-
-#### `match_get(): array`
-
-Get the entity match criteria.
-
-#### `match_set($match): void`
-
-Set the entity match criteria.
-
-#### `make(): ApplicationsManagementEntity`
-
-Create a new `ApplicationsManagementEntity` instance with the same client and
 options.
 
 #### `get_name(): string`
@@ -543,14 +491,6 @@ Create a new entity with the given data. Returns the created entity and throws o
 ```php
 $result = $client->Event()->create([
   "id" => null, // string
-  "event_id" => null, // string
-  "event_type_name" => null, // string
-  "ip" => null, // string
-  "labels" => null, // array
-  "occurred_at" => null, // string
-  "payload" => null, // string
-  "payload_content_type" => null, // string
-  "received_at" => null, // string
 ]);
 ```
 
@@ -629,13 +569,9 @@ Create a new entity with the given data. Returns the created entity and throws o
 ```php
 $result = $client->EventType()->create([
   "application_id" => null, // string
-  "event_type_name" => null, // string
   "resource_type" => null, // string
-  "resource_type_name" => null, // string
   "service" => null, // string
-  "service_name" => null, // string
   "verb" => null, // string
-  "verb_name" => null, // string
 ]);
 ```
 
@@ -653,6 +589,14 @@ Load a single entity matching the given criteria. Returns the entity, whose reco
 
 ```php
 $result = $client->EventType()->load(["id" => "event_type_id", "application_id" => "application_id"]);
+```
+
+#### `remove(array $reqmatch, ?array $ctrl = null): mixed`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
+
+```php
+$result = $client->EventType()->remove(["id" => "event_type_id", "application_id" => "application_id"]);
 ```
 
 ### Common Methods
@@ -699,14 +643,6 @@ List entities matching the given criteria (call with no argument to list all). R
 
 ```php
 $results = $client->EventsManagement()->list();
-```
-
-#### `remove(array $reqmatch, ?array $ctrl = null): mixed`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and throws on error.
-
-```php
-$result = $client->EventsManagement()->remove(["event_type_name" => "event_type_name", "application_id" => "application_id"]);
 ```
 
 ### Common Methods
@@ -1073,19 +1009,7 @@ Create a new entity with the given data. Returns the created entity and throws o
 
 ```php
 $result = $client->Organization()->create([
-  "amount" => null, // int
-  "application_id" => null, // string
-  "application_name" => null, // string
-  "consumption" => null, // array
-  "date" => null, // string
-  "is_provisional" => null, // bool
   "name" => null, // string
-  "onboarding_steps" => null, // array
-  "organization_id" => null, // string
-  "plan" => null, // array
-  "quotas" => null, // array
-  "role" => null, // string
-  "users" => null, // array
 ]);
 ```
 
@@ -1529,11 +1453,8 @@ Create a new entity with the given data. Returns the created entity and throws o
 
 ```php
 $result = $client->ServiceToken()->create([
-  "biscuit" => null, // string
-  "created_at" => null, // string
   "name" => null, // string
   "organization_id" => null, // string
-  "token_id" => null, // string
 ]);
 ```
 
@@ -1657,18 +1578,9 @@ Create a new entity with the given data. Returns the created entity and throws o
 ```php
 $result = $client->Subscription()->create([
   "application_id" => null, // string
-  "created_at" => null, // string
-  "dedicated_workers" => null, // array
   "event_types" => null, // array
   "is_enabled" => null, // bool
-  "label_key" => null, // string
-  "label_value" => null, // string
-  "labels" => null, // array
-  "metadata" => null, // array
-  "secret" => null, // string
-  "subscription_id" => null, // string
   "target" => null, // array
-  "updated_at" => null, // string
 ]);
 ```
 
@@ -1864,6 +1776,7 @@ Return the entity name.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `secrets` | 0.1.0 | Secrets |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -1879,6 +1792,7 @@ $client = new Hook0SDK([
     "paging" => ["active" => true],
     "ratelimit" => ["active" => true],
     "retry" => ["active" => true],
+    "secrets" => ["active" => true],
     "test" => ["active" => true],
     "timeout" => ["active" => true],
   ],
@@ -1897,7 +1811,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `secrets`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -2091,6 +2005,31 @@ another when you do not.
 **Usage**
 
 Set `feature.retry.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
+#### `secrets`
+
+Secrets.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+**Usage**
+
+Set `feature.secrets.active` to true in the client options, and override any option above in the same entry. Every option keeps
 its default unless you name it.
 
 **Considerations**

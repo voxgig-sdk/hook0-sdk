@@ -1,18 +1,9 @@
 {
   "existing": {
     "events_management": {
-      "EVENTS_MANAGEMENT00": {
-        "event_type_name": "EVENT_TYPE_NAME01",
-        "id": "EVENTS_MANAGEMENT00"
-      },
-      "EVENTS_MANAGEMENT01": {
-        "event_type_name": "EVENT_TYPE_NAME01",
-        "id": "EVENTS_MANAGEMENT01"
-      },
-      "EVENTS_MANAGEMENT02": {
-        "event_type_name": "EVENT_TYPE_NAME01",
-        "id": "EVENTS_MANAGEMENT02"
-      }
+      "EVENTS_MANAGEMENT00": {},
+      "EVENTS_MANAGEMENT01": {},
+      "EVENTS_MANAGEMENT02": {}
     }
   },
   "new": {
@@ -22,11 +13,6 @@
   },
   "requests": {
     "GET /api/v1/payload_content_types/": {
-      "provenance": "operation-contract",
-      "version": 2,
-      "source": "openapi3"
-    },
-    "DELETE /api/v1/event_types/{event_type_name}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

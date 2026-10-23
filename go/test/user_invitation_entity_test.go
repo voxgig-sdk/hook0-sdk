@@ -70,6 +70,7 @@ func TestUserInvitationEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// CREATE
 		userInvitationRef01Ent := client.UserInvitation(nil)

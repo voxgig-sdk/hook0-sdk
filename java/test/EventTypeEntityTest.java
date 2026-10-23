@@ -49,7 +49,7 @@ public class EventTypeEntityTest {
     // Per-op sdk-test-control.json skip — basic test exercises a flow
     // with multiple ops; skipping any op skips the whole flow.
     String mode = setup.live ? "live" : "unit";
-    for (String op : new String[] { "create", "list", "load" }) {
+    for (String op : new String[] { "create", "list", "load", "remove" }) {
       String reason = RunnerSupport.skipReason("entityOp", "event_type." + op, mode);
       Assumptions.assumeTrue(reason == null,
           reason == null || "".equals(reason)
@@ -88,6 +88,24 @@ public class EventTypeEntityTest {
     assertNotNull(eventTypeRef01DataDt0LoadResult, "expected load result to be a map");
     assertEquals(eventTypeRef01Data.get("id"), eventTypeRef01DataDt0LoadResult.get("id"),
         "expected load result id to match");
+
+    // REMOVE
+    Map<String, Object> eventTypeRef01MatchRm0 = new LinkedHashMap<>();
+    eventTypeRef01MatchRm0.put("id", eventTypeRef01Data.get("id"));
+    eventTypeRef01Ent.remove(eventTypeRef01MatchRm0, null);
+
+    // LIST
+    Map<String, Object> eventTypeRef01MatchRt0 = new LinkedHashMap<>();
+
+    Object eventTypeRef01ListRt0Result = eventTypeRef01Ent.list(eventTypeRef01MatchRt0, null);
+    assertTrue(eventTypeRef01ListRt0Result instanceof List,
+        "expected list result to be an array, got " + eventTypeRef01ListRt0Result);
+    List<Object> eventTypeRef01ListRt0 = (List<Object>) eventTypeRef01ListRt0Result;
+
+    List<Object> notFoundItem = Struct.select(
+        RunnerSupport.entityListToData(eventTypeRef01ListRt0),
+        Struct.jm("id", eventTypeRef01Data.get("id")));
+    assertTrue(Struct.isempty(notFoundItem), "expected removed entity to not be in list");
 
   }
 

@@ -200,6 +200,7 @@ func TestHook0Entity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 
 		// Bootstrap entity data from existing test data (no create step in flow).
 		hook0Ref01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.hook0")))

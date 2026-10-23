@@ -1,5 +1,5 @@
 
-import { cmp, each, Content, canonToType, canonKey, File, isAuthActive, entityIdField, opRequestShape , targetFeatures, opNeedsAction, bodyNote, javaMap, javaMapOf } from '@voxgig/sdkgen'
+import { cmp, each, Content, canonToType, canonKey, File, isAuthActive, entityIdField, opRequestShape , targetFeatures, opNeedsAction, bodyNote, javaMap, javaMapOf, matchExampleItems, javaMapItems } from '@voxgig/sdkgen'
 import { ReadmeRefFeatures } from '@voxgig/sdkgen'
 
 import {
@@ -256,13 +256,12 @@ ${info.desc}
           }
 
           if ('load' === opname || 'remove' === opname) {
-            const matchItems = opRequestShape(ent, opname).items
-              .filter((it: any) => !it.optional || it.name === idF)
+            const matchItems = javaMapItems(matchExampleItems(ent, opname, idF))
               .sort((a: any, b: any) =>
                 (a.name === idF ? 0 : 1) - (b.name === idF ? 0 : 1))
             const arg = 0 < matchItems.length
               ? javaMapOf(matchItems.map((it: any) =>
-                `"${it.name}", ${javaLit(it.type,
+                `${JSON.stringify(it.name)}, ${javaLit(it.type,
                   it.name === idF ? ent.name + '_id' : it.name)}`))
               : 'null'
             Content(`\`\`\`java
@@ -282,7 +281,7 @@ for (Object item : results) {
 `)
           }
           else if ('create' === opname) {
-            const createItems = opRequestShape(ent, 'create').items
+            const createItems = javaMapItems(opRequestShape(ent, 'create').items)
               .filter((it: any) => !it.optional)
             const createMap = javaMap(createItems.length)
             Content(`\`\`\`java
@@ -290,7 +289,7 @@ Object result = client.${accessor}(null).create(${createMap.open}
 `)
             createItems.map((it: any, i: number) => {
               const comma = i < createItems.length - 1 ? ',' : ''
-              Content(`    ${createMap.pair(`"${it.name}", ${javaLit(it.type, 'example_' + it.name)}`)}${comma}  // ${canonToType(it.type, target.name)}
+              Content(`    ${createMap.pair(`${JSON.stringify(it.name)}, ${javaLit(it.type, 'example_' + it.name)}`)}${comma}  // ${canonToType(it.type, target.name)}
 `)
             })
             Content(`), null);
@@ -299,14 +298,14 @@ Object result = client.${accessor}(null).create(${createMap.open}
 `)
           }
           else if ('update' === opname || 'patch' === opname) {
-            const updateItems = opRequestShape(ent, opname).items
+            const updateItems = javaMapItems(opRequestShape(ent, opname).items)
               .filter((it: any) => !it.optional || it.name === idF)
               .sort((a: any, b: any) =>
                 (a.name === idF ? 0 : 1) - (b.name === idF ? 0 : 1))
             const updateMap = javaMap(updateItems.length)
             const updateLines = updateItems.map((it: any, i: number) => {
               const comma = i < updateItems.length - 1 ? ',' : ''
-              return `    ${updateMap.pair(`"${it.name}", ${javaLit(it.type,
+              return `    ${updateMap.pair(`${JSON.stringify(it.name)}, ${javaLit(it.type,
                 it.name === idF ? ent.name + '_id' : it.name)}`)}${comma}\n`
             }).join('')
             Content(`\`\`\`java

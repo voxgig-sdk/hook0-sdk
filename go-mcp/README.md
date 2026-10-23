@@ -137,7 +137,7 @@ failure message (e.g. unknown entity, or an API error).
 ### Entities
 
 Each tool takes as its `entity` argument one of the entities that has its
-operation, of the 24 the SDK has:
+operation, of the 23 the SDK has:
 
 | Tool | Entities |
 |------|----------|

@@ -6,7 +6,7 @@ The Golang SDK for the Hook0 API — an entity-oriented client using standard Go
 
 It exposes the API as capitalised, semantic **Entities** — e.g. `client.Application(nil)` — each with the same small set of operations (`List`, `Load`, `Create`, `Update`, `Remove`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
-> Also generated from this model: `go-cli`, `go-mcp`, `java`, `js`, `lua`, `php`, `py`, `ts`, `zig` — see
+> Also generated from this model: `go-cli`, `go-mcp`, `java`, `js`, `lua`, `php`, `py`, `rb`, `ts`, `zig` — see
 > the [top-level README](../README.md).
 
 
@@ -71,14 +71,14 @@ func main() {
     fmt.Println(application.(sdk.Entity).Data())
 
     // Create a application.
-    created, err := client.Application(nil).Create(map[string]any{"amount": 1, "application_id": "example_application_id", "application_name": "example_application_name", "consumption": map[string]any{}, "date": "example_date", "is_provisional": true, "name": "example_name", "onboarding_steps": map[string]any{}, "organization_id": "example_organization_id", "quotas": map[string]any{}}, nil)
+    created, err := client.Application(nil).Create(map[string]any{"name": "example_name", "organization_id": "example_organization_id"}, nil)
     if err != nil {
         panic(err)
     }
     fmt.Println(created.(sdk.Entity).Data())
 
     // Update a application.
-    updated, err := client.Application(nil).Update(map[string]any{"id": "example_id", "amount": 1, "application_id": "example_application_id"}, nil)
+    updated, err := client.Application(nil).Update(map[string]any{"id": "example_id", "name": "example_name", "organization_id": "example_organization_id"}, nil)
     if err != nil {
         panic(err)
     }
@@ -256,7 +256,6 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Direct` | `(fetchargs map[string]any) (map[string]any, error)` | Build and send an HTTP request. |
 | `Application` | `(data map[string]any) Hook0Entity` | Create an Application entity instance. |
 | `ApplicationSecret` | `(data map[string]any) Hook0Entity` | Create an ApplicationSecret entity instance. |
-| `ApplicationsManagement` | `(data map[string]any) Hook0Entity` | Create an ApplicationsManagement entity instance. |
 | `EmailPreference` | `(data map[string]any) Hook0Entity` | Create an EmailPreference entity instance. |
 | `Error` | `(data map[string]any) Hook0Entity` | Create an Error entity instance. |
 | `Event` | `(data map[string]any) Hook0Entity` | Create an Event entity instance. |
@@ -349,18 +348,9 @@ API path: `/api/v1/applications/`
 | `"name"` |  |
 | `"token"` |  |
 
-Operations: Create, List, Update.
+Operations: Create, List, Remove, Update.
 
 API path: `/api/v1/application_secrets/`
-
-#### ApplicationsManagement
-
-| Field | Description |
-| --- | --- |
-
-Operations: Remove.
-
-API path: `/api/v1/application_secrets/{application_secret_token}`
 
 #### EmailPreference
 
@@ -419,7 +409,7 @@ API path: `/api/v1/events/{event_id}/replay`
 | `"verb"` |  |
 | `"verb_name"` |  |
 
-Operations: Create, List, Load.
+Operations: Create, List, Load, Remove.
 
 API path: `/api/v1/event_types/`
 
@@ -428,7 +418,7 @@ API path: `/api/v1/event_types/`
 | Field | Description |
 | --- | --- |
 
-Operations: List, Remove.
+Operations: List.
 
 API path: `/api/v1/payload_content_types/`
 
@@ -747,16 +737,8 @@ for _, item := range applications.([]any) {
 
 ```go
 result, err := client.Application(nil).Create(map[string]any{
-    "amount": 1,
-    "application_id": "example_application_id",
-    "application_name": "example_application_name",
-    "consumption": map[string]any{},
-    "date": "example_date",
-    "is_provisional": true,
     "name": "example_name",
-    "onboarding_steps": map[string]any{},
     "organization_id": "example_organization_id",
-    "quotas": map[string]any{},
 }, nil)
 if err != nil {
     panic(err)
@@ -776,6 +758,7 @@ Create an instance: `applicationSecret := client.ApplicationSecret(nil)`
 | `List(match, ctrl)` | List entities matching the criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
+| `Remove(match, ctrl)` | Remove the matching entity. |
 
 #### Fields
 
@@ -806,25 +789,12 @@ for _, item := range applicationSecrets.([]any) {
 ```go
 result, err := client.ApplicationSecret(nil).Create(map[string]any{
     "application_id": "example_application_id",
-    "created_at": "example_created_at",
-    "token": "example_token",
 }, nil)
 if err != nil {
     panic(err)
 }
 fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
-
-
-### ApplicationsManagement
-
-Create an instance: `applicationsManagement := client.ApplicationsManagement(nil)`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `Remove(match, ctrl)` | Remove the matching entity. |
 
 
 ### EmailPreference
@@ -939,14 +909,6 @@ for _, item := range events.([]any) {
 ```go
 result, err := client.Event(nil).Create(map[string]any{
     "id": "example_id",
-    "event_id": "example_event_id",
-    "event_type_name": "example_event_type_name",
-    "ip": "example_ip",
-    "labels": map[string]any{},
-    "occurred_at": "example_occurred_at",
-    "payload": "example_payload",
-    "payload_content_type": "example_payload_content_type",
-    "received_at": "example_received_at",
 }, nil)
 if err != nil {
     panic(err)
@@ -966,6 +928,7 @@ Create an instance: `eventType := client.EventType(nil)`
 | `List(match, ctrl)` | List entities matching the criteria. |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
+| `Remove(match, ctrl)` | Remove the matching entity. |
 
 #### Fields
 
@@ -1009,13 +972,9 @@ for _, item := range eventTypes.([]any) {
 ```go
 result, err := client.EventType(nil).Create(map[string]any{
     "application_id": "example_application_id",
-    "event_type_name": "example_event_type_name",
     "resource_type": "example_resource_type",
-    "resource_type_name": "example_resource_type_name",
     "service": "example_service",
-    "service_name": "example_service_name",
     "verb": "example_verb",
-    "verb_name": "example_verb_name",
 }, nil)
 if err != nil {
     panic(err)
@@ -1033,7 +992,6 @@ Create an instance: `eventsManagement := client.EventsManagement(nil)`
 | Method | Description |
 | --- | --- |
 | `List(match, ctrl)` | List entities matching the criteria. |
-| `Remove(match, ctrl)` | Remove the matching entity. |
 
 #### Example: List
 
@@ -1288,19 +1246,7 @@ for _, item := range organizations.([]any) {
 
 ```go
 result, err := client.Organization(nil).Create(map[string]any{
-    "amount": 1,
-    "application_id": "example_application_id",
-    "application_name": "example_application_name",
-    "consumption": map[string]any{},
-    "date": "example_date",
-    "is_provisional": true,
     "name": "example_name",
-    "onboarding_steps": map[string]any{},
-    "organization_id": "example_organization_id",
-    "plan": map[string]any{},
-    "quotas": map[string]any{},
-    "role": "example_role",
-    "users": []any{},
 }, nil)
 if err != nil {
     panic(err)
@@ -1544,11 +1490,8 @@ for _, item := range serviceTokens.([]any) {
 
 ```go
 result, err := client.ServiceToken(nil).Create(map[string]any{
-    "biscuit": "example_biscuit",
-    "created_at": "example_created_at",
     "name": "example_name",
     "organization_id": "example_organization_id",
-    "token_id": "example_token_id",
 }, nil)
 if err != nil {
     panic(err)
@@ -1619,18 +1562,9 @@ for _, item := range subscriptions.([]any) {
 ```go
 result, err := client.Subscription(nil).Create(map[string]any{
     "application_id": "example_application_id",
-    "created_at": "example_created_at",
-    "dedicated_workers": []any{},
     "event_types": []any{},
     "is_enabled": true,
-    "label_key": "example_label_key",
-    "label_value": "example_label_value",
-    "labels": map[string]any{},
-    "metadata": map[string]any{},
-    "secret": "example_secret",
-    "subscription_id": "example_subscription_id",
     "target": map[string]any{},
-    "updated_at": "example_updated_at",
 }, nil)
 if err != nil {
     panic(err)
@@ -1707,7 +1641,7 @@ fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -1722,10 +1656,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`secrets`](#secrets) | Secrets |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `secrets`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -1816,6 +1751,24 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### secrets
+
+Secrets.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+Set `feature.secrets.active` to enable it, then override any of the options above.
+
+`secrets` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -1886,6 +1839,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **SecretsFeature**: Secrets
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 

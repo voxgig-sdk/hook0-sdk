@@ -49,10 +49,6 @@ Create a new `Application` entity instance. Pass `nil` for no initial data.
 
 Create a new `ApplicationSecret` entity instance. Pass `nil` for no initial data.
 
-#### `ApplicationsManagement(data)`
-
-Create a new `ApplicationsManagement` entity instance. Pass `nil` for no initial data.
-
 #### `EmailPreference(data)`
 
 Create a new `EmailPreference` entity instance. Pass `nil` for no initial data.
@@ -203,16 +199,8 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 
 ```lua
 local result, err = client:Application():create({
-  amount = --[[ number ]],
-  application_id = --[[ string ]],
-  application_name = --[[ string ]],
-  consumption = --[[ table ]],
-  date = --[[ string ]],
-  is_provisional = --[[ boolean ]],
   name = --[[ string ]],
-  onboarding_steps = --[[ table ]],
   organization_id = --[[ string ]],
-  quotas = --[[ table ]],
 })
 ```
 
@@ -307,8 +295,6 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 ```lua
 local result, err = client:ApplicationSecret():create({
   application_id = --[[ string ]],
-  created_at = --[[ string ]],
-  token = --[[ string ]],
 })
 ```
 
@@ -320,13 +306,21 @@ List entities matching the given criteria. Returns an array of entities, one per
 local results, err = client:ApplicationSecret():list({ application_id = "example" })
 ```
 
+#### `remove(reqmatch, ctrl) -> any, err`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
+
+```lua
+local result, err = client:ApplicationSecret():remove({ id = "application_secret_id", application_id = "application_id" })
+```
+
 #### `update(reqdata, ctrl) -> any, err`
 
 Update an existing entity. The data must include the entity `id`. Returns the updated entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:ApplicationSecret():update({
-  id = "id",
+  id = "application_secret_id",
   -- Fields to update
 })
 ```
@@ -352,52 +346,6 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `ApplicationSecretEntity` instance with the same client and
-options.
-
-#### `get_name() -> string`
-
-Return the entity name.
-
-
----
-
-## ApplicationsManagementEntity
-
-```lua
-local applications_management = client:ApplicationsManagement(nil)
-```
-
-### Operations
-
-#### `remove(reqmatch, ctrl) -> any, err`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
-
-```lua
-local result, err = client:ApplicationsManagement():remove({ application_secret_token = "application_secret_token", application_id = "application_id" })
-```
-
-### Common Methods
-
-#### `data_get() -> table`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> table`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `ApplicationsManagementEntity` instance with the same client and
 options.
 
 #### `get_name() -> string`
@@ -541,14 +489,6 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 ```lua
 local result, err = client:Event():create({
   id = --[[ string ]],
-  event_id = --[[ string ]],
-  event_type_name = --[[ string ]],
-  ip = --[[ string ]],
-  labels = --[[ table ]],
-  occurred_at = --[[ string ]],
-  payload = --[[ string ]],
-  payload_content_type = --[[ string ]],
-  received_at = --[[ string ]],
 })
 ```
 
@@ -627,13 +567,9 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 ```lua
 local result, err = client:EventType():create({
   application_id = --[[ string ]],
-  event_type_name = --[[ string ]],
   resource_type = --[[ string ]],
-  resource_type_name = --[[ string ]],
   service = --[[ string ]],
-  service_name = --[[ string ]],
   verb = --[[ string ]],
-  verb_name = --[[ string ]],
 })
 ```
 
@@ -651,6 +587,14 @@ Load a single entity matching the given criteria. Returns the entity, whose reco
 
 ```lua
 local result, err = client:EventType():load({ id = "event_type_id", application_id = "application_id" })
+```
+
+#### `remove(reqmatch, ctrl) -> any, err`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
+
+```lua
+local result, err = client:EventType():remove({ id = "event_type_id", application_id = "application_id" })
 ```
 
 ### Common Methods
@@ -697,14 +641,6 @@ List entities matching the given criteria. Returns an array of entities, one per
 
 ```lua
 local results, err = client:EventsManagement():list()
-```
-
-#### `remove(reqmatch, ctrl) -> any, err`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `nil` and an error on failure.
-
-```lua
-local result, err = client:EventsManagement():remove({ event_type_name = "event_type_name", application_id = "application_id" })
 ```
 
 ### Common Methods
@@ -1071,19 +1007,7 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 
 ```lua
 local result, err = client:Organization():create({
-  amount = --[[ number ]],
-  application_id = --[[ string ]],
-  application_name = --[[ string ]],
-  consumption = --[[ table ]],
-  date = --[[ string ]],
-  is_provisional = --[[ boolean ]],
   name = --[[ string ]],
-  onboarding_steps = --[[ table ]],
-  organization_id = --[[ string ]],
-  plan = --[[ table ]],
-  quotas = --[[ table ]],
-  role = --[[ string ]],
-  users = --[[ table ]],
 })
 ```
 
@@ -1527,11 +1451,8 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 
 ```lua
 local result, err = client:ServiceToken():create({
-  biscuit = --[[ string ]],
-  created_at = --[[ string ]],
   name = --[[ string ]],
   organization_id = --[[ string ]],
-  token_id = --[[ string ]],
 })
 ```
 
@@ -1655,18 +1576,9 @@ Create a new entity with the given data. Returns the created entity, or `nil` an
 ```lua
 local result, err = client:Subscription():create({
   application_id = --[[ string ]],
-  created_at = --[[ string ]],
-  dedicated_workers = --[[ table ]],
   event_types = --[[ table ]],
   is_enabled = --[[ boolean ]],
-  label_key = --[[ string ]],
-  label_value = --[[ string ]],
-  labels = --[[ table ]],
-  metadata = --[[ table ]],
-  secret = --[[ string ]],
-  subscription_id = --[[ string ]],
   target = --[[ table ]],
-  updated_at = --[[ string ]],
 })
 ```
 
@@ -1862,6 +1774,7 @@ Return the entity name.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `secrets` | 0.1.0 | Secrets |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -1877,6 +1790,7 @@ local client = sdk.new({
     paging = { active = true },
     ratelimit = { active = true },
     retry = { active = true },
+    secrets = { active = true },
     test = { active = true },
     timeout = { active = true },
   },
@@ -1895,7 +1809,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `secrets`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -2089,6 +2003,31 @@ another when you do not.
 **Usage**
 
 Set `feature.retry.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
+#### `secrets`
+
+Secrets.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `cache` | `true` |
+| `exchange` | `{active: false, method: 'POST', path: 'auth/token', refresh: '', request: 'refresh_token', response: 'access_token', retries: 1, statuses: [401]}` |
+| `name` | `'apikey'` |
+| `providers` | `[]` |
+
+**Usage**
+
+Set `feature.secrets.active` to true in the client options, and override any option above in the same entry. Every option keeps
 its default unless you name it.
 
 **Considerations**

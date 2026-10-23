@@ -7,6 +7,7 @@ const MetricsFeature_1 = require("./feature/metrics/MetricsFeature");
 const PagingFeature_1 = require("./feature/paging/PagingFeature");
 const RatelimitFeature_1 = require("./feature/ratelimit/RatelimitFeature");
 const RetryFeature_1 = require("./feature/retry/RetryFeature");
+const SecretsFeature_1 = require("./feature/secrets/SecretsFeature");
 const TestFeature_1 = require("./feature/test/TestFeature");
 const TimeoutFeature_1 = require("./feature/timeout/TimeoutFeature");
 const FEATURE_CLASS = {
@@ -16,6 +17,7 @@ const FEATURE_CLASS = {
     paging: PagingFeature_1.PagingFeature,
     ratelimit: RatelimitFeature_1.RatelimitFeature,
     retry: RetryFeature_1.RetryFeature,
+    secrets: SecretsFeature_1.SecretsFeature,
     test: TestFeature_1.TestFeature,
     timeout: TimeoutFeature_1.TimeoutFeature,
 };
@@ -147,6 +149,29 @@ class Config {
             "strict": false,
             "transport": "wrap"
         },
+        secrets: {
+            "options": {
+                "active": false,
+                "cache": true,
+                "exchange": {
+                    "active": false,
+                    "method": "POST",
+                    "path": "auth/token",
+                    "refresh": "",
+                    "request": "refresh_token",
+                    "response": "access_token",
+                    "retries": 1,
+                    "statuses": [
+                        401
+                    ]
+                },
+                "name": "apikey",
+                "providers": []
+            },
+            "optspec": {},
+            "strict": false,
+            "transport": "wrap"
+        },
         test: {
             "options": {
                 "active": false
@@ -175,7 +200,7 @@ class Config {
     options = {
         base: "https://app.hook0.com",
         auth: {
-            prefix: '',
+            prefix: 'Bearer',
         },
         headers: {
             "content-type": "application/json"
@@ -183,7 +208,6 @@ class Config {
         entity: {
             application: {},
             application_secret: {},
-            applications_management: {},
             email_preference: {},
             error: {},
             event: {},
@@ -764,6 +788,73 @@ class Config {
                         }
                     ]
                 },
+                "remove": {
+                    "input": "data",
+                    "name": "remove",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "DELETE",
+                            "orig": "/api/v1/application_secrets/{application_secret_token}",
+                            "segments": [
+                                {
+                                    "lit": "api"
+                                },
+                                {
+                                    "lit": "v1"
+                                },
+                                {
+                                    "lit": "application_secrets"
+                                },
+                                {
+                                    "var": "id"
+                                }
+                            ],
+                            "parts": [
+                                "api",
+                                "v1",
+                                "application_secrets",
+                                "{id}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "application_secret_token": "id"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "id",
+                                        "orig": "application_secret_token",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ],
+                                "query": [
+                                    {
+                                        "name": "application_id",
+                                        "orig": "application_id",
+                                        "type": "`$STRING`",
+                                        "kind": "query",
+                                        "reqd": true,
+                                        "field": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "application_id",
+                                    "id"
+                                ]
+                            }
+                        }
+                    ]
+                },
                 "update": {
                     "input": "data",
                     "name": "update",
@@ -827,81 +918,6 @@ class Config {
             },
             "relations": {
                 "ancestors": []
-            }
-        },
-        "applications_management": {
-            "fields": [],
-            "name": "applications_management",
-            "op": {
-                "remove": {
-                    "input": "data",
-                    "name": "remove",
-                    "points": [
-                        {
-                            "kind": "http",
-                            "method": "DELETE",
-                            "orig": "/api/v1/application_secrets/{application_secret_token}",
-                            "segments": [
-                                {
-                                    "lit": "api"
-                                },
-                                {
-                                    "lit": "v1"
-                                },
-                                {
-                                    "lit": "application_secrets"
-                                },
-                                {
-                                    "var": "application_secret_token"
-                                }
-                            ],
-                            "parts": [
-                                "api",
-                                "v1",
-                                "application_secrets",
-                                "{application_secret_token}"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "application_secret_token",
-                                        "orig": "application_secret_token",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ],
-                                "query": [
-                                    {
-                                        "name": "application_id",
-                                        "orig": "application_id",
-                                        "type": "`$STRING`",
-                                        "kind": "query",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "application_id",
-                                    "application_secret_token"
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
-            "relations": {
-                "ancestors": [
-                    [
-                        "$.main.kit.entity.application_secret"
-                    ]
-                ]
             }
         },
         "email_preference": {
@@ -1526,6 +1542,73 @@ class Config {
                             }
                         }
                     ]
+                },
+                "remove": {
+                    "input": "data",
+                    "name": "remove",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "DELETE",
+                            "orig": "/api/v1/event_types/{event_type_name}",
+                            "segments": [
+                                {
+                                    "lit": "api"
+                                },
+                                {
+                                    "lit": "v1"
+                                },
+                                {
+                                    "lit": "event_types"
+                                },
+                                {
+                                    "var": "id"
+                                }
+                            ],
+                            "parts": [
+                                "api",
+                                "v1",
+                                "event_types",
+                                "{id}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "event_type_name": "id"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "id",
+                                        "orig": "event_type_name",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ],
+                                "query": [
+                                    {
+                                        "name": "application_id",
+                                        "orig": "application_id",
+                                        "type": "`$STRING`",
+                                        "kind": "query",
+                                        "reqd": true,
+                                        "field": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "application_id",
+                                    "id"
+                                ]
+                            }
+                        }
+                    ]
                 }
             },
             "relations": {
@@ -1573,76 +1656,10 @@ class Config {
                             }
                         }
                     ]
-                },
-                "remove": {
-                    "input": "data",
-                    "name": "remove",
-                    "points": [
-                        {
-                            "kind": "http",
-                            "method": "DELETE",
-                            "orig": "/api/v1/event_types/{event_type_name}",
-                            "segments": [
-                                {
-                                    "lit": "api"
-                                },
-                                {
-                                    "lit": "v1"
-                                },
-                                {
-                                    "lit": "event_types"
-                                },
-                                {
-                                    "var": "event_type_name"
-                                }
-                            ],
-                            "parts": [
-                                "api",
-                                "v1",
-                                "event_types",
-                                "{event_type_name}"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "event_type_name",
-                                        "orig": "event_type_name",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ],
-                                "query": [
-                                    {
-                                        "name": "application_id",
-                                        "orig": "application_id",
-                                        "type": "`$STRING`",
-                                        "kind": "query",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "application_id",
-                                    "event_type_name"
-                                ]
-                            }
-                        }
-                    ]
                 }
             },
             "relations": {
-                "ancestors": [
-                    [
-                        "$.main.kit.entity.event_type"
-                    ]
-                ]
+                "ancestors": []
             }
         },
         "health": {

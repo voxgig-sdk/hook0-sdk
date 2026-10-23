@@ -37,15 +37,6 @@ public class Hook0SDK extends SdkClient {
   }
 
   /**
-   * Returns a applications_management entity bound to this client.
-   * Idiomatic usage: client.applicationsManagement(null).list(null, null) or
-   * client.applicationsManagement(null).load(Map.of("id", ...), null).
-   */
-  public SdkEntity applicationsManagement(Map<String, Object> entopts) {
-    return new voxgig.hook0sdk.entity.ApplicationsManagementEntity(this, entopts);
-  }
-
-  /**
    * Returns a email_preference entity bound to this client.
    * Idiomatic usage: client.emailPreference(null).list(null, null) or
    * client.emailPreference(null).load(Map.of("id", ...), null).

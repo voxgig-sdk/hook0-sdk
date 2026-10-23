@@ -66,6 +66,7 @@ func TestResponseEntity(t *testing.T) {
 			liveMiss(t, responseEntityLiveStrict, "Live entity test blocked: %s", "the flow loads a response record it has no list to find")
 		}
 		client := setup.client
+		_ = client
 
 		// Bootstrap entity data from existing test data (no create step in flow).
 		responseRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.response")))

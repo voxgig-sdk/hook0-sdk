@@ -200,6 +200,7 @@ func TestRequestAttemptEntity(t *testing.T) {
 			}
 		}
 		client := setup.client
+		_ = client
 		if setup.live {
 			liveExisting(t, request_attemptEntityLiveStrict, setup.data, "request_attempt", func() (any, error) {
 				return client.RequestAttempt(nil).List(map[string]any{}, nil)
