@@ -56,14 +56,15 @@ main: kit: doc: style: color: {
 main: kit: config: auth: prefix: 'Bearer'
 
 # Published package names, declared so a change in the generator's naming
-# rule cannot rename a released package. rb is added by this regeneration and
-# is not yet a defined target, so pinning it now would fail the model build;
-# pin it on the next pass.
+# rule cannot rename a released package. csharp, kotlin and rust are added by
+# the 2026-10-27 regeneration and are not yet defined targets, so pinning them
+# now would fail the model build; pin them on the next pass.
 main: kit: target: ts: publish: registry: package: '@voxgig-sdk/hook0-sdk'
 main: kit: target: js: publish: registry: package: '@voxgig-sdk/hook0-sdk-js'
 main: kit: target: py: publish: registry: package: 'voxgig-sdk-hook0-sdk'
 main: kit: target: lua: publish: registry: package: 'voxgig-sdk-hook0-sdk'
 main: kit: target: php: publish: registry: package: 'voxgig-sdk/hook0-sdk'
+main: kit: target: rb: publish: registry: package: 'voxgig-sdk-hook0-sdk'
 
 # --- cedar: release version (written by cedar-regen.sh, do not hand-edit)
 # Per target, because sdkgen keys the version per target; identical across
