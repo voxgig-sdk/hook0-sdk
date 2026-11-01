@@ -22,49 +22,49 @@ var NewTestFeatureFunc func() Feature
 
 var NewTimeoutFeatureFunc func() Feature
 
-var NewApplicationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewApplicationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewApplicationSecretEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewApplicationSecretEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewEmailPreferenceEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewEmailPreferenceEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewErrorEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewErrorEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewEventEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewEventEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewEventTypeEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewEventTypeEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewEventsManagementEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewEventsManagementEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewHealthEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewHealthEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewHook0EntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewHook0EntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewIngestedEventEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewIngestedEventEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewInstanceEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewInstanceEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewLoginEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewLoginEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewOrganizationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewOrganizationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewOrganizationEditRoleEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewOrganizationEditRoleEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewQuotaEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewQuotaEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewRegistrationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewRegistrationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewRequestAttemptEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewRequestAttemptEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewResponseEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewResponseEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewRevokeEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewRevokeEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewServiceTokenEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewServiceTokenEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewSubscriptionEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewSubscriptionEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewUserAuthenticationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewUserAuthenticationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 
-var NewUserInvitationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0Entity
+var NewUserInvitationEntityFunc func(client *Hook0SDK, entopts map[string]any) Hook0EntityBase
 

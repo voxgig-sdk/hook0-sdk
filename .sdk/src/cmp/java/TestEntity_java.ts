@@ -1,4 +1,4 @@
-import { flowSteps, opReachable, invalidRequest } from '@voxgig/sdkgen'
+import { flowSteps, opReachable, invalidRequest, flowLoadRoute, flowLoadReadsRecord } from '@voxgig/sdkgen'
 
 import {
   KIT,
@@ -22,6 +22,9 @@ import {
   serverVarEnv,
   serverVariables, envName, envToken,
   liveFlowNeeds, liveStrict, liveStrictNote,
+  liveGetOnly, liveExcludedLines, liveExcludedSummary, LIVE_GETONLY_ENV,
+  liveRouteExamples, liveStepExamples,
+  liveEntity,
 } from '@voxgig/sdkgen'
 
 
@@ -76,7 +79,9 @@ function liveFlowGate(entity: any, needs: any, entidEnv: string, accessor: strin
   out += `    ${SDK} client = setup.client;\n`
   if (null != needs.discover) {
     const match = Object.entries(needs.discover)
-      .map(([k, v]: any) => `match.put(${JSON.stringify(k)}, setup.idmap.get(${JSON.stringify(v)}));`).join(' ')
+      .map(([k, v]: any) => `match.put(${JSON.stringify(k)}, setup.idmap.get(${JSON.stringify(v)}));`)
+      .concat(liveRouteExamples(entity, 'list', Object.keys(needs.discover))
+        .map(([k, ex]) => `match.put(${JSON.stringify(k)}, ${javaLit(ex)});`)).join(' ')
     out += `    if (setup.live) {
       RunnerSupport.liveExisting(setup.data, LIVE_STRICT, ${JSON.stringify(entity.name)}, () -> {
         Map<String, Object> match = new LinkedHashMap<>();${match ? ' ' + match : ''}
@@ -97,7 +102,7 @@ const TestEntity = cmp(function TestEntity(props: any) {
   const model: Model = ctx$.model
 
   const target = props.target
-  const entity: ModelEntity = props.entity
+  const entity: ModelEntity = liveEntity(ctx$, props.entity)
   const javapackage: string = props.javapackage
 
   const basicflow: ModelEntityFlow | undefined =
@@ -142,7 +147,6 @@ const TestEntity = cmp(function TestEntity(props: any) {
   const genCtx: GenCtx = { model, entity, javapackage, flow: basicflow, PROJUPPER, accessor }
 
   const strict = liveStrict(model, target.name)
-  const needs = liveFlowNeeds(entity, basicflow)
 
   const stepOps = Array.from(new Set(
     (allSteps as any[]).map((s: any) => s.o).filter(Boolean)))
@@ -203,36 +207,66 @@ ${liveStrictNote(strict, '//', '  ')}
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
-${liveFlowGate(entity, needs, entidEnvVar, accessor, SDK, strict, allSteps.length > 0)}`)
+`)
 
-    // Check if the flow has a create step; if not, bootstrap entity data
-    const flowHasCreate = allSteps.some((s: any) => s.o === 'create')
-    if (!flowHasCreate) {
-      const preambleRef = entity.name + '_ref01'
-      const preambleVar = javaVar(preambleRef)
-      Content(`    // Bootstrap entity data from existing test data (no create step in flow).
+    const flowBody = (flow: any) => {
+      const steps = flowSteps(flow) as any[]
+      Content(liveFlowGate(entity, liveFlowNeeds(entity, flow), entidEnvVar, accessor, SDK, strict,
+        steps.length > 0))
+
+      // Check if the flow has a create step; if not, bootstrap entity data
+      const flowHasCreate = steps.some((s: any) => s.o === 'create')
+      if (!flowHasCreate) {
+        const preambleRef = entity.name + '_ref01'
+        const preambleVar = javaVar(preambleRef)
+        Content(`    // Bootstrap entity data from existing test data (no create step in flow).
     List<List<Object>> ${preambleVar}DataRaw = Struct.items(Helpers.toMapAny(
         Struct.getpath(setup.data, "existing.${entity.name}")));
     Map<String, Object> ${preambleVar}Data = ${preambleVar}DataRaw.isEmpty()
         ? null : Helpers.toMapAny(${preambleVar}DataRaw.get(0).get(1));
 
 `)
-    }
-
-    // Model-driven step iteration
-    each(flowSteps(basicflow), (step: any, index: any) => {
-      const opgen: OpGen = GENERATE_OP[step.o]
-      if (opgen) {
-        opgen(genCtx, step, index)
-        Content('\n')
       }
-    })
 
-    Content(`${strict || 0 === allSteps.length ? '' : `    }
+      // Model-driven step iteration
+      each(steps, (step: any, index: any) => {
+        const opgen: OpGen = GENERATE_OP[step.o]
+        if (opgen) {
+          opgen({ ...genCtx, flow }, step, index)
+          Content('\n')
+        }
+      })
+
+      Content(strict || 0 === steps.length ? '' : `    }
     catch (Throwable err) {
       RunnerSupport.liveObserve(err, setup.live, LIVE_STRICT);
     }
-`}  }
+`)
+    }
+
+    const getOnly = liveGetOnly(entity, basicflow)
+    if (null != getOnly) {
+      Content(`    if (setup.live && "TRUE".equals(System.getenv(${javaLit(LIVE_GETONLY_ENV)}))) {
+${liveExcludedLines(getOnly).map((line) => '      System.out.println(' + javaLit(line) + ');\n').join('')}`)
+      if (0 === flowSteps(getOnly.flow).length) {
+        Content(`      Assumptions.abort(${javaLit(liveExcludedSummary(getOnly))});
+      return;
+    }
+
+`)
+      }
+      else {
+        flowBody(getOnly.flow)
+        Content(`      return;
+    }
+
+`)
+      }
+    }
+
+    flowBody(basicflow)
+
+    Content(`  }
 
 `)
 
@@ -456,6 +490,7 @@ const generateList: OpGen = (ctx, step, index) => {
     Content(`    ${matchvar}.put("${key}", setup.idmap.get("${val}"));
 `)
   }
+  Content(liveFill(entity, step, matchvar))
 
   // Only declare ${listvar} as a real var when a downstream validator
   // actually uses it.
@@ -615,7 +650,7 @@ const generateLoad: OpGen = (ctx, step, index) => {
     Content(`    SdkEntity ${entvar} = client.${accessor}(null);
 `)
   }
-  if (!hasSrcData && hasEntId) {
+  if (!hasSrcData && (hasEntId || flowLoadReadsRecord(entity, step))) {
     Content(`    List<List<Object>> ${srcdatavar}Raw = Struct.items(Helpers.toMapAny(
         Struct.getpath(setup.data, "existing.${entity.name}")));
     Map<String, Object> ${srcdatavar} = ${srcdatavar}Raw.isEmpty()
@@ -626,7 +661,7 @@ const generateLoad: OpGen = (ctx, step, index) => {
 `)
   if (hasEntId) {
     Content(`    ${matchvar}.put("id", ${srcdatavar}.get("id"));
-${parentMatch(step, matchvar)}    Object ${datavar}Loaded = ${entvar}.load(${matchvar}, null);
+${loadMatch(entity, step, matchvar, srcdatavar)}${liveFill(entity, step, matchvar)}    Object ${datavar}Loaded = ${entvar}.load(${matchvar}, null);
     Map<String, Object> ${datavar}LoadResult = Helpers.toMapAny(${datavar}Loaded instanceof SdkEntity ? ((SdkEntity) ${datavar}Loaded).data() : ${datavar}Loaded);
     assertNotNull(${datavar}LoadResult, "expected load result to be a map");
     assertEquals(${srcdatavar}.get("id"), ${datavar}LoadResult.get("id"),
@@ -634,7 +669,7 @@ ${parentMatch(step, matchvar)}    Object ${datavar}Loaded = ${entvar}.load(${mat
 `)
   }
   else {
-    Content(`${parentMatch(step, matchvar)}    Object ${datavar}Loaded = ${entvar}.load(${matchvar}, null);
+    Content(`${loadMatch(entity, step, matchvar, srcdatavar)}${liveFill(entity, step, matchvar)}    Object ${datavar}Loaded = ${entvar}.load(${matchvar}, null);
     assertNotNull(${datavar}Loaded, "expected load result to be non-null");
 `)
   }
@@ -669,12 +704,58 @@ ${parentMatch(step, matchvar)}    ${entvar}.remove(${matchvar}, null);
 // A child's route names its parents, and an entity no earlier step has
 // filled knows none of them, so the call itself gives each parent id. A live
 // ENTID may key a parent by its field name, the fixture by its own name.
+function javaLit(value: any): string {
+  if ('string' === typeof value) return JSON.stringify(value)
+  return Number.isInteger(value) && Math.abs(value) > 2147483647 ? value + 'L' : String(value)
+}
+
+
+// A live step sends each example its route requires and the step leaves unbound.
+function liveFill(entity: any, step: any, matchvar: string): string {
+  const fills = liveStepExamples(entity, step)
+  return 0 === fills.length ? '' : `    if (setup.live) {
+${fills.map(([k, ex]) => `      ${matchvar}.put(${JSON.stringify(k)}, ${javaLit(ex)});\n`).join('')}    }
+`
+}
+
+
 function parentMatch(step: any, matchvar: string): string {
   return Object.entries(step.m || {})
     .filter(([k]: any) => k !== 'id' && !k.endsWith('$'))
     .map(([key, val]: any) => `    ${matchvar}.put("${key}", null != setup.idmap.get("${key}")
         ? setup.idmap.get("${key}") : setup.idmap.get("${val}"));
 `).join('')
+}
+
+
+// A load of a known record fills its route from that record, and from the
+// step's binding where the record holds no scalar for it. A record only the
+// fixture holds replaces the step's binding offline.
+function loadMatch(entity: any, step: any, matchvar: string, srcdatavar: string): string {
+  const route = flowLoadRoute(entity, step)
+  if (null == route) {
+    return parentMatch(step, matchvar)
+  }
+  if (route.offline) {
+    const own = route.args.filter((arg) => null != arg.field)
+    return parentMatch(step, matchvar) + (0 === own.length ? '' : `    if (!setup.live) {
+${own.map((arg, i) => `      Object own${i} = ${srcdatavar}.get("${arg.field}");
+      if (own${i} instanceof String || own${i} instanceof Number || own${i} instanceof Boolean) {
+        ${matchvar}.put("${arg.name}", own${i});
+      }
+`).join('')}    }
+`)
+  }
+  return route.args.map((arg) => {
+    const get = (key: string) => `setup.idmap.get("${key}")`
+    const bound = 1 === arg.idmap.length ? get(arg.idmap[0]) :
+      `null != ${get(arg.idmap[0])} ? ${get(arg.idmap[0])} : ${get(arg.idmap[1])}`
+    const own = `${srcdatavar}.get("${arg.field}")`
+    return null == arg.field ? `    ${matchvar}.put("${arg.name}", ${bound});
+` : `    ${matchvar}.put("${arg.name}", ${own} instanceof String || ${own} instanceof Number
+        || ${own} instanceof Boolean ? ${own} : (${bound}));
+`
+  }).join('')
 }
 
 

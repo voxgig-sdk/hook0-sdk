@@ -12,19 +12,22 @@ There are companion guides deeper in the tree: one per language
 
 ## Project map
 
-**Targets** (11):
+**Targets** (14):
 
 | Target | Directory | Build guide |
 | --- | --- | --- |
+| `csharp` | `csharp/` | [`csharp/AGENTS.md`](./csharp/AGENTS.md) |
 | `go` | `go/` | [`go/AGENTS.md`](./go/AGENTS.md) |
 | `go-cli` | `go-cli/` — A CLI surface, not an SDK client library. | [`go-cli/AGENTS.md`](./go-cli/AGENTS.md) |
 | `go-mcp` | `go-mcp/` — An MCP server surface for AI agents, not an SDK client library. | [`go-mcp/AGENTS.md`](./go-mcp/AGENTS.md) |
 | `java` | `java/` | [`java/AGENTS.md`](./java/AGENTS.md) |
 | `js` | `js/` | [`js/AGENTS.md`](./js/AGENTS.md) |
+| `kotlin` | `kotlin/` | [`kotlin/AGENTS.md`](./kotlin/AGENTS.md) |
 | `lua` | `lua/` | [`lua/AGENTS.md`](./lua/AGENTS.md) |
 | `php` | `php/` | [`php/AGENTS.md`](./php/AGENTS.md) |
 | `py` | `py/` | [`py/AGENTS.md`](./py/AGENTS.md) |
 | `rb` | `rb/` | [`rb/AGENTS.md`](./rb/AGENTS.md) |
+| `rust` | `rust/` | [`rust/AGENTS.md`](./rust/AGENTS.md) |
 | `ts` | `ts/` | [`ts/AGENTS.md`](./ts/AGENTS.md) |
 | `zig` | `zig/` | [`zig/AGENTS.md`](./zig/AGENTS.md) |
 

@@ -44,6 +44,12 @@ describe("UserInvitationEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"user_invitation.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite\"}")
+      pending("Live coverage incomplete: user_invitation.create.0 excluded (GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite)")
+      return
+    end
+
     if setup.live then
       for _, _live_key in ipairs({"organization01"}) do
         if setup.synthetic_only or setup.idmap[_live_key] == nil then

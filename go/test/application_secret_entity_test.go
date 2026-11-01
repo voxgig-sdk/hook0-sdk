@@ -200,6 +200,40 @@ func TestApplicationSecretEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"application_secret.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/application_secrets/\"}")
+			t.Log("LIVE STEP {\"id\":\"application_secret.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/application_secrets/{application_secret_token}\"}")
+			t.Log("LIVE STEP {\"id\":\"application_secret.remove.3\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/application_secrets/{application_secret_token}\"}")
+			t.Log("LIVE STEP {\"id\":\"application_secret.list.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+		client := setup.client
+		_ = client
+
+		// Bootstrap entity data from existing test data (no create step in flow).
+		applicationSecretRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.application_secret")))
+		var applicationSecretRef01Data map[string]any
+		if len(applicationSecretRef01DataRaw) > 0 {
+			applicationSecretRef01Data = core.ToMapAny(applicationSecretRef01DataRaw[0][1])
+		}
+		// Discard guards against Go's unused-var check when the flow's steps
+		// happen not to consume the bootstrap data (e.g. list-only flows).
+		_ = applicationSecretRef01Data
+
+		// LIST
+		applicationSecretRef01Ent := client.ApplicationSecret(nil)
+		applicationSecretRef01Match := map[string]any{}
+
+		applicationSecretRef01ListResult, err := applicationSecretRef01Ent.List(applicationSecretRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		_, applicationSecretRef01ListOk := applicationSecretRef01ListResult.([]any)
+		if !applicationSecretRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", applicationSecretRef01ListResult)
+		}
+
+		return
+		}
+
 		client := setup.client
 		_ = client
 

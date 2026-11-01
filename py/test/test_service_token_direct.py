@@ -1,6 +1,7 @@
 # ServiceToken direct test
 
 import json
+import os
 import pytest
 
 from hook0_sdk.utility.voxgig_struct import voxgig_struct as vs
@@ -35,11 +36,13 @@ class TestServiceTokenDirect:
         client = setup["client"]
 
         params = {}
+        query = {}
 
         result = client.direct({
             "path": "api/v1/service_token",
             "method": "GET",
             "params": params,
+            "query": query,
         })
         if setup["live"]:
             if not _live_ok(result):

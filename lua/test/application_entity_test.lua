@@ -154,6 +154,47 @@ describe("ApplicationEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"application.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/applications/\"}")
+      print("LIVE STEP {\"id\":\"application.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/applications/{application_id}\"}")
+      print("LIVE STEP {\"id\":\"application.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/applications/{application_id}\"}")
+      print("LIVE STEP {\"id\":\"application.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+    local client = setup.client
+    if setup.live then
+      runner.live_existing(pending, setup, LIVE_STRICT, "application", function()
+        return client:Application(nil):list({}, nil)
+      end)
+    end
+
+    -- Bootstrap entity data from existing test data.
+    local application_ref01_data_raw = vs.items(helpers.to_map(
+      vs.getpath(setup.data, "existing.application")))
+    local application_ref01_data = nil
+    if #application_ref01_data_raw > 0 then
+      application_ref01_data = helpers.to_map(application_ref01_data_raw[1][2])
+    end
+
+    -- LIST
+    local application_ref01_ent = client:Application(nil)
+    local application_ref01_match = {}
+
+    local application_ref01_list_result, err = application_ref01_ent:list(application_ref01_match, nil)
+    assert.is_nil(err)
+    assert.is_table(application_ref01_list_result)
+
+    -- LOAD
+    local application_ref01_match_dt0 = {
+      id = application_ref01_data["id"],
+    }
+    local application_ref01_data_dt0_loaded, err = application_ref01_ent:load(application_ref01_match_dt0, nil)
+    assert.is_nil(err)
+    local application_ref01_data_dt0_load_result = helpers.to_map(type(application_ref01_data_dt0_loaded) == 'table' and application_ref01_data_dt0_loaded.data_get and application_ref01_data_dt0_loaded:data_get() or application_ref01_data_dt0_loaded)
+    assert.is_not_nil(application_ref01_data_dt0_load_result)
+    assert.are.equal(application_ref01_data_dt0_load_result["id"], application_ref01_data["id"])
+
+      return
+    end
+
     local client = setup.client
 
     -- CREATE

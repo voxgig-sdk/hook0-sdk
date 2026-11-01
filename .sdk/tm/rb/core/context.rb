@@ -115,7 +115,7 @@ class Hook0Context
   end
 
   def make_error(code, msg)
-    Hook0Error.new(code, msg, self)
+    Hook0Error.new(msg, code: code, ctx: self)
   end
 
   # The serialised context leaves the pipeline (a logger, an error dump), so

@@ -30,11 +30,13 @@ class ServiceTokenDirectTest < Minitest::Test
     client = setup[:client]
 
     params = {}
+    query = {}
 
     result = client.direct({
       "path" => "api/v1/service_token",
       "method" => "GET",
       "params" => params,
+      "query" => query,
     })
     if setup[:live]
       unless live_ok(result)

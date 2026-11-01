@@ -157,6 +157,45 @@ class ApplicationEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"application.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/applications/\"}"
+      puts "LIVE STEP {\"id\":\"application.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/applications/{application_id}\"}"
+      puts "LIVE STEP {\"id\":\"application.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/applications/{application_id}\"}"
+      puts "LIVE STEP {\"id\":\"application.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}"
+    client = setup[:client]
+    if setup[:live]
+      Runner.live_existing(setup, LIVE_STRICT, "application") do
+        client.Application(nil).list({}, nil)
+      end
+    end
+
+    # Bootstrap entity data from existing test data.
+    application_ref01_data_raw = Vs.items(Helpers.to_map(
+      Vs.getpath(setup[:data], "existing.application")))
+    application_ref01_data = nil
+    if application_ref01_data_raw.length > 0
+      application_ref01_data = Helpers.to_map(application_ref01_data_raw[0][1])
+    end
+
+    # LIST
+    application_ref01_ent = client.Application(nil)
+    application_ref01_match = {}
+
+    application_ref01_list_result = application_ref01_ent.list(application_ref01_match, nil)
+    assert application_ref01_list_result.is_a?(Array)
+
+    # LOAD
+    application_ref01_match_dt0 = {
+      "id" => application_ref01_data["id"],
+    }
+    application_ref01_data_dt0_loaded = application_ref01_ent.load(application_ref01_match_dt0, nil)
+    application_ref01_data_dt0_load_result = Helpers.to_map(application_ref01_data_dt0_loaded.respond_to?(:data_get) ? application_ref01_data_dt0_loaded.data_get : application_ref01_data_dt0_loaded)
+    assert !application_ref01_data_dt0_load_result.nil?
+    assert_equal application_ref01_data_dt0_load_result["id"], application_ref01_data["id"]
+
+      return
+    end
+
     client = setup[:client]
 
     # CREATE

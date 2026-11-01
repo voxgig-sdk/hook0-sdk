@@ -199,6 +199,60 @@ func TestEventTypeEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"event_type.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/event_types/\"}")
+			t.Log("LIVE STEP {\"id\":\"event_type.remove.3\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/event_types/{event_type_name}\"}")
+			t.Log("LIVE STEP {\"id\":\"event_type.list.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+		client := setup.client
+		_ = client
+		if setup.live {
+			liveExisting(t, event_typeEntityLiveStrict, setup.data, "event_type", func() (any, error) {
+				return client.EventType(nil).List(map[string]any{}, nil)
+			})
+		}
+
+		// Bootstrap entity data from existing test data (no create step in flow).
+		eventTypeRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.event_type")))
+		var eventTypeRef01Data map[string]any
+		if len(eventTypeRef01DataRaw) > 0 {
+			eventTypeRef01Data = core.ToMapAny(eventTypeRef01DataRaw[0][1])
+		}
+		// Discard guards against Go's unused-var check when the flow's steps
+		// happen not to consume the bootstrap data (e.g. list-only flows).
+		_ = eventTypeRef01Data
+
+		// LIST
+		eventTypeRef01Ent := client.EventType(nil)
+		eventTypeRef01Match := map[string]any{}
+
+		eventTypeRef01ListResult, err := eventTypeRef01Ent.List(eventTypeRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		_, eventTypeRef01ListOk := eventTypeRef01ListResult.([]any)
+		if !eventTypeRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", eventTypeRef01ListResult)
+		}
+
+		// LOAD
+		eventTypeRef01MatchDt0 := map[string]any{
+			"id": eventTypeRef01Data["id"],
+		}
+		eventTypeRef01DataDt0Loaded, err := eventTypeRef01Ent.Load(eventTypeRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		eventTypeRef01DataDt0LoadResult := core.ToMapAny(entityData(eventTypeRef01DataDt0Loaded))
+		if eventTypeRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if eventTypeRef01DataDt0LoadResult["id"] != eventTypeRef01Data["id"] {
+			t.Fatal("expected load result id to match")
+		}
+
+		return
+		}
+
 		client := setup.client
 		_ = client
 

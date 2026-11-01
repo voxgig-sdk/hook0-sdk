@@ -44,6 +44,7 @@ describe('EventTypeDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
     if (setup.live) {
       const listResult = await client.direct({
         path: 'api/v1/event_types',
@@ -74,6 +75,7 @@ describe('EventTypeDirect', async () => {
       path: 'api/v1/event_types/{id}',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {
@@ -100,11 +102,13 @@ describe('EventTypeDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
 
     const result = await client.direct({
       path: 'api/v1/event_types',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {

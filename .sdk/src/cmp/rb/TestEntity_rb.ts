@@ -30,6 +30,9 @@ import {
   serverVariables,
   invalidRequest,
   liveFlowNeeds, liveStrict, liveStrictNote,
+  liveRouteExamples, liveStepExamples, flowLoadRoute, flowLoadReadsRecord,
+  liveGetOnly, liveExcludedLines, liveExcludedSummary, LIVE_GETONLY_ENV,
+  liveEntity,
 } from '@voxgig/sdkgen'
 
 import { formatRubyValue } from './utility_rb'
@@ -58,7 +61,9 @@ function liveFlowGate(entity: any, needs: any, entidEnv: string): string {
   out += '    client = setup[:client]\n'
   if (null != needs.discover) {
     const match = Object.entries(needs.discover)
-      .map(([k, v]: any) => `${JSON.stringify(k)} => setup[:idmap][${JSON.stringify(v)}]`).join(', ')
+      .map(([k, v]: any) => `${JSON.stringify(k)} => setup[:idmap][${JSON.stringify(v)}]`)
+      .concat(liveRouteExamples(entity, 'list', Object.keys(needs.discover))
+        .map(([k, ex]) => `${JSON.stringify(k)} => ${formatRubyValue(ex)}`)).join(', ')
     out += `    if setup[:live]
       Runner.live_existing(setup, LIVE_STRICT, ${JSON.stringify(entity.name)}) do
         client.${entity.Name}(nil).list({${match}}, nil)
@@ -86,7 +91,7 @@ const TestEntity = cmp(function TestEntity(props: any) {
   const model: Model = ctx$.model
 
   const target = props.target
-  const entity: ModelEntity = props.entity
+  const entity: ModelEntity = liveEntity(ctx$, props.entity)
 
   // The stream test streams the "list" op with no match and asserts a 3-item
   // collection, so it only applies to an entity whose list a bare call can
@@ -136,7 +141,6 @@ const TestEntity = cmp(function TestEntity(props: any) {
   const genCtx: GenCtx = { model, entity, flow: basicflow, PROJUPPER }
 
   const strict = liveStrict(model, target.name)
-  const needs = liveFlowNeeds(entity, basicflow)
   const entidEnv = PROJUPPER + '_TEST_' + envToken(entity.name) + '_ENTID'
 
   File({ name: entity.name + '_entity_test.' + target.ext }, () => {
@@ -223,13 +227,16 @@ ${failureTests(model, entity)}${validateListTest(model, entity)}` : ''}${validat
         return
       end
     end
-${liveFlowGate(entity, needs, entidEnv)}
 `)
 
-    // Check if the flow has a create step
-    const flowHasCreate = allSteps.some((s: any) => s.o === 'create')
-    if (!flowHasCreate) {
-      Content(`    # Bootstrap entity data from existing test data.
+    const flowBody = (flow: any) => {
+      const steps = flowSteps(flow) as any[]
+      Content(liveFlowGate(entity, liveFlowNeeds(entity, flow), entidEnv) + '\n')
+
+      // Check if the flow has a create step
+      const flowHasCreate = steps.some((s: any) => s.o === 'create')
+      if (!flowHasCreate) {
+        Content(`    # Bootstrap entity data from existing test data.
     ${entity.name}_ref01_data_raw = Vs.items(Helpers.to_map(
       Vs.getpath(setup[:data], "existing.${entity.name}")))
     ${entity.name}_ref01_data = nil
@@ -238,24 +245,46 @@ ${liveFlowGate(entity, needs, entidEnv)}
     end
 
 `)
+      }
+
+      // Model-driven step iteration
+      each(steps, (step: any, index: any) => {
+        // Never emit a REMOVE (or its removed-item verify LIST) without a
+        // preceding CREATE: a coherent CRUD flow only removes what it created,
+        // so a create-less remove would mutate pre-existing (live) data.
+        if (!flowHasCreate) {
+          if ('remove' === step.o) { return }
+          if ('list' === step.o &&
+            (step.v || []).some((v: any) => 'ItemNotExists' === v.apply)) { return }
+        }
+        const opgen: OpGen = GENERATE_OP[step.o]
+        if (opgen) {
+          opgen({ ...genCtx, flow }, step, index)
+          Content('\n')
+        }
+      })
     }
 
-    // Model-driven step iteration
-    each(flowSteps(basicflow), (step: any, index: any) => {
-      // Never emit a REMOVE (or its removed-item verify LIST) without a
-      // preceding CREATE: a coherent CRUD flow only removes what it created,
-      // so a create-less remove would mutate pre-existing (live) data.
-      if (!flowHasCreate) {
-        if ('remove' === step.o) { return }
-        if ('list' === step.o &&
-          (step.v || []).some((v: any) => 'ItemNotExists' === v.apply)) { return }
+    const getOnly = liveGetOnly(entity, basicflow)
+    if (null != getOnly) {
+      Content(`    if setup[:live] && ENV[${formatRubyValue(LIVE_GETONLY_ENV)}] == "TRUE"
+${liveExcludedLines(getOnly).map((line) => '      puts ' + formatRubyValue(line) + '\n').join('')}`)
+      if (0 === flowSteps(getOnly.flow).length) {
+        Content(`      skip(${formatRubyValue(liveExcludedSummary(getOnly))})
+    end
+
+`)
       }
-      const opgen: OpGen = GENERATE_OP[step.o]
-      if (opgen) {
-        opgen(genCtx, step, index)
-        Content('\n')
+      else {
+        flowBody(getOnly.flow)
+        Content(`      return
+    end
+
+`)
       }
-    })
+    }
+
+    flowBody(basicflow)
 
     Content(`${strict ? '' : `  rescue Minitest::Skip
     raise
@@ -438,6 +467,7 @@ const generateList: OpGen = (ctx, step, index) => {
     Content(`    }
 `)
   }
+  Content(liveFill(entity, step, matchvar))
 
   Content(`
     ${listvar}_result = ${entvar}.list(${matchvar}, nil)
@@ -580,7 +610,7 @@ const generateLoad: OpGen = (ctx, step, index) => {
     Content(`    ${entvar} = client.${entity.Name}(nil)
 `)
   }
-  if (!hasSrcData && hasEntId) {
+  if (!hasSrcData && (hasEntId || flowLoadReadsRecord(entity, step))) {
     Content(`    ${srcdatavar}_raw = Vs.items(Helpers.to_map(
       Vs.getpath(setup[:data], "existing.${entity.name}")))
     ${srcdatavar} = nil
@@ -593,7 +623,7 @@ const generateLoad: OpGen = (ctx, step, index) => {
     Content(`    ${matchvar} = {
       "id" => ${srcdatavar}["id"],
     }
-${parentMatch(step, matchvar)}    ${datavar}_loaded = ${entvar}.load(${matchvar}, nil)
+${loadMatch(entity, step, matchvar, srcdatavar)}${liveFill(entity, step, matchvar)}    ${datavar}_loaded = ${entvar}.load(${matchvar}, nil)
     ${datavar}_load_result = Helpers.to_map(${datavar}_loaded.respond_to?(:data_get) ? ${datavar}_loaded.data_get : ${datavar}_loaded)
     assert !${datavar}_load_result.nil?
     assert_equal ${datavar}_load_result["id"], ${srcdatavar}["id"]
@@ -601,7 +631,7 @@ ${parentMatch(step, matchvar)}    ${datavar}_loaded = ${entvar}.load(${matchvar}
   }
   else {
     Content(`    ${matchvar} = {}
-${parentMatch(step, matchvar)}    ${datavar}_loaded = ${entvar}.load(${matchvar}, nil)
+${loadMatch(entity, step, matchvar, srcdatavar)}${liveFill(entity, step, matchvar)}    ${datavar}_loaded = ${entvar}.load(${matchvar}, nil)
     assert !${datavar}_loaded.nil?
 `)
   }
@@ -641,12 +671,47 @@ ${parentMatch(step, matchvar)}    ${entvar}.remove(${matchvar}, nil)
 // A child's route names its parents, and an entity no earlier step has
 // filled knows none of them, so the call itself gives each parent id. A live
 // ENTID may key a parent by its field name, the fixture by its own name.
+// A live step sends each example its route requires and the step leaves unbound.
+function liveFill(entity: any, step: any, matchvar: string): string {
+  const fills = liveStepExamples(entity, step)
+  return 0 === fills.length ? '' : `    if setup[:live]
+${fills.map(([k, ex]) => `      ${matchvar}[${JSON.stringify(k)}] = ${formatRubyValue(ex)}\n`).join('')}    end
+`
+}
+
+
 function parentMatch(step: any, matchvar: string): string {
   return Object.entries(step.m || {})
     .filter(([k]: any) => k !== 'id' && !k.endsWith('$'))
     .map(([key, val]: any) => `    ${matchvar}["${key}"] = setup[:idmap]["${key}"] || setup[:idmap]["${val}"]
 `).join('')
 }
+
+// A load of a known record fills its route from that record, and from the
+// step's binding where the record holds no scalar for it. A record only the
+// fixture holds replaces the step's binding offline.
+function loadMatch(entity: any, step: any, matchvar: string, srcdatavar: string): string {
+  const route = flowLoadRoute(entity, step)
+  if (null == route) {
+    return parentMatch(step, matchvar)
+  }
+  if (route.offline) {
+    const own = route.args.filter((arg) => null != arg.field)
+    return parentMatch(step, matchvar) + (0 === own.length ? '' : `    unless setup[:live]
+${own.map((arg) => `      own = ${srcdatavar}["${arg.field}"]
+      ${matchvar}["${arg.name}"] = own if [String, Numeric, TrueClass, FalseClass].any? { |c| own.is_a?(c) }
+`).join('')}    end
+`)
+  }
+  return route.args.map((arg) => {
+    const bound = arg.idmap.map((key) => `setup[:idmap]["${key}"]`).join(' || ')
+    const own = `${srcdatavar}["${arg.field}"]`
+    return `    ${matchvar}["${arg.name}"] = ${null == arg.field ? bound :
+      `[String, Numeric, TrueClass, FalseClass].any? { |c| ${own}.is_a?(c) } ? ${own} : (${bound})`}
+`
+  }).join('')
+}
+
 
 const GENERATE_OP: Record<string, OpGen> = {
   create: generateCreate,

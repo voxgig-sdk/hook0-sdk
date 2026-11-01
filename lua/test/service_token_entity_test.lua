@@ -154,6 +154,47 @@ describe("ServiceTokenEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"service_token.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/service_token/\"}")
+      print("LIVE STEP {\"id\":\"service_token.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/service_token/{service_token_id}\"}")
+      print("LIVE STEP {\"id\":\"service_token.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/service_token/{service_token_id}\"}")
+      print("LIVE STEP {\"id\":\"service_token.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+    local client = setup.client
+    if setup.live then
+      runner.live_existing(pending, setup, LIVE_STRICT, "service_token", function()
+        return client:ServiceToken(nil):list({}, nil)
+      end)
+    end
+
+    -- Bootstrap entity data from existing test data.
+    local service_token_ref01_data_raw = vs.items(helpers.to_map(
+      vs.getpath(setup.data, "existing.service_token")))
+    local service_token_ref01_data = nil
+    if #service_token_ref01_data_raw > 0 then
+      service_token_ref01_data = helpers.to_map(service_token_ref01_data_raw[1][2])
+    end
+
+    -- LIST
+    local service_token_ref01_ent = client:ServiceToken(nil)
+    local service_token_ref01_match = {}
+
+    local service_token_ref01_list_result, err = service_token_ref01_ent:list(service_token_ref01_match, nil)
+    assert.is_nil(err)
+    assert.is_table(service_token_ref01_list_result)
+
+    -- LOAD
+    local service_token_ref01_match_dt0 = {
+      id = service_token_ref01_data["id"],
+    }
+    local service_token_ref01_data_dt0_loaded, err = service_token_ref01_ent:load(service_token_ref01_match_dt0, nil)
+    assert.is_nil(err)
+    local service_token_ref01_data_dt0_load_result = helpers.to_map(type(service_token_ref01_data_dt0_loaded) == 'table' and service_token_ref01_data_dt0_loaded.data_get and service_token_ref01_data_dt0_loaded:data_get() or service_token_ref01_data_dt0_loaded)
+    assert.is_not_nil(service_token_ref01_data_dt0_load_result)
+    assert.are.equal(service_token_ref01_data_dt0_load_result["id"], service_token_ref01_data["id"])
+
+      return
+    end
+
     local client = setup.client
 
     -- CREATE

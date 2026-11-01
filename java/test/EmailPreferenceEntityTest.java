@@ -55,6 +55,12 @@ public class EmailPreferenceEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"email_preference.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/email-preferences/unsubscribe-reactivation\"}");
+      Assumptions.abort("Live coverage incomplete: email_preference.create.0 excluded (GET-only live run: needs POST /api/v1/email-preferences/unsubscribe-reactivation)");
+      return;
+    }
+
     Hook0SDK client = setup.client;
 
     // CREATE

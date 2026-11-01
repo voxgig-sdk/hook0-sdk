@@ -185,9 +185,9 @@ class Hook0SDK
     {
       "ok" => false,
       "err" => Hook0Error.new(
-        "#{op}_allow",
         "Hook0SDK: #{op}: operation not allowed by" \
-        " SDK option allow.op value: \"#{allow_op}\""),
+        " SDK option allow.op value: \"#{allow_op}\"",
+        code: "#{op}_allow"),
     }
   end
 
@@ -306,7 +306,7 @@ class Hook0SDK
       msg = "graphql error" if msg.nil? || msg.to_s.empty?
       res["ok"] = false
       res["err"] = Hook0Error.new(
-        "graphql_error", "Hook0SDK: graphql: #{msg}")
+        "Hook0SDK: graphql: #{msg}", code: "graphql_error")
       res["graphql"] = errors
     end
 

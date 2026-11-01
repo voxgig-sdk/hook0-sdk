@@ -55,6 +55,44 @@ public class EventTypeEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"event_type.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/event_types/\"}");
+      System.out.println("LIVE STEP {\"id\":\"event_type.remove.3\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/event_types/{event_type_name}\"}");
+      System.out.println("LIVE STEP {\"id\":\"event_type.list.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}");
+    Hook0SDK client = setup.client;
+    if (setup.live) {
+      RunnerSupport.liveExisting(setup.data, LIVE_STRICT, "event_type", () -> {
+        Map<String, Object> match = new LinkedHashMap<>();
+        return client.eventType(null).list(match, null);
+      });
+    }
+
+    // Bootstrap entity data from existing test data (no create step in flow).
+    List<List<Object>> eventTypeRef01DataRaw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.event_type")));
+    Map<String, Object> eventTypeRef01Data = eventTypeRef01DataRaw.isEmpty()
+        ? null : Helpers.toMapAny(eventTypeRef01DataRaw.get(0).get(1));
+
+    // LIST
+    SdkEntity eventTypeRef01Ent = client.eventType(null);
+    Map<String, Object> eventTypeRef01Match = new LinkedHashMap<>();
+
+    Object eventTypeRef01ListResult = eventTypeRef01Ent.list(eventTypeRef01Match, null);
+    assertTrue(eventTypeRef01ListResult instanceof List,
+        "expected list result to be an array, got " + eventTypeRef01ListResult);
+
+    // LOAD
+    Map<String, Object> eventTypeRef01MatchDt0 = new LinkedHashMap<>();
+    eventTypeRef01MatchDt0.put("id", eventTypeRef01Data.get("id"));
+    Object eventTypeRef01DataDt0Loaded = eventTypeRef01Ent.load(eventTypeRef01MatchDt0, null);
+    Map<String, Object> eventTypeRef01DataDt0LoadResult = Helpers.toMapAny(eventTypeRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) eventTypeRef01DataDt0Loaded).data() : eventTypeRef01DataDt0Loaded);
+    assertNotNull(eventTypeRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(eventTypeRef01Data.get("id"), eventTypeRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
+
+      return;
+    }
+
     Hook0SDK client = setup.client;
 
     // CREATE

@@ -34,11 +34,13 @@ describe("Hook0Direct", function()
     local client = setup.client
 
     local params = {}
+    local query = {}
 
     local result, err = client:direct({
       path = "api/v1/environment_variables",
       method = "GET",
       params = params,
+      query = query,
     })
     if setup.live then
       if not live_ok(result, err) then

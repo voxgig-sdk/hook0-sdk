@@ -44,6 +44,7 @@ describe('ServiceTokenDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
     if (setup.live) {
       const listResult = await client.direct({
         path: 'api/v1/service_token',
@@ -74,6 +75,7 @@ describe('ServiceTokenDirect', async () => {
       path: 'api/v1/service_token/{id}',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {
@@ -100,11 +102,13 @@ describe('ServiceTokenDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
 
     const result = await client.direct({
       path: 'api/v1/service_token',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {

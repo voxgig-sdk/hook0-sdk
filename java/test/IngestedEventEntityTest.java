@@ -55,6 +55,12 @@ public class IngestedEventEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"ingested_event.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/event/\"}");
+      Assumptions.abort("Live coverage incomplete: ingested_event.create.0 excluded (GET-only live run: needs POST /api/v1/event/)");
+      return;
+    }
+
     Hook0SDK client = setup.client;
 
     // CREATE

@@ -200,6 +200,61 @@ func TestServiceTokenEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"service_token.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/service_token/\"}")
+			t.Log("LIVE STEP {\"id\":\"service_token.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/service_token/{service_token_id}\"}")
+			t.Log("LIVE STEP {\"id\":\"service_token.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/service_token/{service_token_id}\"}")
+			t.Log("LIVE STEP {\"id\":\"service_token.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+		client := setup.client
+		_ = client
+		if setup.live {
+			liveExisting(t, service_tokenEntityLiveStrict, setup.data, "service_token", func() (any, error) {
+				return client.ServiceToken(nil).List(map[string]any{}, nil)
+			})
+		}
+
+		// Bootstrap entity data from existing test data (no create step in flow).
+		serviceTokenRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.service_token")))
+		var serviceTokenRef01Data map[string]any
+		if len(serviceTokenRef01DataRaw) > 0 {
+			serviceTokenRef01Data = core.ToMapAny(serviceTokenRef01DataRaw[0][1])
+		}
+		// Discard guards against Go's unused-var check when the flow's steps
+		// happen not to consume the bootstrap data (e.g. list-only flows).
+		_ = serviceTokenRef01Data
+
+		// LIST
+		serviceTokenRef01Ent := client.ServiceToken(nil)
+		serviceTokenRef01Match := map[string]any{}
+
+		serviceTokenRef01ListResult, err := serviceTokenRef01Ent.List(serviceTokenRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		_, serviceTokenRef01ListOk := serviceTokenRef01ListResult.([]any)
+		if !serviceTokenRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", serviceTokenRef01ListResult)
+		}
+
+		// LOAD
+		serviceTokenRef01MatchDt0 := map[string]any{
+			"id": serviceTokenRef01Data["id"],
+		}
+		serviceTokenRef01DataDt0Loaded, err := serviceTokenRef01Ent.Load(serviceTokenRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		serviceTokenRef01DataDt0LoadResult := core.ToMapAny(entityData(serviceTokenRef01DataDt0Loaded))
+		if serviceTokenRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if serviceTokenRef01DataDt0LoadResult["id"] != serviceTokenRef01Data["id"] {
+			t.Fatal("expected load result id to match")
+		}
+
+		return
+		}
+
 		client := setup.client
 		_ = client
 

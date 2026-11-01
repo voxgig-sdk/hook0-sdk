@@ -55,6 +55,42 @@ public class EventEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"event.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/events/{event_id}/replay\"}");
+    Hook0SDK client = setup.client;
+    if (setup.live) {
+      RunnerSupport.liveExisting(setup.data, LIVE_STRICT, "event", () -> {
+        Map<String, Object> match = new LinkedHashMap<>();
+        return client.event(null).list(match, null);
+      });
+    }
+
+    // Bootstrap entity data from existing test data (no create step in flow).
+    List<List<Object>> eventRef01DataRaw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.event")));
+    Map<String, Object> eventRef01Data = eventRef01DataRaw.isEmpty()
+        ? null : Helpers.toMapAny(eventRef01DataRaw.get(0).get(1));
+
+    // LIST
+    SdkEntity eventRef01Ent = client.event(null);
+    Map<String, Object> eventRef01Match = new LinkedHashMap<>();
+
+    Object eventRef01ListResult = eventRef01Ent.list(eventRef01Match, null);
+    assertTrue(eventRef01ListResult instanceof List,
+        "expected list result to be an array, got " + eventRef01ListResult);
+
+    // LOAD
+    Map<String, Object> eventRef01MatchDt0 = new LinkedHashMap<>();
+    eventRef01MatchDt0.put("id", eventRef01Data.get("id"));
+    Object eventRef01DataDt0Loaded = eventRef01Ent.load(eventRef01MatchDt0, null);
+    Map<String, Object> eventRef01DataDt0LoadResult = Helpers.toMapAny(eventRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) eventRef01DataDt0Loaded).data() : eventRef01DataDt0Loaded);
+    assertNotNull(eventRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(eventRef01Data.get("id"), eventRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
+
+      return;
+    }
+
     Hook0SDK client = setup.client;
     if (setup.live) {
       RunnerSupport.liveExisting(setup.data, LIVE_STRICT, "event", () -> {

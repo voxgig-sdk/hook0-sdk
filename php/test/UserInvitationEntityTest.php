@@ -52,6 +52,11 @@ class UserInvitationEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"user_invitation.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite"}' . "\n");
+            $this->markTestSkipped('Live coverage incomplete: user_invitation.create.0 excluded (GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite)');
+        }
+
         if (!empty($setup["live"])) {
             foreach (["organization01"] as $_liveKey) {
                 if (!empty($setup["synthetic_only"]) || null === ($setup["idmap"][$_liveKey] ?? null)) {

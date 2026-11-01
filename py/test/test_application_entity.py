@@ -134,6 +134,13 @@ class TestApplicationEntity:
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
+            print("LIVE STEP {\"id\":\"application.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/applications/\"}")
+            print("LIVE STEP {\"id\":\"application.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/applications/{application_id}\"}")
+            print("LIVE STEP {\"id\":\"application.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/applications/{application_id}\"}")
+            print("LIVE STEP {\"id\":\"application.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+            return self._run_get_only_flow(setup)
+
         client = setup["client"]
 
         # CREATE
@@ -195,6 +202,36 @@ class TestApplicationEntity:
             runner.entity_list_to_data(application_ref01_list_rt0_result),
             {"id": application_ref01_data["id"]})
         assert vs.isempty(not_found_item)
+
+
+    def _run_get_only_flow(self, setup):
+        client = setup["client"]
+        if setup["live"]:
+            runner.live_existing(setup, LIVE_STRICT, "application",
+                                 lambda: client.Application(None).list({}, None))
+
+        # Bootstrap entity data from existing test data.
+        application_ref01_data_raw = vs.items(helpers.to_map(
+            vs.getpath(setup["data"], "existing.application")))
+        application_ref01_data = None
+        if len(application_ref01_data_raw) > 0:
+            application_ref01_data = helpers.to_map(application_ref01_data_raw[0][1])
+
+        # LIST
+        application_ref01_ent = client.Application(None)
+        application_ref01_match = {}
+
+        application_ref01_list_result = application_ref01_ent.list(application_ref01_match, None)
+        assert isinstance(application_ref01_list_result, list)
+
+        # LOAD
+        application_ref01_match_dt0 = {
+            "id": application_ref01_data["id"],
+        }
+        application_ref01_data_dt0_loaded = application_ref01_ent.load(application_ref01_match_dt0, None)
+        application_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(application_ref01_data_dt0_loaded))
+        assert application_ref01_data_dt0_load_result is not None
+        assert application_ref01_data_dt0_load_result["id"] == application_ref01_data["id"]
 
 
 

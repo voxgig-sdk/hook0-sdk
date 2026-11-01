@@ -55,6 +55,12 @@ public class OrganizationEditRoleEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"organization_edit_role.update.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/organizations/{organization_id}/invite\"}");
+      Assumptions.abort("Live coverage incomplete: organization_edit_role.update.0 excluded (GET-only live run: needs PUT /api/v1/organizations/{organization_id}/invite)");
+      return;
+    }
+
     if (setup.live) {
       RunnerSupport.liveMiss(LIVE_STRICT, "Live entity test blocked: " + "the flow updates a organization_edit_role record it did not create");
     }

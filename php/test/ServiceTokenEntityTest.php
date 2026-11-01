@@ -219,6 +219,44 @@ class ServiceTokenEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"service_token.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/service_token/"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"service_token.update.2","state":"excluded","attempted":false,"reason":"GET-only live run: needs PUT /api/v1/service_token/{service_token_id}"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"service_token.remove.4","state":"excluded","attempted":false,"reason":"GET-only live run: needs DELETE /api/v1/service_token/{service_token_id}"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"service_token.list.5","state":"excluded","attempted":false,"reason":"GET-only live run: checks a removal this run does not make"}' . "\n");
+        $client = $setup["client"];
+        if (!empty($setup["live"])) {
+            Runner::live_existing($setup, self::LIVE_STRICT, "service_token",
+                fn() => $client->ServiceToken(null)->list([], null));
+        }
+
+        // Bootstrap entity data from existing test data.
+        $service_token_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.service_token")));
+        $service_token_ref01_data = null;
+        if (count($service_token_ref01_data_raw) > 0) {
+            $service_token_ref01_data = Helpers::to_map($service_token_ref01_data_raw[0][1]);
+        }
+
+        // LIST
+        $service_token_ref01_ent = $client->ServiceToken(null);
+        $service_token_ref01_match = [];
+
+        $service_token_ref01_list_result = $service_token_ref01_ent->list($service_token_ref01_match, null);
+        $this->assertIsArray($service_token_ref01_list_result);
+
+        // LOAD
+        $service_token_ref01_match_dt0 = [
+            "id" => $service_token_ref01_data["id"],
+        ];
+        $service_token_ref01_data_dt0_loaded = $service_token_ref01_ent->load($service_token_ref01_match_dt0, null);
+        $service_token_ref01_data_dt0_load_result = Helpers::to_map(is_object($service_token_ref01_data_dt0_loaded) && method_exists($service_token_ref01_data_dt0_loaded, 'data_get') ? $service_token_ref01_data_dt0_loaded->data_get() : $service_token_ref01_data_dt0_loaded);
+        $this->assertNotNull($service_token_ref01_data_dt0_load_result);
+        $this->assertEquals($service_token_ref01_data_dt0_load_result["id"], $service_token_ref01_data["id"]);
+
+            return;
+        }
+
         $client = $setup["client"];
 
         // CREATE

@@ -44,6 +44,12 @@ describe("OrganizationEditRoleEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"organization_edit_role.update.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/organizations/{organization_id}/invite\"}")
+      pending("Live coverage incomplete: organization_edit_role.update.0 excluded (GET-only live run: needs PUT /api/v1/organizations/{organization_id}/invite)")
+      return
+    end
+
     if setup.live then
       runner.live_miss(pending, LIVE_STRICT, "Live entity test blocked: " .. "the flow updates a organization_edit_role record it did not create")
     end

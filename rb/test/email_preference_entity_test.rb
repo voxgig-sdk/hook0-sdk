@@ -29,6 +29,11 @@ class EmailPreferenceEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"email_preference.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/email-preferences/unsubscribe-reactivation\"}"
+      skip("Live coverage incomplete: email_preference.create.0 excluded (GET-only live run: needs POST /api/v1/email-preferences/unsubscribe-reactivation)")
+    end
+
     client = setup[:client]
 
     # CREATE

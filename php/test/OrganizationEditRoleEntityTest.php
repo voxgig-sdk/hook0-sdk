@@ -52,6 +52,11 @@ class OrganizationEditRoleEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"organization_edit_role.update.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs PUT /api/v1/organizations/{organization_id}/invite"}' . "\n");
+            $this->markTestSkipped('Live coverage incomplete: organization_edit_role.update.0 excluded (GET-only live run: needs PUT /api/v1/organizations/{organization_id}/invite)');
+        }
+
         if (!empty($setup["live"])) {
             Runner::live_miss(self::LIVE_STRICT, "Live entity test blocked: " . "the flow updates a organization_edit_role record it did not create");
         }

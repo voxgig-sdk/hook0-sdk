@@ -44,6 +44,7 @@ describe('RequestAttemptDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
     if (setup.live) {
       const listResult = await client.direct({
         path: 'api/v1/request_attempts',
@@ -74,6 +75,7 @@ describe('RequestAttemptDirect', async () => {
       path: 'api/v1/request_attempts/{id}',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {
@@ -100,11 +102,13 @@ describe('RequestAttemptDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
 
     const result = await client.direct({
       path: 'api/v1/request_attempts',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {

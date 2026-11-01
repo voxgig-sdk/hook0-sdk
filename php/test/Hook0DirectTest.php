@@ -36,11 +36,13 @@ class Hook0DirectTest extends TestCase
         $client = $setup["client"];
 
         $params = [];
+        $query = [];
 
         $result = $client->direct([
             "path" => "api/v1/environment_variables",
             "method" => "GET",
             "params" => $params,
+            "query" => $query,
         ]);
         if ($setup["live"]) {
             if (!self::liveOk($result)) {

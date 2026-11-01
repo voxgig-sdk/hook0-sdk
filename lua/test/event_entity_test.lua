@@ -154,6 +154,44 @@ describe("EventEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"event.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/events/{event_id}/replay\"}")
+    local client = setup.client
+    if setup.live then
+      runner.live_existing(pending, setup, LIVE_STRICT, "event", function()
+        return client:Event(nil):list({}, nil)
+      end)
+    end
+
+    -- Bootstrap entity data from existing test data.
+    local event_ref01_data_raw = vs.items(helpers.to_map(
+      vs.getpath(setup.data, "existing.event")))
+    local event_ref01_data = nil
+    if #event_ref01_data_raw > 0 then
+      event_ref01_data = helpers.to_map(event_ref01_data_raw[1][2])
+    end
+
+    -- LIST
+    local event_ref01_ent = client:Event(nil)
+    local event_ref01_match = {}
+
+    local event_ref01_list_result, err = event_ref01_ent:list(event_ref01_match, nil)
+    assert.is_nil(err)
+    assert.is_table(event_ref01_list_result)
+
+    -- LOAD
+    local event_ref01_match_dt0 = {
+      id = event_ref01_data["id"],
+    }
+    local event_ref01_data_dt0_loaded, err = event_ref01_ent:load(event_ref01_match_dt0, nil)
+    assert.is_nil(err)
+    local event_ref01_data_dt0_load_result = helpers.to_map(type(event_ref01_data_dt0_loaded) == 'table' and event_ref01_data_dt0_loaded.data_get and event_ref01_data_dt0_loaded:data_get() or event_ref01_data_dt0_loaded)
+    assert.is_not_nil(event_ref01_data_dt0_load_result)
+    assert.are.equal(event_ref01_data_dt0_load_result["id"], event_ref01_data["id"])
+
+      return
+    end
+
     local client = setup.client
     if setup.live then
       runner.live_existing(pending, setup, LIVE_STRICT, "event", function()

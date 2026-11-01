@@ -154,6 +154,32 @@ describe("ApplicationSecretEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"application_secret.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/application_secrets/\"}")
+      print("LIVE STEP {\"id\":\"application_secret.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/application_secrets/{application_secret_token}\"}")
+      print("LIVE STEP {\"id\":\"application_secret.remove.3\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/application_secrets/{application_secret_token}\"}")
+      print("LIVE STEP {\"id\":\"application_secret.list.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+    local client = setup.client
+
+    -- Bootstrap entity data from existing test data.
+    local application_secret_ref01_data_raw = vs.items(helpers.to_map(
+      vs.getpath(setup.data, "existing.application_secret")))
+    local application_secret_ref01_data = nil
+    if #application_secret_ref01_data_raw > 0 then
+      application_secret_ref01_data = helpers.to_map(application_secret_ref01_data_raw[1][2])
+    end
+
+    -- LIST
+    local application_secret_ref01_ent = client:ApplicationSecret(nil)
+    local application_secret_ref01_match = {}
+
+    local application_secret_ref01_list_result, err = application_secret_ref01_ent:list(application_secret_ref01_match, nil)
+    assert.is_nil(err)
+    assert.is_table(application_secret_ref01_list_result)
+
+      return
+    end
+
     local client = setup.client
 
     -- CREATE

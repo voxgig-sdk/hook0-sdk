@@ -9,7 +9,7 @@ The API is exposed as capitalised, semantic **Entities** — e.g.
 instead of raw URL paths and query parameters. This keeps the surface
 predictable and low-friction for both humans and AI agents.
 
-> Also generated from this model: `go`, `go-cli`, `go-mcp`, `java`, `js`, `lua`, `php`, `py`, `rb`, `zig` — see
+> Also generated from this model: `csharp`, `go`, `go-cli`, `go-mcp`, `java`, `js`, `kotlin`, `lua`, `php`, `py`, `rb`, `rust`, `zig` — see
 > the [top-level README](../README.md).
 
 

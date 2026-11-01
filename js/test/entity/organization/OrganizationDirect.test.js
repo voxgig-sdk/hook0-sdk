@@ -44,6 +44,7 @@ describe('OrganizationDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
     if (setup.live) {
       const listResult = await client.direct({
         path: 'api/v1/events_per_day/organization',
@@ -74,6 +75,7 @@ describe('OrganizationDirect', async () => {
       path: 'api/v1/organizations/{id}',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {
@@ -100,11 +102,13 @@ describe('OrganizationDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
 
     const result = await client.direct({
       path: 'api/v1/events_per_day/organization',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {

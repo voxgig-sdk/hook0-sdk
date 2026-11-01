@@ -15,16 +15,32 @@ import {
   serverVarEnv,
   serverVariables,
   pointParts,
+  pointPlaceholders,
   liveStrict,
   liveStrictNote,
   pointIsGraphql,
   graphqlDirectSkip,
+  liveExampleIds,
+  liveQueryExamples,
+  liveEntity,
+  liveDirectGetOnly, liveExcludedLines, liveExcludedSummary, LIVE_GETONLY_ENV,
 } from '@voxgig/sdkgen'
 
 import { formatRubyValue } from './utility_rb'
 
 
 // Blocked without the ids its request needs, rather than sent with nil.
+// A GET-only live run excludes a test needing an id that only a write gives.
+function getOnlyKeysBlock(model: any, entity: any, test: string, keys: string[]): string {
+  return liveDirectGetOnly(model, entity, test, keys).map((miss) =>
+    `    if setup[:live] && ENV[${formatRubyValue(LIVE_GETONLY_ENV)}] == "TRUE" && setup[:idmap][${formatRubyValue(miss.key)}].nil?
+      puts ${formatRubyValue(liveExcludedLines({ excluded: [miss] })[0])}
+      skip(${formatRubyValue(liveExcludedSummary({ excluded: [miss] }))})
+    end
+`).join('')
+}
+
+
 function liveKeysBlock(keys: string[], entidEnvVar: string): string {
   return 0 === keys.length ? '' : `    if setup[:live]
       [${keys.map((k) => JSON.stringify(k)).join(', ')}].each do |_live_key|
@@ -80,7 +96,7 @@ const TestDirect = cmp(function TestDirect(props: any) {
   const model: Model = ctx$.model
 
   const target = props.target
-  const entity: ModelEntity = props.entity
+  const entity: ModelEntity = liveEntity(ctx$, props.entity)
 
   const PROJECTNAME = envName(model)
 
@@ -124,12 +140,7 @@ const TestDirect = cmp(function TestDirect(props: any) {
   // actually appear in the URL template should drive direct-test path-param
   // setup and URL-substitution asserts; otherwise the SDK silently drops
   // them and the URL-includes assert fails.
-  const _pathPlaceholders = new Set<string>()
-  for (const part of pointParts(loadPoint)) {
-    if (typeof part === 'string' && part.startsWith('{') && part.endsWith('}')) {
-      _pathPlaceholders.add(part.slice(1, -1))
-    }
-  }
+  const _pathPlaceholders = new Set<string>(pointPlaceholders(loadPoint))
   const _renameMap = (loadPoint?.r?.param || {}) as Record<string, string>
   const _renamedPlaceholders = new Set<string>()
   for (const ph of _pathPlaceholders) {
@@ -146,11 +157,8 @@ const TestDirect = cmp(function TestDirect(props: any) {
   const listParams = listPoint?.g?.params || []
 
   // Required query params with spec-provided examples — needed in live mode.
-  const loadQuery = loadPoint?.g?.query || []
-  const loadLiveQueryEntries = loadQuery
-    .filter((q: any) => q.r && undefined !== q.ex && null !== q.ex)
-  const loadLiveQueryLines = loadLiveQueryEntries
-    .map((q: any) => `      query["${q.n}"] = ${JSON.stringify(q.ex)}`)
+  const loadLiveQueryLines = liveQueryExamples(loadPoint)
+    .map(([name, ex]) => `      query["${name}"] = ${formatRubyValue(ex)}`)
     .join('\n')
 
   const loadAllHaveExamples =
@@ -161,6 +169,10 @@ const TestDirect = cmp(function TestDirect(props: any) {
     : ''
 
   const entidEnvVar = `${PROJECTNAME}_TEST_${envToken(entity.name)}_ENTID`
+
+  const exampleIds = liveExampleIds(entity)
+  const listLiveQueryLines = liveQueryExamples(listPoint)
+    .map(([name, ex]) => `      query["${name}"] = ${formatRubyValue(ex)}\n`).join('')
 
   // The *_ENTID key a live test reads a parameter's value from.
   const liveKey = (param: any): string =>
@@ -204,10 +216,11 @@ ${liveStrictNote(liveStrict(model, target.name), '#', '  ')}
       skip(_reason || "skipped via sdk-test-control.json")
       return
     end
-${liveKeysBlock(listParams.map(liveKey), entidEnvVar)}    client = setup[:client]
+${getOnlyKeysBlock(model, entity, 'direct-list-' + entity.name, listParams.map(liveKey))}${liveKeysBlock(listParams.map(liveKey), entidEnvVar)}    client = setup[:client]
 
     params = {}
-`)
+    query = {}
+${listLiveQueryLines ? '    if setup[:live]\n' + listLiveQueryLines + '    end\n' : ''}`)
       listParams.forEach((lp: any, i: number) => {
         Content(`    params["${lp.n}"] = setup[:live] ? setup[:idmap]["${liveKey(lp)}"] : "direct0${i + 1}"
 `)
@@ -217,6 +230,7 @@ ${liveKeysBlock(listParams.map(liveKey), entidEnvVar)}    client = setup[:client
       "path" => "${listPath}",
       "method" => "GET",
       "params" => params,
+      "query" => query,
     })
     if setup[:live]
       unless live_ok(result)
@@ -259,7 +273,7 @@ ${liveKeysBlock(listParams.map(liveKey), entidEnvVar)}    client = setup[:client
       skip(_reason || "skipped via sdk-test-control.json")
       return
     end
-${liveKeysBlock([...new Set(loadLiveIdKeys)], entidEnvVar)}    client = setup[:client]
+${getOnlyKeysBlock(model, entity, 'direct-load-' + entity.name, [...new Set(loadLiveIdKeys)])}${liveKeysBlock([...new Set(loadLiveIdKeys)], entidEnvVar)}    client = setup[:client]
 
     params = {}
     query = {}
@@ -361,7 +375,10 @@ def ${entity.name}_direct_setup(mockres)
     })
     client = ${model.const.Name}SDK.new(merged_opts)
     idmap = env["${entidEnvVar}"]
-    return {
+${0 === exampleIds.length ? '' : `    # A path parameter's example stands in for an id *_ENTID does not give.
+    idmap = { ${exampleIds.map(([key, ex]) => `"${key}" => ${formatRubyValue(ex)}`).join(', ')} }
+      .merge(idmap.is_a?(Hash) ? idmap : {})
+`}    return {
       client: client,
       calls: calls,
       live: true,

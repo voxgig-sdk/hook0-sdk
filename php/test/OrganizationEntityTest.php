@@ -201,6 +201,44 @@ class OrganizationEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"organization.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/organizations/"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"organization.update.2","state":"excluded","attempted":false,"reason":"GET-only live run: needs PUT /api/v1/organizations/{organization_id}/"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"organization.remove.4","state":"excluded","attempted":false,"reason":"GET-only live run: needs DELETE /api/v1/organizations/{organization_id}/"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"organization.list.5","state":"excluded","attempted":false,"reason":"GET-only live run: checks a removal this run does not make"}' . "\n");
+        $client = $setup["client"];
+        if (!empty($setup["live"])) {
+            Runner::live_existing($setup, self::LIVE_STRICT, "organization",
+                fn() => $client->Organization(null)->list([], null));
+        }
+
+        // Bootstrap entity data from existing test data.
+        $organization_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.organization")));
+        $organization_ref01_data = null;
+        if (count($organization_ref01_data_raw) > 0) {
+            $organization_ref01_data = Helpers::to_map($organization_ref01_data_raw[0][1]);
+        }
+
+        // LIST
+        $organization_ref01_ent = $client->Organization(null);
+        $organization_ref01_match = [];
+
+        $organization_ref01_list_result = $organization_ref01_ent->list($organization_ref01_match, null);
+        $this->assertIsArray($organization_ref01_list_result);
+
+        // LOAD
+        $organization_ref01_match_dt0 = [
+            "id" => $organization_ref01_data["id"],
+        ];
+        $organization_ref01_data_dt0_loaded = $organization_ref01_ent->load($organization_ref01_match_dt0, null);
+        $organization_ref01_data_dt0_load_result = Helpers::to_map(is_object($organization_ref01_data_dt0_loaded) && method_exists($organization_ref01_data_dt0_loaded, 'data_get') ? $organization_ref01_data_dt0_loaded->data_get() : $organization_ref01_data_dt0_loaded);
+        $this->assertNotNull($organization_ref01_data_dt0_load_result);
+        $this->assertEquals($organization_ref01_data_dt0_load_result["id"], $organization_ref01_data["id"]);
+
+            return;
+        }
+
         $client = $setup["client"];
 
         // CREATE

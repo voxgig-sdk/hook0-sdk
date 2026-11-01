@@ -13,7 +13,11 @@ type Context = core.Context
 type Utility = core.Utility
 type Feature = core.Feature
 type Entity = core.Entity
-type Hook0Entity = core.Hook0Entity
+type Hook0EntityBase = core.Hook0EntityBase
+
+// Deprecated: use Hook0EntityBase.
+type Hook0Entity = core.Hook0EntityBase
+
 type StreamItem = core.StreamItem
 type FetcherFunc = core.FetcherFunc
 type Spec = core.Spec
@@ -57,73 +61,73 @@ func init() {
 	core.NewTimeoutFeatureFunc = func() core.Feature {
 		return feature.NewTimeoutFeature()
 	}
-	core.NewApplicationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewApplicationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewApplicationEntity(client, entopts)
 	}
-	core.NewApplicationSecretEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewApplicationSecretEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewApplicationSecretEntity(client, entopts)
 	}
-	core.NewEmailPreferenceEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewEmailPreferenceEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewEmailPreferenceEntity(client, entopts)
 	}
-	core.NewErrorEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewErrorEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewErrorEntity(client, entopts)
 	}
-	core.NewEventEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewEventEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewEventEntity(client, entopts)
 	}
-	core.NewEventTypeEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewEventTypeEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewEventTypeEntity(client, entopts)
 	}
-	core.NewEventsManagementEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewEventsManagementEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewEventsManagementEntity(client, entopts)
 	}
-	core.NewHealthEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewHealthEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewHealthEntity(client, entopts)
 	}
-	core.NewHook0EntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewHook0EntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewHook0Entity(client, entopts)
 	}
-	core.NewIngestedEventEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewIngestedEventEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewIngestedEventEntity(client, entopts)
 	}
-	core.NewInstanceEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewInstanceEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewInstanceEntity(client, entopts)
 	}
-	core.NewLoginEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewLoginEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewLoginEntity(client, entopts)
 	}
-	core.NewOrganizationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewOrganizationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewOrganizationEntity(client, entopts)
 	}
-	core.NewOrganizationEditRoleEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewOrganizationEditRoleEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewOrganizationEditRoleEntity(client, entopts)
 	}
-	core.NewQuotaEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewQuotaEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewQuotaEntity(client, entopts)
 	}
-	core.NewRegistrationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewRegistrationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewRegistrationEntity(client, entopts)
 	}
-	core.NewRequestAttemptEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewRequestAttemptEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewRequestAttemptEntity(client, entopts)
 	}
-	core.NewResponseEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewResponseEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewResponseEntity(client, entopts)
 	}
-	core.NewRevokeEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewRevokeEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewRevokeEntity(client, entopts)
 	}
-	core.NewServiceTokenEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewServiceTokenEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewServiceTokenEntity(client, entopts)
 	}
-	core.NewSubscriptionEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewSubscriptionEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewSubscriptionEntity(client, entopts)
 	}
-	core.NewUserAuthenticationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewUserAuthenticationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewUserAuthenticationEntity(client, entopts)
 	}
-	core.NewUserInvitationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0Entity {
+	core.NewUserInvitationEntityFunc = func(client *core.Hook0SDK, entopts map[string]any) core.Hook0EntityBase {
 		return entity.NewUserInvitationEntity(client, entopts)
 	}
 }

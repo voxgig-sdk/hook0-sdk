@@ -144,6 +144,13 @@ class TestApplicationSecretEntity:
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
+            print("LIVE STEP {\"id\":\"application_secret.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/application_secrets/\"}")
+            print("LIVE STEP {\"id\":\"application_secret.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/application_secrets/{application_secret_token}\"}")
+            print("LIVE STEP {\"id\":\"application_secret.remove.3\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/application_secrets/{application_secret_token}\"}")
+            print("LIVE STEP {\"id\":\"application_secret.list.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+            return self._run_get_only_flow(setup)
+
         client = setup["client"]
 
         # CREATE
@@ -196,6 +203,24 @@ class TestApplicationSecretEntity:
             runner.entity_list_to_data(application_secret_ref01_list_rt0_result),
             {"id": application_secret_ref01_data["id"]})
         assert vs.isempty(not_found_item)
+
+
+    def _run_get_only_flow(self, setup):
+        client = setup["client"]
+
+        # Bootstrap entity data from existing test data.
+        application_secret_ref01_data_raw = vs.items(helpers.to_map(
+            vs.getpath(setup["data"], "existing.application_secret")))
+        application_secret_ref01_data = None
+        if len(application_secret_ref01_data_raw) > 0:
+            application_secret_ref01_data = helpers.to_map(application_secret_ref01_data_raw[0][1])
+
+        # LIST
+        application_secret_ref01_ent = client.ApplicationSecret(None)
+        application_secret_ref01_match = {}
+
+        application_secret_ref01_list_result = application_secret_ref01_ent.list(application_secret_ref01_match, None)
+        assert isinstance(application_secret_ref01_list_result, list)
 
 
 

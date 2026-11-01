@@ -12,7 +12,7 @@ Learn more about Voxgig SDKs at [voxgig.com/sdk](https://voxgig.com/sdk/).
 
 Full documentation for this SDK: [https://voxgig-sdk.github.io/hook0-sdk/](https://voxgig-sdk.github.io/hook0-sdk/)
 
-> TypeScript, Python, PHP, Golang, Ruby, Lua, Java, JavaScript, Zig SDKs, a CLI with an interactive REPL, and an MCP server for AI agents — all generated from one OpenAPI spec by [@voxgig/sdkgen](https://github.com/voxgig/sdkgen).
+> TypeScript, Python, PHP, Golang, Ruby, Lua, C#, Java, JavaScript, Kotlin, Rust, Zig SDKs, a CLI with an interactive REPL, and an MCP server for AI agents — all generated from one OpenAPI spec by [@voxgig/sdkgen](https://github.com/voxgig/sdkgen).
 
 > **Features:** `debug`, `idempotency`, `metrics`, `paging`, `ratelimit`, `retry`, `secrets`, `test`, `timeout` — opt-in,
 > inactive until switched on, and configured per client. See the Features
@@ -100,6 +100,14 @@ local client = sdk.test()
 local result, err = client:Response():load({ id = "test01", application_id = "example" })
 ```
 
+### C#
+
+```csharp
+var client = Hook0SDK.TestSDK(null, null);
+var response = (IEntity)client.Response().Load(new Dictionary<string, object?> { ["id"] = "test01", ["application_id"] = "example" })!;
+Console.WriteLine(StructUtils.Jsonify(response.Data()));
+```
+
 ### Java
 
 ```java
@@ -115,6 +123,24 @@ const client = Hook0SDK.test()
 const response = await client.Response().load({ id: 'test01', application_id: 'example_application_id' })
 // response is the Response entity; .data() reads its mock record
 console.log(response.data())
+```
+
+### Kotlin
+
+```kotlin
+val client = Hook0SDK.testSDK(null, null)
+val response = client.response(null).load(mutableMapOf<String, Any?>("id" to "test01", "application_id" to "example"), null) as SdkEntity
+println(response.data())
+```
+
+### Rust
+
+```rust
+use hook0_sdk::{jo, test_sdk, Hook0EntityBase, Entity, Value};
+
+let client = test_sdk(Value::Noval, Value::Noval);
+let response = client.response(Value::Noval).load(jo(vec![("id", Value::str("test01")), ("application_id", Value::str("example"))]), Value::Noval).unwrap();
+println!("{:?}", response.data(None));
 ```
 
 ### Zig
@@ -141,8 +167,11 @@ switch (client.response(h.vnull()).load(h.jo(&.{.{ "id", h.vstr("test01") }, .{ 
 | Golang | `github.com/voxgig-sdk/hook0-sdk/go` | `go get github.com/voxgig-sdk/hook0-sdk/go@latest` |
 | Ruby | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](rb/README.md#install) |
 | Lua | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](lua/README.md#install) |
+| C# | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](csharp/README.md#install) |
 | Java | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](java/README.md#install) |
 | JavaScript | `@voxgig-sdk/hook0-sdk-js` | publish pending — [install from source](js/README.md#install) |
+| Kotlin | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](kotlin/README.md#install) |
+| Rust | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](rust/README.md#install) |
 | Zig | `voxgig-sdk-hook0-sdk` | publish pending — [install from source](zig/README.md#install) |
 | Go CLI | `github.com/voxgig-sdk/hook0-sdk/go-cli` | build from source — [go-cli/README.md](go-cli/README.md) |
 | Go MCP server | `github.com/voxgig-sdk/hook0-sdk/go-mcp` | build from source — [go-mcp/README.md](go-mcp/README.md) |
@@ -171,7 +200,7 @@ See the [TypeScript README](ts/README.md) for the full guide.
 
 | Surface | Path |
 | --- | --- |
-| **SDK** (TypeScript, Python, PHP, Golang, Ruby, Lua, Java, JavaScript, Zig) | `ts/` `py/` `php/` `go/` `rb/` `lua/` `java/` `js/` `zig/` |
+| **SDK** (TypeScript, Python, PHP, Golang, Ruby, Lua, C#, Java, JavaScript, Kotlin, Rust, Zig) | `ts/` `py/` `php/` `go/` `rb/` `lua/` `csharp/` `java/` `js/` `kotlin/` `rust/` `zig/` |
 | **CLI** | `go-cli/` |
 | **MCP server** | `go-mcp/` |
 
@@ -332,6 +361,29 @@ if err then error(err) end
 print(json.encode(application:data_get()))
 ```
 
+### C#
+
+```csharp
+using Hook0Sdk;
+using Voxgig.Struct;
+
+var client = new Hook0SDK(new Dictionary<string, object?>
+{
+    ["apikey"] = Environment.GetEnvironmentVariable("HOOK0_APIKEY"),
+});
+
+// List all applications (a list of entities, one per record, as object?; raises on error)
+var applicationList = (List<object?>)client.Application().List(new Dictionary<string, object?> { ["organization_id"] = "example" })!;
+foreach (var applicationItem in applicationList)
+{
+    Console.WriteLine(StructUtils.Jsonify(((IEntity)applicationItem!).Data()));
+}
+
+// Load a specific application (returns the entity, raises on error)
+var application = (IEntity)client.Application().Load(new Dictionary<string, object?> { ["id"] = "example_id" })!;
+Console.WriteLine(StructUtils.Jsonify(application.Data()));
+```
+
 ### Java
 
 ```java
@@ -369,6 +421,47 @@ const applications = await client.Application().list({ organization_id: "example
 for (const application of applications) {
   console.log(application.data())
 }
+```
+
+### Kotlin
+
+```kotlin
+import voxgig.hook0sdk.core.Hook0SDK
+import voxgig.hook0sdk.core.SdkEntity
+
+val client = Hook0SDK(mutableMapOf<String, Any?>(
+    "apikey" to System.getenv("HOOK0_APIKEY"),
+))
+
+// List all applications (a list of entities, one per record; raises on error)
+val applicationList = client.application(null).list(mutableMapOf<String, Any?>("organization_id" to "example"), null) as List<*>
+for (applicationItem in applicationList) {
+    println((applicationItem as SdkEntity).data())
+}
+
+// Load a specific application (returns the entity, raises on error)
+val application = client.application(null).load(mutableMapOf<String, Any?>("id" to "example_id"), null) as SdkEntity
+println(application.data())
+```
+
+### Rust
+
+```rust
+use hook0_sdk::{jo, Hook0EntityBase, Hook0SDK, Entity, Value};
+
+let client = Hook0SDK::new(jo(vec![
+    ("apikey", Value::str(std::env::var("HOOK0_APIKEY").unwrap_or_default())),
+]));
+
+// List all applications (one entity per record, Err on failure)
+let applications = client.application(Value::Noval).list(jo(vec![("organization_id", Value::str("example"))]), Value::Noval).unwrap();
+for application in &applications {
+    println!("{:?}", application.data(None));
+}
+
+// Load a specific application (returns the entity, Err on failure)
+let application = client.application(Value::Noval).load(jo(vec![("id", Value::str("example_id"))]), Value::Noval).unwrap();
+println!("{:?}", application.data(None));
 ```
 
 ### Zig
@@ -476,6 +569,16 @@ local result, err = client:direct({
 })
 ```
 
+**C#:**
+```csharp
+var result = client.Direct(new Dictionary<string, object?>
+{
+    ["path"] = "/api/resource/{id}",
+    ["method"] = "GET",
+    ["params"] = new Dictionary<string, object?> { ["id"] = "example" },
+});
+```
+
 **Java:**
 ```java
 Map<String, Object> result = client.direct(Map.of(
@@ -494,6 +597,23 @@ const result = await client.direct({
 if (result.ok) {
   console.log(result.data)
 }
+```
+
+**Kotlin:**
+```kotlin
+val result = client.direct(mutableMapOf<String, Any?>(
+    "path" to "/api/resource/{id}",
+    "method" to "GET",
+    "params" to mapOf("id" to "example")))
+```
+
+**Rust:**
+```rust
+let result = client.direct(jo(vec![
+    ("path", Value::str("/api/resource/{id}")),
+    ("method", Value::str("GET")),
+    ("params", jo(vec![("id", Value::str("example"))])),
+]));
 ```
 
 **Zig:**
@@ -601,8 +721,11 @@ The full story: [voxgig.com/sdk/custom](https://voxgig.com/sdk/custom).
 - [Golang](go/README.md)
 - [Ruby](rb/README.md)
 - [Lua](lua/README.md)
+- [C#](csharp/README.md)
 - [Java](java/README.md)
 - [JavaScript](js/README.md)
+- [Kotlin](kotlin/README.md)
+- [Rust](rust/README.md)
 - [Zig](zig/README.md)
 
 ## Upstream API

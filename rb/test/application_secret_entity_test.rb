@@ -171,6 +171,31 @@ class ApplicationSecretEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"application_secret.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/application_secrets/\"}"
+      puts "LIVE STEP {\"id\":\"application_secret.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/application_secrets/{application_secret_token}\"}"
+      puts "LIVE STEP {\"id\":\"application_secret.remove.3\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/application_secrets/{application_secret_token}\"}"
+      puts "LIVE STEP {\"id\":\"application_secret.list.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}"
+    client = setup[:client]
+
+    # Bootstrap entity data from existing test data.
+    application_secret_ref01_data_raw = Vs.items(Helpers.to_map(
+      Vs.getpath(setup[:data], "existing.application_secret")))
+    application_secret_ref01_data = nil
+    if application_secret_ref01_data_raw.length > 0
+      application_secret_ref01_data = Helpers.to_map(application_secret_ref01_data_raw[0][1])
+    end
+
+    # LIST
+    application_secret_ref01_ent = client.ApplicationSecret(nil)
+    application_secret_ref01_match = {}
+
+    application_secret_ref01_list_result = application_secret_ref01_ent.list(application_secret_ref01_match, nil)
+    assert application_secret_ref01_list_result.is_a?(Array)
+
+      return
+    end
+
     client = setup[:client]
 
     # CREATE

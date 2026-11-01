@@ -51,6 +51,10 @@ class TestOrganizationEditRoleEntity:
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
+            print("LIVE STEP {\"id\":\"organization_edit_role.update.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/organizations/{organization_id}/invite\"}")
+            pytest.skip("Live coverage incomplete: organization_edit_role.update.0 excluded (GET-only live run: needs PUT /api/v1/organizations/{organization_id}/invite)")
+
         if setup["live"]:
             runner.live_miss(LIVE_STRICT, "Live entity test blocked: " + "the flow updates a organization_edit_role record it did not create")
         client = setup["client"]

@@ -154,6 +154,47 @@ describe("SubscriptionEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"subscription.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/subscriptions/\"}")
+      print("LIVE STEP {\"id\":\"subscription.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/subscriptions/{subscription_id}\"}")
+      print("LIVE STEP {\"id\":\"subscription.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/subscriptions/{subscription_id}\"}")
+      print("LIVE STEP {\"id\":\"subscription.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+    local client = setup.client
+    if setup.live then
+      runner.live_existing(pending, setup, LIVE_STRICT, "subscription", function()
+        return client:Subscription(nil):list({}, nil)
+      end)
+    end
+
+    -- Bootstrap entity data from existing test data.
+    local subscription_ref01_data_raw = vs.items(helpers.to_map(
+      vs.getpath(setup.data, "existing.subscription")))
+    local subscription_ref01_data = nil
+    if #subscription_ref01_data_raw > 0 then
+      subscription_ref01_data = helpers.to_map(subscription_ref01_data_raw[1][2])
+    end
+
+    -- LIST
+    local subscription_ref01_ent = client:Subscription(nil)
+    local subscription_ref01_match = {}
+
+    local subscription_ref01_list_result, err = subscription_ref01_ent:list(subscription_ref01_match, nil)
+    assert.is_nil(err)
+    assert.is_table(subscription_ref01_list_result)
+
+    -- LOAD
+    local subscription_ref01_match_dt0 = {
+      id = subscription_ref01_data["id"],
+    }
+    local subscription_ref01_data_dt0_loaded, err = subscription_ref01_ent:load(subscription_ref01_match_dt0, nil)
+    assert.is_nil(err)
+    local subscription_ref01_data_dt0_load_result = helpers.to_map(type(subscription_ref01_data_dt0_loaded) == 'table' and subscription_ref01_data_dt0_loaded.data_get and subscription_ref01_data_dt0_loaded:data_get() or subscription_ref01_data_dt0_loaded)
+    assert.is_not_nil(subscription_ref01_data_dt0_load_result)
+    assert.are.equal(subscription_ref01_data_dt0_load_result["id"], subscription_ref01_data["id"])
+
+      return
+    end
+
     local client = setup.client
 
     -- CREATE

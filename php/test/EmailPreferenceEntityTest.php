@@ -36,6 +36,11 @@ class EmailPreferenceEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"email_preference.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/email-preferences/unsubscribe-reactivation"}' . "\n");
+            $this->markTestSkipped('Live coverage incomplete: email_preference.create.0 excluded (GET-only live run: needs POST /api/v1/email-preferences/unsubscribe-reactivation)');
+        }
+
         $client = $setup["client"];
 
         // CREATE

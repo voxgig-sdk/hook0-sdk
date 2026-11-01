@@ -44,6 +44,12 @@ describe("UserAuthenticationEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"user_authentication.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/auth/begin-reset-password\"}")
+      pending("Live coverage incomplete: user_authentication.create.0 excluded (GET-only live run: needs POST /api/v1/auth/begin-reset-password)")
+      return
+    end
+
     local client = setup.client
 
     -- CREATE

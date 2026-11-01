@@ -171,6 +171,44 @@ class EventTypeEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"event_type.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/event_types/\"}"
+      puts "LIVE STEP {\"id\":\"event_type.remove.3\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/event_types/{event_type_name}\"}"
+      puts "LIVE STEP {\"id\":\"event_type.list.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}"
+    client = setup[:client]
+    if setup[:live]
+      Runner.live_existing(setup, LIVE_STRICT, "event_type") do
+        client.EventType(nil).list({}, nil)
+      end
+    end
+
+    # Bootstrap entity data from existing test data.
+    event_type_ref01_data_raw = Vs.items(Helpers.to_map(
+      Vs.getpath(setup[:data], "existing.event_type")))
+    event_type_ref01_data = nil
+    if event_type_ref01_data_raw.length > 0
+      event_type_ref01_data = Helpers.to_map(event_type_ref01_data_raw[0][1])
+    end
+
+    # LIST
+    event_type_ref01_ent = client.EventType(nil)
+    event_type_ref01_match = {}
+
+    event_type_ref01_list_result = event_type_ref01_ent.list(event_type_ref01_match, nil)
+    assert event_type_ref01_list_result.is_a?(Array)
+
+    # LOAD
+    event_type_ref01_match_dt0 = {
+      "id" => event_type_ref01_data["id"],
+    }
+    event_type_ref01_data_dt0_loaded = event_type_ref01_ent.load(event_type_ref01_match_dt0, nil)
+    event_type_ref01_data_dt0_load_result = Helpers.to_map(event_type_ref01_data_dt0_loaded.respond_to?(:data_get) ? event_type_ref01_data_dt0_loaded.data_get : event_type_ref01_data_dt0_loaded)
+    assert !event_type_ref01_data_dt0_load_result.nil?
+    assert_equal event_type_ref01_data_dt0_load_result["id"], event_type_ref01_data["id"]
+
+      return
+    end
+
     client = setup[:client]
 
     # CREATE

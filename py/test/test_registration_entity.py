@@ -51,6 +51,10 @@ class TestRegistrationEntity:
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
+            print("LIVE STEP {\"id\":\"registration.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/register/\"}")
+            pytest.skip("Live coverage incomplete: registration.create.0 excluded (GET-only live run: needs POST /api/v1/register/)")
+
         client = setup["client"]
 
         # CREATE

@@ -1,0 +1,71 @@
+// VENDORED: @voxgig/plugin 0.2.0 (rust/src/resolve.rs)
+// Source: https://github.com/voxgig/plugin @ caa404b2dfa206d77db6c2869e5b31c2a3202b2d  [tag: sdk-20261016-0845-0]
+// License: MIT (c) voxgig - see repository LICENSE. Do not edit: resync from upstream.
+
+use super::value::Value;
+
+pub fn default_sources() -> Vec<Value> {
+    let mut src = Value::map();
+    src.set("kind", Value::str("module"));
+    src.set(
+        "prefix",
+        Value::List(vec![
+            Value::str("@voxgig/plugin-"),
+            Value::str("voxgig-plugin-"),
+            Value::str("plugin-"),
+            Value::str(""),
+        ]),
+    );
+    vec![src]
+}
+
+pub fn resolve_candidates(name: &str, sources: &Value) -> Vec<String> {
+    let mut out: Vec<String> = Vec::new();
+
+    // A SCOPED NAME RESOLVES VERBATIM ONLY (§10.2). `@acme/thing` is
+    // already a package id; prefixing it produces
+    // `@voxgig/plugin-@acme/thing`, which is not a thing that can exist.
+    if name.starts_with('@') {
+        return vec![name.to_string()];
+    }
+
+    let given = sources.as_list().cloned().unwrap_or_default();
+    let list = if given.is_empty() {
+        default_sources()
+    } else {
+        given
+    };
+
+    for src in list.iter() {
+        match src.get("kind").as_str() {
+            Some("module") => {
+                let prefixes = src.get("prefix");
+                let mut list = prefixes.as_list().cloned().unwrap_or_default();
+                if list.is_empty() {
+                    list = vec![Value::str("")];
+                }
+                for p in list.iter() {
+                    let id = format!("{}{}", p.as_str().unwrap_or(""), name);
+                    if !out.contains(&id) {
+                        out.push(id);
+                    }
+                }
+            }
+            Some("path") => {
+                let dir = src.get("dir");
+                let dir = dir.as_str().unwrap_or("").trim_end_matches('/');
+                let id = format!("{}/{}", dir, name);
+                if !out.contains(&id) {
+                    out.push(id);
+                }
+            }
+            _ => {}
+        }
+    }
+
+    out
+}
+
+pub fn resolve_from(from: &Value) -> Vec<Value> {
+    vec![from.clone()]
+}

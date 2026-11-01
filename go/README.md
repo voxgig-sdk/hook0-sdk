@@ -6,7 +6,7 @@ The Golang SDK for the Hook0 API — an entity-oriented client using standard Go
 
 It exposes the API as capitalised, semantic **Entities** — e.g. `client.Application(nil)` — each with the same small set of operations (`List`, `Load`, `Create`, `Update`, `Remove`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
-> Also generated from this model: `go-cli`, `go-mcp`, `java`, `js`, `lua`, `php`, `py`, `rb`, `ts`, `zig` — see
+> Also generated from this model: `csharp`, `go-cli`, `go-mcp`, `java`, `js`, `kotlin`, `lua`, `php`, `py`, `rb`, `rust`, `ts`, `zig` — see
 > the [top-level README](../README.md).
 
 
@@ -254,33 +254,33 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `GetUtility` | `() *Utility` | Copy of the SDK utility object. |
 | `Prepare` | `(fetchargs map[string]any) (map[string]any, error)` | Build an HTTP request definition without sending. |
 | `Direct` | `(fetchargs map[string]any) (map[string]any, error)` | Build and send an HTTP request. |
-| `Application` | `(data map[string]any) Hook0Entity` | Create an Application entity instance. |
-| `ApplicationSecret` | `(data map[string]any) Hook0Entity` | Create an ApplicationSecret entity instance. |
-| `EmailPreference` | `(data map[string]any) Hook0Entity` | Create an EmailPreference entity instance. |
-| `Error` | `(data map[string]any) Hook0Entity` | Create an Error entity instance. |
-| `Event` | `(data map[string]any) Hook0Entity` | Create an Event entity instance. |
-| `EventType` | `(data map[string]any) Hook0Entity` | Create an EventType entity instance. |
-| `EventsManagement` | `(data map[string]any) Hook0Entity` | Create an EventsManagement entity instance. |
-| `Health` | `(data map[string]any) Hook0Entity` | Create a Health entity instance. |
-| `Hook0` | `(data map[string]any) Hook0Entity` | Create a Hook0 entity instance. |
-| `IngestedEvent` | `(data map[string]any) Hook0Entity` | Create an IngestedEvent entity instance. |
-| `Instance` | `(data map[string]any) Hook0Entity` | Create an Instance entity instance. |
-| `Login` | `(data map[string]any) Hook0Entity` | Create a Login entity instance. |
-| `Organization` | `(data map[string]any) Hook0Entity` | Create an Organization entity instance. |
-| `OrganizationEditRole` | `(data map[string]any) Hook0Entity` | Create an OrganizationEditRole entity instance. |
-| `Quota` | `(data map[string]any) Hook0Entity` | Create a Quota entity instance. |
-| `Registration` | `(data map[string]any) Hook0Entity` | Create a Registration entity instance. |
-| `RequestAttempt` | `(data map[string]any) Hook0Entity` | Create a RequestAttempt entity instance. |
-| `Response` | `(data map[string]any) Hook0Entity` | Create a Response entity instance. |
-| `Revoke` | `(data map[string]any) Hook0Entity` | Create a Revoke entity instance. |
-| `ServiceToken` | `(data map[string]any) Hook0Entity` | Create a ServiceToken entity instance. |
-| `Subscription` | `(data map[string]any) Hook0Entity` | Create a Subscription entity instance. |
-| `UserAuthentication` | `(data map[string]any) Hook0Entity` | Create an UserAuthentication entity instance. |
-| `UserInvitation` | `(data map[string]any) Hook0Entity` | Create an UserInvitation entity instance. |
+| `Application` | `(data map[string]any) Hook0EntityBase` | Create an Application entity instance. |
+| `ApplicationSecret` | `(data map[string]any) Hook0EntityBase` | Create an ApplicationSecret entity instance. |
+| `EmailPreference` | `(data map[string]any) Hook0EntityBase` | Create an EmailPreference entity instance. |
+| `Error` | `(data map[string]any) Hook0EntityBase` | Create an Error entity instance. |
+| `Event` | `(data map[string]any) Hook0EntityBase` | Create an Event entity instance. |
+| `EventType` | `(data map[string]any) Hook0EntityBase` | Create an EventType entity instance. |
+| `EventsManagement` | `(data map[string]any) Hook0EntityBase` | Create an EventsManagement entity instance. |
+| `Health` | `(data map[string]any) Hook0EntityBase` | Create a Health entity instance. |
+| `Hook0` | `(data map[string]any) Hook0EntityBase` | Create a Hook0 entity instance. |
+| `IngestedEvent` | `(data map[string]any) Hook0EntityBase` | Create an IngestedEvent entity instance. |
+| `Instance` | `(data map[string]any) Hook0EntityBase` | Create an Instance entity instance. |
+| `Login` | `(data map[string]any) Hook0EntityBase` | Create a Login entity instance. |
+| `Organization` | `(data map[string]any) Hook0EntityBase` | Create an Organization entity instance. |
+| `OrganizationEditRole` | `(data map[string]any) Hook0EntityBase` | Create an OrganizationEditRole entity instance. |
+| `Quota` | `(data map[string]any) Hook0EntityBase` | Create a Quota entity instance. |
+| `Registration` | `(data map[string]any) Hook0EntityBase` | Create a Registration entity instance. |
+| `RequestAttempt` | `(data map[string]any) Hook0EntityBase` | Create a RequestAttempt entity instance. |
+| `Response` | `(data map[string]any) Hook0EntityBase` | Create a Response entity instance. |
+| `Revoke` | `(data map[string]any) Hook0EntityBase` | Create a Revoke entity instance. |
+| `ServiceToken` | `(data map[string]any) Hook0EntityBase` | Create a ServiceToken entity instance. |
+| `Subscription` | `(data map[string]any) Hook0EntityBase` | Create a Subscription entity instance. |
+| `UserAuthentication` | `(data map[string]any) Hook0EntityBase` | Create an UserAuthentication entity instance. |
+| `UserInvitation` | `(data map[string]any) Hook0EntityBase` | Create an UserInvitation entity instance. |
 
-### Entity interface (Hook0Entity)
+### Entity interface (Hook0EntityBase)
 
-All entities implement the `Hook0Entity` interface.
+All entities implement the `Hook0EntityBase` interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |

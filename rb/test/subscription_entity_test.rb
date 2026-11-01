@@ -157,6 +157,45 @@ class SubscriptionEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"subscription.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/subscriptions/\"}"
+      puts "LIVE STEP {\"id\":\"subscription.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/subscriptions/{subscription_id}\"}"
+      puts "LIVE STEP {\"id\":\"subscription.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/subscriptions/{subscription_id}\"}"
+      puts "LIVE STEP {\"id\":\"subscription.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}"
+    client = setup[:client]
+    if setup[:live]
+      Runner.live_existing(setup, LIVE_STRICT, "subscription") do
+        client.Subscription(nil).list({}, nil)
+      end
+    end
+
+    # Bootstrap entity data from existing test data.
+    subscription_ref01_data_raw = Vs.items(Helpers.to_map(
+      Vs.getpath(setup[:data], "existing.subscription")))
+    subscription_ref01_data = nil
+    if subscription_ref01_data_raw.length > 0
+      subscription_ref01_data = Helpers.to_map(subscription_ref01_data_raw[0][1])
+    end
+
+    # LIST
+    subscription_ref01_ent = client.Subscription(nil)
+    subscription_ref01_match = {}
+
+    subscription_ref01_list_result = subscription_ref01_ent.list(subscription_ref01_match, nil)
+    assert subscription_ref01_list_result.is_a?(Array)
+
+    # LOAD
+    subscription_ref01_match_dt0 = {
+      "id" => subscription_ref01_data["id"],
+    }
+    subscription_ref01_data_dt0_loaded = subscription_ref01_ent.load(subscription_ref01_match_dt0, nil)
+    subscription_ref01_data_dt0_load_result = Helpers.to_map(subscription_ref01_data_dt0_loaded.respond_to?(:data_get) ? subscription_ref01_data_dt0_loaded.data_get : subscription_ref01_data_dt0_loaded)
+    assert !subscription_ref01_data_dt0_load_result.nil?
+    assert_equal subscription_ref01_data_dt0_load_result["id"], subscription_ref01_data["id"]
+
+      return
+    end
+
     client = setup[:client]
 
     # CREATE

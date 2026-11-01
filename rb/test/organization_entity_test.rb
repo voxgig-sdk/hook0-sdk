@@ -157,6 +157,45 @@ class OrganizationEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"organization.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/organizations/\"}"
+      puts "LIVE STEP {\"id\":\"organization.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/organizations/{organization_id}/\"}"
+      puts "LIVE STEP {\"id\":\"organization.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/organizations/{organization_id}/\"}"
+      puts "LIVE STEP {\"id\":\"organization.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}"
+    client = setup[:client]
+    if setup[:live]
+      Runner.live_existing(setup, LIVE_STRICT, "organization") do
+        client.Organization(nil).list({}, nil)
+      end
+    end
+
+    # Bootstrap entity data from existing test data.
+    organization_ref01_data_raw = Vs.items(Helpers.to_map(
+      Vs.getpath(setup[:data], "existing.organization")))
+    organization_ref01_data = nil
+    if organization_ref01_data_raw.length > 0
+      organization_ref01_data = Helpers.to_map(organization_ref01_data_raw[0][1])
+    end
+
+    # LIST
+    organization_ref01_ent = client.Organization(nil)
+    organization_ref01_match = {}
+
+    organization_ref01_list_result = organization_ref01_ent.list(organization_ref01_match, nil)
+    assert organization_ref01_list_result.is_a?(Array)
+
+    # LOAD
+    organization_ref01_match_dt0 = {
+      "id" => organization_ref01_data["id"],
+    }
+    organization_ref01_data_dt0_loaded = organization_ref01_ent.load(organization_ref01_match_dt0, nil)
+    organization_ref01_data_dt0_load_result = Helpers.to_map(organization_ref01_data_dt0_loaded.respond_to?(:data_get) ? organization_ref01_data_dt0_loaded.data_get : organization_ref01_data_dt0_loaded)
+    assert !organization_ref01_data_dt0_load_result.nil?
+    assert_equal organization_ref01_data_dt0_load_result["id"], organization_ref01_data["id"]
+
+      return
+    end
+
     client = setup[:client]
 
     # CREATE

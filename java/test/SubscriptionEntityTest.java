@@ -55,6 +55,45 @@ public class SubscriptionEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"subscription.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/subscriptions/\"}");
+      System.out.println("LIVE STEP {\"id\":\"subscription.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/subscriptions/{subscription_id}\"}");
+      System.out.println("LIVE STEP {\"id\":\"subscription.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/subscriptions/{subscription_id}\"}");
+      System.out.println("LIVE STEP {\"id\":\"subscription.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}");
+    Hook0SDK client = setup.client;
+    if (setup.live) {
+      RunnerSupport.liveExisting(setup.data, LIVE_STRICT, "subscription", () -> {
+        Map<String, Object> match = new LinkedHashMap<>();
+        return client.subscription(null).list(match, null);
+      });
+    }
+
+    // Bootstrap entity data from existing test data (no create step in flow).
+    List<List<Object>> subscriptionRef01DataRaw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.subscription")));
+    Map<String, Object> subscriptionRef01Data = subscriptionRef01DataRaw.isEmpty()
+        ? null : Helpers.toMapAny(subscriptionRef01DataRaw.get(0).get(1));
+
+    // LIST
+    SdkEntity subscriptionRef01Ent = client.subscription(null);
+    Map<String, Object> subscriptionRef01Match = new LinkedHashMap<>();
+
+    Object subscriptionRef01ListResult = subscriptionRef01Ent.list(subscriptionRef01Match, null);
+    assertTrue(subscriptionRef01ListResult instanceof List,
+        "expected list result to be an array, got " + subscriptionRef01ListResult);
+
+    // LOAD
+    Map<String, Object> subscriptionRef01MatchDt0 = new LinkedHashMap<>();
+    subscriptionRef01MatchDt0.put("id", subscriptionRef01Data.get("id"));
+    Object subscriptionRef01DataDt0Loaded = subscriptionRef01Ent.load(subscriptionRef01MatchDt0, null);
+    Map<String, Object> subscriptionRef01DataDt0LoadResult = Helpers.toMapAny(subscriptionRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) subscriptionRef01DataDt0Loaded).data() : subscriptionRef01DataDt0Loaded);
+    assertNotNull(subscriptionRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(subscriptionRef01Data.get("id"), subscriptionRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
+
+      return;
+    }
+
     Hook0SDK client = setup.client;
 
     // CREATE

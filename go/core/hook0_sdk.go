@@ -375,7 +375,7 @@ func (sdk *Hook0SDK) Graphql(
 // Application returns a Application entity bound to this client.
 // Idiomatic usage: client.Application(nil).List(nil, nil) or
 // client.Application(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Application(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Application(data map[string]any) Hook0EntityBase {
 	return NewApplicationEntityFunc(sdk, data)
 }
 
@@ -383,7 +383,7 @@ func (sdk *Hook0SDK) Application(data map[string]any) Hook0Entity {
 // ApplicationSecret returns a ApplicationSecret entity bound to this client.
 // Idiomatic usage: client.ApplicationSecret(nil).List(nil, nil) or
 // client.ApplicationSecret(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) ApplicationSecret(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) ApplicationSecret(data map[string]any) Hook0EntityBase {
 	return NewApplicationSecretEntityFunc(sdk, data)
 }
 
@@ -391,7 +391,7 @@ func (sdk *Hook0SDK) ApplicationSecret(data map[string]any) Hook0Entity {
 // EmailPreference returns a EmailPreference entity bound to this client.
 // Idiomatic usage: client.EmailPreference(nil).List(nil, nil) or
 // client.EmailPreference(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) EmailPreference(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) EmailPreference(data map[string]any) Hook0EntityBase {
 	return NewEmailPreferenceEntityFunc(sdk, data)
 }
 
@@ -399,7 +399,7 @@ func (sdk *Hook0SDK) EmailPreference(data map[string]any) Hook0Entity {
 // Error returns a Error entity bound to this client.
 // Idiomatic usage: client.Error(nil).List(nil, nil) or
 // client.Error(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Error(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Error(data map[string]any) Hook0EntityBase {
 	return NewErrorEntityFunc(sdk, data)
 }
 
@@ -407,7 +407,7 @@ func (sdk *Hook0SDK) Error(data map[string]any) Hook0Entity {
 // Event returns a Event entity bound to this client.
 // Idiomatic usage: client.Event(nil).List(nil, nil) or
 // client.Event(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Event(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Event(data map[string]any) Hook0EntityBase {
 	return NewEventEntityFunc(sdk, data)
 }
 
@@ -415,7 +415,7 @@ func (sdk *Hook0SDK) Event(data map[string]any) Hook0Entity {
 // EventType returns a EventType entity bound to this client.
 // Idiomatic usage: client.EventType(nil).List(nil, nil) or
 // client.EventType(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) EventType(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) EventType(data map[string]any) Hook0EntityBase {
 	return NewEventTypeEntityFunc(sdk, data)
 }
 
@@ -423,7 +423,7 @@ func (sdk *Hook0SDK) EventType(data map[string]any) Hook0Entity {
 // EventsManagement returns a EventsManagement entity bound to this client.
 // Idiomatic usage: client.EventsManagement(nil).List(nil, nil) or
 // client.EventsManagement(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) EventsManagement(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) EventsManagement(data map[string]any) Hook0EntityBase {
 	return NewEventsManagementEntityFunc(sdk, data)
 }
 
@@ -431,7 +431,7 @@ func (sdk *Hook0SDK) EventsManagement(data map[string]any) Hook0Entity {
 // Health returns a Health entity bound to this client.
 // Idiomatic usage: client.Health(nil).List(nil, nil) or
 // client.Health(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Health(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Health(data map[string]any) Hook0EntityBase {
 	return NewHealthEntityFunc(sdk, data)
 }
 
@@ -439,7 +439,7 @@ func (sdk *Hook0SDK) Health(data map[string]any) Hook0Entity {
 // Hook0 returns a Hook0 entity bound to this client.
 // Idiomatic usage: client.Hook0(nil).List(nil, nil) or
 // client.Hook0(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Hook0(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Hook0(data map[string]any) Hook0EntityBase {
 	return NewHook0EntityFunc(sdk, data)
 }
 
@@ -447,7 +447,7 @@ func (sdk *Hook0SDK) Hook0(data map[string]any) Hook0Entity {
 // IngestedEvent returns a IngestedEvent entity bound to this client.
 // Idiomatic usage: client.IngestedEvent(nil).List(nil, nil) or
 // client.IngestedEvent(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) IngestedEvent(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) IngestedEvent(data map[string]any) Hook0EntityBase {
 	return NewIngestedEventEntityFunc(sdk, data)
 }
 
@@ -455,7 +455,7 @@ func (sdk *Hook0SDK) IngestedEvent(data map[string]any) Hook0Entity {
 // Instance returns a Instance entity bound to this client.
 // Idiomatic usage: client.Instance(nil).List(nil, nil) or
 // client.Instance(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Instance(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Instance(data map[string]any) Hook0EntityBase {
 	return NewInstanceEntityFunc(sdk, data)
 }
 
@@ -463,7 +463,7 @@ func (sdk *Hook0SDK) Instance(data map[string]any) Hook0Entity {
 // Login returns a Login entity bound to this client.
 // Idiomatic usage: client.Login(nil).List(nil, nil) or
 // client.Login(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Login(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Login(data map[string]any) Hook0EntityBase {
 	return NewLoginEntityFunc(sdk, data)
 }
 
@@ -471,7 +471,7 @@ func (sdk *Hook0SDK) Login(data map[string]any) Hook0Entity {
 // Organization returns a Organization entity bound to this client.
 // Idiomatic usage: client.Organization(nil).List(nil, nil) or
 // client.Organization(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Organization(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Organization(data map[string]any) Hook0EntityBase {
 	return NewOrganizationEntityFunc(sdk, data)
 }
 
@@ -479,7 +479,7 @@ func (sdk *Hook0SDK) Organization(data map[string]any) Hook0Entity {
 // OrganizationEditRole returns a OrganizationEditRole entity bound to this client.
 // Idiomatic usage: client.OrganizationEditRole(nil).List(nil, nil) or
 // client.OrganizationEditRole(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) OrganizationEditRole(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) OrganizationEditRole(data map[string]any) Hook0EntityBase {
 	return NewOrganizationEditRoleEntityFunc(sdk, data)
 }
 
@@ -487,7 +487,7 @@ func (sdk *Hook0SDK) OrganizationEditRole(data map[string]any) Hook0Entity {
 // Quota returns a Quota entity bound to this client.
 // Idiomatic usage: client.Quota(nil).List(nil, nil) or
 // client.Quota(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Quota(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Quota(data map[string]any) Hook0EntityBase {
 	return NewQuotaEntityFunc(sdk, data)
 }
 
@@ -495,7 +495,7 @@ func (sdk *Hook0SDK) Quota(data map[string]any) Hook0Entity {
 // Registration returns a Registration entity bound to this client.
 // Idiomatic usage: client.Registration(nil).List(nil, nil) or
 // client.Registration(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Registration(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Registration(data map[string]any) Hook0EntityBase {
 	return NewRegistrationEntityFunc(sdk, data)
 }
 
@@ -503,7 +503,7 @@ func (sdk *Hook0SDK) Registration(data map[string]any) Hook0Entity {
 // RequestAttempt returns a RequestAttempt entity bound to this client.
 // Idiomatic usage: client.RequestAttempt(nil).List(nil, nil) or
 // client.RequestAttempt(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) RequestAttempt(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) RequestAttempt(data map[string]any) Hook0EntityBase {
 	return NewRequestAttemptEntityFunc(sdk, data)
 }
 
@@ -511,7 +511,7 @@ func (sdk *Hook0SDK) RequestAttempt(data map[string]any) Hook0Entity {
 // Response returns a Response entity bound to this client.
 // Idiomatic usage: client.Response(nil).List(nil, nil) or
 // client.Response(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Response(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Response(data map[string]any) Hook0EntityBase {
 	return NewResponseEntityFunc(sdk, data)
 }
 
@@ -519,7 +519,7 @@ func (sdk *Hook0SDK) Response(data map[string]any) Hook0Entity {
 // Revoke returns a Revoke entity bound to this client.
 // Idiomatic usage: client.Revoke(nil).List(nil, nil) or
 // client.Revoke(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Revoke(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Revoke(data map[string]any) Hook0EntityBase {
 	return NewRevokeEntityFunc(sdk, data)
 }
 
@@ -527,7 +527,7 @@ func (sdk *Hook0SDK) Revoke(data map[string]any) Hook0Entity {
 // ServiceToken returns a ServiceToken entity bound to this client.
 // Idiomatic usage: client.ServiceToken(nil).List(nil, nil) or
 // client.ServiceToken(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) ServiceToken(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) ServiceToken(data map[string]any) Hook0EntityBase {
 	return NewServiceTokenEntityFunc(sdk, data)
 }
 
@@ -535,7 +535,7 @@ func (sdk *Hook0SDK) ServiceToken(data map[string]any) Hook0Entity {
 // Subscription returns a Subscription entity bound to this client.
 // Idiomatic usage: client.Subscription(nil).List(nil, nil) or
 // client.Subscription(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) Subscription(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) Subscription(data map[string]any) Hook0EntityBase {
 	return NewSubscriptionEntityFunc(sdk, data)
 }
 
@@ -543,7 +543,7 @@ func (sdk *Hook0SDK) Subscription(data map[string]any) Hook0Entity {
 // UserAuthentication returns a UserAuthentication entity bound to this client.
 // Idiomatic usage: client.UserAuthentication(nil).List(nil, nil) or
 // client.UserAuthentication(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) UserAuthentication(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) UserAuthentication(data map[string]any) Hook0EntityBase {
 	return NewUserAuthenticationEntityFunc(sdk, data)
 }
 
@@ -551,7 +551,7 @@ func (sdk *Hook0SDK) UserAuthentication(data map[string]any) Hook0Entity {
 // UserInvitation returns a UserInvitation entity bound to this client.
 // Idiomatic usage: client.UserInvitation(nil).List(nil, nil) or
 // client.UserInvitation(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *Hook0SDK) UserInvitation(data map[string]any) Hook0Entity {
+func (sdk *Hook0SDK) UserInvitation(data map[string]any) Hook0EntityBase {
 	return NewUserInvitationEntityFunc(sdk, data)
 }
 

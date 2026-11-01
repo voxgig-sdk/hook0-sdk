@@ -41,6 +41,11 @@ class UserInvitationEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"user_invitation.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite\"}"
+      skip("Live coverage incomplete: user_invitation.create.0 excluded (GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite)")
+    end
+
     if setup[:live]
       ["organization01"].each do |_live_key|
         if setup[:synthetic_only] || setup[:idmap][_live_key].nil?

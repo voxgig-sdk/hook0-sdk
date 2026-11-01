@@ -55,6 +55,30 @@ public class ApplicationSecretEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"application_secret.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/application_secrets/\"}");
+      System.out.println("LIVE STEP {\"id\":\"application_secret.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/application_secrets/{application_secret_token}\"}");
+      System.out.println("LIVE STEP {\"id\":\"application_secret.remove.3\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/application_secrets/{application_secret_token}\"}");
+      System.out.println("LIVE STEP {\"id\":\"application_secret.list.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}");
+    Hook0SDK client = setup.client;
+
+    // Bootstrap entity data from existing test data (no create step in flow).
+    List<List<Object>> applicationSecretRef01DataRaw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.application_secret")));
+    Map<String, Object> applicationSecretRef01Data = applicationSecretRef01DataRaw.isEmpty()
+        ? null : Helpers.toMapAny(applicationSecretRef01DataRaw.get(0).get(1));
+
+    // LIST
+    SdkEntity applicationSecretRef01Ent = client.applicationSecret(null);
+    Map<String, Object> applicationSecretRef01Match = new LinkedHashMap<>();
+
+    Object applicationSecretRef01ListResult = applicationSecretRef01Ent.list(applicationSecretRef01Match, null);
+    assertTrue(applicationSecretRef01ListResult instanceof List,
+        "expected list result to be an array, got " + applicationSecretRef01ListResult);
+
+      return;
+    }
+
     Hook0SDK client = setup.client;
 
     // CREATE

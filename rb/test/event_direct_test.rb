@@ -30,11 +30,13 @@ class EventDirectTest < Minitest::Test
     client = setup[:client]
 
     params = {}
+    query = {}
 
     result = client.direct({
       "path" => "api/v1/events",
       "method" => "GET",
       "params" => params,
+      "query" => query,
     })
     if setup[:live]
       unless live_ok(result)

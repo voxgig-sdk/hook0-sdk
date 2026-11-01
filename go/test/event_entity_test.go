@@ -199,6 +199,58 @@ func TestEventEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"event.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/events/{event_id}/replay\"}")
+		client := setup.client
+		_ = client
+		if setup.live {
+			liveExisting(t, eventEntityLiveStrict, setup.data, "event", func() (any, error) {
+				return client.Event(nil).List(map[string]any{}, nil)
+			})
+		}
+
+		// Bootstrap entity data from existing test data (no create step in flow).
+		eventRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.event")))
+		var eventRef01Data map[string]any
+		if len(eventRef01DataRaw) > 0 {
+			eventRef01Data = core.ToMapAny(eventRef01DataRaw[0][1])
+		}
+		// Discard guards against Go's unused-var check when the flow's steps
+		// happen not to consume the bootstrap data (e.g. list-only flows).
+		_ = eventRef01Data
+
+		// LIST
+		eventRef01Ent := client.Event(nil)
+		eventRef01Match := map[string]any{}
+
+		eventRef01ListResult, err := eventRef01Ent.List(eventRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		_, eventRef01ListOk := eventRef01ListResult.([]any)
+		if !eventRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", eventRef01ListResult)
+		}
+
+		// LOAD
+		eventRef01MatchDt0 := map[string]any{
+			"id": eventRef01Data["id"],
+		}
+		eventRef01DataDt0Loaded, err := eventRef01Ent.Load(eventRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		eventRef01DataDt0LoadResult := core.ToMapAny(entityData(eventRef01DataDt0Loaded))
+		if eventRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if eventRef01DataDt0LoadResult["id"] != eventRef01Data["id"] {
+			t.Fatal("expected load result id to match")
+		}
+
+		return
+		}
+
 		client := setup.client
 		_ = client
 		if setup.live {

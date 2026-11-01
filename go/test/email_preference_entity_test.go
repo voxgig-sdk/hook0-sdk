@@ -49,6 +49,12 @@ func TestEmailPreferenceEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"email_preference.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/email-preferences/unsubscribe-reactivation\"}")
+			t.Skip("Live coverage incomplete: email_preference.create.0 excluded (GET-only live run: needs POST /api/v1/email-preferences/unsubscribe-reactivation)")
+			return
+		}
+
 		client := setup.client
 		_ = client
 

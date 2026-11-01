@@ -52,6 +52,11 @@ class RegistrationEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"registration.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/register/"}' . "\n");
+            $this->markTestSkipped('Live coverage incomplete: registration.create.0 excluded (GET-only live run: needs POST /api/v1/register/)');
+        }
+
         $client = $setup["client"];
 
         // CREATE

@@ -157,6 +157,42 @@ class EventEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"event.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/events/{event_id}/replay\"}"
+    client = setup[:client]
+    if setup[:live]
+      Runner.live_existing(setup, LIVE_STRICT, "event") do
+        client.Event(nil).list({}, nil)
+      end
+    end
+
+    # Bootstrap entity data from existing test data.
+    event_ref01_data_raw = Vs.items(Helpers.to_map(
+      Vs.getpath(setup[:data], "existing.event")))
+    event_ref01_data = nil
+    if event_ref01_data_raw.length > 0
+      event_ref01_data = Helpers.to_map(event_ref01_data_raw[0][1])
+    end
+
+    # LIST
+    event_ref01_ent = client.Event(nil)
+    event_ref01_match = {}
+
+    event_ref01_list_result = event_ref01_ent.list(event_ref01_match, nil)
+    assert event_ref01_list_result.is_a?(Array)
+
+    # LOAD
+    event_ref01_match_dt0 = {
+      "id" => event_ref01_data["id"],
+    }
+    event_ref01_data_dt0_loaded = event_ref01_ent.load(event_ref01_match_dt0, nil)
+    event_ref01_data_dt0_load_result = Helpers.to_map(event_ref01_data_dt0_loaded.respond_to?(:data_get) ? event_ref01_data_dt0_loaded.data_get : event_ref01_data_dt0_loaded)
+    assert !event_ref01_data_dt0_load_result.nil?
+    assert_equal event_ref01_data_dt0_load_result["id"], event_ref01_data["id"]
+
+      return
+    end
+
     client = setup[:client]
     if setup[:live]
       Runner.live_existing(setup, LIVE_STRICT, "event") do

@@ -15,10 +15,15 @@ import {
   serverVarEnv,
   serverVariables, envName, envToken,
   pointParts,
+  pointPlaceholders,
   liveStrict,
   liveStrictNote,
   pointIsGraphql,
   graphqlDirectSkip,
+  liveExampleIds,
+  liveQueryExamples,
+  liveEntity,
+  liveDirectGetOnly, liveExcludedLines, liveExcludedSummary, LIVE_GETONLY_ENV,
 } from '@voxgig/sdkgen'
 
 
@@ -74,12 +79,24 @@ function javaLiteral(v: any): string {
 }
 
 
+// A GET-only live run excludes a test needing an id that only a write gives.
+function getOnlyKeysBlock(model: any, entity: any, test: string, keys: string[]): string {
+  return liveDirectGetOnly(model, entity, test, keys).map((miss) =>
+    `    if (setup.live && "TRUE".equals(System.getenv(${javaLiteral(LIVE_GETONLY_ENV)}))
+        && setup.idmap.get(${javaLiteral(miss.key)}) == null) {
+      System.out.println(${javaLiteral(liveExcludedLines({ excluded: [miss] })[0])});
+      Assumptions.abort(${javaLiteral(liveExcludedSummary({ excluded: [miss] }))});
+    }
+`).join('')
+}
+
+
 const TestDirect = cmp(function TestDirect(props: any) {
   const ctx$ = props.ctx$
   const model: Model = ctx$.model
 
   const target = props.target
-  const entity: ModelEntity = props.entity
+  const entity: ModelEntity = liveEntity(ctx$, props.entity)
   const javapackage: string = props.javapackage
 
   const PROJECTNAME = envName(model)
@@ -118,12 +135,7 @@ const TestDirect = cmp(function TestDirect(props: any) {
   const allLoadParams = loadPoint?.g?.params || []
   // Only path params that actually appear in the URL template drive
   // direct-test path-param setup and URL-substitution asserts.
-  const _pathPlaceholders = new Set<string>()
-  for (const part of pointParts(loadPoint)) {
-    if (typeof part === 'string' && part.startsWith('{') && part.endsWith('}')) {
-      _pathPlaceholders.add(part.slice(1, -1))
-    }
-  }
+  const _pathPlaceholders = new Set<string>(pointPlaceholders(loadPoint))
   const _renameMap = (loadPoint?.r?.param || {}) as Record<string, string>
   const _renamedPlaceholders = new Set<string>()
   for (const ph of _pathPlaceholders) {
@@ -141,11 +153,8 @@ const TestDirect = cmp(function TestDirect(props: any) {
   const listParams = listPoint?.g?.params || []
 
   // Required query params with spec-provided examples — needed in live mode.
-  const loadQuery = loadPoint?.g?.query || []
-  const loadLiveQueryEntries = loadQuery
-    .filter((q: any) => q.r && undefined !== q.ex && null !== q.ex)
-  const loadLiveQueryLines = loadLiveQueryEntries
-    .map((q: any) => `      query.put("${q.n}", ${javaLiteral(q.ex)});`)
+  const loadLiveQueryLines = liveQueryExamples(loadPoint)
+    .map(([name, ex]) => `      query.put("${name}", ${javaLiteral(ex)});`)
     .join('\n')
 
   // Path params with spec-provided examples — when ALL load params have
@@ -159,6 +168,10 @@ const TestDirect = cmp(function TestDirect(props: any) {
 
   // Build the ENTID env var name for this entity
   const entidEnvVar = `${PROJECTNAME}_TEST_${envToken(entity.name)}_ENTID`
+
+  const exampleIds = liveExampleIds(entity)
+  const listLiveQueryLines = liveQueryExamples(listPoint)
+    .map(([name, ex]) => `      query.put("${name}", ${javaLiteral(ex)});\n`).join('')
 
   File({ name: entity.Name + 'DirectTest.' + target.ext }, () => {
 
@@ -225,7 +238,8 @@ ${liveStrictNote(liveStrict(model, target.name), '//', '  ')}
       const listLiveIdKeys = listParams.length > 0
         ? listLiveParams.map((lp: any) => lp.key)
         : []
-      const listSkipBlock = listLiveIdKeys.length > 0
+      const listSkipBlock = getOnlyKeysBlock(model, entity, 'direct-list-' + entity.name, listLiveIdKeys) +
+        (listLiveIdKeys.length > 0
         ? `    if (setup.live) {
       for (String liveKey : new String[] { ${listLiveIdKeys.map((k: string) => `"${k}"`).join(', ')} }) {
         if (setup.idmap.get(liveKey) == null) {
@@ -234,7 +248,7 @@ ${liveStrictNote(liveStrict(model, target.name), '//', '  ')}
       }
     }
 `
-        : ''
+        : '')
 
       Content(`  @Test
   public void directList${entity.Name}() {
@@ -251,9 +265,10 @@ ${listSkipBlock}    ${SDK} client = setup.client;
 
 `)
 
-      if (listParams.length > 0) {
+      if (listParams.length > 0 || '' !== listLiveQueryLines) {
         Content(`    Map<String, Object> params = new LinkedHashMap<>();
-`)
+    Map<String, Object> query = new LinkedHashMap<>();
+${listLiveQueryLines ? '    if (setup.live) {\n' + listLiveQueryLines + '    }\n' : ''}`)
         listLiveParams.forEach((lp: any, i: number) => {
           const placeholder = 'direct0' + (i + 1)
           Content(`    if (setup.live) {
@@ -268,7 +283,8 @@ ${listSkipBlock}    ${SDK} client = setup.client;
     Map<String, Object> result = client.direct(jm(
         "path", "${listPath}",
         "method", "GET",
-        "params", params));
+        "params", params,
+        "query", query));
 `)
       } else {
         Content(`
@@ -340,7 +356,8 @@ ${listSkipBlock}    ${SDK} client = setup.client;
         loadLiveIdKeys = [...new Set((hasList ?
           [...listParams, ...loadParams.filter((p: any) => p.n !== 'id')] : loadParams).map(liveKey))]
       }
-      const loadSkipBlock = loadLiveIdKeys.length > 0
+      const loadSkipBlock = getOnlyKeysBlock(model, entity, 'direct-load-' + entity.name, loadLiveIdKeys) +
+        (loadLiveIdKeys.length > 0
         ? `    if (setup.live) {
       for (String liveKey : new String[] { ${loadLiveIdKeys.map(k => `"${k}"`).join(', ')} }) {
         if (setup.idmap.get(liveKey) == null) {
@@ -349,7 +366,7 @@ ${listSkipBlock}    ${SDK} client = setup.client;
       }
     }
 `
-        : ''
+        : '')
 
       Content(`  @Test
   public void directLoad${entity.Name}() {
@@ -533,7 +550,10 @@ ${authActive ? `      mergedOpts.put("apikey", env.get("${PROJECTNAME}_APIKEY"))
       else if (entidRaw instanceof Map) {
         idmap = (Map<String, Object>) entidRaw;
       }
-      setup.idmap = idmap;
+${0 === exampleIds.length ? '' : `      // A path parameter's example stands in for an id *_ENTID does not give.
+      idmap = new LinkedHashMap<>(idmap);
+${exampleIds.map(([key, ex]) => `      idmap.putIfAbsent("${key}", ${javaLiteral(ex)});
+`).join('')}`}      setup.idmap = idmap;
       return setup;
     }
 

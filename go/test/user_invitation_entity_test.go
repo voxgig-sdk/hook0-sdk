@@ -62,6 +62,12 @@ func TestUserInvitationEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"user_invitation.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite\"}")
+			t.Skip("Live coverage incomplete: user_invitation.create.0 excluded (GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite)")
+			return
+		}
+
 		if setup.live {
 			for _, _liveKey := range []string{"organization01"} {
 				if setup.syntheticOnly || setup.idmap[_liveKey] == nil {

@@ -55,6 +55,12 @@ public class UserInvitationEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"user_invitation.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite\"}");
+      Assumptions.abort("Live coverage incomplete: user_invitation.create.0 excluded (GET-only live run: needs POST /api/v1/organizations/{organization_id}/invite)");
+      return;
+    }
+
     if (setup.live) {
       for (String liveKey : new String[] { "organization01" }) {
         if (setup.syntheticOnly || setup.idmap.get(liveKey) == null) {

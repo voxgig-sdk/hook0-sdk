@@ -201,6 +201,41 @@ class EventEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"event.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/events/{event_id}/replay"}' . "\n");
+        $client = $setup["client"];
+        if (!empty($setup["live"])) {
+            Runner::live_existing($setup, self::LIVE_STRICT, "event",
+                fn() => $client->Event(null)->list([], null));
+        }
+
+        // Bootstrap entity data from existing test data.
+        $event_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.event")));
+        $event_ref01_data = null;
+        if (count($event_ref01_data_raw) > 0) {
+            $event_ref01_data = Helpers::to_map($event_ref01_data_raw[0][1]);
+        }
+
+        // LIST
+        $event_ref01_ent = $client->Event(null);
+        $event_ref01_match = [];
+
+        $event_ref01_list_result = $event_ref01_ent->list($event_ref01_match, null);
+        $this->assertIsArray($event_ref01_list_result);
+
+        // LOAD
+        $event_ref01_match_dt0 = [
+            "id" => $event_ref01_data["id"],
+        ];
+        $event_ref01_data_dt0_loaded = $event_ref01_ent->load($event_ref01_match_dt0, null);
+        $event_ref01_data_dt0_load_result = Helpers::to_map(is_object($event_ref01_data_dt0_loaded) && method_exists($event_ref01_data_dt0_loaded, 'data_get') ? $event_ref01_data_dt0_loaded->data_get() : $event_ref01_data_dt0_loaded);
+        $this->assertNotNull($event_ref01_data_dt0_load_result);
+        $this->assertEquals($event_ref01_data_dt0_load_result["id"], $event_ref01_data["id"]);
+
+            return;
+        }
+
         $client = $setup["client"];
         if (!empty($setup["live"])) {
             Runner::live_existing($setup, self::LIVE_STRICT, "event",

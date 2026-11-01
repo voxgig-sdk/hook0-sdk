@@ -51,6 +51,10 @@ class TestLoginEntity:
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
+            print("LIVE STEP {\"id\":\"login.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/auth/login\"}")
+            pytest.skip("Live coverage incomplete: login.create.0 excluded (GET-only live run: needs POST /api/v1/auth/login)")
+
         client = setup["client"]
 
         # CREATE

@@ -15,10 +15,15 @@ import {
   serverVarEnv,
   serverVariables, envName, envToken,
   pointParts,
+  pointPlaceholders,
   liveStrict,
   liveStrictNote,
   pointIsGraphql,
   graphqlDirectSkip,
+  liveExampleIds,
+  liveQueryExamples,
+  liveEntity,
+  liveDirectGetOnly, liveExcludedLines, liveExcludedSummary, LIVE_GETONLY_ENV,
 } from '@voxgig/sdkgen'
 
 
@@ -61,6 +66,17 @@ function normalizePathParams(
 
 
 // Blocked without the ids its request needs, rather than sent with None.
+// A GET-only live run excludes a test needing an id that only a write gives.
+function getOnlyKeysBlock(model: any, entity: any, test: string, keys: string[]): string {
+  return liveDirectGetOnly(model, entity, test, keys).map((miss) =>
+    `        if setup["live"] and os.environ.get(${JSON.stringify(LIVE_GETONLY_ENV)}) == "TRUE" and setup["idmap"].get(${JSON.stringify(miss.key)}) is None:
+            print(${JSON.stringify(liveExcludedLines({ excluded: [miss] })[0])})
+            pytest.skip(${JSON.stringify(liveExcludedSummary({ excluded: [miss] }))})
+
+`).join('')
+}
+
+
 function liveKeysBlock(keys: string[], entidEnvVar: string): string {
   return 0 === keys.length ? '' : `        if setup["live"]:
             for _live_key in [${keys.map((k) => JSON.stringify(k)).join(', ')}]:
@@ -76,7 +92,7 @@ const TestDirect = cmp(function TestDirect(props: any) {
   const model: Model = ctx$.model
 
   const target = props.target
-  const entity: ModelEntity = props.entity
+  const entity: ModelEntity = liveEntity(ctx$, props.entity)
 
   const PROJECTNAME = envName(model)
 
@@ -121,12 +137,7 @@ const TestDirect = cmp(function TestDirect(props: any) {
   // actually appear in the URL template should drive direct-test path-param
   // setup and URL-substitution asserts; otherwise the SDK silently drops
   // them and the URL-includes assert fails.
-  const _pathPlaceholders = new Set<string>()
-  for (const part of pointParts(loadPoint)) {
-    if (typeof part === 'string' && part.startsWith('{') && part.endsWith('}')) {
-      _pathPlaceholders.add(part.slice(1, -1))
-    }
-  }
+  const _pathPlaceholders = new Set<string>(pointPlaceholders(loadPoint))
   const _renameMap = (loadPoint?.r?.param || {}) as Record<string, string>
   const _renamedPlaceholders = new Set<string>()
   for (const ph of _pathPlaceholders) {
@@ -142,11 +153,8 @@ const TestDirect = cmp(function TestDirect(props: any) {
   const listPath = listPoint ? normalizePathParams(pointParts(listPoint), listPoint?.g?.params || [], listPoint?.r?.param) : ''
   const listParams = listPoint?.g?.params || []
 
-  const loadQuery = loadPoint?.g?.query || []
-  const loadLiveQueryEntries = loadQuery
-    .filter((q: any) => q.r && undefined !== q.ex && null !== q.ex)
-  const loadLiveQueryLines = loadLiveQueryEntries
-    .map((q: any) => `            query["${q.n}"] = ${JSON.stringify(q.ex)}`)
+  const loadLiveQueryLines = liveQueryExamples(loadPoint)
+    .map(([name, ex]) => `            query["${name}"] = ${pyLit(ex)}`)
     .join('\n')
 
   // Path params with spec-provided examples — when ALL load params have
@@ -160,6 +168,10 @@ const TestDirect = cmp(function TestDirect(props: any) {
 
   const entidEnvVar = `${PROJECTNAME}_TEST_${envToken(entity.name)}_ENTID`
 
+  const exampleIds = liveExampleIds(entity)
+  const listLiveQueryLines = liveQueryExamples(listPoint)
+    .map(([name, ex]) => `            query["${name}"] = ${pyLit(ex)}\n`).join('')
+
   // The *_ENTID key a live test reads a parameter's value from.
   const liveKey = (param: any): string =>
     ('id' === param.n ? entity.name : param.n.replace(/_id$/, '')) + '01'
@@ -169,6 +181,7 @@ const TestDirect = cmp(function TestDirect(props: any) {
     Content(`# ${entity.Name} direct test
 
 import json
+import os
 import pytest
 
 from ${model.const.Name.toLowerCase()}_sdk.utility.voxgig_struct import voxgig_struct as vs
@@ -207,10 +220,11 @@ class Test${entity.Name}Direct:
         if _skip:
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
-${liveKeysBlock(listLiveIdKeys, entidEnvVar)}        client = setup["client"]
+${getOnlyKeysBlock(model, entity, 'direct-list-' + entity.name, listLiveIdKeys)}${liveKeysBlock(listLiveIdKeys, entidEnvVar)}        client = setup["client"]
 
         params = {}
-`)
+        query = {}
+${listLiveQueryLines ? '        if setup["live"]:\n' + listLiveQueryLines : ''}`)
       listParams.forEach((lp: any, i: number) => {
         Content(`        if setup["live"]:
             params["${lp.n}"] = setup["idmap"].get("${liveKey(lp)}")
@@ -223,6 +237,7 @@ ${liveKeysBlock(listLiveIdKeys, entidEnvVar)}        client = setup["client"]
             "path": "${listPath}",
             "method": "GET",
             "params": params,
+            "query": query,
         })
         if setup["live"]:
             if not _live_ok(result):
@@ -257,7 +272,7 @@ ${liveKeysBlock(listLiveIdKeys, entidEnvVar)}        client = setup["client"]
         if _skip:
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
-${liveKeysBlock([...new Set(loadLiveIdKeys)], entidEnvVar)}        client = setup["client"]
+${getOnlyKeysBlock(model, entity, 'direct-load-' + entity.name, [...new Set(loadLiveIdKeys)])}${liveKeysBlock([...new Set(loadLiveIdKeys)], entidEnvVar)}        client = setup["client"]
 
         params = {}
         query = {}
@@ -348,7 +363,10 @@ def _${entity.name}_direct_setup(mockres):
         })
         client = ${model.const.Name}SDK(merged_opts)
         idmap = env.get("${entidEnvVar}")
-        return {
+${0 === exampleIds.length ? '' : `        # A path parameter's example stands in for an id *_ENTID does not give.
+        idmap = {${exampleIds.map(([key, ex]) => `${JSON.stringify(key)}: ${pyLit(ex)}`).join(', ')},
+                 **(idmap if isinstance(idmap, dict) else {})}
+`}        return {
             "client": client,
             "calls": calls,
             "live": True,
@@ -381,6 +399,11 @@ def _${entity.name}_direct_setup(mockres):
 `)
   })
 })
+
+
+function pyLit(value: any): string {
+  return true === value ? 'True' : false === value ? 'False' : JSON.stringify(value)
+}
 
 
 export {

@@ -30,6 +30,9 @@ import {
   entityDataIdField, envName, envToken,
   invalidRequest,
   liveFlowNeeds, liveStrict, liveStrictNote,
+  liveRouteExamples, liveStepExamples, flowLoadRoute, flowLoadReadsRecord,
+  liveGetOnly, liveExcludedLines, liveExcludedSummary, LIVE_GETONLY_ENV,
+  liveEntity,
 } from '@voxgig/sdkgen'
 
 
@@ -52,7 +55,9 @@ function liveFlowGate(entity: any, needs: any, entidEnv: string): string {
   out += '        client = setup["client"]\n'
   if (null != needs.discover) {
     const match = Object.entries(needs.discover)
-      .map(([k, v]: any) => `${JSON.stringify(k)}: setup["idmap"].get(${JSON.stringify(v)})`).join(', ')
+      .map(([k, v]: any) => `${JSON.stringify(k)}: setup["idmap"].get(${JSON.stringify(v)})`)
+      .concat(liveRouteExamples(entity, 'list', Object.keys(needs.discover))
+        .map(([k, ex]) => `${JSON.stringify(k)}: ${pyLit(ex)}`)).join(', ')
     out += `        if setup["live"]:
             runner.live_existing(setup, LIVE_STRICT, ${JSON.stringify(entity.name)},
                                  lambda: client.${entity.Name}(None).list({${match}}, None))
@@ -78,7 +83,7 @@ const TestEntity = cmp(function TestEntity(props: any) {
   const model: Model = ctx$.model
 
   const target = props.target
-  const entity: ModelEntity = props.entity
+  const entity: ModelEntity = liveEntity(ctx$, props.entity)
 
   const basicflow: ModelEntityFlow | undefined =
     getModelPath(model, `main.${KIT}.flow.Basic${nom(entity, 'Name')}Flow`)
@@ -127,7 +132,6 @@ const TestEntity = cmp(function TestEntity(props: any) {
   const genCtx: GenCtx = { model, entity, flow: basicflow, PROJUPPER }
 
   const strict = liveStrict(model, target.name)
-  const needs = liveFlowNeeds(entity, basicflow)
   const entidEnv = PROJUPPER + '_TEST_' + envToken(entity.name) + '_ENTID'
 
   // The stream test streams the "list" op with no match and asserts a 3-item
@@ -213,13 +217,16 @@ ${strict ? '' : `    @runner.live_observe("${PROJUPPER}_TEST_LIVE", LIVE_STRICT)
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
-${liveFlowGate(entity, needs, entidEnv)}
 `)
 
-    // Check if the flow has a create step
-    const flowHasCreate = allSteps.some((s: any) => s.o === 'create')
-    if (!flowHasCreate) {
-      Content(`        # Bootstrap entity data from existing test data.
+    const flowBody = (flow: any) => {
+      const steps = flowSteps(flow) as any[]
+      Content(liveFlowGate(entity, liveFlowNeeds(entity, flow), entidEnv) + '\n')
+
+      // Check if the flow has a create step
+      const flowHasCreate = steps.some((s: any) => s.o === 'create')
+      if (!flowHasCreate) {
+        Content(`        # Bootstrap entity data from existing test data.
         ${entity.name}_ref01_data_raw = vs.items(helpers.to_map(
             vs.getpath(setup["data"], "existing.${entity.name}")))
         ${entity.name}_ref01_data = None
@@ -227,24 +234,46 @@ ${liveFlowGate(entity, needs, entidEnv)}
             ${entity.name}_ref01_data = helpers.to_map(${entity.name}_ref01_data_raw[0][1])
 
 `)
+      }
+
+      // Model-driven step iteration
+      each(steps, (step: any, index: any) => {
+        // Never emit a REMOVE (or its removed-item verify LIST) without a
+        // preceding CREATE: a coherent CRUD flow only removes what it created,
+        // so a create-less remove would mutate pre-existing (live) data.
+        if (!flowHasCreate) {
+          if ('remove' === step.o) { return }
+          if ('list' === step.o &&
+            (step.v || []).some((v: any) => 'ItemNotExists' === v.apply)) { return }
+        }
+        const opgen: OpGen = GENERATE_OP[step.o]
+        if (opgen) {
+          opgen({ ...genCtx, flow }, step, index)
+          Content('\n')
+        }
+      })
     }
 
-    // Model-driven step iteration
-    each(flowSteps(basicflow), (step: any, index: any) => {
-      // Never emit a REMOVE (or its removed-item verify LIST) without a
-      // preceding CREATE: a coherent CRUD flow only removes what it created,
-      // so a create-less remove would mutate pre-existing (live) data.
-      if (!flowHasCreate) {
-        if ('remove' === step.o) { return }
-        if ('list' === step.o &&
-          (step.v || []).some((v: any) => 'ItemNotExists' === v.apply)) { return }
-      }
-      const opgen: OpGen = GENERATE_OP[step.o]
-      if (opgen) {
-        opgen(genCtx, step, index)
-        Content('\n')
-      }
-    })
+    // A python block cannot hold steps emitted at the method's own indent,
+    // so the steps a GET-only run keeps go in a method of their own.
+    const getOnly = liveGetOnly(entity, basicflow)
+    const getOnlyRuns = null != getOnly && 0 < flowSteps(getOnly.flow).length
+    if (null != getOnly) {
+      Content(`        if setup["live"] and os.environ.get(${JSON.stringify(LIVE_GETONLY_ENV)}) == "TRUE":
+${liveExcludedLines(getOnly).map((line) => '            print(' + pyLit(line) + ')\n').join('')}${getOnlyRuns ?
+  '            return self._run_get_only_flow(setup)\n' :
+  '            pytest.skip(' + pyLit(liveExcludedSummary(getOnly)) + ')\n'}
+`)
+    }
+
+    flowBody(basicflow)
+
+    if (null != getOnly && getOnlyRuns) {
+      Content(`
+    def _run_get_only_flow(self, setup):
+`)
+      flowBody(getOnly.flow)
+    }
 
     Content(`
 
@@ -420,6 +449,7 @@ const generateList: OpGen = (ctx, step, index) => {
     Content(`        }
 `)
   }
+  Content(liveFill(entity, step, matchvar))
 
   Content(`
         ${listvar}_result = ${entvar}.list(${matchvar}, None)
@@ -561,7 +591,7 @@ const generateLoad: OpGen = (ctx, step, index) => {
     Content(`        ${entvar} = client.${entity.Name}(None)
 `)
   }
-  if (!hasSrcData && hasEntId) {
+  if (!hasSrcData && (hasEntId || flowLoadReadsRecord(entity, step))) {
     Content(`        ${srcdatavar}_raw = vs.items(helpers.to_map(
             vs.getpath(setup["data"], "existing.${entity.name}")))
         ${srcdatavar} = None
@@ -573,7 +603,7 @@ const generateLoad: OpGen = (ctx, step, index) => {
     Content(`        ${matchvar} = {
             "id": ${srcdatavar}["id"],
         }
-${parentMatch(step, matchvar)}        ${datavar}_loaded = ${entvar}.load(${matchvar}, None)
+${loadMatch(entity, step, matchvar, srcdatavar)}${liveFill(entity, step, matchvar)}        ${datavar}_loaded = ${entvar}.load(${matchvar}, None)
         ${datavar}_load_result = helpers.to_map(runner.entity_data(${datavar}_loaded))
         assert ${datavar}_load_result is not None
         assert ${datavar}_load_result["id"] == ${srcdatavar}["id"]
@@ -581,7 +611,7 @@ ${parentMatch(step, matchvar)}        ${datavar}_loaded = ${entvar}.load(${match
   }
   else {
     Content(`        ${matchvar} = {}
-${parentMatch(step, matchvar)}        ${datavar}_loaded = ${entvar}.load(${matchvar}, None)
+${loadMatch(entity, step, matchvar, srcdatavar)}${liveFill(entity, step, matchvar)}        ${datavar}_loaded = ${entvar}.load(${matchvar}, None)
         assert ${datavar}_loaded is not None
 `)
   }
@@ -621,12 +651,45 @@ ${parentMatch(step, matchvar)}        ${entvar}.remove(${matchvar}, None)
 // A child's route names its parents, and an entity no earlier step has
 // filled knows none of them, so the call itself gives each parent id. A live
 // ENTID may key a parent by its field name, the fixture by its own name.
+// A live step sends each example its route requires and the step leaves unbound.
+function liveFill(entity: any, step: any, matchvar: string): string {
+  const fills = liveStepExamples(entity, step)
+  return 0 === fills.length ? '' : `        if setup["live"]:
+${fills.map(([k, ex]) => `            ${matchvar}[${JSON.stringify(k)}] = ${pyLit(ex)}\n`).join('')}`
+}
+
+
 function parentMatch(step: any, matchvar: string): string {
   return Object.entries(step.m || {})
     .filter(([k]: any) => k !== 'id' && !k.endsWith('$'))
     .map(([key, val]: any) => `        ${matchvar}["${key}"] = setup["idmap"].get("${key}") or setup["idmap"].get("${val}")
 `).join('')
 }
+
+// A load of a known record fills its route from that record, and from the
+// step's binding where the record holds no scalar for it. A record only the
+// fixture holds replaces the step's binding offline.
+function loadMatch(entity: any, step: any, matchvar: string, srcdatavar: string): string {
+  const route = flowLoadRoute(entity, step)
+  if (null == route) {
+    return parentMatch(step, matchvar)
+  }
+  if (route.offline) {
+    const own = route.args.filter((arg) => null != arg.field)
+    return parentMatch(step, matchvar) + (0 === own.length ? '' : `        if not setup["live"]:
+${own.map((arg) => `            if isinstance(${srcdatavar}.get("${arg.field}"), (str, int, float)):
+                ${matchvar}["${arg.name}"] = ${srcdatavar}["${arg.field}"]
+`).join('')}`)
+  }
+  return route.args.map((arg) => {
+    const bound = arg.idmap.map((key) => `setup["idmap"].get("${key}")`).join(' or ')
+    const own = `${srcdatavar}.get("${arg.field}")`
+    return `        ${matchvar}["${arg.name}"] = ${null == arg.field ? bound :
+      `${own} if isinstance(${own}, (str, int, float)) else ${bound}`}
+`
+  }).join('')
+}
+
 
 const GENERATE_OP: Record<string, OpGen> = {
   create: generateCreate,

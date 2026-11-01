@@ -55,6 +55,45 @@ public class ServiceTokenEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"service_token.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/service_token/\"}");
+      System.out.println("LIVE STEP {\"id\":\"service_token.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/service_token/{service_token_id}\"}");
+      System.out.println("LIVE STEP {\"id\":\"service_token.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/service_token/{service_token_id}\"}");
+      System.out.println("LIVE STEP {\"id\":\"service_token.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}");
+    Hook0SDK client = setup.client;
+    if (setup.live) {
+      RunnerSupport.liveExisting(setup.data, LIVE_STRICT, "service_token", () -> {
+        Map<String, Object> match = new LinkedHashMap<>();
+        return client.serviceToken(null).list(match, null);
+      });
+    }
+
+    // Bootstrap entity data from existing test data (no create step in flow).
+    List<List<Object>> serviceTokenRef01DataRaw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.service_token")));
+    Map<String, Object> serviceTokenRef01Data = serviceTokenRef01DataRaw.isEmpty()
+        ? null : Helpers.toMapAny(serviceTokenRef01DataRaw.get(0).get(1));
+
+    // LIST
+    SdkEntity serviceTokenRef01Ent = client.serviceToken(null);
+    Map<String, Object> serviceTokenRef01Match = new LinkedHashMap<>();
+
+    Object serviceTokenRef01ListResult = serviceTokenRef01Ent.list(serviceTokenRef01Match, null);
+    assertTrue(serviceTokenRef01ListResult instanceof List,
+        "expected list result to be an array, got " + serviceTokenRef01ListResult);
+
+    // LOAD
+    Map<String, Object> serviceTokenRef01MatchDt0 = new LinkedHashMap<>();
+    serviceTokenRef01MatchDt0.put("id", serviceTokenRef01Data.get("id"));
+    Object serviceTokenRef01DataDt0Loaded = serviceTokenRef01Ent.load(serviceTokenRef01MatchDt0, null);
+    Map<String, Object> serviceTokenRef01DataDt0LoadResult = Helpers.toMapAny(serviceTokenRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) serviceTokenRef01DataDt0Loaded).data() : serviceTokenRef01DataDt0Loaded);
+    assertNotNull(serviceTokenRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(serviceTokenRef01Data.get("id"), serviceTokenRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
+
+      return;
+    }
+
     Hook0SDK client = setup.client;
 
     // CREATE

@@ -4833,6 +4833,9 @@
           "plugin": {},
           "spec": {},
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -4848,6 +4851,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -4858,6 +4864,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -4949,6 +4958,9 @@
           "plugin": {},
           "spec": {},
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -4964,6 +4976,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -4974,6 +4989,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -5065,6 +5083,9 @@
           "plugin": {},
           "spec": {},
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -5080,6 +5101,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -5090,6 +5114,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -5176,6 +5203,9 @@
           "plugin": {},
           "spec": {},
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -5191,6 +5221,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -5201,6 +5234,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -5283,6 +5319,9 @@
           "plugin": {},
           "spec": {},
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -5298,6 +5337,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -5308,6 +5350,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -5401,6 +5446,9 @@
           "plugin": {},
           "spec": {},
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -5416,6 +5464,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -5426,6 +5477,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -6397,6 +6451,9 @@
             "authexchange": "exchange"
           },
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -6412,6 +6469,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -6422,6 +6482,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -6510,6 +6573,9 @@
           "plugin": {},
           "spec": {},
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -6525,6 +6591,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -6535,6 +6604,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -6617,6 +6689,9 @@
           "plugin": {},
           "spec": {},
           "target": {
+            "csharp": {
+              "deps": {}
+            },
             "go": {
               "deps": {}
             },
@@ -6632,6 +6707,9 @@
             "js": {
               "deps": {}
             },
+            "kotlin": {
+              "deps": {}
+            },
             "lua": {
               "deps": {}
             },
@@ -6642,6 +6720,9 @@
               "deps": {}
             },
             "rb": {
+              "deps": {}
+            },
+            "rust": {
               "deps": {}
             },
             "ts": {
@@ -7871,6 +7952,75 @@
         "path": ""
       },
       "target": {
+        "csharp": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "cs",
+          "feature": {
+            "fullset": [
+              "test/FeatureTest.cs"
+            ],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
+          },
+          "name": "csharp",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "root": false,
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "nuget",
+              "package": "",
+              "state": "pending",
+              "url": "https://www.nuget.org",
+              "vault": {
+                "alias": "nuget",
+                "env": "NUGET_API_KEY",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.1.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/StructRunner.cs"
+          ],
+          "title": "C#"
+        },
         "go": {
           "active": true,
           "author": {
@@ -8241,6 +8391,75 @@
           ],
           "title": "JavaScript"
         },
+        "kotlin": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "kt",
+          "feature": {
+            "fullset": [
+              "test/FeatureTest.kt"
+            ],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
+          },
+          "name": "kotlin",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "root": false,
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "maven-central",
+              "package": "",
+              "state": "pending",
+              "url": "https://central.sonatype.com",
+              "vault": {
+                "alias": "central",
+                "env": "",
+                "recipe": "maven"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.1.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/StructRunner.kt"
+          ],
+          "title": "Kotlin"
+        },
         "lua": {
           "active": true,
           "author": {
@@ -8501,7 +8720,7 @@
             "registry": {
               "active": false,
               "name": "rubygems",
-              "package": "",
+              "package": "voxgig-sdk-hook0-sdk",
               "state": "pending",
               "url": "https://rubygems.org",
               "vault": {
@@ -8526,6 +8745,81 @@
             "test/struct_runner.rb"
           ],
           "title": "Ruby"
+        },
+        "rust": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {
+            "ureq": {
+              "active": true,
+              "kind": "prod",
+              "version": "2"
+            }
+          },
+          "ext": "rs",
+          "feature": {
+            "fullset": [
+              "tests/feature_test.rs"
+            ],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "hook0",
+            "package": "",
+            "path": ""
+          },
+          "name": "rust",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "root": false,
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "crates.io",
+              "package": "",
+              "state": "pending",
+              "url": "https://crates.io",
+              "vault": {
+                "alias": "cratesio",
+                "env": "CARGO_REGISTRY_TOKEN",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.1.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "tests/struct_runner/mod.rs"
+          ],
+          "title": "Rust"
         },
         "ts": {
           "active": true,

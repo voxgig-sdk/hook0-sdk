@@ -13,3 +13,6 @@
 @"./zig.aontu"
 
 @"./rb.aontu"
+@"./csharp.aontu"
+@"./kotlin.aontu"
+@"./rust.aontu"

@@ -200,6 +200,61 @@ func TestSubscriptionEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"subscription.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/subscriptions/\"}")
+			t.Log("LIVE STEP {\"id\":\"subscription.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/subscriptions/{subscription_id}\"}")
+			t.Log("LIVE STEP {\"id\":\"subscription.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/subscriptions/{subscription_id}\"}")
+			t.Log("LIVE STEP {\"id\":\"subscription.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+		client := setup.client
+		_ = client
+		if setup.live {
+			liveExisting(t, subscriptionEntityLiveStrict, setup.data, "subscription", func() (any, error) {
+				return client.Subscription(nil).List(map[string]any{}, nil)
+			})
+		}
+
+		// Bootstrap entity data from existing test data (no create step in flow).
+		subscriptionRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.subscription")))
+		var subscriptionRef01Data map[string]any
+		if len(subscriptionRef01DataRaw) > 0 {
+			subscriptionRef01Data = core.ToMapAny(subscriptionRef01DataRaw[0][1])
+		}
+		// Discard guards against Go's unused-var check when the flow's steps
+		// happen not to consume the bootstrap data (e.g. list-only flows).
+		_ = subscriptionRef01Data
+
+		// LIST
+		subscriptionRef01Ent := client.Subscription(nil)
+		subscriptionRef01Match := map[string]any{}
+
+		subscriptionRef01ListResult, err := subscriptionRef01Ent.List(subscriptionRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		_, subscriptionRef01ListOk := subscriptionRef01ListResult.([]any)
+		if !subscriptionRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", subscriptionRef01ListResult)
+		}
+
+		// LOAD
+		subscriptionRef01MatchDt0 := map[string]any{
+			"id": subscriptionRef01Data["id"],
+		}
+		subscriptionRef01DataDt0Loaded, err := subscriptionRef01Ent.Load(subscriptionRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		subscriptionRef01DataDt0LoadResult := core.ToMapAny(entityData(subscriptionRef01DataDt0Loaded))
+		if subscriptionRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if subscriptionRef01DataDt0LoadResult["id"] != subscriptionRef01Data["id"] {
+			t.Fatal("expected load result id to match")
+		}
+
+		return
+		}
+
 		client := setup.client
 		_ = client
 

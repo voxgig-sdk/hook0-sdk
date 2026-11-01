@@ -55,6 +55,12 @@ public class LoginEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"login.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/auth/login\"}");
+      Assumptions.abort("Live coverage incomplete: login.create.0 excluded (GET-only live run: needs POST /api/v1/auth/login)");
+      return;
+    }
+
     Hook0SDK client = setup.client;
 
     // CREATE

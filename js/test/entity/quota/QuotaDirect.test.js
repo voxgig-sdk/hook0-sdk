@@ -44,6 +44,7 @@ describe('QuotaDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
     if (setup.live) {
       // no params
     } else {
@@ -54,6 +55,7 @@ describe('QuotaDirect', async () => {
       path: 'api/v1/quotas',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {

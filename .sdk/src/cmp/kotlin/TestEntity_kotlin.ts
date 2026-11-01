@@ -1,0 +1,810 @@
+import { flowSteps, opReachable, invalidRequest, flowLoadRoute, flowLoadReadsRecord } from '@voxgig/sdkgen'
+
+import {
+  KIT,
+  Model,
+  ModelEntity,
+  ModelEntityFlow,
+  ModelEntityFlowStep,
+  getModelPath,
+  nom,
+} from '@voxgig/apidef'
+
+
+import {
+  Content,
+  File,
+  cmp,
+  each,
+  buildIdNames,
+  getMatchEntries,
+  isAuthActive, envName, envToken,
+  liveFlowNeeds, liveStrict, liveStrictNote,
+  liveGetOnly, liveExcludedLines, liveExcludedSummary, LIVE_GETONLY_ENV,
+  liveRouteExamples, liveStepExamples,
+  liveEntity,
+} from '@voxgig/sdkgen'
+
+
+import { kotlinVarName } from './utility_kotlin'
+
+
+// Convert snake_case to camelCase for Kotlin variable names.
+function kvar(name: string): string {
+  return name.replace(/_([a-z0-9])/g, (_: any, c: string) => c.toUpperCase())
+}
+
+
+type GenCtx = {
+  model: Model
+  entity: ModelEntity
+  kotlinpackage: string
+  flow: ModelEntityFlow
+  PROJUPPER: string
+  accessor: string
+}
+
+type OpGen = (ctx: GenCtx, step: ModelEntityFlowStep, index: number) => void
+
+
+// The live prologue of a flow built from offline fixtures: blocked without
+// the ids it binds, a create-less load reading the first listed record, and
+// a lenient run observing its checks rather than failing on them.
+function liveFlowGate(entity: any, needs: any, entidEnv: string, accessor: string,
+  strict: boolean, hasSteps: boolean): string {
+  let out = ''
+  if (0 < needs.keys.length) {
+    out += `    if (setup.live) {
+      for (liveKey in arrayOf<String>(${needs.keys.map((k: string) => JSON.stringify(k)).join(', ')})) {
+        if (setup.syntheticOnly || setup.idmap?.get(liveKey) == null) {
+          RunnerSupport.liveMiss(LIVE_STRICT, "Live entity test blocked: needs " + liveKey + " via ${entidEnv}")
+        }
+      }
+    }
+`
+  }
+  if (null != needs.blocked) {
+    out += `    if (setup.live) {
+      RunnerSupport.liveMiss(LIVE_STRICT, "Live entity test blocked: " + ${JSON.stringify(needs.blocked)})
+    }
+`
+  }
+  if (!hasSteps) {
+    return out
+  }
+  out += '    val client = setup.client\n'
+  if (null != needs.discover) {
+    const match = Object.entries(needs.discover)
+      .map(([k, v]: any) => `${JSON.stringify(k)} to setup.idmap?.get(${JSON.stringify(v)})`)
+      .concat(liveRouteExamples(entity, 'list', Object.keys(needs.discover))
+        .map(([k, ex]) => `${JSON.stringify(k)} to ${kotlinLit(ex)}`)).join(', ')
+    out += `    if (setup.live) {
+      RunnerSupport.liveExisting(setup.data!!, LIVE_STRICT, ${JSON.stringify(entity.name)}) {
+        client.${accessor}(null).list(linkedMapOf<String, Any?>(${match}), null)
+      }
+    }
+`
+  }
+  if (!strict) {
+    out += '    try {\n'
+  }
+  return out + '\n'
+}
+
+
+const TestEntity = cmp(function TestEntity(props: any) {
+  const ctx$ = props.ctx$
+  const model: Model = ctx$.model
+
+  const target = props.target
+  const entity: ModelEntity = liveEntity(ctx$, props.entity)
+  const kotlinpackage: string = props.kotlinpackage
+
+  const basicflow: ModelEntityFlow | undefined =
+    getModelPath(model, `main.${KIT}.flow.Basic${nom(entity, 'Name')}Flow`)
+  if (null == basicflow || true !== basicflow.active) {
+    return
+  }
+
+  const PROJUPPER = envName(model)
+  const ENTUPPER = envToken(entity.name)
+  const entidEnvVar = `${PROJUPPER}_TEST_${ENTUPPER}_ENTID`
+
+  const SDK = model.const.Name + 'SDK'
+  const accessor = kotlinVarName(entity.name)
+
+  const authActive = isAuthActive(model)
+
+  const idnames = buildIdNames(entity, basicflow)
+
+  const allSteps = Object.values(flowSteps(basicflow)) as any[]
+  const updateStep = allSteps.find((s: any) => s.o === 'update')
+  const updateData = updateStep?.d
+    ? Object.entries(updateStep.d).filter(([k]: any) => k !== 'id' && !k.endsWith('$'))
+    : []
+  const aliases = updateData.map(([k, v]: any) => [k, v])
+
+  const genCtx: GenCtx = { model, entity, kotlinpackage, flow: basicflow, PROJUPPER, accessor }
+
+  const strict = liveStrict(model, target.name)
+
+  const stepOps = Array.from(new Set(
+    (allSteps as any[]).map((s: any) => s.o).filter(Boolean)))
+
+  File({ name: entity.Name + 'EntityTest.' + target.ext }, () => {
+
+    Content(`package ${kotlinpackage}.sdktest
+
+import java.nio.file.Files
+import java.nio.file.Paths
+
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assumptions
+import org.junit.jupiter.api.Test
+
+import ${kotlinpackage}.core.Config
+import ${kotlinpackage}.core.Context
+import ${kotlinpackage}.core.Helpers
+import ${kotlinpackage}.core.SdkEntity
+import ${kotlinpackage}.core.SdkError
+import ${kotlinpackage}.core.${SDK}
+import ${kotlinpackage}.feature.BaseFeature
+import ${kotlinpackage}.utility.Json
+import ${kotlinpackage}.utility.struct.Struct
+
+@Suppress("UNCHECKED_CAST", "UNUSED_VARIABLE", "UNUSED_VALUE")
+class ${entity.Name}EntityTest {
+
+${liveStrictNote(strict, '//', '  ')}
+  private val LIVE_STRICT = ${strict}
+
+  @Test
+  fun instance() {
+    val testsdk = ${SDK}.testSDK()
+    val ent = testsdk.${accessor}(null)
+    assertNotNull(ent, "expected non-null ${entity.name} entity")
+  }
+
+  @Test
+  fun basic() {
+    val setup = ${accessor}BasicSetup(null)
+    // Per-op sdk-test-control.json skip.
+    val mode = if (setup.live) "live" else "unit"
+    for (op in arrayOf<String>(${stepOps.map(o => `"${o}"`).join(', ')})) {
+      val reason = RunnerSupport.skipReason("entityOp", "${entity.name}.\$op", mode)
+      Assumptions.assumeTrue(
+        reason == null,
+        if (reason == null || "" == reason) "skipped via sdk-test-control.json" else reason,
+      )
+    }
+`)
+
+    const flowBody = (flow: any) => {
+      const steps = flowSteps(flow) as any[]
+      Content(liveFlowGate(entity, liveFlowNeeds(entity, flow), entidEnvVar, accessor, strict,
+        steps.length > 0))
+
+      const flowHasCreate = steps.some((s: any) => s.o === 'create')
+      if (!flowHasCreate) {
+        const preambleRef = entity.name + '_ref01'
+        const preambleVar = kvar(preambleRef)
+        Content(`    // Bootstrap entity data from existing test data (no create step in flow).
+    val ${preambleVar}DataRaw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.${entity.name}")))
+    val ${preambleVar}Data: MutableMap<String, Any?> = if (${preambleVar}DataRaw.isEmpty())
+        linkedMapOf() else (Helpers.toMapAny(${preambleVar}DataRaw[0][1]) ?: linkedMapOf())
+
+`)
+      }
+
+      each(steps, (step: any, index: any) => {
+        const opgen: OpGen = GENERATE_OP[step.o]
+        if (opgen) {
+          opgen({ ...genCtx, flow }, step, index)
+          Content('\n')
+        }
+      })
+
+      Content(strict || 0 === steps.length ? '' : `    } catch (err: Throwable) {
+      RunnerSupport.liveObserve(err, setup.live, LIVE_STRICT)
+    }
+`)
+    }
+
+    const getOnly = liveGetOnly(entity, basicflow)
+    if (null != getOnly) {
+      Content(`    if (setup.live && "TRUE" == System.getenv(${kotlinLit(LIVE_GETONLY_ENV)})) {
+${liveExcludedLines(getOnly).map((line) => '      println(' + kotlinLit(line) + ')\n').join('')}`)
+      if (0 === flowSteps(getOnly.flow).length) {
+        Content(`      Assumptions.assumeTrue(false, ${kotlinLit(liveExcludedSummary(getOnly))})
+      return
+    }
+
+`)
+      }
+      else {
+        flowBody(getOnly.flow)
+        Content(`      return
+    }
+
+`)
+      }
+    }
+
+    flowBody(basicflow)
+
+    Content(`  }
+
+`)
+
+    // The stream test lists with no match, so a bare call must reach a route.
+    const flowHasList = allSteps.some((s: any) => s.o === 'list') &&
+      opReachable((entity.op as any)?.list, [])
+    if (flowHasList) {
+      Content(`  @Test
+  fun stream() {
+    val streamingActive = linkedMapOf<String, Any?>(
+      "feature" to linkedMapOf<String, Any?>(
+        "streaming" to linkedMapOf<String, Any?>("active" to true),
+      ),
+    )
+    val setup = ${accessor}BasicSetup(streamingActive)
+    Assumptions.assumeFalse(
+      setup.live,
+      "stream test streams the seeded fixture data (unit mode only)",
+    )
+
+    val ent = setup.client.${accessor}(null)
+    val match = linkedMapOf<String, Any?>()
+
+    // Materialised list result for the same op.
+    val listedResult = ent.list(match, null)
+    val listed = (listedResult as? List<Any?>) ?: emptyList<Any?>()
+
+    // stream("list") yields items via the streaming feature's iterator.
+    val streamed = ent.stream("list", match, null).toList()
+    assertTrue(streamed.size > 0, "expected stream to yield items")
+    assertEquals(listed.size, streamed.size, "expected stream to match list count")
+
+    // Fallback: with streaming inactive, stream still yields the materialised
+    // items.
+    val setup2 = ${accessor}BasicSetup(null)
+    val ent2 = setup2.client.${accessor}(null)
+    val streamed2 = ent2.stream("list", match, null).toList()
+    assertEquals(listed.size, streamed2.size, "expected fallback stream to match list")
+  }
+
+`)
+    }
+
+    Content(failureTests(SDK, entity, accessor))
+
+    // Setup function (companion object).
+    Content(`  companion object {
+    fun ${accessor}BasicSetup(extra: MutableMap<String, Any?>?): RunnerSupport.EntityTestSetup {
+      RunnerSupport.loadEnvLocal()
+
+      val entityData: MutableMap<String, Any?>
+      try {
+        val entityDataSource = Files.readString(Paths.get(
+            "..", ".sdk", "test", "entity", "${entity.name}", "${entity.Name}TestData.json"))
+        entityData = Helpers.toMapAny(Json.parse(entityDataSource)) ?: linkedMapOf()
+      } catch (e: Exception) {
+        throw AssertionError("failed to read ${entity.name} test data: " + e.message, e)
+      }
+
+      val options = linkedMapOf<String, Any?>()
+      options["entity"] = entityData["existing"]
+
+      var client = ${SDK}.testSDK(options, extra)
+
+      // Generate idmap via transform, matching TS pattern.
+      val idnames = mutableListOf<Any?>()
+`)
+
+    for (const n of idnames) {
+      Content(`      idnames.add("${n}")
+`)
+    }
+
+    Content(`      val idmap = Struct.transform(idnames, Json.parse(
+          "{\\"\`\\$PACK\`\\": [\\"\\", {" +
+          "\\"\`\\$KEY\`\\": \\"\`\\$COPY\`\\"," +
+          "\\"\`\\$VAL\`\\": [\\"\`\\$FORMAT\`\\", \\"upper\\", \\"\`\\$COPY\`\\"]" +
+          "}]}"))
+
+      // Whether *_ENTID supplied the idmap, read before envOverride consumes it.
+      val entidEnvRaw = RunnerSupport.getenv("${entidEnvVar}")
+      val idmapOverridden = entidEnvRaw != null && entidEnvRaw.trim().startsWith("{")
+
+      val envm = linkedMapOf<String, Any?>()
+      envm["${entidEnvVar}"] = idmap
+      envm["${PROJUPPER}_TEST_LIVE"] = "FALSE"
+      envm["${PROJUPPER}_TEST_EXPLAIN"] = "FALSE"
+${authActive ? `      envm["${PROJUPPER}_APIKEY"] = "NONE"\n` : ''}      val env = RunnerSupport.envOverride(envm)
+
+      var idmapResolved = Helpers.toMapAny(env["${entidEnvVar}"])
+      if (idmapResolved == null) {
+        idmapResolved = Helpers.toMapAny(idmap) ?: linkedMapOf()
+      }
+`)
+
+    for (const [key, val] of aliases) {
+      Content(`      // Add ${key} alias for update test.
+      if (idmapResolved["${key}"] == null) {
+        idmapResolved["${key}"] = idmapResolved["${val}"]
+      }
+`)
+    }
+
+    Content(`
+      val live = "TRUE" == env["${PROJUPPER}_TEST_LIVE"]
+      if (live) {
+        val liveOpts = linkedMapOf<String, Any?>()
+${authActive ? `        liveOpts["apikey"] = env["${PROJUPPER}_APIKEY"]\n` : ''}        val mergedOpts = Struct.merge(Struct.jt(liveOpts, extra))
+        client = ${SDK}(Helpers.toMapAny(mergedOpts))
+      }
+
+      val setup = RunnerSupport.EntityTestSetup()
+      setup.client = client
+      setup.data = entityData
+      setup.idmap = idmapResolved
+      setup.env = env
+      setup.explain = "TRUE" == env["${PROJUPPER}_TEST_EXPLAIN"]
+      setup.live = live
+      setup.syntheticOnly = live && !idmapOverridden
+      setup.now = System.currentTimeMillis()
+      return setup
+    }
+  }
+}
+`)
+  })
+})
+
+
+const generateCreate: OpGen = (ctx, step, index) => {
+  const { entity, flow, accessor } = ctx
+  const ref = step.i.ref ?? entity.name + '_ref01'
+  const entvar = kvar(step.i.entvar ?? ref + '_ent')
+  const datavar = kvar(step.i.datavar ?? (ref + '_data' + (step.i.suffix ?? '')))
+
+  const priorSteps = Object.values(flowSteps(flow)).slice(0, Number(index)) as any[]
+  const needsEnt = !priorSteps.some((s: any) =>
+    ['create', 'list', 'load', 'update', 'remove'].includes(s.o))
+
+  const hasDatvar = priorSteps.some((s: any) => {
+    if ('create' === s.o) {
+      const priorRef = s.i.ref ?? entity.name + '_ref01'
+      const priorDatvar = kvar(s.i.datavar ?? (priorRef + '_data' + (s.i.suffix ?? '')))
+      return priorDatvar === datavar
+    }
+    return false
+  })
+
+  Content(`    // CREATE
+`)
+  if (needsEnt) {
+    Content(`    val ${entvar} = client.${accessor}(null)
+`)
+  }
+
+  const decl = hasDatvar ? '' : 'var '
+  Content(`    ${decl}${datavar}: MutableMap<String, Any?> = (Helpers.toMapAny(Struct.getprop(
+        Struct.getpath(setup.data, "new.${entity.name}"), "${ref}")) ?: linkedMapOf())
+`)
+
+  const matchEntries = getMatchEntries(step)
+  for (const [key, val] of matchEntries) {
+    Content(`    ${datavar}["${key}"] = setup.idmap!!["${val}"]
+`)
+  }
+
+  Content(`
+    val ${datavar}Result = ${entvar}.create(${datavar}, null)
+    ${datavar} = Helpers.toMapAny(if (${datavar}Result is SdkEntity) ${datavar}Result.data() else ${datavar}Result) ?: linkedMapOf()
+    assertNotNull(${datavar}, "expected create result to be a map")
+`)
+  if (null != ctx.entity.id) {
+    Content(`    assertNotNull(${datavar}["id"], "expected created entity to have an id")
+`)
+  }
+}
+
+
+const generateList: OpGen = (ctx, step, index) => {
+  const { entity, flow, accessor } = ctx
+  const ref = step.i.ref ?? entity.name + '_ref01'
+  const entvar = kvar(step.i.entvar ?? ref + '_ent')
+  const matchvar = kvar(step.i.matchvar ?? (ref + '_match' + (step.i.suffix ?? '')))
+  const listvar = kvar(step.i.listvar ?? (ref + '_list' + (step.i.suffix ?? '')))
+
+  const priorSteps = Object.values(flowSteps(flow)).slice(0, Number(index)) as any[]
+  const needsEnt = !priorSteps.some((s: any) =>
+    ['create', 'list', 'load', 'update', 'remove'].includes(s.o))
+
+  Content(`    // LIST
+`)
+  if (needsEnt) {
+    Content(`    val ${entvar} = client.${accessor}(null)
+`)
+  }
+
+  const matchEntries = getMatchEntries(step)
+  Content(`    val ${matchvar} = linkedMapOf<String, Any?>()
+`)
+  for (const [key, val] of matchEntries) {
+    Content(`    ${matchvar}["${key}"] = setup.idmap!!["${val}"]
+`)
+  }
+  Content(liveFill(entity, step, matchvar))
+
+  const allSteps = Object.values(flowSteps(flow)) as any[]
+  const listvarUsed = !!step.v?.some((v: any) => {
+    if ('ItemExists' !== v.apply && 'ItemNotExists' !== v.apply) return false
+    const validRef = v.def?.ref
+    return validRef && allSteps.some((s: any) => 'create' === s.o &&
+      ((s.i.ref ?? entity.name + '_ref01') === validRef))
+  })
+
+  Content(`
+    val ${listvar}Result = ${entvar}.list(${matchvar}, null)
+    assertTrue(${listvar}Result is List<*>,
+        "expected list result to be an array, got " + ${listvar}Result)
+`)
+  if (listvarUsed) {
+    Content(`    val ${listvar} = ${listvar}Result as List<Any?>
+`)
+  }
+
+  if (step.v) {
+    for (const validator of step.v) {
+      const validRef = validator.def?.ref
+      const hasRefData = validRef && allSteps.some((s: any) => 'create' === s.o &&
+        ((s.i.ref ?? entity.name + '_ref01') === validRef))
+
+      if ('ItemExists' === validator.apply && hasRefData) {
+        const refDataVar = kvar(validRef + '_data')
+        Content(`
+    val foundItem = Struct.select(
+        RunnerSupport.entityListToData(${listvar}),
+        Struct.jm("id", ${refDataVar}["id"]))
+    assertFalse(Struct.isempty(foundItem), "expected to find created entity in list")
+`)
+      } else if ('ItemNotExists' === validator.apply && hasRefData) {
+        const refDataVar = kvar(validRef + '_data')
+        Content(`
+    val notFoundItem = Struct.select(
+        RunnerSupport.entityListToData(${listvar}),
+        Struct.jm("id", ${refDataVar}["id"]))
+    assertTrue(Struct.isempty(notFoundItem), "expected removed entity to not be in list")
+`)
+      }
+    }
+  }
+}
+
+
+const generateUpdate: OpGen = (ctx, step, index) => {
+  const { entity, flow, accessor } = ctx
+  const ref = step.i.ref ?? entity.name + '_ref01'
+  const entvar = kvar(step.i.entvar ?? ref + '_ent')
+  const datavar = kvar(step.i.datavar ?? (ref + '_data' + (step.i.suffix ?? '')))
+  const resdatavar = kvar(step.i.resdatavar ?? (ref + '_resdata' + (step.i.suffix ?? '')))
+  const markdefvar = kvar(step.i.markdefvar ?? (ref + '_markdef' + (step.i.suffix ?? '')))
+  const srcdatavar = kvar(step.i.srcdatavar ?? (ref + '_data' + (step.i.suffix ?? '')))
+
+  const priorSteps = Object.values(flowSteps(flow)).slice(0, Number(index)) as any[]
+  const needsEnt = !priorSteps.some((s: any) =>
+    ['create', 'list', 'load', 'update', 'remove'].includes(s.o))
+
+  const hasEntIdU = null != entity.id
+
+  Content(`    // UPDATE
+`)
+  if (needsEnt) {
+    Content(`    val ${entvar} = client.${accessor}(null)
+`)
+  }
+  Content(`    val ${datavar}Up = linkedMapOf<String, Any?>()
+`)
+  if (hasEntIdU) {
+    Content(`    ${datavar}Up["id"] = ${srcdatavar}["id"]
+`)
+  }
+
+  if (step.d) {
+    const dataEntries = Object.entries(step.d).filter(([k]: any) => k !== 'id' && !k.endsWith('$'))
+    for (const [key] of dataEntries) {
+      Content(`    ${datavar}Up["${key}"] = setup.idmap!!["${key}"]
+`)
+    }
+  }
+
+  if (step.s) {
+    for (const spec of step.s) {
+      if ('TextFieldMark' === spec.apply && null != step.i.textfield) {
+        const fieldname = step.i.textfield
+        const fieldvalue = spec.def?.mark ?? `Mark01-${ref}`
+        Content(`
+    val ${markdefvar}Name = "${fieldname}"
+    val ${markdefvar}Value = "${fieldvalue}_" + setup.now
+    ${datavar}Up[${markdefvar}Name] = ${markdefvar}Value
+`)
+      }
+    }
+  }
+
+  Content(`
+    val ${resdatavar}Result = ${entvar}.update(${datavar}Up, null)
+    val ${resdatavar} = Helpers.toMapAny(if (${resdatavar}Result is SdkEntity) ${resdatavar}Result.data() else ${resdatavar}Result) ?: linkedMapOf()
+    assertNotNull(${resdatavar}, "expected update result to be a map")
+`)
+  if (hasEntIdU) {
+    Content(`    assertEquals(${datavar}Up["id"], ${resdatavar}["id"],
+        "expected update result id to match")
+`)
+  }
+
+  if (step.s) {
+    for (const spec of step.s) {
+      if ('TextFieldMark' === spec.apply && null != step.i.textfield) {
+        Content(`    assertEquals(${markdefvar}Value, ${resdatavar}[${markdefvar}Name],
+        "expected " + ${markdefvar}Name + " to be updated")
+`)
+      }
+    }
+  }
+}
+
+
+const generateLoad: OpGen = (ctx, step, index) => {
+  const { entity, flow, accessor } = ctx
+  const ref = step.i.ref ?? entity.name + '_ref01'
+  const entvar = kvar(step.i.entvar ?? ref + '_ent')
+  const matchvar = kvar(step.i.matchvar ?? (ref + '_match' + (step.i.suffix ?? '')))
+  const datavar = kvar(step.i.datavar ?? (ref + '_data' + (step.i.suffix ?? '')))
+  const srcdatavar = kvar(step.i.srcdatavar ?? (ref + '_data' + (step.i.suffix ?? '')))
+
+  const priorSteps = Object.values(flowSteps(flow)).slice(0, Number(index)) as any[]
+  const hasEntVar = priorSteps.some((s: any) =>
+    ['create', 'list', 'load', 'update', 'remove'].includes(s.o))
+
+  const flowHasCreate = Object.values(flowSteps(flow)).some((s: any) => (s as any).o === 'create')
+  const preambleRef = entity.name + '_ref01'
+  const hasSrcData = (!flowHasCreate && srcdatavar === kvar(preambleRef + '_data')) ||
+    priorSteps.some((s: any) => {
+      if ('create' === s.o) {
+        const priorRef = s.i.ref ?? entity.name + '_ref01'
+        const priorDatvar = kvar(s.i.datavar ?? (priorRef + '_data' + (s.i.suffix ?? '')))
+        return priorDatvar === srcdatavar
+      }
+      return false
+    })
+
+  const hasEntId = null != entity.id
+
+  Content(`    // LOAD
+`)
+  if (!hasEntVar) {
+    Content(`    val ${entvar} = client.${accessor}(null)
+`)
+  }
+  if (!hasSrcData && (hasEntId || flowLoadReadsRecord(entity, step))) {
+    Content(`    val ${srcdatavar}Raw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.${entity.name}")))
+    val ${srcdatavar}: MutableMap<String, Any?> = if (${srcdatavar}Raw.isEmpty())
+        linkedMapOf() else (Helpers.toMapAny(${srcdatavar}Raw[0][1]) ?: linkedMapOf())
+`)
+  }
+  Content(`    val ${matchvar} = linkedMapOf<String, Any?>()
+`)
+  if (hasEntId) {
+    Content(`    ${matchvar}["id"] = ${srcdatavar}["id"]
+${loadMatch(entity, step, matchvar, srcdatavar)}${liveFill(entity, step, matchvar)}    val ${datavar}Loaded = ${entvar}.load(${matchvar}, null)
+    val ${datavar}LoadResult = Helpers.toMapAny(if (${datavar}Loaded is SdkEntity) ${datavar}Loaded.data() else ${datavar}Loaded) ?: linkedMapOf()
+    assertNotNull(${datavar}LoadResult, "expected load result to be a map")
+    assertEquals(${srcdatavar}["id"], ${datavar}LoadResult["id"],
+        "expected load result id to match")
+`)
+  } else {
+    Content(`${loadMatch(entity, step, matchvar, srcdatavar)}${liveFill(entity, step, matchvar)}    val ${datavar}Loaded = ${entvar}.load(${matchvar}, null)
+    assertNotNull(${datavar}Loaded, "expected load result to be non-null")
+`)
+  }
+}
+
+
+const generateRemove: OpGen = (ctx, step, index) => {
+  const { entity, flow, accessor } = ctx
+  const ref = step.i.ref ?? entity.name + '_ref01'
+  const entvar = kvar(step.i.entvar ?? ref + '_ent')
+  const matchvar = kvar(step.i.matchvar ?? (ref + '_match' + (step.i.suffix ?? '')))
+  const srcdatavar = kvar(step.i.srcdatavar ?? (ref + '_data'))
+
+  const priorSteps = Object.values(flowSteps(flow)).slice(0, Number(index)) as any[]
+  const needsEnt = !priorSteps.some((s: any) =>
+    ['create', 'list', 'load', 'update', 'remove'].includes(s.o))
+
+  Content(`    // REMOVE
+`)
+  if (needsEnt) {
+    Content(`    val ${entvar} = client.${accessor}(null)
+`)
+  }
+  Content(`    val ${matchvar} = linkedMapOf<String, Any?>()
+    ${matchvar}["id"] = ${srcdatavar}["id"]
+${parentMatch(step, matchvar)}    ${entvar}.remove(${matchvar}, null)
+`)
+}
+
+
+// A child's route names its parents, and an entity no earlier step has
+// filled knows none of them, so the call itself gives each parent id. A live
+// ENTID may key a parent by its field name, the fixture by its own name.
+function kotlinLit(value: any): string {
+  if ('string' === typeof value) return JSON.stringify(value).replace(/\$/g, '\\$')
+  return Number.isInteger(value) && Math.abs(value) > 2147483647 ? value + 'L' : String(value)
+}
+
+
+// A live step sends each example its route requires and the step leaves unbound.
+function liveFill(entity: any, step: any, matchvar: string): string {
+  const fills = liveStepExamples(entity, step)
+  return 0 === fills.length ? '' : `    if (setup.live) {
+${fills.map(([k, ex]) => `      ${matchvar}[${JSON.stringify(k)}] = ${kotlinLit(ex)}\n`).join('')}    }
+`
+}
+
+
+function parentMatch(step: any, matchvar: string): string {
+  return Object.entries(step.m || {})
+    .filter(([k]: any) => k !== 'id' && !k.endsWith('$'))
+    .map(([key, val]: any) => `    ${matchvar}["${key}"] = setup.idmap?.get("${key}") ?: setup.idmap?.get("${val}")
+`).join('')
+}
+
+
+// A load of a known record fills its route from that record, and from the
+// step's binding where the record holds no scalar for it. A record only the
+// fixture holds replaces the step's binding offline.
+function loadMatch(entity: any, step: any, matchvar: string, srcdatavar: string): string {
+  const route = flowLoadRoute(entity, step)
+  if (null == route) {
+    return parentMatch(step, matchvar)
+  }
+  if (route.offline) {
+    const own = route.args.filter((arg) => null != arg.field)
+    return parentMatch(step, matchvar) + (0 === own.length ? '' : `    if (!setup.live) {
+${own.map((arg, i) => `      val own${i} = ${srcdatavar}["${arg.field}"]
+      if (own${i} is String || own${i} is Number || own${i} is Boolean) {
+        ${matchvar}["${arg.name}"] = own${i}
+      }
+`).join('')}    }
+`)
+  }
+  return route.args.map((arg) => {
+    const bound = arg.idmap.map((key) => `setup.idmap?.get("${key}")`).join(' ?: ')
+    return `    ${matchvar}["${arg.name}"] = ${null == arg.field ? bound :
+      `${srcdatavar}["${arg.field}"].let { if (it is String || it is Number || it is Boolean) it else ${bound} }`}
+`
+  }).join('')
+}
+
+
+const GENERATE_OP: Record<string, OpGen> = {
+  create: generateCreate,
+  list: generateList,
+  update: generateUpdate,
+  load: generateLoad,
+  remove: generateRemove,
+}
+
+
+// A failed operation throws from a stream as it does from the operation: a
+// transport failure, and a hook that rejects the call. A throwing hook fires
+// PreUnexpected, under throw false too. The caller's ctrl stays its own. An
+// invalid request fails with validate's own error, before it is sent.
+function failureTests(SDK: string, entity: ModelEntity, accessor: string): string {
+  const hasList = opReachable((entity.op as any)?.list, [])
+  const bad = invalidRequest(entity)
+  if (!hasList && null == bad) {
+    return ''
+  }
+
+  let out = `  private fun hasFeature(name: String): Boolean {
+    val fm = Helpers.toMapAny(Config.sharedConfig()["feature"])
+    return fm != null && fm[name] != null
+  }
+
+`
+
+  if (hasList) {
+    out += `  class FailHook : BaseFeature("failhook", "0.0.1", true) {
+    var unexpected = 0
+    override fun preSpec(ctx: Context) { throw RuntimeException("${entity.name} hook failed") }
+    override fun preUnexpected(ctx: Context) { unexpected++ }
+  }
+
+  @Test
+  fun streamError() {
+    val offline = linkedMapOf<String, Any?>("net" to linkedMapOf<String, Any?>("offline" to true))
+    val err = assertThrows(RuntimeException::class.java) {
+      ${SDK}.testSDK(offline, null).${accessor}(null).stream("list", null, null).toList()
+    }
+    assertTrue(err.message.orEmpty().contains("offline"), err.message)
+
+    ${SDK}.testSDK(offline, null).${accessor}(null).stream("list", null,
+      linkedMapOf<String, Any?>("ctrl" to linkedMapOf<String, Any?>("throw" to false))).toList()
+
+    if (hasFeature("rbac")) {
+      val denied = ${SDK}.testSDK(null, linkedMapOf<String, Any?>(
+        "feature" to linkedMapOf<String, Any?>(
+          "rbac" to linkedMapOf<String, Any?>("active" to true, "deny" to true))))
+      val denyerr = assertThrows(SdkError::class.java) {
+        denied.${accessor}(null).stream("list", null, null).toList()
+      }
+      assertEquals("rbac_denied", denyerr.code)
+    }
+  }
+
+  @Test
+  fun streamCtrl() {
+    val explain = linkedMapOf<String, Any?>()
+    val ctrl = linkedMapOf<String, Any?>("explain" to explain)
+    ${SDK}.testSDK().${accessor}(null).stream("list", null,
+      linkedMapOf<String, Any?>("ctrl" to ctrl)).toList()
+    assertEquals(listOf("explain"), ctrl.keys.toList())
+    assertTrue(explain === ctrl["explain"] && explain.isNotEmpty())
+  }
+
+  @Test
+  fun unexpected() {
+    val hook = FailHook()
+    val client = ${SDK}(linkedMapOf<String, Any?>(
+      "feature" to linkedMapOf<String, Any?>("test" to linkedMapOf<String, Any?>("active" to true)),
+      "extend" to mutableListOf<Any?>(hook)))
+
+    val err = assertThrows(RuntimeException::class.java) {
+      client.${accessor}(null).list(null, null)
+    }
+    assertTrue(err.message.orEmpty().contains("hook failed"), err.message)
+    assertTrue(0 < hook.unexpected)
+
+    val fired = hook.unexpected
+    client.${accessor}(null).list(null, linkedMapOf<String, Any?>("throw" to false))
+    assertTrue(fired < hook.unexpected)
+  }
+
+`
+  }
+
+  if (null != bad) {
+    const args = Object.entries(bad.args)
+      .map(([k, v]) => JSON.stringify(k) + ' to ' + JSON.stringify(v)).join(', ')
+    out += `  @Test
+  fun validate() {
+    Assumptions.assumeTrue(hasFeature("validate"), "feature not present in this SDK: validate")
+    val client = ${SDK}.testSDK(null, linkedMapOf<String, Any?>(
+      "feature" to linkedMapOf<String, Any?>(
+        "validate" to linkedMapOf<String, Any?>("active" to true))))
+    val err = assertThrows(SdkError::class.java) {
+      client.${accessor}(null).${bad.op}(linkedMapOf<String, Any?>(${args}), null)
+    }
+    assertEquals("validate_failed", err.code)
+  }
+
+`
+  }
+
+  return out
+}
+
+
+export {
+  TestEntity
+}

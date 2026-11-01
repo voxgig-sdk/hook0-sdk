@@ -154,6 +154,47 @@ describe("OrganizationEntity", function()
         return
       end
     end
+    if setup.live and os.getenv("VOXGIG_GETONLY_GUARD") == "TRUE" then
+      print("LIVE STEP {\"id\":\"organization.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/organizations/\"}")
+      print("LIVE STEP {\"id\":\"organization.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/organizations/{organization_id}/\"}")
+      print("LIVE STEP {\"id\":\"organization.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/organizations/{organization_id}/\"}")
+      print("LIVE STEP {\"id\":\"organization.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+    local client = setup.client
+    if setup.live then
+      runner.live_existing(pending, setup, LIVE_STRICT, "organization", function()
+        return client:Organization(nil):list({}, nil)
+      end)
+    end
+
+    -- Bootstrap entity data from existing test data.
+    local organization_ref01_data_raw = vs.items(helpers.to_map(
+      vs.getpath(setup.data, "existing.organization")))
+    local organization_ref01_data = nil
+    if #organization_ref01_data_raw > 0 then
+      organization_ref01_data = helpers.to_map(organization_ref01_data_raw[1][2])
+    end
+
+    -- LIST
+    local organization_ref01_ent = client:Organization(nil)
+    local organization_ref01_match = {}
+
+    local organization_ref01_list_result, err = organization_ref01_ent:list(organization_ref01_match, nil)
+    assert.is_nil(err)
+    assert.is_table(organization_ref01_list_result)
+
+    -- LOAD
+    local organization_ref01_match_dt0 = {
+      id = organization_ref01_data["id"],
+    }
+    local organization_ref01_data_dt0_loaded, err = organization_ref01_ent:load(organization_ref01_match_dt0, nil)
+    assert.is_nil(err)
+    local organization_ref01_data_dt0_load_result = helpers.to_map(type(organization_ref01_data_dt0_loaded) == 'table' and organization_ref01_data_dt0_loaded.data_get and organization_ref01_data_dt0_loaded:data_get() or organization_ref01_data_dt0_loaded)
+    assert.is_not_nil(organization_ref01_data_dt0_load_result)
+    assert.are.equal(organization_ref01_data_dt0_load_result["id"], organization_ref01_data["id"])
+
+      return
+    end
+
     local client = setup.client
 
     -- CREATE

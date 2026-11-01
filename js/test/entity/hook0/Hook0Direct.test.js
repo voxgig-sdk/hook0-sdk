@@ -44,11 +44,13 @@ describe('Hook0Direct', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
 
     const result = await client.direct({
       path: 'api/v1/environment_variables',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {

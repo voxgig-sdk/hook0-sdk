@@ -30,11 +30,13 @@ class ApplicationSecretDirectTest < Minitest::Test
     client = setup[:client]
 
     params = {}
+    query = {}
 
     result = client.direct({
       "path" => "api/v1/application_secrets",
       "method" => "GET",
       "params" => params,
+      "query" => query,
     })
     if setup[:live]
       unless live_ok(result)

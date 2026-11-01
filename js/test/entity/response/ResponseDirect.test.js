@@ -45,6 +45,7 @@ describe('ResponseDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
     if (setup.live) {
       params.id = setup.idmap['response01']
     } else {
@@ -55,6 +56,7 @@ describe('ResponseDirect', async () => {
       path: 'api/v1/responses/{id}',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {

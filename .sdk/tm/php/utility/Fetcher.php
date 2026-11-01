@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 // Hook0 SDK utility: fetcher
 
+require_once __DIR__ . '/../core/Error.php';
+
 class Hook0Fetcher
 {
     // Default User-Agent — many CDNs (notably Cloudflare) reject requests
@@ -28,9 +30,29 @@ class Hook0Fetcher
         return self::$curl;
     }
 
+    public const GETONLY_ENV = 'VOXGIG_GETONLY_GUARD';
+
+    // A GET-only live run refuses any other method before it is sent, on
+    // either transport below. The path alone: the query can carry a
+    // credential, and nothing has cleaned this line.
+    public static function getOnlyRefusal(string $fullurl, string $method): ?Hook0Error
+    {
+        if (getenv(self::GETONLY_ENV) !== 'TRUE' || $method === 'GET') {
+            return null;
+        }
+        $path = parse_url($fullurl, PHP_URL_PATH);
+        $path = is_string($path) && $path !== '' ? $path : '/';
+        fwrite(STDERR, "[GET-ONLY GUARD] blocked {$method} {$path}\n");
+        return new Hook0Error('fetch_getonly_block', "[GET-ONLY GUARD] blocked {$method} {$path}");
+    }
+
     public static function defaultHttpFetch(string $fullurl, array $fetchdef): array
     {
         $method_str = strtoupper($fetchdef['method'] ?? 'GET');
+        $refused = self::getOnlyRefusal($fullurl, $method_str);
+        if (null !== $refused) {
+            return [null, $refused];
+        }
         $body_str = $fetchdef['body'] ?? null;
         if (is_resource($body_str)) {
             $body_str = stream_get_contents($body_str);
@@ -144,27 +166,6 @@ class Hook0Fetcher
 
     private static function curlFetch(string $fullurl, string $method, $body_str, array $header_lines): array
     {
-        // GET-only guard for live tests — set by pub-live-test. We respect
-        // it here at the SDK level since cURL bypasses PHP stream wrappers
-        // (so the wrapper-based guard wouldn't see this call).
-        if (getenv('VOXGIG_GETONLY_GUARD') === 'TRUE' && $method !== 'GET') {
-            // The path alone: the query can carry a credential, and nothing
-            // has cleaned this line.
-            $path = parse_url($fullurl, PHP_URL_PATH);
-            $path = is_string($path) && $path !== '' ? $path : '/';
-            fwrite(STDERR, "[GET-ONLY GUARD] blocked {$method} {$path}\n");
-            return [
-                [
-                    'status' => 0,
-                    'statusText' => 'Blocked',
-                    'headers' => [],
-                    'json' => function () { return null; },
-                    'body' => '',
-                ],
-                "GET-only guard blocked {$method} {$path}",
-            ];
-        }
-
         $ch = self::curlHandle($fullurl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
@@ -256,12 +257,8 @@ class Hook0Fetcher
                 "Request blocked as test feature is active (URL was: \"{$fullurl}\")")];
         }
 
-        $sys_fetch = \Voxgig\Struct\Struct::getpath($options, 'system.fetch');
+        $sys_fetch = self::systemFetch($options);
 
-        // Treat null OR an empty stdClass/array as "no fetcher provided" and
-        // fall through to the default HTTP fetcher. The options builder
-        // sometimes materializes `system.fetch` as an empty stdClass even
-        // when the user didn't set one — that's a placeholder, not a value.
         if (self::usesDefault($ctx)) {
             if (null !== $ctx->spec) {
                 $ctx->spec->headers = self::sentHeaders($ctx->spec->headers);
@@ -275,9 +272,19 @@ class Hook0Fetcher
         return [null, $ctx->make_error('fetch_invalid', 'system.fetch is not a valid function')];
     }
 
+    // getpath answers a missing path with the struct port's UNDEF sentinel:
+    // one stdClass for the whole process, which setprop writes into when it
+    // is handed as a parent. It must never be read, or kept, as a fetcher.
+    public static function systemFetch(mixed $options): mixed
+    {
+        $fetch = \Voxgig\Struct\Struct::getpath($options, 'system.fetch');
+        return $fetch === \Voxgig\Struct\Struct::undef() ? null : $fetch;
+    }
+
+    // An empty map or list for `system.fetch` names no fetcher either.
     public static function usesDefault(Hook0Context $ctx): bool
     {
-        $sys_fetch = \Voxgig\Struct\Struct::getpath($ctx->client->options_map(), 'system.fetch');
+        $sys_fetch = self::systemFetch($ctx->client->options_map());
         $is_empty_obj = ($sys_fetch instanceof \stdClass) && empty(get_object_vars($sys_fetch));
         $is_empty_arr = is_array($sys_fetch) && empty($sys_fetch);
         return $sys_fetch === null || $is_empty_obj || $is_empty_arr;

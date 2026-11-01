@@ -44,6 +44,7 @@ describe('SubscriptionDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
     if (setup.live) {
       const listResult = await client.direct({
         path: 'api/v1/subscriptions',
@@ -74,6 +75,7 @@ describe('SubscriptionDirect', async () => {
       path: 'api/v1/subscriptions/{id}',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {
@@ -100,11 +102,13 @@ describe('SubscriptionDirect', async () => {
     const { client, calls } = setup
 
     const params = {}
+    const query = {}
 
     const result = await client.direct({
       path: 'api/v1/subscriptions',
       method: 'GET',
       params,
+      query,
     })
 
     if (setup.live) {

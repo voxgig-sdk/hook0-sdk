@@ -201,6 +201,44 @@ class SubscriptionEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"subscription.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/subscriptions/"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"subscription.update.2","state":"excluded","attempted":false,"reason":"GET-only live run: needs PUT /api/v1/subscriptions/{subscription_id}"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"subscription.remove.4","state":"excluded","attempted":false,"reason":"GET-only live run: needs DELETE /api/v1/subscriptions/{subscription_id}"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"subscription.list.5","state":"excluded","attempted":false,"reason":"GET-only live run: checks a removal this run does not make"}' . "\n");
+        $client = $setup["client"];
+        if (!empty($setup["live"])) {
+            Runner::live_existing($setup, self::LIVE_STRICT, "subscription",
+                fn() => $client->Subscription(null)->list([], null));
+        }
+
+        // Bootstrap entity data from existing test data.
+        $subscription_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.subscription")));
+        $subscription_ref01_data = null;
+        if (count($subscription_ref01_data_raw) > 0) {
+            $subscription_ref01_data = Helpers::to_map($subscription_ref01_data_raw[0][1]);
+        }
+
+        // LIST
+        $subscription_ref01_ent = $client->Subscription(null);
+        $subscription_ref01_match = [];
+
+        $subscription_ref01_list_result = $subscription_ref01_ent->list($subscription_ref01_match, null);
+        $this->assertIsArray($subscription_ref01_list_result);
+
+        // LOAD
+        $subscription_ref01_match_dt0 = [
+            "id" => $subscription_ref01_data["id"],
+        ];
+        $subscription_ref01_data_dt0_loaded = $subscription_ref01_ent->load($subscription_ref01_match_dt0, null);
+        $subscription_ref01_data_dt0_load_result = Helpers::to_map(is_object($subscription_ref01_data_dt0_loaded) && method_exists($subscription_ref01_data_dt0_loaded, 'data_get') ? $subscription_ref01_data_dt0_loaded->data_get() : $subscription_ref01_data_dt0_loaded);
+        $this->assertNotNull($subscription_ref01_data_dt0_load_result);
+        $this->assertEquals($subscription_ref01_data_dt0_load_result["id"], $subscription_ref01_data["id"]);
+
+            return;
+        }
+
         $client = $setup["client"];
 
         // CREATE

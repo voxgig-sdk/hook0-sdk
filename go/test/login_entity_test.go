@@ -62,6 +62,12 @@ func TestLoginEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"login.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/auth/login\"}")
+			t.Skip("Live coverage incomplete: login.create.0 excluded (GET-only live run: needs POST /api/v1/auth/login)")
+			return
+		}
+
 		client := setup.client
 		_ = client
 

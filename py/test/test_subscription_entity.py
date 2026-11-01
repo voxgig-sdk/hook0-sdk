@@ -134,6 +134,13 @@ class TestSubscriptionEntity:
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
+            print("LIVE STEP {\"id\":\"subscription.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/subscriptions/\"}")
+            print("LIVE STEP {\"id\":\"subscription.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/subscriptions/{subscription_id}\"}")
+            print("LIVE STEP {\"id\":\"subscription.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/subscriptions/{subscription_id}\"}")
+            print("LIVE STEP {\"id\":\"subscription.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+            return self._run_get_only_flow(setup)
+
         client = setup["client"]
 
         # CREATE
@@ -195,6 +202,36 @@ class TestSubscriptionEntity:
             runner.entity_list_to_data(subscription_ref01_list_rt0_result),
             {"id": subscription_ref01_data["id"]})
         assert vs.isempty(not_found_item)
+
+
+    def _run_get_only_flow(self, setup):
+        client = setup["client"]
+        if setup["live"]:
+            runner.live_existing(setup, LIVE_STRICT, "subscription",
+                                 lambda: client.Subscription(None).list({}, None))
+
+        # Bootstrap entity data from existing test data.
+        subscription_ref01_data_raw = vs.items(helpers.to_map(
+            vs.getpath(setup["data"], "existing.subscription")))
+        subscription_ref01_data = None
+        if len(subscription_ref01_data_raw) > 0:
+            subscription_ref01_data = helpers.to_map(subscription_ref01_data_raw[0][1])
+
+        # LIST
+        subscription_ref01_ent = client.Subscription(None)
+        subscription_ref01_match = {}
+
+        subscription_ref01_list_result = subscription_ref01_ent.list(subscription_ref01_match, None)
+        assert isinstance(subscription_ref01_list_result, list)
+
+        # LOAD
+        subscription_ref01_match_dt0 = {
+            "id": subscription_ref01_data["id"],
+        }
+        subscription_ref01_data_dt0_loaded = subscription_ref01_ent.load(subscription_ref01_match_dt0, None)
+        subscription_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(subscription_ref01_data_dt0_loaded))
+        assert subscription_ref01_data_dt0_load_result is not None
+        assert subscription_ref01_data_dt0_load_result["id"] == subscription_ref01_data["id"]
 
 
 

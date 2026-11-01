@@ -144,6 +144,13 @@ class TestServiceTokenEntity:
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
+            print("LIVE STEP {\"id\":\"service_token.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/service_token/\"}")
+            print("LIVE STEP {\"id\":\"service_token.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/service_token/{service_token_id}\"}")
+            print("LIVE STEP {\"id\":\"service_token.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/service_token/{service_token_id}\"}")
+            print("LIVE STEP {\"id\":\"service_token.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}")
+            return self._run_get_only_flow(setup)
+
         client = setup["client"]
 
         # CREATE
@@ -205,6 +212,36 @@ class TestServiceTokenEntity:
             runner.entity_list_to_data(service_token_ref01_list_rt0_result),
             {"id": service_token_ref01_data["id"]})
         assert vs.isempty(not_found_item)
+
+
+    def _run_get_only_flow(self, setup):
+        client = setup["client"]
+        if setup["live"]:
+            runner.live_existing(setup, LIVE_STRICT, "service_token",
+                                 lambda: client.ServiceToken(None).list({}, None))
+
+        # Bootstrap entity data from existing test data.
+        service_token_ref01_data_raw = vs.items(helpers.to_map(
+            vs.getpath(setup["data"], "existing.service_token")))
+        service_token_ref01_data = None
+        if len(service_token_ref01_data_raw) > 0:
+            service_token_ref01_data = helpers.to_map(service_token_ref01_data_raw[0][1])
+
+        # LIST
+        service_token_ref01_ent = client.ServiceToken(None)
+        service_token_ref01_match = {}
+
+        service_token_ref01_list_result = service_token_ref01_ent.list(service_token_ref01_match, None)
+        assert isinstance(service_token_ref01_list_result, list)
+
+        # LOAD
+        service_token_ref01_match_dt0 = {
+            "id": service_token_ref01_data["id"],
+        }
+        service_token_ref01_data_dt0_loaded = service_token_ref01_ent.load(service_token_ref01_match_dt0, None)
+        service_token_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(service_token_ref01_data_dt0_loaded))
+        assert service_token_ref01_data_dt0_load_result is not None
+        assert service_token_ref01_data_dt0_load_result["id"] == service_token_ref01_data["id"]
 
 
 

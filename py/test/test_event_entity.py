@@ -134,6 +134,40 @@ class TestEventEntity:
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"] and os.environ.get("VOXGIG_GETONLY_GUARD") == "TRUE":
+            print("LIVE STEP {\"id\":\"event.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/events/{event_id}/replay\"}")
+            return self._run_get_only_flow(setup)
+
+        client = setup["client"]
+        if setup["live"]:
+            runner.live_existing(setup, LIVE_STRICT, "event",
+                                 lambda: client.Event(None).list({}, None))
+
+        # Bootstrap entity data from existing test data.
+        event_ref01_data_raw = vs.items(helpers.to_map(
+            vs.getpath(setup["data"], "existing.event")))
+        event_ref01_data = None
+        if len(event_ref01_data_raw) > 0:
+            event_ref01_data = helpers.to_map(event_ref01_data_raw[0][1])
+
+        # LIST
+        event_ref01_ent = client.Event(None)
+        event_ref01_match = {}
+
+        event_ref01_list_result = event_ref01_ent.list(event_ref01_match, None)
+        assert isinstance(event_ref01_list_result, list)
+
+        # LOAD
+        event_ref01_match_dt0 = {
+            "id": event_ref01_data["id"],
+        }
+        event_ref01_data_dt0_loaded = event_ref01_ent.load(event_ref01_match_dt0, None)
+        event_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(event_ref01_data_dt0_loaded))
+        assert event_ref01_data_dt0_load_result is not None
+        assert event_ref01_data_dt0_load_result["id"] == event_ref01_data["id"]
+
+
+    def _run_get_only_flow(self, setup):
         client = setup["client"]
         if setup["live"]:
             runner.live_existing(setup, LIVE_STRICT, "event",

@@ -201,6 +201,44 @@ class ApplicationEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"application.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/applications/"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"application.update.2","state":"excluded","attempted":false,"reason":"GET-only live run: needs PUT /api/v1/applications/{application_id}"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"application.remove.4","state":"excluded","attempted":false,"reason":"GET-only live run: needs DELETE /api/v1/applications/{application_id}"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"application.list.5","state":"excluded","attempted":false,"reason":"GET-only live run: checks a removal this run does not make"}' . "\n");
+        $client = $setup["client"];
+        if (!empty($setup["live"])) {
+            Runner::live_existing($setup, self::LIVE_STRICT, "application",
+                fn() => $client->Application(null)->list([], null));
+        }
+
+        // Bootstrap entity data from existing test data.
+        $application_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.application")));
+        $application_ref01_data = null;
+        if (count($application_ref01_data_raw) > 0) {
+            $application_ref01_data = Helpers::to_map($application_ref01_data_raw[0][1]);
+        }
+
+        // LIST
+        $application_ref01_ent = $client->Application(null);
+        $application_ref01_match = [];
+
+        $application_ref01_list_result = $application_ref01_ent->list($application_ref01_match, null);
+        $this->assertIsArray($application_ref01_list_result);
+
+        // LOAD
+        $application_ref01_match_dt0 = [
+            "id" => $application_ref01_data["id"],
+        ];
+        $application_ref01_data_dt0_loaded = $application_ref01_ent->load($application_ref01_match_dt0, null);
+        $application_ref01_data_dt0_load_result = Helpers::to_map(is_object($application_ref01_data_dt0_loaded) && method_exists($application_ref01_data_dt0_loaded, 'data_get') ? $application_ref01_data_dt0_loaded->data_get() : $application_ref01_data_dt0_loaded);
+        $this->assertNotNull($application_ref01_data_dt0_load_result);
+        $this->assertEquals($application_ref01_data_dt0_load_result["id"], $application_ref01_data["id"]);
+
+            return;
+        }
+
         $client = $setup["client"];
 
         // CREATE

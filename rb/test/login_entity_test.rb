@@ -41,6 +41,11 @@ class LoginEntityTest < Minitest::Test
         return
       end
     end
+    if setup[:live] && ENV["VOXGIG_GETONLY_GUARD"] == "TRUE"
+      puts "LIVE STEP {\"id\":\"login.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/auth/login\"}"
+      skip("Live coverage incomplete: login.create.0 excluded (GET-only live run: needs POST /api/v1/auth/login)")
+    end
+
     client = setup[:client]
 
     # CREATE

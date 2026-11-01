@@ -48,95 +48,95 @@ client := sdk.TestSDK(testopts, sdkopts)
 
 ### Instance Methods
 
-#### `Application(data map[string]any) Hook0Entity`
+#### `Application(data map[string]any) Hook0EntityBase`
 
 Create a new `Application` entity instance. Pass `nil` for no initial data.
 
-#### `ApplicationSecret(data map[string]any) Hook0Entity`
+#### `ApplicationSecret(data map[string]any) Hook0EntityBase`
 
 Create a new `ApplicationSecret` entity instance. Pass `nil` for no initial data.
 
-#### `EmailPreference(data map[string]any) Hook0Entity`
+#### `EmailPreference(data map[string]any) Hook0EntityBase`
 
 Create a new `EmailPreference` entity instance. Pass `nil` for no initial data.
 
-#### `Error(data map[string]any) Hook0Entity`
+#### `Error(data map[string]any) Hook0EntityBase`
 
 Create a new `Error` entity instance. Pass `nil` for no initial data.
 
-#### `Event(data map[string]any) Hook0Entity`
+#### `Event(data map[string]any) Hook0EntityBase`
 
 Create a new `Event` entity instance. Pass `nil` for no initial data.
 
-#### `EventType(data map[string]any) Hook0Entity`
+#### `EventType(data map[string]any) Hook0EntityBase`
 
 Create a new `EventType` entity instance. Pass `nil` for no initial data.
 
-#### `EventsManagement(data map[string]any) Hook0Entity`
+#### `EventsManagement(data map[string]any) Hook0EntityBase`
 
 Create a new `EventsManagement` entity instance. Pass `nil` for no initial data.
 
-#### `Health(data map[string]any) Hook0Entity`
+#### `Health(data map[string]any) Hook0EntityBase`
 
 Create a new `Health` entity instance. Pass `nil` for no initial data.
 
-#### `Hook0(data map[string]any) Hook0Entity`
+#### `Hook0(data map[string]any) Hook0EntityBase`
 
 Create a new `Hook0` entity instance. Pass `nil` for no initial data.
 
-#### `IngestedEvent(data map[string]any) Hook0Entity`
+#### `IngestedEvent(data map[string]any) Hook0EntityBase`
 
 Create a new `IngestedEvent` entity instance. Pass `nil` for no initial data.
 
-#### `Instance(data map[string]any) Hook0Entity`
+#### `Instance(data map[string]any) Hook0EntityBase`
 
 Create a new `Instance` entity instance. Pass `nil` for no initial data.
 
-#### `Login(data map[string]any) Hook0Entity`
+#### `Login(data map[string]any) Hook0EntityBase`
 
 Create a new `Login` entity instance. Pass `nil` for no initial data.
 
-#### `Organization(data map[string]any) Hook0Entity`
+#### `Organization(data map[string]any) Hook0EntityBase`
 
 Create a new `Organization` entity instance. Pass `nil` for no initial data.
 
-#### `OrganizationEditRole(data map[string]any) Hook0Entity`
+#### `OrganizationEditRole(data map[string]any) Hook0EntityBase`
 
 Create a new `OrganizationEditRole` entity instance. Pass `nil` for no initial data.
 
-#### `Quota(data map[string]any) Hook0Entity`
+#### `Quota(data map[string]any) Hook0EntityBase`
 
 Create a new `Quota` entity instance. Pass `nil` for no initial data.
 
-#### `Registration(data map[string]any) Hook0Entity`
+#### `Registration(data map[string]any) Hook0EntityBase`
 
 Create a new `Registration` entity instance. Pass `nil` for no initial data.
 
-#### `RequestAttempt(data map[string]any) Hook0Entity`
+#### `RequestAttempt(data map[string]any) Hook0EntityBase`
 
 Create a new `RequestAttempt` entity instance. Pass `nil` for no initial data.
 
-#### `Response(data map[string]any) Hook0Entity`
+#### `Response(data map[string]any) Hook0EntityBase`
 
 Create a new `Response` entity instance. Pass `nil` for no initial data.
 
-#### `Revoke(data map[string]any) Hook0Entity`
+#### `Revoke(data map[string]any) Hook0EntityBase`
 
 Create a new `Revoke` entity instance. Pass `nil` for no initial data.
 
-#### `ServiceToken(data map[string]any) Hook0Entity`
+#### `ServiceToken(data map[string]any) Hook0EntityBase`
 
 Create a new `ServiceToken` entity instance. Pass `nil` for no initial data.
 
-#### `Subscription(data map[string]any) Hook0Entity`
+#### `Subscription(data map[string]any) Hook0EntityBase`
 
 Create a new `Subscription` entity instance. Pass `nil` for no initial data.
 
-#### `UserAuthentication(data map[string]any) Hook0Entity`
+#### `UserAuthentication(data map[string]any) Hook0EntityBase`
 
 Create a new `UserAuthentication` entity instance. Pass `nil` for no initial data.
 
-#### `UserInvitation(data map[string]any) Hook0Entity`
+#### `UserInvitation(data map[string]any) Hook0EntityBase`
 
 Create a new `UserInvitation` entity instance. Pass `nil` for no initial data.
 

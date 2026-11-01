@@ -55,6 +55,45 @@ public class OrganizationEntityTest {
           reason == null || "".equals(reason)
               ? "skipped via sdk-test-control.json" : reason);
     }
+    if (setup.live && "TRUE".equals(System.getenv("VOXGIG_GETONLY_GUARD"))) {
+      System.out.println("LIVE STEP {\"id\":\"organization.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/organizations/\"}");
+      System.out.println("LIVE STEP {\"id\":\"organization.update.2\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs PUT /api/v1/organizations/{organization_id}/\"}");
+      System.out.println("LIVE STEP {\"id\":\"organization.remove.4\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs DELETE /api/v1/organizations/{organization_id}/\"}");
+      System.out.println("LIVE STEP {\"id\":\"organization.list.5\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: checks a removal this run does not make\"}");
+    Hook0SDK client = setup.client;
+    if (setup.live) {
+      RunnerSupport.liveExisting(setup.data, LIVE_STRICT, "organization", () -> {
+        Map<String, Object> match = new LinkedHashMap<>();
+        return client.organization(null).list(match, null);
+      });
+    }
+
+    // Bootstrap entity data from existing test data (no create step in flow).
+    List<List<Object>> organizationRef01DataRaw = Struct.items(Helpers.toMapAny(
+        Struct.getpath(setup.data, "existing.organization")));
+    Map<String, Object> organizationRef01Data = organizationRef01DataRaw.isEmpty()
+        ? null : Helpers.toMapAny(organizationRef01DataRaw.get(0).get(1));
+
+    // LIST
+    SdkEntity organizationRef01Ent = client.organization(null);
+    Map<String, Object> organizationRef01Match = new LinkedHashMap<>();
+
+    Object organizationRef01ListResult = organizationRef01Ent.list(organizationRef01Match, null);
+    assertTrue(organizationRef01ListResult instanceof List,
+        "expected list result to be an array, got " + organizationRef01ListResult);
+
+    // LOAD
+    Map<String, Object> organizationRef01MatchDt0 = new LinkedHashMap<>();
+    organizationRef01MatchDt0.put("id", organizationRef01Data.get("id"));
+    Object organizationRef01DataDt0Loaded = organizationRef01Ent.load(organizationRef01MatchDt0, null);
+    Map<String, Object> organizationRef01DataDt0LoadResult = Helpers.toMapAny(organizationRef01DataDt0Loaded instanceof SdkEntity ? ((SdkEntity) organizationRef01DataDt0Loaded).data() : organizationRef01DataDt0Loaded);
+    assertNotNull(organizationRef01DataDt0LoadResult, "expected load result to be a map");
+    assertEquals(organizationRef01Data.get("id"), organizationRef01DataDt0LoadResult.get("id"),
+        "expected load result id to match");
+
+      return;
+    }
+
     Hook0SDK client = setup.client;
 
     // CREATE

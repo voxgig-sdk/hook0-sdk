@@ -27,6 +27,12 @@ import {
   liveStrict,
   liveStrictNote,
   primaryPoint,
+  liveExampleIds,
+  liveQueryExamples,
+  litString,
+  liveEntity,
+  liveGetOnlyReason, LIVE_GETONLY_ENV,
+  liveDirectGetOnly, liveExcludedLines, liveExcludedSummary,
 } from '@voxgig/sdkgen'
 
 
@@ -41,7 +47,7 @@ const TestDirect = cmp(function TestDirect(props: any) {
   const stdrep = ctx$.stdrep
 
   const target = props.target
-  const entity: ModelEntity = props.entity
+  const entity: ModelEntity = liveEntity(ctx$, props.entity)
 
   const ff = projectPath('src/cmp/js/fragment/')
 
@@ -73,6 +79,14 @@ const TestDirect = cmp(function TestDirect(props: any) {
   if (!hasLoad && !hasList) {
     return
   }
+
+  const exampleIds = liveExampleIds(entity)
+  const exampleIdLine = 0 === exampleIds.length ? '' :
+    `    // A path parameter's example stands in for an id *_ENTID does not give.
+    idmap = Object.assign({ ${exampleIds.map(([key, ex]) =>
+      `${jsKey(key)}: ${jsLit(ex)}`).join(', ')} },
+      'object' === typeof idmap ? idmap : {})
+`
 
   Folder({ name: entity.name }, () => {
 
@@ -116,7 +130,7 @@ function directSetup(mockres) {
     if ('string' === typeof idmap && idmap.startsWith('{')) {
       idmap = JSON.parse(idmap)
     }
-
+${exampleIdLine}
     return { client, calls, live, idmap }
   }
 
@@ -174,6 +188,7 @@ function generateDirectLoad(model: Model, entity: ModelEntity) {
 
   const loadParams = loadPoint.g?.params || []
   const loadPath = normalizePathParams(pointParts(loadPoint), loadParams, loadPoint.r?.param)
+  const liveQueryLines = liveQueryLinesJs(loadPoint)
 
   // Get list info for live mode bootstrapping
   const listOp = entity.op?.list
@@ -204,7 +219,7 @@ function generateDirectLoad(model: Model, entity: ModelEntity) {
       `      ${jsProp('params', lp.name)} = setup.idmap['${lp.key}']`).join('\n')
 
     liveParamsBlock = `    if (setup.live) {
-      const listResult = await client.direct({
+${liveQueryLines}      const listResult = await client.direct({
         path: '${listPath}',
         method: 'GET',
         params: {
@@ -232,7 +247,7 @@ ${mockParamLines}
     const liveParams = loadParams.map((p: any) => ({ name: p.n, key: liveIdKey(entity, p) }))
     liveIdKeys = liveParams.map((lp: any) => lp.key)
     liveParamsBlock = `    if (setup.live) {
-${liveParams.map((lp: any) => `      ${jsProp('params', lp.name)} = setup.idmap['${lp.key}']`).join('\n') || '      // no params'}
+${liveQueryLines}${liveParams.map((lp: any) => `      ${jsProp('params', lp.name)} = setup.idmap['${lp.key}']`).join('\n') || '      // no params'}
     } else {
 ${mockParamLines || '      // no params'}
     }`
@@ -246,15 +261,17 @@ ${mockParamLines || '      // no params'}
   test('direct-load-${entity.name}', async (t) => {
     if (liveScenariosActive()) { t.skip('Covered by live operation scenarios'); return }
     const setup = directSetup({ id: 'direct01' })
-${skipMissingLine}    const { client, calls } = setup
+${getOnlyKeysLine(model, entity, 'direct-load-' + entity.name, liveIdKeys)}${skipMissingLine}    const { client, calls } = setup
 
     const params = {}
+    const query = {}
 ${liveParamsBlock}
 
     const result = await client.direct({
       path: '${loadPath}',
       method: 'GET',
       params,
+      query,
     })
 
 ${liveChecks('load', 'null != result.data', 'no data', `      assert(result.ok === true)
@@ -287,26 +304,28 @@ function generateDirectList(model: Model, entity: ModelEntity) {
   const listPath = normalizePathParams(pointParts(listPoint), listParams, listPoint.r?.param)
 
   const liveParams = listParams.map((p: any) => ({ name: p.n, key: liveIdKey(entity, p) }))
+  const liveQueryLines = liveQueryLinesJs(listPoint)
 
   const paramAsserts = listParams.map((p: any, i: number) =>
     '      assert(calls[0].url.includes(\'direct0' + (i + 1) + '\'))\n').join('')
 
   let paramsBlock = ''
-  if (listParams.length > 0) {
-    const liveLines = liveParams.map((lp: any) =>
-      `      ${jsProp('params', lp.name)} = setup.idmap['${lp.key}']`).join('\n')
+  if (listParams.length > 0 || '' !== liveQueryLines) {
+    const liveLines = liveQueryLines + liveParams.map((lp: any) =>
+      `      ${jsProp('params', lp.name)} = setup.idmap['${lp.key}']\n`).join('')
     const mockLines = listParams.map((p: any, i: number) =>
       `      ${jsProp('params', p.n)} = 'direct0${i + 1}'`).join('\n')
 
     paramsBlock = `    const params = {}
+    const query = {}
     if (setup.live) {
-${liveLines}
-    } else {
+${liveLines}    }${mockLines ? ` else {
 ${mockLines}
-    }
+    }` : ''}
 `
   } else {
     paramsBlock = `    const params = {}
+    const query = {}
 `
   }
 
@@ -318,13 +337,14 @@ ${mockLines}
   test('direct-list-${entity.name}', async (t) => {
     if (liveScenariosActive()) { t.skip('Covered by live operation scenarios'); return }
     const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }])
-${skipMissingLine}    const { client, calls } = setup
+${getOnlyKeysLine(model, entity, 'direct-list-' + entity.name, liveParams.map((lp: any) => lp.key))}${skipMissingLine}    const { client, calls } = setup
 
 ${paramsBlock}
     const result = await client.direct({
       path: '${listPath}',
       method: 'GET',
       params,
+      query,
     })
 
 ${liveChecks('list', 'Array.isArray(result.data)', 'no list', `      assert(result.ok === true)
@@ -342,6 +362,29 @@ ${paramAsserts}`)}
 // GraphQL-backed op needs POST+body, not a REST-shaped GET+params direct()
 // call — reuse apidef's own point.gq.doc via the SDK's graphql() hatch.
 // Mirrors TestDirect_ts.ts's generateDirectGraphql.
+// A GET-only live run excludes a test needing an id that only a write gives.
+function getOnlyKeysLine(model: any, entity: any, test: string, keys: string[]): string {
+  return liveDirectGetOnly(model, entity, test, keys).map((miss) =>
+    `    if (setup.live && 'TRUE' === process.env.${LIVE_GETONLY_ENV} && null == setup.idmap?.[${JSON.stringify(miss.key)}]) {
+      console.log(${JSON.stringify(liveExcludedLines({ excluded: [miss] })[0])})
+      t.skip(${JSON.stringify(liveExcludedSummary({ excluded: [miss] }))})
+      return
+    }
+`).join('')
+}
+
+
+// A GraphQL request is a POST, which a GET-only live run does not send.
+function getOnlySkip(point: any): string {
+  const reason = liveGetOnlyReason(point)
+  return null == reason ? '' : `    if (setup.live && 'TRUE' === process.env.${LIVE_GETONLY_ENV}) {
+      t.skip(${JSON.stringify(reason)})
+      return
+    }
+`
+}
+
+
 function generateDirectGraphqlJs(
   opname: 'load' | 'list',
   entity: ModelEntity,
@@ -371,7 +414,7 @@ function generateDirectGraphqlJs(
   test('direct-${opname}-${entity.name}', async (t) => {
     if (liveScenariosActive()) { t.skip('Covered by live operation scenarios'); return }
     const setup = directSetup()
-${skipMissingLine}    const { client, calls } = setup
+${getOnlySkip(point)}${skipMissingLine}    const { client, calls } = setup
 
     const variables = {}
     if (setup.live) {
@@ -392,6 +435,18 @@ ${liveChecks(opname, 'null != result.data', 'no data', `      assert(result.ok =
 ${varAsserts}`)}
   })
 `)
+}
+
+
+function jsLit(value: any): string {
+  return 'string' === typeof value ? litString('js', value) : String(value)
+}
+
+
+// A live request sends each required query parameter's example.
+function liveQueryLinesJs(point: any): string {
+  return liveQueryExamples(point)
+    .map(([name, ex]) => `      ${jsProp('query', name)} = ${jsLit(ex)}\n`).join('')
 }
 
 

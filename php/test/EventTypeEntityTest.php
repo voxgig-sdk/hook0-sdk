@@ -219,6 +219,43 @@ class EventTypeEntityTest extends TestCase
                 return;
             }
         }
+        if (!empty($setup["live"]) && getenv('VOXGIG_GETONLY_GUARD') === "TRUE") {
+            fwrite(STDOUT, 'LIVE STEP {"id":"event_type.create.0","state":"excluded","attempted":false,"reason":"GET-only live run: needs POST /api/v1/event_types/"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"event_type.remove.3","state":"excluded","attempted":false,"reason":"GET-only live run: needs DELETE /api/v1/event_types/{event_type_name}"}' . "\n");
+            fwrite(STDOUT, 'LIVE STEP {"id":"event_type.list.4","state":"excluded","attempted":false,"reason":"GET-only live run: checks a removal this run does not make"}' . "\n");
+        $client = $setup["client"];
+        if (!empty($setup["live"])) {
+            Runner::live_existing($setup, self::LIVE_STRICT, "event_type",
+                fn() => $client->EventType(null)->list([], null));
+        }
+
+        // Bootstrap entity data from existing test data.
+        $event_type_ref01_data_raw = Vs::items(Helpers::to_map(
+            Vs::getpath($setup["data"], "existing.event_type")));
+        $event_type_ref01_data = null;
+        if (count($event_type_ref01_data_raw) > 0) {
+            $event_type_ref01_data = Helpers::to_map($event_type_ref01_data_raw[0][1]);
+        }
+
+        // LIST
+        $event_type_ref01_ent = $client->EventType(null);
+        $event_type_ref01_match = [];
+
+        $event_type_ref01_list_result = $event_type_ref01_ent->list($event_type_ref01_match, null);
+        $this->assertIsArray($event_type_ref01_list_result);
+
+        // LOAD
+        $event_type_ref01_match_dt0 = [
+            "id" => $event_type_ref01_data["id"],
+        ];
+        $event_type_ref01_data_dt0_loaded = $event_type_ref01_ent->load($event_type_ref01_match_dt0, null);
+        $event_type_ref01_data_dt0_load_result = Helpers::to_map(is_object($event_type_ref01_data_dt0_loaded) && method_exists($event_type_ref01_data_dt0_loaded, 'data_get') ? $event_type_ref01_data_dt0_loaded->data_get() : $event_type_ref01_data_dt0_loaded);
+        $this->assertNotNull($event_type_ref01_data_dt0_load_result);
+        $this->assertEquals($event_type_ref01_data_dt0_load_result["id"], $event_type_ref01_data["id"]);
+
+            return;
+        }
+
         $client = $setup["client"];
 
         // CREATE

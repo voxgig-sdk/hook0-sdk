@@ -62,6 +62,12 @@ func TestIngestedEventEntity(t *testing.T) {
 				return
 			}
 		}
+		if setup.live && os.Getenv("VOXGIG_GETONLY_GUARD") == "TRUE" {
+			t.Log("LIVE STEP {\"id\":\"ingested_event.create.0\",\"state\":\"excluded\",\"attempted\":false,\"reason\":\"GET-only live run: needs POST /api/v1/event/\"}")
+			t.Skip("Live coverage incomplete: ingested_event.create.0 excluded (GET-only live run: needs POST /api/v1/event/)")
+			return
+		}
+
 		client := setup.client
 		_ = client
 
